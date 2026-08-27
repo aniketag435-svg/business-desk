@@ -59,7 +59,7 @@ body.dark{--bg:#0b1220;--panel:#111827;--text:#f5f7fb;--muted:#9aa7ba;--line:#27
 
 <section class="page" id="vouchers"><div class="head"><div><h2>Vouchers</h2><p>Manual entries use a single balanced debit/credit pair.</p></div><button class="btn primary" onclick="openVoucher()">+ New Voucher</button></div><div class="card panel"><div class="pb"><div class="toolbar"><input id="voucherSearch" placeholder="Search..." oninput="renderVouchers()"><select id="voucherFilter" onchange="renderVouchers()"><option value="">All</option><option>Payment</option><option>Receipt</option><option>Contra</option><option>Journal</option></select></div><div class="tablewrap"><table><thead><tr><th>No.</th><th>Date</th><th>Type</th><th>Debit</th><th>Credit</th><th>Amount</th><th></th></tr></thead><tbody id="vouchersBody"></tbody></table></div></div></div></section>
 
-<section class="page" id="daybook"><div class="head"><div><h2>Day Book</h2><p>Unified view of accounting entries.</p></div></div><div class="card panel"><div class="pb"><div class="toolbar"><input type="date" id="dayDate" onchange="renderDaybook()"><select id="dayFilter" onchange="renderDaybook"><option value="">All</option><option>Sales</option><option>Purchase</option><option>Payment</option><option>Receipt</option><option>Contra</option><option>Journal</option></select></div><div class="tablewrap"><table><thead><tr><th>Date</th><th>No.</th><th>Type</th><th>Debit</th><th>Credit</th><th>Amount</th><th>Narration</th></tr></thead><tbody id="dayBody"></tbody></table></div></div></div></section>
+<section class="page" id="daybook"><div class="head"><div><h2>Day Book</h2><p>Unified view of accounting entries.</p></div></div><div class="card panel"><div class="pb"><div class="toolbar"><input type="date" id="dayDate" onchange="renderDaybook()"><select id="dayFilter" onchange="renderDaybook()"><option value="">All</option><option>Sales</option><option>Purchase</option><option>Payment</option><option>Receipt</option><option>Contra</option><option>Journal</option></select></div><div class="tablewrap"><table><thead><tr><th>Date</th><th>No.</th><th>Type</th><th>Debit</th><th>Credit</th><th>Amount</th><th>Narration</th></tr></thead><tbody id="dayBody"></tbody></table></div></div></div></section>
 
 <section class="page" id="trial"><div class="head"><div><h2>Trial Balance</h2><p>Closing ledger balances. Debit total must equal credit total.</p></div><button class="btn" onclick="window.print()">🖨 Print</button></div><div id="tbCheck"></div><div class="cards"><div class="card stat"><label>Total Debit</label><strong id="tbDr">₹0.00</strong></div><div class="card stat"><label>Total Credit</label><strong id="tbCr">₹0.00</strong></div><div class="card stat"><label>Difference</label><strong id="tbDiff">₹0.00</strong></div><div class="card stat"><label>Status</label><strong id="tbStatus">Balanced</strong></div></div><div class="card panel"><div class="pb"><div class="tablewrap"><table><thead><tr><th>Ledger</th><th>Group</th><th>Debit</th><th>Credit</th></tr></thead><tbody id="tbBody"></tbody></table></div></div></div></section>
 
@@ -99,6 +99,26 @@ body.dark{--bg:#0b1220;--panel:#111827;--text:#f5f7fb;--muted:#9aa7ba;--line:#27
 <div id="toast" style="position:fixed;right:20px;bottom:20px;background:#111827;color:#fff;padding:11px 15px;border-radius:8px;opacity:0;transform:translateY(10px);transition:.2s;z-index:200;font-size:12px"></div>
 
 <script>
+/* Explicit DOM references: do not rely on browser-specific ID globals. */
+const $ = id => document.getElementById(id);
+const side=$("side"), globalSearch=$("globalSearch"), topCompany=$("topCompany"), toastEl=$("toast");
+const groupSearch=$("groupSearch"), groupsBody=$("groupsBody"), gn=$("gn"), gNature=$("gNature"), gParent=$("gParent");
+const ledgerSearch=$("ledgerSearch"), ledgerFilter=$("ledgerFilter"), ledgersBody=$("ledgersBody"), ledgerTitle=$("ledgerTitle"), ln=$("ln"), lGroup=$("lGroup"), lOpening=$("lOpening"), lNature=$("lNature"), lNotes=$("lNotes");
+const partySearch=$("partySearch"), partyType=$("partyType"), partiesBody=$("partiesBody"), pn=$("pn"), pType=$("pType"), pGSTIN=$("pGSTIN"), pState=$("pState"), pPhone=$("pPhone"), pLimit=$("pLimit"), pAddress=$("pAddress");
+const salesSearch=$("salesSearch"), salesBody=$("salesBody"), purchaseSearch=$("purchaseSearch"), purchaseBody=$("purchaseBody");
+const voucherSearch=$("voucherSearch"), voucherFilter=$("voucherFilter"), vouchersBody=$("vouchersBody"), vType=$("vType"), vDate=$("vDate"), vDebit=$("vDebit"), vCredit=$("vCredit"), vAmount=$("vAmount"), vRef=$("vRef"), vNarration=$("vNarration");
+const dayDate=$("dayDate"), dayFilter=$("dayFilter"), dayBody=$("dayBody");
+const tbCheck=$("tbCheck"), tbDr=$("tbDr"), tbCr=$("tbCr"), tbDiff=$("tbDiff"), tbStatus=$("tbStatus"), tbBody=$("tbBody");
+const plRev=$("plRev"), plDirect=$("plDirect"), plIndirect=$("plIndirect"), plNet=$("plNet"), plBody=$("plBody");
+const bsAssets=$("bsAssets"), bsLiab=$("bsLiab"), bsCapital=$("bsCapital"), bsDiff=$("bsDiff"), bsBody=$("bsBody");
+const gstOut=$("gstOut"), gstIn=$("gstIn"), gstNet=$("gstNet"), gstTurn=$("gstTurn"), gstBody=$("gstBody");
+const osRec=$("osRec"), osPay=$("osPay"), osC=$("osC"), osS=$("osS"), osBody=$("osBody");
+const dLedgers=$("dLedgers"), dParties=$("dParties"), dSales=$("dSales"), dPurchase=$("dPurchase"), dOut=$("dOut"), dIn=$("dIn"), dRec=$("dRec"), dPay=$("dPay"), recent=$("recent");
+const calcDisplay=$("calcDisplay"), calcKeys=$("calcKeys"), qa=$("qa"), qr=$("qr"), qresult=$("qresult");
+const sheet=$("sheet");
+const coName=$("coName"), coGSTIN=$("coGSTIN"), coPAN=$("coPAN"), coState=$("coState"), coFY=$("coFY"), coAddress=$("coAddress");
+const invoiceTitle=$("invoiceTitle"), iDate=$("iDate"), iParty=$("iParty"), iNo=$("iNo"), iState=$("iState"), iMode=$("iMode"), iRound=$("iRound"), iNarration=$("iNarration"), itemRows=$("itemRows"), tTax=$("tTax"), tCGST=$("tCGST"), tSGST=$("tSGST"), tIGST=$("tIGST"), tTotal=$("tTotal");
+const groupModal=$("groupModal"), ledgerModal=$("ledgerModal"), partyModal=$("partyModal"), voucherModal=$("voucherModal"), invoiceModal=$("invoiceModal"), restore=$("restore");
 const KEY="businessDeskPhase31";
 const BASE={
 version:"3.1",
@@ -125,12 +145,26 @@ ledgers:[
 parties:[],vouchers:[],sales:[],purchases:[],seq:1,invoiceSeq:1
 };
 let db=JSON.parse(localStorage.getItem(KEY)||"null")||structuredClone(BASE);
-db.version="3.1";db.groups??=[];db.ledgers??=[];db.parties??=[];db.vouchers??=[];db.sales??=[];db.purchases??=[];db.seq??=1;db.invoiceSeq??=1;
+db.version="3.1";
+db.company??=structuredClone(BASE.company);
+db.groups??=[];db.ledgers??=[];db.parties??=[];db.vouchers??=[];db.sales??=[];db.purchases??=[];db.seq??=1;db.invoiceSeq??=1;
+
+function ensureSystemData(){
+  const baseGroups=BASE.groups;
+  for(const g of baseGroups) if(!db.groups.some(x=>x.id===g.id)) db.groups.push(structuredClone(g));
+  const baseLedgers=BASE.ledgers;
+  for(const l of baseLedgers) if(!db.ledgers.some(x=>x.id===l.id)) db.ledgers.push(structuredClone(l));
+  db.parties.forEach(p=>{
+    if(!partyLedger(p.id)){
+      db.ledgers.push({id:uid("l"),name:p.name,group:p.type==="Customer"?"g_ca":"g_cl",opening:0,nature:p.type==="Customer"?"Debit":"Credit",partyId:p.id,notes:"Auto-created party ledger"});
+    }
+  });
+}
 function save(){localStorage.setItem(KEY,JSON.stringify(db))}
 function money(n){return "₹"+Number(n||0).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2})}
-function uid(p){return p+"_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,7)}
+function uid(p){return p+"_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,7)}\nensureSystemData();
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
-function toast(m){let x=document.getElementById("toast");x.textContent=m;x.style.opacity=1;x.style.transform="translateY(0)";clearTimeout(window.tt);window.tt=setTimeout(()=>{x.style.opacity=0;x.style.transform="translateY(10px)"},2200)}
+function toast(m){let x=toastEl;x.textContent=m;x.style.opacity=1;x.style.transform="translateY(0)";clearTimeout(window.tt);window.tt=setTimeout(()=>{x.style.opacity=0;x.style.transform="translateY(10px)"},2200)}
 function toggleSide(){side.classList.toggle("open")}function toggleDark(){document.body.classList.toggle("dark");localStorage.setItem("bdDark",document.body.classList.contains("dark"))}if(localStorage.getItem("bdDark")==="true")document.body.classList.add("dark")
 function go(p){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(p).classList.add("active");document.querySelectorAll(".nav[data-page]").forEach(x=>x.classList.toggle("active",x.dataset.page===p));side.classList.remove("open");refresh()}
 document.querySelectorAll(".nav[data-page]").forEach(x=>x.onclick=()=>go(x.dataset.page));
@@ -181,13 +215,13 @@ function renderDaybook(){let d=dayDate?.value||"",f=dayFilter?.value||"";let a=a
 function trialData(){return db.ledgers.map(l=>{let t=ledgerTotals(l.id),dr=Math.max(t.balance,0),cr=Math.max(-t.balance,0);return{l,dr,cr}})}
 function renderTrial(){let a=trialData(),dr=a.reduce((s,x)=>s+x.dr,0),cr=a.reduce((s,x)=>s+x.cr,0),diff=Math.abs(dr-cr);tbDr.textContent=money(dr);tbCr.textContent=money(cr);tbDiff.textContent=money(diff);tbStatus.textContent=diff<.005?"Balanced":"Difference";tbCheck.innerHTML=diff<.005?'<div class="check good">✓ Books are balanced at the trial-balance level.</div>':'<div class="check bad">⚠ Trial balance difference detected. Review opening balances and postings.</div>';tbBody.innerHTML=a.map(x=>`<tr><td>${esc(x.l.name)}</td><td>${esc(G(x.l.group)?.name||"")}</td><td>${money(x.dr)}</td><td>${money(x.cr)}</td></tr>`).join("")}
 function renderPL(){let rev=0,de=0,ie=0,rows=[];db.ledgers.forEach(l=>{let n=groupNature(l.group),t=Math.abs(ledgerTotals(l.id).balance);if(n==="Income"){rev+=t;rows.push([l,"Income",t])}else if(n==="Expenses"){if(G(l.group)?.name==="Direct Expenses")de+=t;else ie+=t;rows.push([l,G(l.group)?.name||"Expenses",t])}});plRev.textContent=money(rev);plDirect.textContent=money(de);plIndirect.textContent=money(ie);plNet.textContent=money(rev-de-ie);plBody.innerHTML=rows.map(x=>`<tr><td>${esc(x[0].name)}</td><td>${esc(x[1])}</td><td>${money(x[2])}</td></tr>`).join("")||`<tr><td colspan="3" class="empty">No P&L data.</td></tr>`}
-function renderBS(){let assets=0,liab=0,cap=0,rows=[];db.ledgers.forEach(l=>{let n=groupNature(l.group),t=ledgerTotals(l.id).balance;if(n==="Assets"){assets+=Math.max(t,0);rows.push([l,"Assets",Math.max(t,0)])}else if(n==="Liabilities"){liab+=Math.max(-t,0);rows.push([l,"Liabilities",Math.max(-t,0)])}});let income=0;db.ledgers.forEach(l=>{let n=groupNature(l.group),t=ledgerTotals(l.id).balance;if(n==="Income")income-=t;if(n==="Expenses")income-=t});db.ledgers.filter(l=>G(l.group)?.name==="Capital Account").forEach(l=>{let t=ledgerTotals(l.id).balance;cap+=Math.max(-t,0)});cap+=income;bsAssets.textContent=money(assets);bsLiab.textContent=money(liab);bsCapital.textContent=money(cap);bsDiff.textContent=money(Math.abs(assets-liab-cap));bsBody.innerHTML=rows.map(x=>`<tr><td>${esc(x[0].name)}</td><td>${x[1]}</td><td>${money(x[2])}</td></tr>`).join("")}
+function renderBS(){let assets=0,liab=0,cap=0,rows=[];db.ledgers.forEach(l=>{let n=groupNature(l.group),t=ledgerTotals(l.id).balance;if(n==="Assets"){assets+=Math.max(t,0);rows.push([l,"Assets",Math.max(t,0)])}else if(n==="Liabilities"){liab+=Math.max(-t,0);rows.push([l,"Liabilities",Math.max(-t,0)])}});let income=0;db.ledgers.forEach(l=>{let n=groupNature(l.group),t=ledgerTotals(l.id).balance;if(n==="Income")income-=t;if(n==="Expenses")income-=Math.max(t,0)});db.ledgers.filter(l=>G(l.group)?.name==="Capital Account").forEach(l=>{let t=ledgerTotals(l.id).balance;cap+=Math.max(-t,0)});cap+=income;bsAssets.textContent=money(assets);bsLiab.textContent=money(liab);bsCapital.textContent=money(cap);bsDiff.textContent=money(Math.abs(assets-liab-cap));bsBody.innerHTML=rows.map(x=>`<tr><td>${esc(x[0].name)}</td><td>${x[1]}</td><td>${money(x[2])}</td></tr>`).join("")}
 function renderGST(){let out=db.sales.reduce((a,x)=>a+x.gst,0),input=db.purchases.reduce((a,x)=>a+x.gst,0),turn=db.sales.reduce((a,x)=>a+x.taxable,0);gstOut.textContent=money(out);gstIn.textContent=money(input);gstNet.textContent=money(out-input);gstTurn.textContent=money(turn);let a=[];db.sales.forEach(x=>a.push([x.no,"Output",x.taxable,x.gst,x.cgst,x.sgst,x.igst]));db.purchases.forEach(x=>a.push([x.no,"Input",x.taxable,x.gst,x.cgst,x.sgst,x.igst]));gstBody.innerHTML=a.map(x=>`<tr><td>${x[0]}</td><td>${x[1]}</td><td>${money(x[2])}</td><td>${money(x[3])}</td><td>${money(x[4])}</td><td>${money(x[5])}</td><td>${money(x[6])}</td></tr>`).join("")||`<tr><td colspan="7" class="empty">No GST documents.</td></tr>`}
 function renderOutstanding(){let rec=0,pay=0;db.parties.forEach(p=>{let o=partyOutstanding(p);if(p.type==="Customer")rec+=o;else pay+=o});osRec.textContent=money(rec);osPay.textContent=money(pay);osC.textContent=db.parties.filter(p=>p.type==="Customer").length;osS.textContent=db.parties.filter(p=>p.type==="Supplier").length;osBody.innerHTML=db.parties.map(p=>{let total=partyInvoiceTotals(p),o=partyOutstanding(p);return`<tr><td>${esc(p.name)}</td><td>${p.type}</td><td>${money(total)}</td><td>${money(Math.max(0,total-o))}</td><td>${money(o)}</td></tr>`}).join("")||`<tr><td colspan="5" class="empty">No party balances.</td></tr>`}
 function renderDash(){dLedgers.textContent=db.ledgers.length;dParties.textContent=db.parties.length;dSales.textContent=money(db.sales.reduce((a,x)=>a+x.total,0));dPurchase.textContent=money(db.purchases.reduce((a,x)=>a+x.total,0));dOut.textContent=money(db.sales.reduce((a,x)=>a+x.gst,0));dIn.textContent=money(db.purchases.reduce((a,x)=>a+x.gst,0));dRec.textContent=money(db.parties.filter(p=>p.type==="Customer").reduce((a,p)=>a+partyOutstanding(p),0));dPay.textContent=money(db.parties.filter(p=>p.type==="Supplier").reduce((a,p)=>a+partyOutstanding(p),0));recent.innerHTML=allRows().slice().reverse().slice(0,8).map(x=>`<tr><td>${x.date}</td><td>${x.no}</td><td>${x.type}</td><td>${esc(x.lines.filter(y=>y.dr).map(y=>L(y.ledger)?.name).join(", "))}</td><td>${esc(x.lines.filter(y=>y.cr).map(y=>L(y.ledger)?.name).join(", "))}</td><td>${money(x.lines.reduce((a,y)=>a+y.dr,0))}</td></tr>`).join("")||`<tr><td colspan="6" class="empty">No transactions yet.</td></tr>`;topCompany.textContent=db.company.name||"My Business"}
 function saveCompany(){db.company={name:coName.value.trim()||"My Business",gstin:coGSTIN.value.trim(),pan:coPAN.value.trim(),state:coState.value.trim(),fy:coFY.value,address:coAddress.value.trim()};save();refresh();toast("Company saved")}
 function loadCompany(){let c=db.company;coName.value=c.name;coGSTIN.value=c.gstin;coPAN.value=c.pan;coState.value=c.state;coFY.value=c.fy;coAddress.value=c.address}
-function backup(){let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:"application/json"}));a.download="BusinessDesk_Phase3_1_Backup.json";a.click();toast("Backup exported")}
+function backup(){let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:"application/json"}));a.download="BusinessDesk_Phase3_1_Backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast("Backup exported")}
 restore.onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.company||!x.groups||!x.ledgers||!Array.isArray(x.vouchers))throw Error();db=x;save();refresh();toast("Backup restored")}catch{toast("Invalid BusinessDesk backup")}};r.readAsText(f);e.target.value=""}
 function globalSearchFn(){let q=globalSearch.value.toLowerCase().trim();if(!q)return;let m={"dashboard":"dashboard","calculator":"calculator","spreadsheet":"spreadsheet","group":"groups","ledger":"ledgers","party":"parties","customer":"parties","supplier":"parties","sales":"sales","purchase":"purchase","voucher":"vouchers","day":"daybook","trial":"trial","profit":"pl","balance":"balance","gst":"gst","outstanding":"outstanding","company":"company"};for(let k in m)if(k.includes(q)||q.includes(k)){go(m[k]);break}}
 let cv="0",op=null,first=null;function calcInput(x){if(x==="C"){cv="0";op=null;first=null}else if(x==="⌫")cv=cv.length>1?cv.slice(0,-1):"0";else if(["+","-","×","÷"].includes(x)){first=+cv;op=x;cv="0"}else if(x==="="&&op){let b=+cv,r=op==="+"?first+b:op==="-"?first-b:op==="×"?first*b:(b?first/b:NaN);cv=Number.isFinite(r)?String(+r.toFixed(10)):"Error";op=null}else if(x!=="="){if(x==="."&&cv.includes("."))return;cv=cv==="0"&&x!=="."?x:cv}calcDisplay.value=cv}
@@ -197,6 +231,18 @@ let sr=20,sc=8;function buildSheet(){sheet.querySelector("thead").innerHTML="<tr
 function saveSheet(){localStorage.setItem("bdSheet31",JSON.stringify([...document.querySelectorAll("#sheet td")].map(c=>({r:c.dataset.r,c:c.dataset.c,v:c.textContent}))));toast("Spreadsheet saved")}function addRow(){sr++;buildSheet()}function addCol(){sc++;buildSheet()}function clearSheet(){if(confirm("Clear spreadsheet?")){localStorage.removeItem("bdSheet31");buildSheet()}}
 function exportCSV(){let out=[];for(let r=0;r<sr;r++){let row=[];for(let c=0;c<sc;c++)row.push('"'+(document.querySelector(`#sheet td[data-r="${r}"][data-c="${c}"]`)?.textContent||"").replaceAll('"','""')+'"');out.push(row.join(","))}let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([out.join("\n")],{type:"text/csv"}));a.download="BusinessDesk_WorkingPaper.csv";a.click()}
 function refresh(){renderDash();renderGroups();renderLedgers();renderParties();renderSales();renderPurchases();renderVouchers();renderDaybook();renderTrial();renderPL();renderBS();renderGST();renderOutstanding();loadCompany()}
+
+
+document.addEventListener("keydown", e=>{
+  if(e.key==="Escape") document.querySelectorAll(".modal.show").forEach(m=>m.classList.remove("show"));
+  if(document.getElementById("calculator").classList.contains("active")){
+    const map={"Enter":"=","Escape":"C","Backspace":"⌫","+":"+","-":"-","*":"×","/":"÷"};
+    if(/^[0-9.]$/.test(e.key)) calcInput(e.key);
+    else if(map[e.key]) { e.preventDefault(); calcInput(map[e.key]); }
+  }
+});
+document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)m.classList.remove("show")}));
+
 buildSheet();refresh();quickGST();
 </script>
 </body>
