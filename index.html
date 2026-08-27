@@ -1,0 +1,3518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Business Desk — Accounting & Excel Suite</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: #f5f7fb;
+    --sidebar: #111827;
+    --sidebar-hover: #1f2937;
+    --card: #ffffff;
+    --text: #111827;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --success: #059669;
+    --danger: #dc2626;
+    --warning: #d97706;
+    --input: #ffffff;
+    --shadow: 0 8px 25px rgba(15,23,42,.07);
+}
+
+body.dark {
+    --bg: #0f172a;
+    --sidebar: #020617;
+    --sidebar-hover: #1e293b;
+    --card: #111827;
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --border: #243244;
+    --input: #0b1220;
+    --shadow: 0 8px 25px rgba(0,0,0,.25);
+}
+
+body {
+    font-family: Inter, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+
+.app {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background: var(--sidebar);
+    color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    padding: 24px 20px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.logo h1 {
+    font-size: 21px;
+    letter-spacing: -.5px;
+}
+
+.logo span {
+    color: #60a5fa;
+}
+
+.logo small {
+    display: block;
+    margin-top: 5px;
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+.menu {
+    padding: 15px 10px;
+    overflow-y: auto;
+}
+
+.menu-title {
+    color: #64748b;
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 12px 12px 7px;
+    letter-spacing: 1px;
+}
+
+.menu button {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: #cbd5e1;
+    padding: 11px 13px;
+    border-radius: 8px;
+    text-align: left;
+    cursor: pointer;
+    margin: 2px 0;
+    font-size: 13px;
+    transition: .2s;
+}
+
+.menu button:hover,
+.menu button.active {
+    background: var(--sidebar-hover);
+    color: white;
+}
+
+.menu button.active {
+    border-left: 3px solid #60a5fa;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+    padding: 12px;
+    border-top: 1px solid rgba(255,255,255,.08);
+}
+
+.main {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+    min-height: 100vh;
+}
+
+/* =========================
+   TOPBAR
+========================= */
+
+.topbar {
+    height: 68px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.search {
+    position: relative;
+    width: 380px;
+}
+
+.search input {
+    width: 100%;
+    padding: 11px 15px 11px 40px;
+    border: 1px solid var(--border);
+    background: var(--input);
+    color: var(--text);
+    border-radius: 9px;
+    outline: none;
+}
+
+.search-icon {
+    position: absolute;
+    left: 14px;
+    top: 10px;
+    color: var(--muted);
+}
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.icon-btn {
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding-left: 8px;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content {
+    padding: 25px;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.page-header h2 {
+    font-size: 24px;
+}
+
+.page-header p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btn {
+    border: 0;
+    border-radius: 8px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+.btn-secondary {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.btn-success {
+    background: var(--success);
+    color: white;
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-warning {
+    background: var(--warning);
+    color: white;
+}
+
+/* =========================
+   DASHBOARD CARDS
+========================= */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.stat-card {
+    padding: 18px;
+}
+
+.stat-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-label {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.stat-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eff6ff;
+    color: var(--primary);
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 9px 0 5px;
+}
+
+.stat-change {
+    font-size: 11px;
+}
+
+.up {
+    color: var(--success);
+}
+
+.down {
+    color: var(--danger);
+}
+
+/* =========================
+   DASHBOARD GRID
+========================= */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 18px;
+}
+
+.panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.panel-header {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.panel-header h3 {
+    font-size: 14px;
+}
+
+.panel-body {
+    padding: 18px;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 12px 13px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    font-size: 12px;
+}
+
+th {
+    color: var(--muted);
+    font-weight: 600;
+    background: rgba(148,163,184,.05);
+}
+
+.status {
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.status.success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status.danger {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* =========================
+   QUICK ACTIONS
+========================= */
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+}
+
+.quick-action {
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    padding: 14px;
+    border-radius: 9px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.quick-action:hover {
+    border-color: var(--primary);
+}
+
+.quick-action strong {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 3px;
+}
+
+.quick-action span {
+    color: var(--muted);
+    font-size: 10px;
+}
+
+/* =========================
+   CALCULATOR
+========================= */
+
+.calculator-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.calc-box {
+    padding: 20px;
+}
+
+.calc-display {
+    width: 100%;
+    background: var(--input);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 9px;
+    padding: 16px;
+    text-align: right;
+    font-size: 27px;
+    margin-bottom: 12px;
+    outline: none;
+}
+
+.calc-grid {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 8px;
+}
+
+.calc-btn {
+    padding: 15px 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.calc-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.calc-btn.operator {
+    background: #eff6ff;
+    color: var(--primary);
+}
+
+.calc-btn.equal {
+    background: var(--primary);
+    color: white;
+}
+
+.form-card {
+    padding: 20px;
+}
+
+.form-card h3 {
+    margin-bottom: 16px;
+    font-size: 15px;
+}
+
+.form-group {
+    margin-bottom: 13px;
+}
+
+.form-group label {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    border: 1px solid var(--border);
+    background: var(--input);
+    color: var(--text);
+    padding: 10px;
+    border-radius: 7px;
+    outline: none;
+}
+
+.result-box {
+    background: rgba(37,99,235,.08);
+    border: 1px solid rgba(37,99,235,.2);
+    padding: 14px;
+    border-radius: 8px;
+    margin-top: 14px;
+}
+
+.result-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    font-size: 12px;
+}
+
+.result-row.total {
+    font-weight: bold;
+    font-size: 15px;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: 5px;
+}
+
+/* =========================
+   SPREADSHEET
+========================= */
+
+.sheet-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    padding: 10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-bottom: 0;
+    border-radius: 10px 10px 0 0;
+}
+
+.sheet-toolbar button {
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 7px 10px;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+.sheet-toolbar button:hover {
+    background: var(--bg);
+}
+
+.sheet-container {
+    overflow: auto;
+    max-height: 600px;
+    border: 1px solid var(--border);
+    background: var(--card);
+}
+
+.sheet {
+    border-collapse: collapse;
+    min-width: 1000px;
+}
+
+.sheet th,
+.sheet td {
+    min-width: 110px;
+    height: 30px;
+    padding: 5px;
+    border: 1px solid var(--border);
+    font-size: 11px;
+}
+
+.sheet th {
+    text-align: center;
+    min-width: 42px;
+    width: 42px;
+    position: sticky;
+    top: 0;
+    z-index: 4;
+}
+
+.sheet th:first-child {
+    left: 0;
+    z-index: 5;
+}
+
+.row-number {
+    position: sticky;
+    left: 0;
+    background: var(--card);
+    z-index: 3;
+    text-align: center !important;
+    min-width: 42px !important;
+}
+
+.sheet td {
+    background: var(--input);
+}
+
+.sheet td:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: -2px;
+}
+
+/* =========================
+   COMPANY
+========================= */
+
+.company-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.company-card {
+    padding: 22px;
+}
+
+.company-logo {
+    width: 70px;
+    height: 70px;
+    background: var(--primary);
+    color: white;
+    border-radius: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 14px;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    background: #111827;
+    color: white;
+    padding: 12px 17px;
+    border-radius: 8px;
+    font-size: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(15px);
+    transition: .3s;
+    z-index: 5000;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+.mobile-menu {
+    display: none;
+}
+
+@media(max-width:1000px) {
+    .cards {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .dashboard-grid,
+    .calculator-layout,
+    .company-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width:700px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: .3s;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .mobile-menu {
+        display: block;
+    }
+
+    .search {
+        width: 180px;
+    }
+
+    .content {
+        padding: 15px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .page-header {
+        align-items: flex-start;
+        gap: 10px;
+        flex-direction: column;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+        <h1>Business<span>Desk</span></h1>
+        <small>Accounting • Excel • Finance</small>
+    </div>
+
+    <div class="menu">
+
+        <div class="menu-title">Workspace</div>
+
+        <button class="nav-btn active" data-page="dashboard">
+            🏠 Dashboard
+        </button>
+
+        <button class="nav-btn" data-page="calculator">
+            🧮 Calculator
+        </button>
+
+        <button class="nav-btn" data-page="spreadsheet">
+            📊 Spreadsheet
+        </button>
+
+        <div class="menu-title">Business</div>
+
+        <button class="nav-btn" data-page="company">
+            🏢 Company
+        </button>
+
+        <button class="nav-btn" data-page="documents">
+            📄 Documents
+        </button>
+
+        <button class="nav-btn" data-page="reports">
+            📑 Reports
+        </button>
+
+        <div class="menu-title">Finance Tools</div>
+
+        <button class="nav-btn" data-page="gst">
+            🧾 GST Tools
+        </button>
+
+        <button class="nav-btn" data-page="tax">
+            💰 Tax Tools
+        </button>
+
+    </div>
+
+    <div class="sidebar-bottom">
+        <button class="menu-btn" style="
+            width:100%;
+            padding:10px;
+            background:#1f2937;
+            border:0;
+            color:#cbd5e1;
+            border-radius:8px;
+            cursor:pointer;"
+            onclick="showToast('Backup feature will be expanded in Phase 2')">
+            💾 Backup & Data
+        </button>
+    </div>
+
+</aside>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="main">
+
+<header class="topbar">
+
+    <div style="display:flex;align-items:center;gap:10px">
+
+        <button class="icon-btn mobile-menu" onclick="toggleSidebar()">
+            ☰
+        </button>
+
+        <div class="search">
+            <span class="search-icon">⌕</span>
+            <input
+                type="text"
+                id="globalSearch"
+                placeholder="Search tools, pages..."
+                onkeyup="globalSearch()">
+        </div>
+
+    </div>
+
+    <div class="top-actions">
+
+        <button class="icon-btn" onclick="toggleDarkMode()" title="Dark mode">
+            ◐
+        </button>
+
+        <button class="icon-btn" onclick="showToast('No new notifications')">
+            🔔
+        </button>
+
+        <div class="profile">
+            <div class="avatar">U</div>
+            <div style="font-size:12px">
+                <strong>User</strong>
+                <div style="color:var(--muted);font-size:10px">
+                    Administrator
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</header>
+
+
+<div class="content">
+
+<!-- =========================
+     DASHBOARD
+========================= -->
+
+<section class="page active" id="dashboard">
+
+    <div class="page-header">
+
+        <div>
+            <h2>Dashboard</h2>
+            <p id="dashboardGreeting">
+                Welcome back. Here's your workspace overview.
+            </p>
+        </div>
+
+        <button class="btn btn-primary"
+                onclick="navigate('spreadsheet')">
+            + Open Spreadsheet
+        </button>
+
+    </div>
+
+
+    <div class="cards">
+
+        <div class="card stat-card">
+            <div class="stat-top">
+                <span class="stat-label">Total Sales</span>
+                <div class="stat-icon">₹</div>
+            </div>
+
+            <div class="stat-value">₹85,000</div>
+
+            <span class="stat-change up">
+                ↑ 12.5% this month
+            </span>
+        </div>
+
+
+        <div class="card stat-card">
+            <div class="stat-top">
+                <span class="stat-label">Purchases</span>
+                <div class="stat-icon">🛒</div>
+            </div>
+
+            <div class="stat-value">₹42,500</div>
+
+            <span class="stat-change down">
+                ↓ 4.2% this month
+            </span>
+        </div>
+
+
+        <div class="card stat-card">
+            <div class="stat-top">
+                <span class="stat-label">Receivables</span>
+                <div class="stat-icon">↗</div>
+            </div>
+
+            <div class="stat-value">₹65,000</div>
+
+            <span class="stat-change up">
+                ↑ 8.4% outstanding
+            </span>
+        </div>
+
+
+        <div class="card stat-card">
+            <div class="stat-top">
+                <span class="stat-label">Payables</span>
+                <div class="stat-icon">↘</div>
+            </div>
+
+            <div class="stat-value">₹31,000</div>
+
+            <span class="stat-change">
+                Current period
+            </span>
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-grid">
+
+        <div class="panel">
+
+            <div class="panel-header">
+                <h3>Recent Transactions</h3>
+
+                <button class="btn btn-secondary"
+                        onclick="navigate('reports')">
+                    View All
+                </button>
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+                    <tr>
+                        <th>Reference</th>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Party</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <tr>
+                        <td>INV-1024</td>
+                        <td>27 Aug 2026</td>
+                        <td>Sales</td>
+                        <td>ABC Traders</td>
+                        <td>₹12,500</td>
+                        <td>
+                            <span class="status success">
+                                Paid
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>PUR-087</td>
+                        <td>26 Aug 2026</td>
+                        <td>Purchase</td>
+                        <td>XYZ Supplies</td>
+                        <td>₹8,400</td>
+                        <td>
+                            <span class="status pending">
+                                Pending
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>REC-054</td>
+                        <td>25 Aug 2026</td>
+                        <td>Receipt</td>
+                        <td>Global Stores</td>
+                        <td>₹15,000</td>
+                        <td>
+                            <span class="status success">
+                                Cleared
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>PAY-041</td>
+                        <td>24 Aug 2026</td>
+                        <td>Payment</td>
+                        <td>Office Mart</td>
+                        <td>₹6,250</td>
+                        <td>
+                            <span class="status success">
+                                Cleared
+                            </span>
+                        </td>
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <div class="panel-header">
+                <h3>Quick Actions</h3>
+            </div>
+
+            <div class="panel-body">
+
+                <div class="quick-actions">
+
+                    <button class="quick-action"
+                            onclick="navigate('calculator')">
+                        <strong>🧮 Calculator</strong>
+                        <span>Perform calculations</span>
+                    </button>
+
+                    <button class="quick-action"
+                            onclick="navigate('spreadsheet')">
+                        <strong>📊 Spreadsheet</strong>
+                        <span>Work like Excel</span>
+                    </button>
+
+                    <button class="quick-action"
+                            onclick="navigate('gst')">
+                        <strong>🧾 GST</strong>
+                        <span>GST calculations</span>
+                    </button>
+
+                    <button class="quick-action"
+                            onclick="navigate('company')">
+                        <strong>🏢 Company</strong>
+                        <span>Manage company profile</span>
+                    </button>
+
+                    <button class="quick-action"
+                            onclick="showToast('Invoice module is planned for Phase 2')">
+                        <strong>📄 Invoice</strong>
+                        <span>Create invoice</span>
+                    </button>
+
+                    <button class="quick-action"
+                            onclick="navigate('reports')">
+                        <strong>📑 Reports</strong>
+                        <span>View business reports</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     CALCULATOR
+========================= -->
+
+<section class="page" id="calculator">
+
+    <div class="page-header">
+
+        <div>
+            <h2>Calculator Centre</h2>
+            <p>Professional financial and mathematical calculations.</p>
+        </div>
+
+    </div>
+
+
+    <div class="calculator-layout">
+
+        <div class="card calc-box">
+
+            <h3 style="margin-bottom:12px">
+                Standard Calculator
+            </h3>
+
+            <input
+                class="calc-display"
+                id="calcDisplay"
+                value="0"
+                readonly>
+
+            <div class="calc-grid">
+
+                <button class="calc-btn"
+                        onclick="calcClear()">
+                    C
+                </button>
+
+                <button class="calc-btn"
+                        onclick="calcBackspace()">
+                    ⌫
+                </button>
+
+                <button class="calc-btn"
+                        onclick="calcPercent()">
+                    %
+                </button>
+
+                <button class="calc-btn operator"
+                        onclick="calcOperator('/')">
+                    ÷
+                </button>
+
+
+                <button class="calc-btn"
+                        onclick="calcNumber('7')">
+                    7
+                </button>
+
+                <button class="calc-btn"
+                        onclick="calcNumber('8')">
+                    8
+                </button>
+
+                <button class="calc-btn"
+                        onclick="calcNumber('9')">
+                    9
+                </button>
+
+                <button class="calc-btn operator"
+                        onclick="calcOperator('*')">
+                    ×
+                </button>
+
+
+                <button class="calc-btn"
+                        onclick="calcNumber('4')">
+                    4
+                </button>
+
+                <button class="calc-btn"
+                        onclick="calcNumber('5')">
+                    5
+                </button>
+
+                <button class="calc-btn"
+                        onclick="calcNumber('6')">
+                    6
+                </button>
+
+                <button class="calc-btn operator"
+                        onclick="calcOperator('-')">
+                    −
+                </button>
+
+
+                <button class="calc-btn"
+                        onclick="calcNumber('1')">
+                    1
+                </button>
+
+                <button class="calc-btn"
+                        onclick="calcNumber('2')">
+                    2
+                </button>
+
+                <button class="calc-btn"
+                        onclick="calcNumber('3')">
+                    3
+                </button>
+
+                <button class="calc-btn operator"
+                        onclick="calcOperator('+')">
+                    +
+                </button>
+
+
+                <button class="calc-btn"
+                        onclick="calcNumber('0')">
+                    0
+                </button>
+
+                <button class="calc-btn"
+                        onclick="calcNumber('.')">
+                    .
+                </button>
+
+                <button class="calc-btn"
+                        onclick="calcToggleSign()">
+                    ±
+                </button>
+
+                <button class="calc-btn equal"
+                        onclick="calcEquals()">
+                    =
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="card form-card">
+
+            <h3>GST Calculator</h3>
+
+            <div class="form-group">
+                <label>Amount (₹)</label>
+                <input
+                    type="number"
+                    id="gstAmount"
+                    placeholder="10000"
+                    oninput="calculateGST()">
+            </div>
+
+            <div class="form-group">
+                <label>GST Rate</label>
+
+                <select id="gstRate"
+                        onchange="calculateGST()">
+
+                    <option value="0">0%</option>
+                    <option value="3">3%</option>
+                    <option value="5">5%</option>
+                    <option value="12">12%</option>
+                    <option value="18" selected>18%</option>
+                    <option value="28">28%</option>
+
+                </select>
+            </div>
+
+            <div class="form-group">
+
+                <label>Calculation Type</label>
+
+                <select id="gstType"
+                        onchange="calculateGST()">
+
+                    <option value="exclusive">
+                        GST Extra
+                    </option>
+
+                    <option value="inclusive">
+                        GST Included
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="result-box">
+
+                <div class="result-row">
+                    <span>Base Amount</span>
+                    <strong id="gstBase">₹0.00</strong>
+                </div>
+
+                <div class="result-row">
+                    <span>CGST</span>
+                    <strong id="gstCgst">₹0.00</strong>
+                </div>
+
+                <div class="result-row">
+                    <span>SGST</span>
+                    <strong id="gstSgst">₹0.00</strong>
+                </div>
+
+                <div class="result-row total">
+                    <span>Total</span>
+                    <strong id="gstTotal">₹0.00</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card form-card">
+
+            <h3>Profit / Margin Calculator</h3>
+
+            <div class="form-group">
+                <label>Cost Price (₹)</label>
+                <input
+                    type="number"
+                    id="costPrice"
+                    placeholder="1000"
+                    oninput="calculateProfit()">
+            </div>
+
+            <div class="form-group">
+                <label>Selling Price (₹)</label>
+                <input
+                    type="number"
+                    id="sellingPrice"
+                    placeholder="1250"
+                    oninput="calculateProfit()">
+            </div>
+
+            <div class="result-box">
+
+                <div class="result-row">
+                    <span>Profit</span>
+                    <strong id="profitValue">₹0.00</strong>
+                </div>
+
+                <div class="result-row">
+                    <span>Profit % on Cost</span>
+                    <strong id="profitPercent">0%</strong>
+                </div>
+
+                <div class="result-row total">
+                    <span>Margin %</span>
+                    <strong id="marginPercent">0%</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card form-card">
+
+            <h3>Percentage Calculator</h3>
+
+            <div class="form-group">
+                <label>Number</label>
+                <input
+                    type="number"
+                    id="percentageNumber"
+                    placeholder="500"
+                    oninput="calculatePercentage()">
+            </div>
+
+            <div class="form-group">
+                <label>Percentage</label>
+                <input
+                    type="number"
+                    id="percentageRate"
+                    placeholder="18"
+                    oninput="calculatePercentage()">
+            </div>
+
+            <div class="result-box">
+
+                <div class="result-row total">
+                    <span>Result</span>
+                    <strong id="percentageResult">
+                        0.00
+                    </strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     SPREADSHEET
+========================= -->
+
+<section class="page" id="spreadsheet">
+
+    <div class="page-header">
+
+        <div>
+            <h2>Spreadsheet</h2>
+            <p>
+                Excel-style working area for calculations and data.
+            </p>
+        </div>
+
+        <div style="display:flex;gap:8px">
+
+            <button class="btn btn-secondary"
+                    onclick="saveSheet()">
+                💾 Save
+            </button>
+
+            <button class="btn btn-primary"
+                    onclick="exportCSV()">
+                ⬇ Export CSV
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="sheet-toolbar">
+
+        <button onclick="addRow()">
+            + Row
+        </button>
+
+        <button onclick="addColumn()">
+            + Column
+        </button>
+
+        <button onclick="deleteSelectedRow()">
+            − Row
+        </button>
+
+        <button onclick="deleteSelectedColumn()">
+            − Column
+        </button>
+
+        <button onclick="clearSheet()">
+            Clear
+        </button>
+
+        <button onclick="formatBold()">
+            <b>B</b>
+        </button>
+
+        <button onclick="formatItalic()">
+            <i>I</i>
+        </button>
+
+        <button onclick="alignSelected('left')">
+            Left
+        </button>
+
+        <button onclick="alignSelected('center')">
+            Center
+        </button>
+
+        <button onclick="alignSelected('right')">
+            Right
+        </button>
+
+        <button onclick="document.getElementById('csvInput').click()">
+            ⬆ Import CSV
+        </button>
+
+        <input
+            type="file"
+            id="csvInput"
+            accept=".csv"
+            style="display:none"
+            onchange="importCSV(event)">
+
+    </div>
+
+
+    <div class="sheet-container">
+
+        <table class="sheet" id="sheetTable">
+
+            <thead>
+                <tr id="sheetHead">
+                    <th>#</th>
+                </tr>
+            </thead>
+
+            <tbody id="sheetBody"></tbody>
+
+        </table>
+
+    </div>
+
+    <p style="
+        margin-top:8px;
+        color:var(--muted);
+        font-size:10px;">
+        Tip: You can enter formulas such as =SUM(A1:A5) in cells.
+    </p>
+
+</section>
+
+
+<!-- =========================
+     COMPANY
+========================= -->
+
+<section class="page" id="company">
+
+    <div class="page-header">
+
+        <div>
+            <h2>Company Profile</h2>
+            <p>Manage your business information.</p>
+        </div>
+
+        <button class="btn btn-primary"
+                onclick="saveCompany()">
+            Save Company
+        </button>
+
+    </div>
+
+
+    <div class="company-layout">
+
+        <div class="card company-card">
+
+            <div class="company-logo" id="companyLogo">
+                BD
+            </div>
+
+            <h3 id="companyPreviewName">
+                My Business
+            </h3>
+
+            <p id="companyPreviewAddress"
+               style="color:var(--muted);
+               font-size:12px;
+               margin-top:5px;">
+                Business address
+            </p>
+
+        </div>
+
+
+        <div class="card company-card">
+
+            <div class="form-group">
+                <label>Company Name</label>
+
+                <input
+                    id="companyName"
+                    value="My Business"
+                    oninput="updateCompanyPreview()">
+            </div>
+
+
+            <div class="form-group">
+                <label>GSTIN</label>
+
+                <input
+                    id="companyGSTIN"
+                    placeholder="Enter GSTIN">
+            </div>
+
+
+            <div class="form-group">
+                <label>PAN</label>
+
+                <input
+                    id="companyPAN"
+                    placeholder="Enter PAN">
+            </div>
+
+
+            <div class="form-group">
+                <label>Address</label>
+
+                <input
+                    id="companyAddress"
+                    placeholder="Business address"
+                    oninput="updateCompanyPreview()">
+            </div>
+
+
+            <div class="form-group">
+                <label>State</label>
+
+                <input
+                    id="companyState"
+                    placeholder="West Bengal">
+            </div>
+
+
+            <div class="form-group">
+                <label>Financial Year</label>
+
+                <select id="financialYear">
+
+                    <option>2026-27</option>
+                    <option>2025-26</option>
+                    <option>2027-28</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     DOCUMENTS
+========================= -->
+
+<section class="page" id="documents">
+
+    <div class="page-header">
+
+        <div>
+            <h2>Documents</h2>
+            <p>Business documents will be available here.</p>
+        </div>
+
+    </div>
+
+
+    <div class="card panel-body">
+
+        <div class="quick-actions">
+
+            <button class="quick-action"
+                    onclick="showToast('Invoice module coming in Phase 2')">
+
+                <strong>🧾 Sales Invoice</strong>
+
+                <span>
+                    Create professional invoices
+                </span>
+
+            </button>
+
+
+            <button class="quick-action"
+                    onclick="showToast('Quotation module coming in Phase 2')">
+
+                <strong>📄 Quotation</strong>
+
+                <span>
+                    Prepare quotations
+                </span>
+
+            </button>
+
+
+            <button class="quick-action"
+                    onclick="showToast('Purchase Order module coming in Phase 2')">
+
+                <strong>📑 Purchase Order</strong>
+
+                <span>
+                    Manage purchase orders
+                </span>
+
+            </button>
+
+
+            <button class="quick-action"
+                    onclick="showToast('Receipt module coming in Phase 2')">
+
+                <strong>🧾 Receipt</strong>
+
+                <span>
+                    Generate receipts
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     REPORTS
+========================= -->
+
+<section class="page" id="reports">
+
+    <div class="page-header">
+
+        <div>
+            <h2>Reports</h2>
+            <p>Business reporting centre.</p>
+        </div>
+
+    </div>
+
+
+    <div class="cards">
+
+        <div class="card stat-card">
+
+            <span class="stat-label">
+                Sales
+            </span>
+
+            <div class="stat-value">
+                ₹85,000
+            </div>
+
+            <span class="stat-change up">
+                Current period
+            </span>
+
+        </div>
+
+
+        <div class="card stat-card">
+
+            <span class="stat-label">
+                Purchases
+            </span>
+
+            <div class="stat-value">
+                ₹42,500
+            </div>
+
+            <span class="stat-change">
+                Current period
+            </span>
+
+        </div>
+
+
+        <div class="card stat-card">
+
+            <span class="stat-label">
+                Gross Profit
+            </span>
+
+            <div class="stat-value">
+                ₹42,500
+            </div>
+
+            <span class="stat-change up">
+                50.0%
+            </span>
+
+        </div>
+
+
+        <div class="card stat-card">
+
+            <span class="stat-label">
+                GST
+            </span>
+
+            <div class="stat-value">
+                ₹7,650
+            </div>
+
+            <span class="stat-change">
+                Indicative
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="panel-header">
+
+            <h3>Report Centre</h3>
+
+        </div>
+
+        <div class="panel-body">
+
+            <div class="quick-actions">
+
+                <button class="quick-action"
+                        onclick="showToast('Trial Balance is planned for Phase 2')">
+                    <strong>Trial Balance</strong>
+                    <span>Ledger balances</span>
+                </button>
+
+                <button class="quick-action"
+                        onclick="showToast('Profit & Loss is planned for Phase 2')">
+                    <strong>Profit & Loss</strong>
+                    <span>Income and expenses</span>
+                </button>
+
+                <button class="quick-action"
+                        onclick="showToast('Balance Sheet is planned for Phase 2')">
+                    <strong>Balance Sheet</strong>
+                    <span>Assets and liabilities</span>
+                </button>
+
+                <button class="quick-action"
+                        onclick="showToast('Day Book is planned for Phase 2')">
+                    <strong>Day Book</strong>
+                    <span>Transaction history</span>
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     GST
+========================= -->
+
+<section class="page" id="gst">
+
+    <div class="page-header">
+
+        <div>
+            <h2>GST Tools</h2>
+            <p>Quick GST calculation utilities.</p>
+        </div>
+
+    </div>
+
+
+    <div class="card form-card"
+         style="max-width:650px">
+
+        <h3>GST Calculator</h3>
+
+        <div class="form-group">
+
+            <label>Taxable Value</label>
+
+            <input
+                type="number"
+                id="gstAmount2"
+                placeholder="10000"
+                oninput="calculateGST2()">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>GST Rate</label>
+
+            <select id="gstRate2"
+                    onchange="calculateGST2()">
+
+                <option value="5">5%</option>
+                <option value="12">12%</option>
+                <option value="18" selected>18%</option>
+                <option value="28">28%</option>
+
+            </select>
+
+        </div>
+
+
+        <div class="result-box">
+
+            <div class="result-row">
+                <span>CGST</span>
+                <strong id="cgst2">₹0.00</strong>
+            </div>
+
+            <div class="result-row">
+                <span>SGST</span>
+                <strong id="sgst2">₹0.00</strong>
+            </div>
+
+            <div class="result-row">
+                <span>Total GST</span>
+                <strong id="totalgst2">₹0.00</strong>
+            </div>
+
+            <div class="result-row total">
+                <span>Invoice Total</span>
+                <strong id="invoiceTotal2">₹0.00</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     TAX
+========================= -->
+
+<section class="page" id="tax">
+
+    <div class="page-header">
+
+        <div>
+            <h2>Tax Tools</h2>
+            <p>Tax utilities will be expanded in later phases.</p>
+        </div>
+
+    </div>
+
+
+    <div class="card panel-body">
+
+        <div class="quick-actions">
+
+            <button class="quick-action"
+                    onclick="showToast('Income tax calculator will be added in Phase 3')">
+
+                <strong>💰 Income Tax</strong>
+
+                <span>
+                    Tax computation
+                </span>
+
+            </button>
+
+
+            <button class="quick-action"
+                    onclick="showToast('TDS calculator will be added in Phase 3')">
+
+                <strong>🧾 TDS</strong>
+
+                <span>
+                    TDS calculations
+                </span>
+
+            </button>
+
+
+            <button class="quick-action"
+                    onclick="showToast('Depreciation calculator will be added in Phase 3')">
+
+                <strong>📉 Depreciation</strong>
+
+                <span>
+                    Asset depreciation
+                </span>
+
+            </button>
+
+
+            <button class="quick-action"
+                    onclick="showToast('Tax working paper will be added in Phase 3')">
+
+                <strong>📊 Tax Working</strong>
+
+                <span>
+                    Working paper
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</div>
+
+</main>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* =========================================================
+   GLOBAL UTILITIES
+========================================================= */
+
+function showToast(message) {
+
+    const toast = document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2500);
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+const navButtons =
+    document.querySelectorAll(".nav-btn");
+
+const pages =
+    document.querySelectorAll(".page");
+
+
+navButtons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        navigate(button.dataset.page);
+
+    });
+
+});
+
+
+function navigate(pageName) {
+
+    pages.forEach(page => {
+
+        page.classList.remove("active");
+
+    });
+
+
+    navButtons.forEach(button => {
+
+        button.classList.remove("active");
+
+        if(button.dataset.page === pageName) {
+
+            button.classList.add("active");
+
+        }
+
+    });
+
+
+    const target =
+        document.getElementById(pageName);
+
+    if(target) {
+
+        target.classList.add("active");
+
+    }
+
+
+    document.getElementById("sidebar")
+        .classList.remove("open");
+
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+function toggleSidebar() {
+
+    document.getElementById("sidebar")
+        .classList.toggle("open");
+
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+function toggleDarkMode() {
+
+    document.body.classList.toggle("dark");
+
+    localStorage.setItem(
+        "businessDeskDark",
+        document.body.classList.contains("dark")
+    );
+
+}
+
+
+if(localStorage.getItem("businessDeskDark") === "true") {
+
+    document.body.classList.add("dark");
+
+}
+
+
+/* =========================================================
+   STANDARD CALCULATOR
+========================================================= */
+
+let calcCurrent = "0";
+let calcPrevious = null;
+let calcOperatorValue = null;
+let calcWaiting = false;
+
+
+function updateCalcDisplay() {
+
+    document.getElementById("calcDisplay")
+        .value = calcCurrent;
+
+}
+
+
+function calcNumber(number) {
+
+    if(calcWaiting) {
+
+        calcCurrent = number;
+        calcWaiting = false;
+
+    } else {
+
+        if(number === "." && calcCurrent.includes(".")) {
+            return;
+        }
+
+        if(calcCurrent === "0" && number !== ".") {
+
+            calcCurrent = number;
+
+        } else {
+
+            calcCurrent += number;
+
+        }
+
+    }
+
+    updateCalcDisplay();
+
+}
+
+
+function calcClear() {
+
+    calcCurrent = "0";
+    calcPrevious = null;
+    calcOperatorValue = null;
+    calcWaiting = false;
+
+    updateCalcDisplay();
+
+}
+
+
+function calcBackspace() {
+
+    if(calcCurrent.length > 1) {
+
+        calcCurrent =
+            calcCurrent.slice(0,-1);
+
+    } else {
+
+        calcCurrent = "0";
+
+    }
+
+    updateCalcDisplay();
+
+}
+
+
+function calcToggleSign() {
+
+    if(calcCurrent !== "0") {
+
+        calcCurrent =
+            String(parseFloat(calcCurrent) * -1);
+
+    }
+
+    updateCalcDisplay();
+
+}
+
+
+function calcPercent() {
+
+    calcCurrent =
+        String(parseFloat(calcCurrent) / 100);
+
+    updateCalcDisplay();
+
+}
+
+
+function calcOperator(operator) {
+
+    const input =
+        parseFloat(calcCurrent);
+
+    if(calcPrevious !== null &&
+       calcOperatorValue &&
+       !calcWaiting) {
+
+        calculateOperation();
+
+    }
+
+    calcPrevious =
+        parseFloat(calcCurrent);
+
+    calcOperatorValue = operator;
+
+    calcWaiting = true;
+
+}
+
+
+function calculateOperation() {
+
+    const current =
+        parseFloat(calcCurrent);
+
+    let result;
+
+    switch(calcOperatorValue) {
+
+        case "+":
+            result = calcPrevious + current;
+            break;
+
+        case "-":
+            result = calcPrevious - current;
+            break;
+
+        case "*":
+            result = calcPrevious * current;
+            break;
+
+        case "/":
+
+            if(current === 0) {
+
+                showToast("Cannot divide by zero");
+
+                return;
+
+            }
+
+            result = calcPrevious / current;
+
+            break;
+
+        default:
+            return;
+
+    }
+
+    calcCurrent =
+        String(Number(result.toFixed(10)));
+
+    calcPrevious = null;
+    calcOperatorValue = null;
+
+    updateCalcDisplay();
+
+}
+
+
+function calcEquals() {
+
+    if(calcPrevious !== null &&
+       calcOperatorValue) {
+
+        calculateOperation();
+
+    }
+
+    calcWaiting = true;
+
+}
+
+
+/* =========================================================
+   GST CALCULATOR
+========================================================= */
+
+function money(value) {
+
+    return "₹" +
+        Number(value || 0).toLocaleString(
+            "en-IN",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        );
+
+}
+
+
+function calculateGST() {
+
+    const amount =
+        parseFloat(
+            document.getElementById("gstAmount").value
+        ) || 0;
+
+    const rate =
+        parseFloat(
+            document.getElementById("gstRate").value
+        ) || 0;
+
+    const type =
+        document.getElementById("gstType").value;
+
+
+    let base;
+    let gst;
+
+
+    if(type === "inclusive") {
+
+        base =
+            amount / (1 + rate / 100);
+
+        gst =
+            amount - base;
+
+    } else {
+
+        base = amount;
+
+        gst =
+            base * rate / 100;
+
+    }
+
+
+    const cgst = gst / 2;
+    const sgst = gst / 2;
+
+    const total =
+        type === "inclusive"
+            ? amount
+            : base + gst;
+
+
+    document.getElementById("gstBase")
+        .textContent = money(base);
+
+    document.getElementById("gstCgst")
+        .textContent = money(cgst);
+
+    document.getElementById("gstSgst")
+        .textContent = money(sgst);
+
+    document.getElementById("gstTotal")
+        .textContent = money(total);
+
+}
+
+
+function calculateGST2() {
+
+    const amount =
+        parseFloat(
+            document.getElementById("gstAmount2").value
+        ) || 0;
+
+    const rate =
+        parseFloat(
+            document.getElementById("gstRate2").value
+        ) || 0;
+
+
+    const totalGST =
+        amount * rate / 100;
+
+    const cgst =
+        totalGST / 2;
+
+    const sgst =
+        totalGST / 2;
+
+    const total =
+        amount + totalGST;
+
+
+    document.getElementById("cgst2")
+        .textContent = money(cgst);
+
+    document.getElementById("sgst2")
+        .textContent = money(sgst);
+
+    document.getElementById("totalgst2")
+        .textContent = money(totalGST);
+
+    document.getElementById("invoiceTotal2")
+        .textContent = money(total);
+
+}
+
+
+/* =========================================================
+   PROFIT CALCULATOR
+========================================================= */
+
+function calculateProfit() {
+
+    const cost =
+        parseFloat(
+            document.getElementById("costPrice").value
+        ) || 0;
+
+    const selling =
+        parseFloat(
+            document.getElementById("sellingPrice").value
+        ) || 0;
+
+
+    const profit =
+        selling - cost;
+
+
+    const profitPercent =
+        cost
+            ? (profit / cost) * 100
+            : 0;
+
+
+    const margin =
+        selling
+            ? (profit / selling) * 100
+            : 0;
+
+
+    document.getElementById("profitValue")
+        .textContent = money(profit);
+
+    document.getElementById("profitPercent")
+        .textContent =
+            profitPercent.toFixed(2) + "%";
+
+    document.getElementById("marginPercent")
+        .textContent =
+            margin.toFixed(2) + "%";
+
+}
+
+
+/* =========================================================
+   PERCENTAGE
+========================================================= */
+
+function calculatePercentage() {
+
+    const number =
+        parseFloat(
+            document.getElementById(
+                "percentageNumber"
+            ).value
+        ) || 0;
+
+
+    const rate =
+        parseFloat(
+            document.getElementById(
+                "percentageRate"
+            ).value
+        ) || 0;
+
+
+    const result =
+        number * rate / 100;
+
+
+    document.getElementById(
+        "percentageResult"
+    ).textContent =
+        result.toFixed(2);
+
+}
+
+
+/* =========================================================
+   SPREADSHEET
+========================================================= */
+
+let rows = 25;
+let columns = 10;
+let selectedCell = null;
+
+
+function columnName(index) {
+
+    let name = "";
+
+    index++;
+
+    while(index > 0) {
+
+        let remainder =
+            (index - 1) % 26;
+
+        name =
+            String.fromCharCode(
+                65 + remainder
+            ) + name;
+
+        index =
+            Math.floor(
+                (index - 1) / 26
+            );
+
+    }
+
+    return name;
+
+}
+
+
+function buildSheet() {
+
+    const head =
+        document.getElementById("sheetHead");
+
+    const body =
+        document.getElementById("sheetBody");
+
+
+    head.innerHTML = "<th>#</th>";
+
+    for(let c = 0; c < columns; c++) {
+
+        const th =
+            document.createElement("th");
+
+        th.textContent =
+            columnName(c);
+
+        head.appendChild(th);
+
+    }
+
+
+    body.innerHTML = "";
+
+
+    for(let r = 0; r < rows; r++) {
+
+        const tr =
+            document.createElement("tr");
+
+
+        const rowNumber =
+            document.createElement("th");
+
+        rowNumber.className =
+            "row-number";
+
+        rowNumber.textContent =
+            r + 1;
+
+        rowNumber.onclick = () => {
+
+            selectedCell =
+                {row:r,column:-1};
+
+        };
+
+
+        tr.appendChild(rowNumber);
+
+
+        for(let c = 0; c < columns; c++) {
+
+            const td =
+                document.createElement("td");
+
+            td.contentEditable = true;
+
+            td.dataset.row = r;
+            td.dataset.column = c;
+
+            td.onclick = () => {
+
+                selectedCell =
+                    {row:r,column:c};
+
+            };
+
+
+            td.oninput = () => {
+
+                saveSheetSilent();
+
+            };
+
+
+            td.onkeydown = event => {
+
+                if(event.key === "Enter") {
+
+                    event.preventDefault();
+
+                    const next =
+                        document.querySelector(
+                            `td[data-row="${r+1}"][data-column="${c}"]`
+                        );
+
+                    if(next) {
+
+                        next.focus();
+
+                    }
+
+                }
+
+            };
+
+
+            tr.appendChild(td);
+
+        }
+
+
+        body.appendChild(tr);
+
+    }
+
+}
+
+
+function addRow() {
+
+    rows++;
+
+    buildSheet();
+
+    showToast("Row added");
+
+}
+
+
+function addColumn() {
+
+    columns++;
+
+    buildSheet();
+
+    showToast("Column added");
+
+}
+
+
+function deleteSelectedRow() {
+
+    if(!selectedCell) {
+
+        showToast("Select a row first");
+
+        return;
+
+    }
+
+    if(rows <= 1) return;
+
+    rows--;
+
+    buildSheet();
+
+    selectedCell = null;
+
+    showToast("Row removed");
+
+}
+
+
+function deleteSelectedColumn() {
+
+    if(!selectedCell) {
+
+        showToast("Select a column first");
+
+        return;
+
+    }
+
+    if(columns <= 1) return;
+
+    columns--;
+
+    buildSheet();
+
+    selectedCell = null;
+
+    showToast("Column removed");
+
+}
+
+
+function clearSheet() {
+
+    if(!confirm(
+        "Clear the entire spreadsheet?"
+    )) return;
+
+    buildSheet();
+
+    saveSheetSilent();
+
+    showToast("Spreadsheet cleared");
+
+}
+
+
+/* =========================================================
+   SHEET FORMATTING
+========================================================= */
+
+function getSelectedElement() {
+
+    if(!selectedCell ||
+       selectedCell.column < 0) {
+
+        showToast("Select a cell first");
+
+        return null;
+
+    }
+
+
+    return document.querySelector(
+        `td[data-row="${selectedCell.row}"][data-column="${selectedCell.column}"]`
+    );
+
+}
+
+
+function formatBold() {
+
+    const cell =
+        getSelectedElement();
+
+    if(cell) {
+
+        cell.style.fontWeight =
+            cell.style.fontWeight === "bold"
+                ? "normal"
+                : "bold";
+
+    }
+
+}
+
+
+function formatItalic() {
+
+    const cell =
+        getSelectedElement();
+
+    if(cell) {
+
+        cell.style.fontStyle =
+            cell.style.fontStyle === "italic"
+                ? "normal"
+                : "italic";
+
+    }
+
+}
+
+
+function alignSelected(direction) {
+
+    const cell =
+        getSelectedElement();
+
+    if(cell) {
+
+        cell.style.textAlign =
+            direction;
+
+    }
+
+}
+
+
+/* =========================================================
+   SHEET SAVE / LOAD
+========================================================= */
+
+function saveSheetSilent() {
+
+    const cells =
+        document.querySelectorAll(
+            "#sheetBody td"
+        );
+
+
+    const data = {
+
+        rows: rows,
+        columns: columns,
+        cells: []
+
+    };
+
+
+    cells.forEach(cell => {
+
+        data.cells.push({
+
+            row: cell.dataset.row,
+
+            column:
+                cell.dataset.column,
+
+            value:
+                cell.innerText,
+
+            bold:
+                cell.style.fontWeight,
+
+            italic:
+                cell.style.fontStyle,
+
+            align:
+                cell.style.textAlign
+
+        });
+
+    });
+
+
+    localStorage.setItem(
+        "businessDeskSheet",
+        JSON.stringify(data)
+    );
+
+}
+
+
+function saveSheet() {
+
+    saveSheetSilent();
+
+    showToast("Spreadsheet saved locally");
+
+}
+
+
+function loadSheet() {
+
+    const saved =
+        localStorage.getItem(
+            "businessDeskSheet"
+        );
+
+
+    if(!saved) {
+
+        buildSheet();
+
+        return;
+
+    }
+
+
+    try {
+
+        const data =
+            JSON.parse(saved);
+
+        rows =
+            data.rows || 25;
+
+        columns =
+            data.columns || 10;
+
+        buildSheet();
+
+
+        data.cells.forEach(item => {
+
+            const cell =
+                document.querySelector(
+                    `td[data-row="${item.row}"][data-column="${item.column}"]`
+                );
+
+            if(cell) {
+
+                cell.innerText =
+                    item.value || "";
+
+                cell.style.fontWeight =
+                    item.bold || "";
+
+                cell.style.fontStyle =
+                    item.italic || "";
+
+                cell.style.textAlign =
+                    item.align || "";
+
+            }
+
+        });
+
+    } catch(error) {
+
+        buildSheet();
+
+    }
+
+}
+
+
+/* =========================================================
+   CSV EXPORT
+========================================================= */
+
+function exportCSV() {
+
+    const table =
+        document.getElementById(
+            "sheetTable"
+        );
+
+
+    const lines = [];
+
+
+    const header = [];
+
+    for(let c = 0; c < columns; c++) {
+
+        header.push(columnName(c));
+
+    }
+
+    lines.push(header.join(","));
+
+
+    for(let r = 0; r < rows; r++) {
+
+        const row = [];
+
+
+        for(let c = 0; c < columns; c++) {
+
+            const cell =
+                document.querySelector(
+                    `td[data-row="${r}"][data-column="${c}"]`
+                );
+
+
+            let value =
+                cell ? cell.innerText : "";
+
+
+            value =
+                value.replace(/"/g,'""');
+
+
+            if(
+                value.includes(",") ||
+                value.includes('"') ||
+                value.includes("\n")
+            ) {
+
+                value =
+                    `"${value}"`;
+
+            }
+
+
+            row.push(value);
+
+        }
+
+
+        lines.push(row.join(","));
+
+    }
+
+
+    const blob =
+        new Blob(
+            [lines.join("\n")],
+            {type:"text/csv;charset=utf-8;"}
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const link =
+        document.createElement("a");
+
+    link.href = url;
+
+    link.download =
+        "BusinessDesk_Spreadsheet.csv";
+
+    link.click();
+
+
+    URL.revokeObjectURL(url);
+
+    showToast("CSV exported");
+
+}
+
+
+/* =========================================================
+   CSV IMPORT
+========================================================= */
+
+function parseCSVLine(line) {
+
+    const result = [];
+
+    let current = "";
+
+    let insideQuotes = false;
+
+
+    for(let i=0;i<line.length;i++) {
+
+        const char = line[i];
+
+        if(char === '"') {
+
+            if(
+                insideQuotes &&
+                line[i+1] === '"'
+            ) {
+
+                current += '"';
+
+                i++;
+
+            } else {
+
+                insideQuotes =
+                    !insideQuotes;
+
+            }
+
+        } else if(
+            char === "," &&
+            !insideQuotes
+        ) {
+
+            result.push(current);
+
+            current = "";
+
+        } else {
+
+            current += char;
+
+        }
+
+    }
+
+
+    result.push(current);
+
+    return result;
+
+}
+
+
+function importCSV(event) {
+
+    const file =
+        event.target.files[0];
+
+    if(!file) return;
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload = function(e) {
+
+        const text =
+            e.target.result;
+
+
+        const lines =
+            text.split(/\r?\n/)
+                .filter(line => line.trim() !== "");
+
+
+        if(lines.length === 0) return;
+
+
+        const parsed =
+            lines.map(parseCSVLine);
+
+
+        rows =
+            Math.max(
+                25,
+                parsed.length
+            );
+
+
+        columns =
+            Math.max(
+                10,
+                ...parsed.map(row => row.length)
+            );
+
+
+        buildSheet();
+
+
+        parsed.forEach((row,r) => {
+
+            row.forEach((value,c) => {
+
+                const cell =
+                    document.querySelector(
+                        `td[data-row="${r}"][data-column="${c}"]`
+                    );
+
+                if(cell) {
+
+                    cell.innerText =
+                        value;
+
+                }
+
+            });
+
+        });
+
+
+        saveSheetSilent();
+
+        showToast("CSV imported successfully");
+
+    };
+
+
+    reader.readAsText(file);
+
+    event.target.value = "";
+
+}
+
+
+/* =========================================================
+   COMPANY
+========================================================= */
+
+function updateCompanyPreview() {
+
+    const name =
+        document.getElementById(
+            "companyName"
+        ).value || "My Business";
+
+
+    const address =
+        document.getElementById(
+            "companyAddress"
+        ).value || "Business address";
+
+
+    document.getElementById(
+        "companyPreviewName"
+    ).textContent = name;
+
+
+    document.getElementById(
+        "companyPreviewAddress"
+    ).textContent = address;
+
+
+    document.getElementById(
+        "companyLogo"
+    ).textContent =
+        name
+            .split(" ")
+            .slice(0,2)
+            .map(word => word[0])
+            .join("")
+            .toUpperCase();
+
+}
+
+
+function saveCompany() {
+
+    const company = {
+
+        name:
+            document.getElementById(
+                "companyName"
+            ).value,
+
+        gstin:
+            document.getElementById(
+                "companyGSTIN"
+            ).value,
+
+        pan:
+            document.getElementById(
+                "companyPAN"
+            ).value,
+
+        address:
+            document.getElementById(
+                "companyAddress"
+            ).value,
+
+        state:
+            document.getElementById(
+                "companyState"
+            ).value,
+
+        financialYear:
+            document.getElementById(
+                "financialYear"
+            ).value
+
+    };
+
+
+    localStorage.setItem(
+        "businessDeskCompany",
+        JSON.stringify(company)
+    );
+
+
+    updateCompanyPreview();
+
+    showToast("Company information saved");
+
+}
+
+
+function loadCompany() {
+
+    const saved =
+        localStorage.getItem(
+            "businessDeskCompany"
+        );
+
+
+    if(!saved) return;
+
+
+    try {
+
+        const company =
+            JSON.parse(saved);
+
+
+        document.getElementById(
+            "companyName"
+        ).value =
+            company.name || "";
+
+
+        document.getElementById(
+            "companyGSTIN"
+        ).value =
+            company.gstin || "";
+
+
+        document.getElementById(
+            "companyPAN"
+        ).value =
+            company.pan || "";
+
+
+        document.getElementById(
+            "companyAddress"
+        ).value =
+            company.address || "";
+
+
+        document.getElementById(
+            "companyState"
+        ).value =
+            company.state || "";
+
+
+        document.getElementById(
+            "financialYear"
+        ).value =
+            company.financialYear || "2026-27";
+
+
+        updateCompanyPreview();
+
+    } catch(e) {}
+
+}
+
+
+/* =========================================================
+   GLOBAL SEARCH
+========================================================= */
+
+function globalSearch() {
+
+    const value =
+        document.getElementById(
+            "globalSearch"
+        ).value
+        .toLowerCase()
+        .trim();
+
+
+    if(!value) return;
+
+
+    const map = {
+
+        "dashboard":"dashboard",
+
+        "calculator":"calculator",
+        "calc":"calculator",
+
+        "excel":"spreadsheet",
+        "spreadsheet":"spreadsheet",
+
+        "company":"company",
+
+        "document":"documents",
+        "documents":"documents",
+        "invoice":"documents",
+
+        "report":"reports",
+        "reports":"reports",
+
+        "gst":"gst",
+
+        "tax":"tax",
+
+        "tds":"tax"
+
+    };
+
+
+    for(const key in map) {
+
+        if(key.includes(value)) {
+
+            navigate(map[key]);
+
+            return;
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   KEYBOARD SHORTCUTS
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if(
+            event.ctrlKey &&
+            event.key.toLowerCase() === "s"
+        ) {
+
+            event.preventDefault();
+
+            saveSheet();
+
+        }
+
+
+        if(
+            event.ctrlKey &&
+            event.key.toLowerCase() === "e"
+        ) {
+
+            event.preventDefault();
+
+            exportCSV();
+
+        }
+
+
+        if(event.key === "Escape") {
+
+            document.getElementById(
+                "globalSearch"
+            ).value = "";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+loadSheet();
+
+loadCompany();
+
+calculateGST();
+
+calculateGST2();
+
+calculateProfit();
+
+calculatePercentage();
+
+
+const hour =
+    new Date().getHours();
+
+
+let greeting = "Good evening";
+
+if(hour < 12) {
+
+    greeting = "Good morning";
+
+} else if(hour < 17) {
+
+    greeting = "Good afternoon";
+
+}
+
+
+document.getElementById(
+    "dashboardGreeting"
+).textContent =
+    greeting +
+    ". Here's your workspace overview.";
+
+
+</script>
+
+</body>
+</html>
