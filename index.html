@@ -119,7 +119,7 @@ function showTab(id){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   event.target.classList.add('active');
   if(id=='masters') loadLedgers();
-  if(id=='voucher'){loadLedgerDropdowns(); loadVouchers(); addEntryRow();}
+  if(id=='voucher'){loadLedgerDropdowns(); loadVouchers(); if(entryLines.length==0) addEntryRow();}
   if(id=='reports'){loadTB(); loadGST();}
 }
 
@@ -134,36 +134,39 @@ function loadLedgers(){
 }
 
 function loadLedgerDropdowns(){
-  const opts = db.ledgers.map(l=>`<option value="${l.id}">${l.name} [${l.type}]</option>`).join('');
-  vType.onchange = ()=>{
-    saleItems=[]; purItems=[]; entryLines=[]; entries.innerHTML='';
-    saleBox.style.display = vType.value=='Sales'?'block':'none';
-    purBox.style.display = vType.value=='Purchase'?'block':'none';
-    normalBox.style.display = (vType.value=='Sales'||vType.value=='Purchase')?'none':'block';
-    if(normalBox.style.display!='none') addEntryRow();
-    renderGST();
-  }
+  vType.onchange = handleTypeChange;
+  handleTypeChange();
+}
+
+function handleTypeChange(){
+  saleItems=[]; purItems=[]; entryLines=[]; entries.innerHTML='';
+  saleBox.style.display = vType.value=='Sales'?'block':'none';
+  purBox.style.display = vType.value=='Purchase'?'block':'none';
+  normalBox.style.display = (vType.value=='Sales'||vType.value=='Purchase')?'none':'block';
+  if(normalBox.style.display!='none') addEntryRow();
+  renderGST();
 }
 
 function addEntryRow(){
   const id=Date.now();
-  entryLines.push({id,dr:'',cr:'',name:'',amt:''});
+  entryLines.push({id,dr:db.ledgers[0]?.id||'',cr:db.ledgers[1]?.id||'',name:'',amt:''});
   renderEntries();
 }
 function renderEntries(){
+  const opts = db.ledgers.map(l=>`<option value="${l.id}">${l.name} [${l.type}]</option>`).join('');
   entries.innerHTML = entryLines.map(e=>`
     <div class="entry-row">
       <b>Line</b>
       <input placeholder="Particulars/Name" value="${e.name}" oninput="entryLines.find(x=>x.id==${e.id}).name=this.value">
-      <select onchange="entryLines.find(x=>x.id==${e.id}).dr=this.value">${db.ledgers.map(l=>`<option value="${l.id}">Dr: ${l.name}</option>`).join('')}</select>
-      <input type="number" placeholder="Dr Amt" oninput="entryLines.find(x=>x.id==${e.id}).amt=this.value">
-      <select onchange="entryLines.find(x=>x.id==${e.id}).cr=this.value">${db.ledgers.map(l=>`<option value="${l.id}">Cr: ${l.name}</option>`).join('')}</select>
+      <select onchange="entryLines.find(x=>x.id==${e.id}).dr=this.value">${opts}</select>
+      <input type="number" placeholder="Dr Amt" oninput="entryLines.find(x=>x.id==${e.id}).amt=Number(this.value)">
+      <select onchange="entryLines.find(x=>x.id==${e.id}).cr=this.value">${opts}</select>
     </div>`).join('');
 }
 
 function addSaleItem(){
   const qty=Number(sQty.value), rate=Number(sRate.value), gst=Number(sGST.value);
-  if(!sItem.value||!rate)return;
+  if(!sItem.value||!rate)return alert('Item and Rate required');
   const taxable=qty*rate; const gstAmt=taxable*gst/100;
   saleItems.push({name:sItem.value,qty,rate,gst,taxable,gstAmt,total:taxable+gstAmt});
   sItem.value='';sQty.value=1;sRate.value=''; renderSale();
@@ -174,7 +177,7 @@ function renderSale(){
 }
 function addPurItem(){
   const qty=Number(pQty.value), rate=Number(pRate.value), gst=Number(pGST.value);
-  if(!pItem.value||!rate)return;
+  if(!pItem.value||!rate)return alert('Item and Rate required');
   const taxable=qty*rate; const gstAmt=taxable*gst/100;
   purItems.push({name:pItem.value,qty,rate,gst,taxable,gstAmt,total:taxable+gstAmt});
   pItem.value='';pQty.value=1;pRate.value=''; renderPur();
@@ -195,13 +198,20 @@ function renderGST(){
 function saveVoucher(){
   const v={id:Date.now(),date:vDate.value,type:vType.value,narration:vNarration.value,entries:[]};
   if(vType.value=='Sales'){
+    if(saleItems.length==0)return alert('Add at least 1 item');
     const total=saleItems.reduce((a,b)=>a+b.total,0);
-    v.entries.push({amt:total,items:[...saleItems],gstOut:saleItems.map(i=>({rate:i.gst,taxable:i.taxable,gst:i.gstAmt}))});
+    const cashId = db.ledgers.find(l=>l.name.toLowerCase().includes('cash'))?.id || db.ledgers[0]?.id;
+    const salesId = db.ledgers.find(l=>l.group=='Income')?.id || db.ledgers[0]?.id;
+    v.entries.push({dr:cashId, cr:salesId, name:'Sales', amt:total, items:[...saleItems], gstOut:saleItems.map(i=>({rate:i.gst,taxable:i.taxable,gst:i.gstAmt}))});
   }else if(vType.value=='Purchase'){
+    if(purItems.length==0)return alert('Add at least 1 item');
     const total=purItems.reduce((a,b)=>a+b.total,0);
-    v.entries.push({amt:total,items:[...purItems],gstIn:purItems.map(i=>({rate:i.gst,taxable:i.taxable,gst:i.gstAmt}))});
+    const cashId = db.ledgers.find(l=>l.name.toLowerCase().includes('cash'))?.id || db.ledgers[0]?.id;
+    const purId = db.ledgers.find(l=>l.group=='Expenses')?.id || db.ledgers[0]?.id;
+    v.entries.push({dr:purId, cr:cashId, name:'Purchase', amt:total, items:[...purItems], gstIn:purItems.map(i=>({rate:i.gst,taxable:i.taxable,gst:i.gstAmt}))});
   }else{
-    v.entries = entryLines.filter(e=>e.amt).map(e=>({name:e.name,dr:e.dr,cr:e.cr,amt:Number(e.amt)}));
+    if(entryLines.filter(e=>e.amt>0).length==0)return alert('Add at least 1 entry');
+    v.entries = entryLines.filter(e=>e.amt>0).map(e=>({name:e.name,dr:e.dr,cr:e.cr,amt:Number(e.amt)}));
   }
   if(!v.date)return alert('Date required');
   db.vouchers.push(v); save(); vNarration.value=''; saleItems=[]; purItems=[]; entryLines=[]; entries.innerHTML=''; renderSale(); renderPur(); renderGST(); addEntryRow();
@@ -220,8 +230,8 @@ function loadTB(){
   db.ledgers.forEach(l=>tb[l.id]={name:l.name,type:l.type,d:0,c:0});
   db.vouchers.forEach(v=>{
     v.entries.forEach(e=>{
-      if(e.dr){tb[e.dr].d+=e.amt; tb[e.cr].c+=e.amt}
-      else{const amt=e.amt||0; tb[v.entries[0].dr||Object.keys(tb)[0]].d+=amt; tb[v.entries[0].cr||Object.keys(tb)[1]].c+=amt}
+      if(e.dr && tb[e.dr]) tb[e.dr].d+=e.amt;
+      if(e.cr && tb[e.cr]) tb[e.cr].c+=e.amt;
     })
   });
   tbTbl.querySelector('tbody').innerHTML = Object.values(tb).map(t=>`<tr><td>${t.name}</td><td>${t.type}</td><td>${t.d.toFixed(2)}</td><td>${t.c.toFixed(2)}</td></tr>`).join('');
@@ -230,8 +240,8 @@ function loadTB(){
 function loadGST(){
   const out={}, inp={};
   db.vouchers.forEach(v=>{
-    if(v.type=='Sales'&&v.entries[0].gstOut) v.entries[0].gstOut.forEach(g=>{out[g.rate]=(out[g.rate]||{tax:0,gst:0}); out[g.rate].tax+=g.taxable; out[g.rate].gst+=g.gst});
-    if(v.type=='Purchase'&&v.entries[0].gstIn) v.entries[0].gstIn.forEach(g=>{inp[g.rate]=(inp[g.rate]||{tax:0,gst:0}); inp[g.rate].tax+=g.taxable; inp[g.rate].gst+=g.gst});
+    if(v.type=='Sales'&&v.entries[0]?.gstOut) v.entries[0].gstOut.forEach(g=>{out[g.rate]=(out[g.rate]||{tax:0,gst:0}); out[g.rate].tax+=g.taxable; out[g.rate].gst+=g.gst});
+    if(v.type=='Purchase'&&v.entries[0]?.gstIn) v.entries[0].gstIn.forEach(g=>{inp[g.rate]=(inp[g.rate]||{tax:0,gst:0}); inp[g.rate].tax+=g.taxable; inp[g.rate].gst+=g.gst});
   });
   outGstTbl.querySelector('tbody').innerHTML = Object.entries(out).map(([k,v])=>`<tr><td>${k}%</td><td>${v.tax.toFixed(2)}</td><td>${v.gst.toFixed(2)}</td></tr>`).join('');
   inGstTbl.querySelector('tbody').innerHTML = Object.entries(inp).map(([k,v])=>`<tr><td>${k}%</td><td>${v.tax.toFixed(2)}</td><td>${v.gst.toFixed(2)}</td></tr>`).join('');
