@@ -2,156 +2,245 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OpenMaster Accounts - Mini ERP</title>
+<title>OpenMaster Accounts - Pymt, Receipt, Sale, Purchase + GST</title>
 <style>
-    * { box-sizing: border-box; font-family: Arial, sans-serif; }
-  body { margin: 0; background: #f4f6f9; }
-  header { background: #1e3a8a; color: white; padding: 12px 20px; font-size: 18px; font-weight: bold; }
- .container { padding: 20px; }
- .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
- .tab { padding: 10px 20px; background: white; border: 1px solid #ddd; cursor: pointer; border-radius: 6px; }
- .tab.active { background: #1e3a8a; color: white; }
- .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
-  input, select, button { padding: 8px; margin: 5px; border: 1px solid #ccc; border-radius: 4px; }
-  button { background: #1e3a8a; color: white; cursor: pointer; border: none; }
-  button:hover { background: #0f2a6b; }
-  table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-  th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-  th { background: #eef2ff; }
- .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  *{box-sizing:border-box;font-family:Segoe UI,Arial}
+  body{margin:0;background:#f4f6f9}
+  header{background:#1e3a8a;color:#fff;padding:14px 20px;font-size:18px;font-weight:600}
+.container{padding:20px;max-width:1200px;margin:auto}
+.tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.tab{padding:10px 16px;background:#fff;border:1px solid #ddd;cursor:pointer;border-radius:6px}
+.tab.active{background:#1e3a8a;color:#fff;border-color:#1e3a8a}
+.card{background:#fff;padding:20px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.08);margin-bottom:20px;display:none}
+.card.show{display:block}
+  input,select,button{padding:8px;margin:4px;border:1px solid #ccc;border-radius:4px}
+  button{background:#1e3a8a;color:#fff;border:none;cursor:pointer}
+  button:hover{background:#0f2a6b}
+  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+  th,td{border:1px solid #ddd;padding:8px;text-align:left}
+  th{background:#eef2ff}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+.gst-box{background:#fffbe6;border:1px solid #ffe58f;padding:10px;border-radius:6px;margin-top:10px}
+.entry-row{border:1px dashed #ccc;padding:10px;border-radius:6px;margin:6px 0}
 </style>
 </head>
 <body>
-<header>OpenMaster Accounts - Tally + Excel in 1 File</header>
+<header>OpenMaster Accounts - Payment, Receipt, Sale, Purchase + GST</header>
 
 <div class="container">
   <div class="tabs">
-    <div class="tab active" onclick="showTab('ledger')">Ledger Master</div>
-    <div class="tab" onclick="showTab('voucher')">Journal Voucher</div>
-    <div class="tab" onclick="showTab('report')">Trial Balance</div>
+    <div class="tab active" onclick="showTab('masters')">Masters</div>
+    <div class="tab" onclick="showTab('voucher')">Vouchers</div>
+    <div class="tab" onclick="showTab('reports')">Reports</div>
   </div>
 
-  <!-- LEDGER MASTER -->
-  <div id="ledger" class="card">
-    <h3>Create Ledger</h3>
-    <input id="ledgerName" placeholder="Ledger Name e.g. Cash">
-    <select id="ledgerGroup">
-      <option>Assets</option><option>Liabilities</option><option>Income</option><option>Expenses</option>
-    </select>
-    <button onclick="addLedger()">Add Ledger</button>
-    <h4>All Ledgers</h4>
-    <table id="ledgerTable"><thead><tr><th>Name</th><th>Group</th></tr></thead><tbody></tbody></table>
-  </div>
-
-  <!-- VOUCHER ENTRY -->
-  <div id="voucher" class="card" style="display:none">
-    <h3>Journal Voucher</h3>
-    <input type="date" id="vDate">
-    <input id="vNarration" placeholder="Narration">
-    <div class="grid">
-      <div>
-        <h4>Debit</h4>
-        <select id="debitLedger"></select>
-        <input type="number" id="debitAmt" placeholder="Amount">
-      </div>
-      <div>
-        <h4>Credit</h4>
-        <select id="creditLedger"></select>
-        <input type="number" id="creditAmt" placeholder="Amount">
-      </div>
+  <!-- MASTERS -->
+  <div id="masters" class="card show">
+    <h3>Ledger Master</h3>
+    <div class="row">
+      <input id="lName" placeholder="Ledger Name">
+      <select id="lGroup"><option>Assets</option><option>Liabilities</option><option>Income</option><option>Expenses</option></select>
+      <select id="lType"><option>Other</option><option>Customer</option><option>Supplier</option></select>
+      <input id="lGST" placeholder="GSTIN Optional">
+      <button onclick="addLedger()">Add</button>
     </div>
-    <button onclick="addVoucher()">Save Voucher</button>
-    <h4>Recent Vouchers</h4>
-    <table id="voucherTable"><thead><tr><th>Date</th><th>Narration</th><th>Dr</th><th>Cr</th></tr></thead><tbody></tbody></table>
+    <table id="ledgerTbl"><thead><tr><th>Name</th><th>Group</th><th>Type</th><th>GSTIN</th></tr></thead><tbody></tbody></table>
+  </div>
+
+  <!-- VOUCHERS -->
+  <div id="voucher" class="card">
+    <h3>Voucher Entry</h3>
+    <div class="row">
+      <select id="vType"><option>Payment</option><option>Receipt</option><option>Journal</option><option>Sales</option><option>Purchase</option></select>
+      <input type="date" id="vDate">
+      <input id="vNarration" placeholder="Narration">
+    </div>
+
+    <!-- SALES ITEMS -->
+    <div id="saleBox" style="display:none">
+      <h4>Sales Items + Output GST</h4>
+      <div class="row">
+        <input id="sItem" placeholder="Item">
+        <input type="number" id="sQty" placeholder="Qty" value="1">
+        <input type="number" id="sRate" placeholder="Rate">
+        <select id="sGST"><option value="0">0%</option><option value="5">5%</option><option value="12">12%</option><option value="18">18%</option><option value="28">28%</option></select>
+        <button onclick="addSaleItem()">Add</button>
+      </div>
+      <table id="sTbl"><thead><tr><th>Item</th><th>Qty</th><th>Rate</th><th>Tax%</th><th>Tax</th><th>Total</th></tr></thead><tbody></tbody></table>
+    </div>
+
+    <!-- PURCHASE ITEMS -->
+    <div id="purBox" style="display:none">
+      <h4>Purchase Items + Input GST</h4>
+      <div class="row">
+        <input id="pItem" placeholder="Item">
+        <input type="number" id="pQty" placeholder="Qty" value="1">
+        <input type="number" id="pRate" placeholder="Rate">
+        <select id="pGST"><option value="0">0%</option><option value="5">5%</option><option value="12">12%</option><option value="18">18%</option><option value="28">28%</option></select>
+        <button onclick="addPurItem()">Add</button>
+      </div>
+      <table id="pTbl"><thead><tr><th>Item</th><th>Qty</th><th>Rate</th><th>Tax%</th><th>Input GST</th><th>Total</th></tr></thead><tbody></tbody></table>
+    </div>
+
+    <!-- NORMAL ENTRIES WITH NAME -->
+    <div id="normalBox">
+      <h4>Entries</h4>
+      <div id="entries"></div>
+      <button onclick="addEntryRow()">+ Add Line</button>
+    </div>
+    <div class="gst-box" id="gstSummary"></div>
+    <button onclick="saveVoucher()">Save Voucher</button>
+
+    <h4>Last 10 Vouchers</h4>
+    <table id="vTbl"><thead><tr><th>Date</th><th>Type</th><th>Narration</th><th>Amount</th></tr></thead><tbody></tbody></table>
   </div>
 
   <!-- REPORTS -->
-  <div id="report" class="card" style="display:none">
+  <div id="reports" class="card">
     <h3>Trial Balance</h3>
-    <button onclick="exportCSV()">Export to Excel/CSV</button>
-    <table id="tbTable"><thead><tr><th>Particulars</th><th>Debit</th><th>Credit</th></tr></thead><tbody></tbody></table>
+    <button onclick="exportCSV()">Export CSV</button>
+    <table id="tbTbl"><thead><tr><th>Ledger</th><th>Type</th><th>Debit</th><th>Credit</th></tr></thead><tbody></tbody></table>
+
+    <h3 style="margin-top:20px">GST Summary</h3>
+    <div class="row"><div><b>Output GST - Sales:</b><table id="outGstTbl"><thead><tr><th>Rate</th><th>Taxable</th><th>GST</th></tr></thead><tbody></tbody></table></div>
+    <div><b>Input GST - Purchase:</b><table id="inGstTbl"><thead><tr><th>Rate</th><th>Taxable</th><th>GST</th></tr></thead><tbody></tbody></table></div></div>
   </div>
 </div>
 
 <script>
-let data = JSON.parse(localStorage.getItem('openmaster')) || {ledgers:[], vouchers:[]};
+let db = JSON.parse(localStorage.getItem('om_db2')) || {ledgers:[],vouchers:[]};
+let saleItems = [], purItems = [], entryLines = [];
 
-function saveData() { localStorage.setItem('openmaster', JSON.stringify(data)); }
+function save(){localStorage.setItem('om_db2',JSON.stringify(db))}
 
-function showTab(id) {
-  document.querySelectorAll('.card').forEach(c=>c.style.display='none');
-  document.getElementById(id).style.display='block';
+function showTab(id){
+  document.querySelectorAll('.card').forEach(c=>c.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   event.target.classList.add('active');
-  if(id==='ledger') loadLedgers();
-  if(id==='voucher') loadVoucherForm();
-  if(id==='report') loadTB();
+  if(id=='masters') loadLedgers();
+  if(id=='voucher'){loadLedgerDropdowns(); loadVouchers(); addEntryRow();}
+  if(id=='reports'){loadTB(); loadGST();}
 }
 
-function addLedger() {
-  const name = document.getElementById('ledgerName').value;
-  const group = document.getElementById('ledgerGroup').value;
-  if(!name) return alert('Enter name');
-  data.ledgers.push({id: Date.now(), name, group});
-  saveData(); document.getElementById('ledgerName').value='';
-  loadLedgers();
+function addLedger(){
+  const name=lName.value.trim(); if(!name)return alert('Name required');
+  db.ledgers.push({id:Date.now(),name,group:lGroup.value,type:lType.value,gstin:lGST.value});
+  lName.value=''; lGST.value=''; save(); loadLedgers();
 }
 
-function loadLedgers() {
-  const tbody = document.querySelector('#ledgerTable tbody');
-  tbody.innerHTML = data.ledgers.map(l=>`<tr><td>${l.name}</td><td>${l.group}</td></tr>`).join('');
+function loadLedgers(){
+  ledgerTbl.querySelector('tbody').innerHTML = db.ledgers.map(l=>`<tr><td>${l.name}</td><td>${l.group}</td><td>${l.type}</td><td>${l.gstin||'-'}</td></tr>`).join('');
 }
 
-function loadVoucherForm() {
-  const options = data.ledgers.map(l=>`<option value="${l.id}">${l.name}</option>`).join('');
-  document.getElementById('debitLedger').innerHTML = options;
-  document.getElementById('creditLedger').innerHTML = options;
+function loadLedgerDropdowns(){
+  const opts = db.ledgers.map(l=>`<option value="${l.id}">${l.name} [${l.type}]</option>`).join('');
+  vType.onchange = ()=>{
+    saleItems=[]; purItems=[]; entryLines=[]; entries.innerHTML='';
+    saleBox.style.display = vType.value=='Sales'?'block':'none';
+    purBox.style.display = vType.value=='Purchase'?'block':'none';
+    normalBox.style.display = (vType.value=='Sales'||vType.value=='Purchase')?'none':'block';
+    if(normalBox.style.display!='none') addEntryRow();
+    renderGST();
+  }
+}
+
+function addEntryRow(){
+  const id=Date.now();
+  entryLines.push({id,dr:'',cr:'',name:'',amt:''});
+  renderEntries();
+}
+function renderEntries(){
+  entries.innerHTML = entryLines.map(e=>`
+    <div class="entry-row">
+      <b>Line</b>
+      <input placeholder="Particulars/Name" value="${e.name}" oninput="entryLines.find(x=>x.id==${e.id}).name=this.value">
+      <select onchange="entryLines.find(x=>x.id==${e.id}).dr=this.value">${db.ledgers.map(l=>`<option value="${l.id}">Dr: ${l.name}</option>`).join('')}</select>
+      <input type="number" placeholder="Dr Amt" oninput="entryLines.find(x=>x.id==${e.id}).amt=this.value">
+      <select onchange="entryLines.find(x=>x.id==${e.id}).cr=this.value">${db.ledgers.map(l=>`<option value="${l.id}">Cr: ${l.name}</option>`).join('')}</select>
+    </div>`).join('');
+}
+
+function addSaleItem(){
+  const qty=Number(sQty.value), rate=Number(sRate.value), gst=Number(sGST.value);
+  if(!sItem.value||!rate)return;
+  const taxable=qty*rate; const gstAmt=taxable*gst/100;
+  saleItems.push({name:sItem.value,qty,rate,gst,taxable,gstAmt,total:taxable+gstAmt});
+  sItem.value='';sQty.value=1;sRate.value=''; renderSale();
+}
+function renderSale(){
+  sTbl.querySelector('tbody').innerHTML = saleItems.map(i=>`<tr><td>${i.name}</td><td>${i.qty}</td><td>${i.rate}</td><td>${i.gst}%</td><td>${i.gstAmt.toFixed(2)}</td><td>${i.total.toFixed(2)}</td></tr>`).join('');
+  renderGST();
+}
+function addPurItem(){
+  const qty=Number(pQty.value), rate=Number(pRate.value), gst=Number(pGST.value);
+  if(!pItem.value||!rate)return;
+  const taxable=qty*rate; const gstAmt=taxable*gst/100;
+  purItems.push({name:pItem.value,qty,rate,gst,taxable,gstAmt,total:taxable+gstAmt});
+  pItem.value='';pQty.value=1;pRate.value=''; renderPur();
+}
+function renderPur(){
+  pTbl.querySelector('tbody').innerHTML = purItems.map(i=>`<tr><td>${i.name}</td><td>${i.qty}</td><td>${i.rate}</td><td>${i.gst}%</td><td>${i.gstAmt.toFixed(2)}</td><td>${i.total.toFixed(2)}</td></tr>`).join('');
+  renderGST();
+}
+
+function renderGST(){
+  let out={}, inp={};
+  saleItems.forEach(i=>{out[i.gst]=(out[i.gst]||0)+i.gstAmt});
+  purItems.forEach(i=>{inp[i.gst]=(inp[i.gst]||0)+i.gstAmt});
+  gstSummary.innerHTML = '<b>Output GST:</b> '+Object.entries(out).map(([k,v])=>`${k}%:₹${v.toFixed(2)}`).join(' ') +
+  '<br><b>Input GST:</b> '+Object.entries(inp).map(([k,v])=>`${k}%:₹${v.toFixed(2)}`).join(' ');
+}
+
+function saveVoucher(){
+  const v={id:Date.now(),date:vDate.value,type:vType.value,narration:vNarration.value,entries:[]};
+  if(vType.value=='Sales'){
+    const total=saleItems.reduce((a,b)=>a+b.total,0);
+    v.entries.push({amt:total,items:[...saleItems],gstOut:saleItems.map(i=>({rate:i.gst,taxable:i.taxable,gst:i.gstAmt}))});
+  }else if(vType.value=='Purchase'){
+    const total=purItems.reduce((a,b)=>a+b.total,0);
+    v.entries.push({amt:total,items:[...purItems],gstIn:purItems.map(i=>({rate:i.gst,taxable:i.taxable,gst:i.gstAmt}))});
+  }else{
+    v.entries = entryLines.filter(e=>e.amt).map(e=>({name:e.name,dr:e.dr,cr:e.cr,amt:Number(e.amt)}));
+  }
+  if(!v.date)return alert('Date required');
+  db.vouchers.push(v); save(); vNarration.value=''; saleItems=[]; purItems=[]; entryLines=[]; entries.innerHTML=''; renderSale(); renderPur(); renderGST(); addEntryRow();
   loadVouchers();
 }
 
-function addVoucher() {
-  const v = {
-    id: Date.now(),
-    date: document.getElementById('vDate').value,
-    narration: document.getElementById('vNarration').value,
-    debit: {ledger: document.getElementById('debitLedger').value, amt: document.getElementById('debitAmt').value},
-    credit: {ledger: document.getElementById('creditLedger').value, amt: document.getElementById('creditAmt').value}
-  };
-  if(!v.date ||!v.debit.amt ||!v.credit.amt) return alert('Fill all fields');
-  data.vouchers.push(v); saveData();
-  document.getElementById('vNarration').value=''; document.getElementById('debitAmt').value=''; document.getElementById('creditAmt').value='';
-  loadVouchers();
-}
-
-function loadVouchers() {
-  const tbody = document.querySelector('#voucherTable tbody');
-  tbody.innerHTML = data.vouchers.slice(-5).map(v=>{
-    const dL = data.ledgers.find(l=>l.id==v.debit.ledger)?.name;
-    const cL = data.ledgers.find(l=>l.id==v.credit.ledger)?.name;
-    return `<tr><td>${v.date}</td><td>${v.narration}</td><td>${dL}: ${v.debit.amt}</td><td>${cL}: ${v.credit.amt}</td></tr>`;
+function loadVouchers(){
+  vTbl.querySelector('tbody').innerHTML = db.vouchers.slice(-10).reverse().map(v=>{
+    const amt = v.entries.reduce((a,e)=>a+(e.amt||0),0);
+    return `<tr><td>${v.date}</td><td>${v.type}</td><td>${v.narration}</td><td>₹${amt.toFixed(2)}</td></tr>`;
   }).join('');
 }
 
-function loadTB() {
-  const tb = {};
-  data.ledgers.forEach(l=>tb[l.id]={name:l.name, debit:0, credit:0});
-  data.vouchers.forEach(v=>{
-    tb[v.debit.ledger].debit += Number(v.debit.amt);
-    tb[v.credit.ledger].credit += Number(v.credit.amt);
+function loadTB(){
+  const tb={};
+  db.ledgers.forEach(l=>tb[l.id]={name:l.name,type:l.type,d:0,c:0});
+  db.vouchers.forEach(v=>{
+    v.entries.forEach(e=>{
+      if(e.dr){tb[e.dr].d+=e.amt; tb[e.cr].c+=e.amt}
+      else{const amt=e.amt||0; tb[v.entries[0].dr||Object.keys(tb)[0]].d+=amt; tb[v.entries[0].cr||Object.keys(tb)[1]].c+=amt}
+    })
   });
-  const tbody = document.querySelector('#tbTable tbody');
-  tbody.innerHTML = Object.values(tb).map(t=>`<tr><td>${t.name}</td><td>${t.debit}</td><td>${t.credit}</td></tr>`).join('');
+  tbTbl.querySelector('tbody').innerHTML = Object.values(tb).map(t=>`<tr><td>${t.name}</td><td>${t.type}</td><td>${t.d.toFixed(2)}</td><td>${t.c.toFixed(2)}</td></tr>`).join('');
 }
 
-function exportCSV() {
-  let csv = 'Particulars,Debit,Credit\n';
-  document.querySelectorAll('#tbTable tbody tr').forEach(r=>{
-    csv += [...r.cells].map(c=>c.innerText).join(',') + '\n';
+function loadGST(){
+  const out={}, inp={};
+  db.vouchers.forEach(v=>{
+    if(v.type=='Sales'&&v.entries[0].gstOut) v.entries[0].gstOut.forEach(g=>{out[g.rate]=(out[g.rate]||{tax:0,gst:0}); out[g.rate].tax+=g.taxable; out[g.rate].gst+=g.gst});
+    if(v.type=='Purchase'&&v.entries[0].gstIn) v.entries[0].gstIn.forEach(g=>{inp[g.rate]=(inp[g.rate]||{tax:0,gst:0}); inp[g.rate].tax+=g.taxable; inp[g.rate].gst+=g.gst});
   });
-  const blob = new Blob([csv], {type:'text/csv'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob); a.download = 'TrialBalance.csv'; a.click();
+  outGstTbl.querySelector('tbody').innerHTML = Object.entries(out).map(([k,v])=>`<tr><td>${k}%</td><td>${v.tax.toFixed(2)}</td><td>${v.gst.toFixed(2)}</td></tr>`).join('');
+  inGstTbl.querySelector('tbody').innerHTML = Object.entries(inp).map(([k,v])=>`<tr><td>${k}%</td><td>${v.tax.toFixed(2)}</td><td>${v.gst.toFixed(2)}</td></tr>`).join('');
+}
+
+function exportCSV(){
+  let csv='Ledger,Type,Debit,Credit\n';
+  document.querySelectorAll('#tbTbl tbody tr').forEach(r=>csv+=[...r.cells].map(c=>c.innerText).join(',')+'\n');
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv])); a.download='TrialBalance.csv'; a.click();
 }
 
 loadLedgers();
