@@ -1,271 +1,203 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BusinessDesk — Phase 2</title>
+<title>BusinessDesk — Phase 3.1</title>
 <style>
-:root{--bg:#f5f7fb;--card:#fff;--text:#111827;--muted:#6b7280;--border:#e5e7eb;--primary:#2563eb;--primary2:#1d4ed8;--success:#059669;--danger:#dc2626;--sidebar:#111827;--hover:#1f2937;--input:#fff}
-body.dark{--bg:#0f172a;--card:#111827;--text:#f8fafc;--muted:#94a3b8;--border:#263447;--input:#0b1220;--sidebar:#020617;--hover:#1e293b}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font:14px Arial, sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-button,input,select{font:inherit}.app{display:flex;min-height:100vh}.sidebar{width:245px;position:fixed;inset:0 auto 0 0;background:var(--sidebar);color:#fff;z-index:10;display:flex;flex-direction:column}.logo{padding:22px 18px;border-bottom:1px solid #ffffff12}.logo h1{font-size:21px}.logo b{color:#60a5fa}.logo small{color:#94a3b8;font-size:10px}.menu{padding:12px 9px;overflow:auto}.mt{font-size:10px;color:#64748b;text-transform:uppercase;padding:12px 10px 6px}.nav{display:block;width:100%;border:0;background:none;color:#cbd5e1;text-align:left;padding:10px 12px;border-radius:7px;cursor:pointer;margin:2px 0}.nav:hover,.nav.active{background:var(--hover);color:#fff}.nav.active{border-left:3px solid #60a5fa}.sidebottom{margin-top:auto;padding:12px;border-top:1px solid #ffffff12}.main{margin-left:245px;width:calc(100% - 245px)}.top{height:64px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:sticky;top:0;z-index:5}.search{width:360px}.search input{width:100%;padding:10px 13px;border:1px solid var(--border);background:var(--input);color:var(--text);border-radius:8px;outline:0}.actions{display:flex;gap:8px;align-items:center}.icon{width:36px;height:36px;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:8px;cursor:pointer}.content{padding:22px}.page{display:none}.page.active{display:block}.head{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:18px}.head h2{font-size:23px}.head p{color:var(--muted);font-size:12px;margin-top:4px}.btn{border:0;border-radius:7px;padding:9px 13px;cursor:pointer;font-weight:600;font-size:12px}.primary{background:var(--primary);color:#fff}.primary:hover{background:var(--primary2)}.secondary{background:var(--card);color:var(--text);border:1px solid var(--border)}.danger{background:var(--danger);color:#fff}.success{background:var(--success);color:#fff}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:17px}.card{background:var(--card);border:1px solid var(--border);border-radius:10px;box-shadow:0 5px 18px #0f172a0a}.stat{padding:16px}.stat label{color:var(--muted);font-size:11px}.stat strong{display:block;font-size:22px;margin-top:7px}.grid2{display:grid;grid-template-columns:1.5fr 1fr;gap:16px}.panel{overflow:hidden}.ph{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}.ph h3{font-size:14px}.pb{padding:16px}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse}th,td{padding:10px 11px;border-bottom:1px solid var(--border);font-size:11px;text-align:left;white-space:nowrap}th{color:var(--muted);background:#94a3b80a}.badge{padding:4px 7px;border-radius:20px;font-size:10px}.green{background:#dcfce7;color:#166534}.yellow{background:#fef3c7;color:#92400e}.red{background:#fee2e2;color:#991b1b}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px}.toolbar input,.toolbar select,.form input,.form select,.form textarea{border:1px solid var(--border);background:var(--input);color:var(--text);border-radius:7px;padding:9px;outline:0}.toolbar input{min-width:220px}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}.form label{display:block;color:var(--muted);font-size:11px;margin-bottom:5px}.form input,.form select,.form textarea{width:100%}.form textarea{min-height:70px;resize:vertical}.full{grid-column:1/-1}.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;z-index:100}.modal.show{display:flex}.modalbox{width:min(650px,94vw);max-height:90vh;overflow:auto;background:var(--card);border:1px solid var(--border);border-radius:12px}.mh{padding:15px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between}.mb{padding:18px}.mf{padding:13px 18px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}.close{background:none;border:0;color:var(--muted);font-size:20px;cursor:pointer}.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.quick button{padding:12px;text-align:left;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:8px;cursor:pointer}.quick button:hover{border-color:var(--primary)}.empty{padding:30px;text-align:center;color:var(--muted)}.mobile{display:none}
+:root{--bg:#f3f6fb;--panel:#fff;--text:#172033;--muted:#687386;--line:#e3e8f0;--primary:#2563eb;--side:#101827;--side2:#1d2939;--danger:#dc2626;--ok:#059669;--warn:#d97706}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px Arial,sans-serif}button,input,select,textarea{font:inherit}
+body.dark{--bg:#0b1220;--panel:#111827;--text:#f5f7fb;--muted:#9aa7ba;--line:#273449;--side:#020617;--side2:#172033}
+.side{position:fixed;inset:0 auto 0 0;width:245px;background:var(--side);color:#fff;z-index:20;display:flex;flex-direction:column}.brand{padding:20px;border-bottom:1px solid #ffffff14}.brand h1{margin:0;font-size:21px}.brand b{color:#60a5fa}.brand small{color:#94a3b8;font-size:10px}.navs{padding:10px;overflow:auto}.label{padding:12px 9px 5px;color:#718096;font-size:10px;text-transform:uppercase}.nav{display:block;width:100%;border:0;background:transparent;color:#cbd5e1;text-align:left;padding:10px 11px;border-radius:7px;cursor:pointer;margin:2px 0}.nav:hover,.nav.active{background:var(--side2);color:#fff}.nav.active{border-left:3px solid #60a5fa}.foot{margin-top:auto;padding:10px;border-top:1px solid #ffffff14}
+.main{margin-left:245px;min-height:100vh}.top{height:62px;background:var(--panel);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:0 20px;position:sticky;top:0;z-index:10}.search input{width:360px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text)}.topright{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:12px}.content{padding:22px}.page{display:none}.page.active{display:block}.head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:18px}.head h2{margin:0;font-size:23px}.head p{margin:5px 0 0;color:var(--muted);font-size:12px}
+.btn{padding:9px 13px;border-radius:7px;border:1px solid var(--line);cursor:pointer;font-size:12px;font-weight:600;background:var(--panel);color:var(--text)}.primary{background:var(--primary);color:#fff;border-color:var(--primary)}.danger{background:var(--danger);color:#fff;border-color:var(--danger)}.ok{background:var(--ok);color:#fff;border-color:var(--ok)}.icon{width:36px;height:36px;padding:0}.mobile{display:none}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:0 4px 18px #17203308}.stat{padding:15px}.stat label{color:var(--muted);font-size:11px}.stat strong{display:block;margin-top:7px;font-size:20px}.panel{overflow:hidden}.ph{padding:13px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.ph h3{margin:0;font-size:14px}.pb{padding:16px}.grid2{display:grid;grid-template-columns:1.5fr 1fr;gap:16px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px}.toolbar input,.toolbar select,.form input,.form select,.form textarea{padding:9px;border:1px solid var(--line);border-radius:7px;background:var(--panel);color:var(--text);outline:none}.toolbar input{min-width:210px}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse}th,td{padding:9px 10px;border-bottom:1px solid var(--line);font-size:11px;text-align:left;white-space:nowrap}th{background:#94a3b80d;color:var(--muted)}.empty{text-align:center;padding:30px;color:var(--muted)}.badge{padding:4px 7px;border-radius:20px;font-size:10px}.blue{background:#dbeafe;color:#1e40af}.orange{background:#ffedd5;color:#9a3412}.green{background:#dcfce7;color:#166534}.red{background:#fee2e2;color:#991b1b}.quick{display:grid;grid-template-columns:1fr 1fr;gap:9px}.quick button{text-align:left;padding:12px;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:8px;cursor:pointer}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}.form label{display:block;color:var(--muted);font-size:11px;margin-bottom:5px}.form input,.form select,.form textarea{width:100%}.form textarea{min-height:75px;resize:vertical}.full{grid-column:1/-1}.notice{padding:10px 12px;border:1px solid #2563eb44;background:#2563eb10;color:var(--muted);border-radius:8px;font-size:11px;margin-bottom:12px}
+.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;z-index:100}.modal.show{display:flex}.modalbox{width:min(850px,95vw);max-height:94vh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px}.mh{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}.mh h3{margin:0}.mb{padding:18px}.mf{padding:13px 18px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}.close{border:0;background:none;color:var(--muted);font-size:20px;cursor:pointer}
+.invoice input,.invoice select{width:100%;padding:7px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--text)}.invoice td{vertical-align:top}.totals{max-width:340px;margin-left:auto;line-height:2}.totals div{display:flex;justify-content:space-between}.grand{border-top:1px solid var(--line);font-size:17px;font-weight:700;padding-top:5px}.check{padding:10px 12px;border-radius:8px;font-size:11px;margin-bottom:12px}.check.good{background:#05966914;color:var(--ok)}.check.bad{background:#dc262614;color:var(--danger)}
 @media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
-@media(max-width:700px){.sidebar{transform:translateX(-100%);transition:.2s}.sidebar.open{transform:translateX(0)}.main{margin-left:0;width:100%}.mobile{display:block}.search{width:190px}.content{padding:14px}.cards{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}}
+@media(max-width:700px){.side{transform:translateX(-100%);transition:.2s}.side.open{transform:none}.main{margin-left:0}.mobile{display:inline-block}.search input{width:190px}.content{padding:14px}.cards{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}}
 </style>
 </head>
 <body>
-<div class="app">
-<aside class="sidebar" id="sidebar">
-<div class="logo"><h1>Business<b>Desk</b></h1><small>Accounting • Finance • Excel</small></div>
-<div class="menu">
-<div class="mt">Workspace</div>
-<button class="nav active" data-page="dashboard">🏠 Dashboard</button>
-<button class="nav" data-page="calculator">🧮 Calculator</button>
-<button class="nav" data-page="spreadsheet">📊 Spreadsheet</button>
-<div class="mt">Accounting</div>
-<button class="nav" data-page="groups">📂 Groups</button>
-<button class="nav" data-page="ledgers">📖 Ledgers</button>
-<button class="nav" data-page="vouchers">🧾 Vouchers</button>
-<button class="nav" data-page="daybook">📅 Day Book</button>
-<button class="nav" data-page="trial">⚖️ Trial Balance</button>
-<div class="mt">Reports & Setup</div>
-<button class="nav" data-page="reports">📑 Reports</button>
-<button class="nav" data-page="company">🏢 Company</button>
+<aside class="side" id="side">
+<div class="brand"><h1>Business<b>Desk</b></h1><small>Phase 3.1 • Double-entry foundation</small></div>
+<div class="navs">
+<div class="label">Workspace</div>
+<button class="nav active" data-page="dashboard">🏠 Dashboard</button><button class="nav" data-page="calculator">🧮 Calculator</button><button class="nav" data-page="spreadsheet">📊 Spreadsheet</button>
+<div class="label">Masters</div>
+<button class="nav" data-page="groups">📂 Groups</button><button class="nav" data-page="ledgers">📖 Ledgers</button><button class="nav" data-page="parties">👥 Customers / Suppliers</button>
+<div class="label">Transactions</div>
+<button class="nav" data-page="sales">🧾 Sales</button><button class="nav" data-page="purchase">🛒 Purchase</button><button class="nav" data-page="vouchers">📒 Vouchers</button><button class="nav" data-page="daybook">📅 Day Book</button>
+<div class="label">Reports</div>
+<button class="nav" data-page="trial">⚖️ Trial Balance</button><button class="nav" data-page="pl">📈 Profit & Loss</button><button class="nav" data-page="balance">🏦 Balance Sheet</button><button class="nav" data-page="gst">🧮 GST Summary</button><button class="nav" data-page="outstanding">💳 Outstanding</button>
+<div class="label">Setup</div><button class="nav" data-page="company">🏢 Company</button>
 </div>
-<div class="sidebottom"><button class="nav" onclick="backup()">💾 Backup Data</button><button class="nav" onclick="document.getElementById('restoreFile').click()">📤 Restore Data</button><input id="restoreFile" type="file" accept=".json" hidden></div>
+<div class="foot"><button class="nav" onclick="backup()">💾 Backup JSON</button><button class="nav" onclick="document.getElementById('restore').click()">📤 Restore JSON</button><input id="restore" type="file" accept=".json" hidden></div>
 </aside>
-
 <main class="main">
-<header class="top">
-<div style="display:flex;gap:9px;align-items:center"><button class="icon mobile" onclick="toggleSide()">☰</button><div class="search"><input id="search" placeholder="Search pages, ledgers, vouchers..." oninput="globalSearch()"></div></div>
-<div class="actions"><button class="icon" onclick="toggleDark()">◐</button><button class="icon" onclick="toast('No new notifications')">🔔</button><span id="companyTop" style="font-size:12px;color:var(--muted)">My Business</span></div>
-</header>
+<header class="top"><div style="display:flex;gap:8px;align-items:center"><button class="btn icon mobile" onclick="toggleSide()">☰</button><div class="search"><input id="globalSearch" placeholder="Search module..." oninput="globalSearchFn()"></div></div><div class="topright"><button class="btn icon" onclick="toggleDark()">◐</button><span id="topCompany">My Business</span></div></header>
 <div class="content">
 
 <section class="page active" id="dashboard">
-<div class="head"><div><h2>Dashboard</h2><p>Accounting workspace and financial overview.</p></div><button class="btn primary" onclick="openVoucher()">+ New Voucher</button></div>
+<div class="head"><div><h2>Dashboard</h2><p>Phase 3.1 rebuild: controlled double-entry posting and derived reports.</p></div><div><button class="btn" onclick="openInvoice('sales')">+ Sales</button> <button class="btn primary" onclick="openVoucher()">+ Voucher</button></div></div>
 <div class="cards">
-<div class="card stat"><label>Total Ledgers</label><strong id="statLedgers">0</strong></div>
-<div class="card stat"><label>Transactions</label><strong id="statVouchers">0</strong></div>
-<div class="card stat"><label>Total Debit</label><strong id="statDebit">₹0.00</strong></div>
-<div class="card stat"><label>Total Credit</label><strong id="statCredit">₹0.00</strong></div>
+<div class="card stat"><label>Ledgers</label><strong id="dLedgers">0</strong></div><div class="card stat"><label>Parties</label><strong id="dParties">0</strong></div><div class="card stat"><label>Sales</label><strong id="dSales">₹0.00</strong></div><div class="card stat"><label>Purchases</label><strong id="dPurchase">₹0.00</strong></div>
 </div>
-<div class="grid2">
-<div class="card panel"><div class="ph"><h3>Recent Vouchers</h3><button class="btn secondary" onclick="go('vouchers')">View All</button></div><div class="tablewrap"><table><thead><tr><th>No.</th><th>Date</th><th>Type</th><th>Ledger</th><th>Amount</th></tr></thead><tbody id="recentVouchers"></tbody></table></div></div>
-<div class="card panel"><div class="ph"><h3>Quick Actions</h3></div><div class="pb quick"><button onclick="go('ledgers')">📖 Create Ledger<br><small>Add account</small></button><button onclick="openVoucher()">🧾 New Voucher<br><small>Record transaction</small></button><button onclick="go('groups')">📂 Account Groups<br><small>Manage groups</small></button><button onclick="go('trial')">⚖️ Trial Balance<br><small>Check balances</small></button></div></div>
-</div>
+<div class="cards"><div class="card stat"><label>Output GST</label><strong id="dOut">₹0.00</strong></div><div class="card stat"><label>Input GST</label><strong id="dIn">₹0.00</strong></div><div class="card stat"><label>Receivable</label><strong id="dRec">₹0.00</strong></div><div class="card stat"><label>Payable</label><strong id="dPay">₹0.00</strong></div></div>
+<div class="grid2"><div class="card panel"><div class="ph"><h3>Recent Transactions</h3><button class="btn" onclick="go('daybook')">Day Book</button></div><div class="tablewrap"><table><thead><tr><th>Date</th><th>No.</th><th>Type</th><th>Debit</th><th>Credit</th><th>Amount</th></tr></thead><tbody id="recent"></tbody></table></div></div><div class="card panel"><div class="ph"><h3>Quick Actions</h3></div><div class="pb quick"><button onclick="openInvoice('sales')">🧾 Sales Invoice</button><button onclick="openInvoice('purchase')">🛒 Purchase Invoice</button><button onclick="openParty()">👥 Add Party</button><button onclick="go('trial')">⚖️ Trial Balance</button></div></div></div>
 </section>
 
-<section class="page" id="groups">
-<div class="head"><div><h2>Account Groups</h2><p>Classify ledgers for accounting reports.</p></div><button class="btn primary" onclick="openGroup()">+ Add Group</button></div>
-<div class="card panel"><div class="pb"><div class="toolbar"><input id="groupSearch" placeholder="Search groups..." oninput="renderGroups()"></div><div class="tablewrap"><table><thead><tr><th>Group</th><th>Nature</th><th>Parent</th><th>Ledgers</th><th>Actions</th></tr></thead><tbody id="groupsBody"></tbody></table></div></div></div>
-</section>
+<section class="page" id="groups"><div class="head"><div><h2>Account Groups</h2><p>Classification used by financial statements.</p></div><button class="btn primary" onclick="openGroup()">+ Add Group</button></div><div class="card panel"><div class="pb"><div class="toolbar"><input id="groupSearch" placeholder="Search..." oninput="renderGroups()"></div><div class="tablewrap"><table><thead><tr><th>Group</th><th>Nature</th><th>Parent</th><th>Ledgers</th><th></th></tr></thead><tbody id="groupsBody"></tbody></table></div></div></div></section>
 
-<section class="page" id="ledgers">
-<div class="head"><div><h2>Ledgers</h2><p>Create and manage individual accounts.</p></div><button class="btn primary" onclick="openLedger()">+ Create Ledger</button></div>
-<div class="card panel"><div class="pb"><div class="toolbar"><input id="ledgerSearch" placeholder="Search ledger or group..." oninput="renderLedgers()"><select id="ledgerNatureFilter" onchange="renderLedgers()"><option value="">All natures</option><option>Debit</option><option>Credit</option></select></div><div class="tablewrap"><table><thead><tr><th>Ledger</th><th>Group</th><th>Opening</th><th>Nature</th><th>Current Balance</th><th>Actions</th></tr></thead><tbody id="ledgersBody"></tbody></table></div></div></div>
-</section>
+<section class="page" id="ledgers"><div class="head"><div><h2>Ledgers</h2><p>Every ledger has a normal balance and opening balance.</p></div><button class="btn primary" onclick="openLedger()">+ Create Ledger</button></div><div class="card panel"><div class="pb"><div class="toolbar"><input id="ledgerSearch" placeholder="Search ledger..." oninput="renderLedgers()"><select id="ledgerFilter" onchange="renderLedgers()"><option value="">All</option><option>Debit</option><option>Credit</option></select></div><div class="tablewrap"><table><thead><tr><th>Ledger</th><th>Group</th><th>Opening</th><th>Closing</th><th></th></tr></thead><tbody id="ledgersBody"></tbody></table></div></div></div></section>
 
-<section class="page" id="vouchers">
-<div class="head"><div><h2>Vouchers</h2><p>Record double-entry accounting transactions.</p></div><button class="btn primary" onclick="openVoucher()">+ New Voucher</button></div>
-<div class="card panel"><div class="pb"><div class="toolbar"><input id="voucherSearch" placeholder="Search voucher..." oninput="renderVouchers()"><select id="voucherFilter" onchange="renderVouchers()"><option value="">All types</option><option>Payment</option><option>Receipt</option><option>Contra</option><option>Journal</option></select></div><div class="tablewrap"><table><thead><tr><th>No.</th><th>Date</th><th>Type</th><th>Debit</th><th>Credit</th><th>Amount</th><th>Narration</th><th>Actions</th></tr></thead><tbody id="vouchersBody"></tbody></table></div></div></div>
-</section>
+<section class="page" id="parties"><div class="head"><div><h2>Customers / Suppliers</h2><p>Party records automatically receive a linked ledger.</p></div><button class="btn primary" onclick="openParty()">+ Add Party</button></div><div class="card panel"><div class="pb"><div class="toolbar"><input id="partySearch" placeholder="Search..." oninput="renderParties()"><select id="partyType" onchange="renderParties()"><option value="">All</option><option>Customer</option><option>Supplier</option></select></div><div class="tablewrap"><table><thead><tr><th>Name</th><th>Type</th><th>GSTIN</th><th>State</th><th>Limit</th><th>Outstanding</th><th></th></tr></thead><tbody id="partiesBody"></tbody></table></div></div></div></section>
 
-<section class="page" id="daybook">
-<div class="head"><div><h2>Day Book</h2><p>Chronological record of all vouchers.</p></div></div>
-<div class="card panel"><div class="pb"><div class="toolbar"><input type="date" id="dayDate" onchange="renderDaybook()"><select id="dayType" onchange="renderDaybook()"><option value="">All voucher types</option><option>Payment</option><option>Receipt</option><option>Contra</option><option>Journal</option></select></div><div class="tablewrap"><table><thead><tr><th>Date</th><th>Voucher</th><th>Type</th><th>Debit</th><th>Credit</th><th>Amount</th><th>Narration</th></tr></thead><tbody id="dayBody"></tbody></table></div></div></div>
-</section>
+<section class="page" id="sales"><div class="head"><div><h2>Sales Invoices</h2><p>Each saved invoice creates balanced accounting postings.</p></div><button class="btn primary" onclick="openInvoice('sales')">+ Sales Invoice</button></div><div class="card panel"><div class="pb"><div class="toolbar"><input id="salesSearch" placeholder="Search..." oninput="renderSales()"></div><div class="tablewrap"><table><thead><tr><th>Invoice</th><th>Date</th><th>Customer</th><th>Taxable</th><th>GST</th><th>Total</th><th></th></tr></thead><tbody id="salesBody"></tbody></table></div></div></div></section>
 
-<section class="page" id="trial">
-<div class="head"><div><h2>Trial Balance</h2><p>Automatically calculated from opening balances and vouchers.</p></div><button class="btn secondary" onclick="window.print()">🖨 Print</button></div>
-<div class="cards"><div class="card stat"><label>Total Debit</label><strong id="trialDebit">₹0.00</strong></div><div class="card stat"><label>Total Credit</label><strong id="trialCredit">₹0.00</strong></div><div class="card stat"><label>Difference</label><strong id="trialDiff">₹0.00</strong></div><div class="card stat"><label>Status</label><strong id="trialStatus">Balanced</strong></div></div>
-<div class="card panel"><div class="pb"><div class="tablewrap"><table><thead><tr><th>Ledger</th><th>Group</th><th>Opening Dr</th><th>Opening Cr</th><th>Current Dr</th><th>Current Cr</th></tr></thead><tbody id="trialBody"></tbody></table></div></div></div>
-</section>
+<section class="page" id="purchase"><div class="head"><div><h2>Purchase Invoices</h2><p>Each saved purchase creates balanced accounting postings.</p></div><button class="btn primary" onclick="openInvoice('purchase')">+ Purchase Invoice</button></div><div class="card panel"><div class="pb"><div class="toolbar"><input id="purchaseSearch" placeholder="Search..." oninput="renderPurchases()"></div><div class="tablewrap"><table><thead><tr><th>Invoice</th><th>Date</th><th>Supplier</th><th>Taxable</th><th>GST</th><th>Total</th><th></th></tr></thead><tbody id="purchaseBody"></tbody></table></div></div></div></section>
 
-<section class="page" id="calculator">
-<div class="head"><div><h2>Calculator</h2><p>Useful business calculations.</p></div></div>
-<div class="grid2">
-<div class="card panel"><div class="pb"><input id="calc" value="0" readonly style="width:100%;font-size:25px;text-align:right;padding:13px;margin-bottom:10px;background:var(--input);color:var(--text);border:1px solid var(--border);border-radius:8px"><div class="quick" id="calcKeys"></div></div></div>
-<div class="card panel"><div class="ph"><h3>GST Calculator</h3></div><div class="pb form"><div><label>Amount</label><input id="gAmt" type="number" oninput="gstCalc()"></div><div style="margin-top:10px"><label>GST Rate</label><select id="gRate" onchange="gstCalc()"><option>5</option><option>12</option><option selected>18</option><option>28</option></select></div><div id="gstResult" style="margin-top:15px;line-height:2"></div></div></div>
-</div>
-</section>
+<section class="page" id="vouchers"><div class="head"><div><h2>Vouchers</h2><p>Manual entries use a single balanced debit/credit pair.</p></div><button class="btn primary" onclick="openVoucher()">+ New Voucher</button></div><div class="card panel"><div class="pb"><div class="toolbar"><input id="voucherSearch" placeholder="Search..." oninput="renderVouchers()"><select id="voucherFilter" onchange="renderVouchers()"><option value="">All</option><option>Payment</option><option>Receipt</option><option>Contra</option><option>Journal</option></select></div><div class="tablewrap"><table><thead><tr><th>No.</th><th>Date</th><th>Type</th><th>Debit</th><th>Credit</th><th>Amount</th><th></th></tr></thead><tbody id="vouchersBody"></tbody></table></div></div></div></section>
 
-<section class="page" id="spreadsheet">
-<div class="head"><div><h2>Spreadsheet</h2><p>Lightweight worksheet for working papers.</p></div><div><button class="btn secondary" onclick="saveSheet()">Save</button> <button class="btn primary" onclick="exportCSV()">Export CSV</button></div></div>
-<div class="card panel"><div class="pb"><div class="toolbar"><button class="btn secondary" onclick="addRow()">+ Row</button><button class="btn secondary" onclick="addCol()">+ Column</button><button class="btn secondary" onclick="clearSheet()">Clear</button></div><div class="tablewrap" style="max-height:560px"><table id="sheet"><thead></thead><tbody></tbody></table></div></div></div>
-</section>
+<section class="page" id="daybook"><div class="head"><div><h2>Day Book</h2><p>Unified view of accounting entries.</p></div></div><div class="card panel"><div class="pb"><div class="toolbar"><input type="date" id="dayDate" onchange="renderDaybook()"><select id="dayFilter" onchange="renderDaybook"><option value="">All</option><option>Sales</option><option>Purchase</option><option>Payment</option><option>Receipt</option><option>Contra</option><option>Journal</option></select></div><div class="tablewrap"><table><thead><tr><th>Date</th><th>No.</th><th>Type</th><th>Debit</th><th>Credit</th><th>Amount</th><th>Narration</th></tr></thead><tbody id="dayBody"></tbody></table></div></div></div></section>
 
-<section class="page" id="reports">
-<div class="head"><div><h2>Reports</h2><p>Phase 2 accounting reports.</p></div></div>
-<div class="cards"><div class="card stat"><label>Assets</label><strong id="repAssets">₹0.00</strong></div><div class="card stat"><label>Liabilities</label><strong id="repLiab">₹0.00</strong></div><div class="card stat"><label>Income</label><strong id="repIncome">₹0.00</strong></div><div class="card stat"><label>Expenses</label><strong id="repExpense">₹0.00</strong></div></div>
-<div class="card panel"><div class="ph"><h3>Report Centre</h3></div><div class="pb"><p style="color:var(--muted);font-size:12px">Phase 3 will add detailed Profit & Loss, Balance Sheet, GST and tax reports based on this accounting engine.</p></div></div>
-</section>
+<section class="page" id="trial"><div class="head"><div><h2>Trial Balance</h2><p>Closing ledger balances. Debit total must equal credit total.</p></div><button class="btn" onclick="window.print()">🖨 Print</button></div><div id="tbCheck"></div><div class="cards"><div class="card stat"><label>Total Debit</label><strong id="tbDr">₹0.00</strong></div><div class="card stat"><label>Total Credit</label><strong id="tbCr">₹0.00</strong></div><div class="card stat"><label>Difference</label><strong id="tbDiff">₹0.00</strong></div><div class="card stat"><label>Status</label><strong id="tbStatus">Balanced</strong></div></div><div class="card panel"><div class="pb"><div class="tablewrap"><table><thead><tr><th>Ledger</th><th>Group</th><th>Debit</th><th>Credit</th></tr></thead><tbody id="tbBody"></tbody></table></div></div></div></section>
 
-<section class="page" id="company">
-<div class="head"><div><h2>Company</h2><p>Current business profile and financial year.</p></div><button class="btn primary" onclick="saveCompany()">Save Company</button></div>
-<div class="card panel"><div class="pb form"><div class="formgrid"><div><label>Company Name</label><input id="coName"></div><div><label>GSTIN</label><input id="coGSTIN"></div><div><label>PAN</label><input id="coPAN"></div><div><label>State</label><input id="coState"></div><div><label>Financial Year</label><select id="coFY"><option>2026-27</option><option>2025-26</option><option>2027-28</option></select></div><div class="full"><label>Address</label><textarea id="coAddress"></textarea></div></div></div></div>
-</section>
-</div></main></div>
+<section class="page" id="pl"><div class="head"><div><h2>Profit & Loss</h2><p>Revenue and expenses from posted books.</p></div></div><div class="cards"><div class="card stat"><label>Revenue</label><strong id="plRev">₹0.00</strong></div><div class="card stat"><label>Direct Expenses</label><strong id="plDirect">₹0.00</strong></div><div class="card stat"><label>Indirect Expenses</label><strong id="plIndirect">₹0.00</strong></div><div class="card stat"><label>Net Profit / (Loss)</label><strong id="plNet">₹0.00</strong></div></div><div class="card panel"><div class="pb"><div class="tablewrap"><table><thead><tr><th>Ledger</th><th>Category</th><th>Amount</th></tr></thead><tbody id="plBody"></tbody></table></div></div></div></section>
 
-<div class="modal" id="ledgerModal"><div class="modalbox"><div class="mh"><h3 id="ledgerTitle">Create Ledger</h3><button class="close" onclick="closeModal('ledgerModal')">×</button></div><div class="mb form"><div class="formgrid"><div><label>Ledger Name *</label><input id="lName"></div><div><label>Group *</label><select id="lGroup"></select></div><div><label>Opening Balance</label><input id="lOpening" type="number" value="0"></div><div><label>Opening Nature</label><select id="lNature"><option>Debit</option><option>Credit</option></select></div><div class="full"><label>Notes</label><textarea id="lNotes"></textarea></div></div></div><div class="mf"><button class="btn secondary" onclick="closeModal('ledgerModal')">Cancel</button><button class="btn primary" onclick="saveLedger()">Save Ledger</button></div></div></div>
+<section class="page" id="balance"><div class="head"><div><h2>Balance Sheet</h2><p>Assets, liabilities and capital based on posted books.</p></div></div><div class="cards"><div class="card stat"><label>Assets</label><strong id="bsAssets">₹0.00</strong></div><div class="card stat"><label>Liabilities</label><strong id="bsLiab">₹0.00</strong></div><div class="card stat"><label>Capital + Profit</label><strong id="bsCapital">₹0.00</strong></div><div class="card stat"><label>Difference</label><strong id="bsDiff">₹0.00</strong></div></div><div class="card panel"><div class="pb"><div class="tablewrap"><table><thead><tr><th>Ledger</th><th>Category</th><th>Amount</th></tr></thead><tbody id="bsBody"></tbody></table></div></div></div></section>
 
-<div class="modal" id="groupModal"><div class="modalbox"><div class="mh"><h3>Add Account Group</h3><button class="close" onclick="closeModal('groupModal')">×</button></div><div class="mb form"><div class="formgrid"><div><label>Group Name *</label><input id="grName"></div><div><label>Nature</label><select id="grNature"><option>Assets</option><option>Liabilities</option><option>Income</option><option>Expenses</option></select></div><div class="full"><label>Parent Group</label><select id="grParent"><option value="">Primary</option></select></div></div></div><div class="mf"><button class="btn secondary" onclick="closeModal('groupModal')">Cancel</button><button class="btn primary" onclick="saveGroup()">Save Group</button></div></div></div>
+<section class="page" id="gst"><div class="head"><div><h2>GST Summary</h2><p>Derived from invoice tax lines; filing integrations are not included in this phase.</p></div></div><div class="cards"><div class="card stat"><label>Output GST</label><strong id="gstOut">₹0.00</strong></div><div class="card stat"><label>Input GST</label><strong id="gstIn">₹0.00</strong></div><div class="card stat"><label>Net GST</label><strong id="gstNet">₹0.00</strong></div><div class="card stat"><label>Sales Taxable</label><strong id="gstTurn">₹0.00</strong></div></div><div class="card panel"><div class="pb"><div class="tablewrap"><table><thead><tr><th>Document</th><th>Type</th><th>Taxable</th><th>GST</th><th>CGST</th><th>SGST</th><th>IGST</th></tr></thead><tbody id="gstBody"></tbody></table></div></div></div></section>
 
-<div class="modal" id="voucherModal"><div class="modalbox"><div class="mh"><h3>New Voucher</h3><button class="close" onclick="closeModal('voucherModal')">×</button></div><div class="mb form"><div class="formgrid"><div><label>Voucher Type *</label><select id="vType"><option>Payment</option><option>Receipt</option><option>Contra</option><option>Journal</option></select></div><div><label>Date *</label><input id="vDate" type="date"></div><div><label>Debit Ledger *</label><select id="vDebit"></select></div><div><label>Credit Ledger *</label><select id="vCredit"></select></div><div><label>Amount *</label><input id="vAmount" type="number" min="0.01" step="0.01"></div><div><label>Reference</label><input id="vRef" placeholder="Optional"></div><div class="full"><label>Narration</label><textarea id="vNarration" placeholder="Transaction description"></textarea></div></div><p style="margin-top:10px;color:var(--muted);font-size:11px">Phase 2 uses one debit ledger and one credit ledger per voucher. This keeps the double-entry engine simple and auditable.</p></div><div class="mf"><button class="btn secondary" onclick="closeModal('voucherModal')">Cancel</button><button class="btn primary" onclick="saveVoucher()">Save Voucher</button></div></div></div>
+<section class="page" id="outstanding"><div class="head"><div><h2>Outstanding</h2><p>Invoice-based receivables/payables. Settlement vouchers are linked through party ledgers.</p></div></div><div class="cards"><div class="card stat"><label>Receivables</label><strong id="osRec">₹0.00</strong></div><div class="card stat"><label>Payables</label><strong id="osPay">₹0.00</strong></div><div class="card stat"><label>Customers</label><strong id="osC">0</strong></div><div class="card stat"><label>Suppliers</label><strong id="osS">0</strong></div></div><div class="card panel"><div class="pb"><div class="tablewrap"><table><thead><tr><th>Party</th><th>Type</th><th>Invoices</th><th>Settled</th><th>Outstanding</th></tr></thead><tbody id="osBody"></tbody></table></div></div></div></section>
+
+<section class="page" id="calculator"><div class="head"><div><h2>Calculator</h2><p>General and GST quick calculations.</p></div></div><div class="grid2"><div class="card panel"><div class="pb"><input id="calcDisplay" value="0" readonly style="width:100%;font-size:24px;text-align:right;padding:12px;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px"><div class="quick" id="calcKeys" style="margin-top:10px"></div></div></div><div class="card panel"><div class="ph"><h3>GST Quick Calculator</h3></div><div class="pb form"><label>Taxable Amount</label><input id="qa" type="number" oninput="quickGST()"><label style="margin-top:10px">GST Rate</label><select id="qr" onchange="quickGST()"><option>5</option><option>12</option><option selected>18</option><option>28</option></select><div id="qresult" style="margin-top:12px;line-height:2"></div></div></div></div></section>
+
+<section class="page" id="spreadsheet"><div class="head"><div><h2>Spreadsheet</h2><p>Lightweight working-paper grid; Excel import/export is planned for the backend phase.</p></div><div><button class="btn" onclick="saveSheet()">Save</button><button class="btn primary" onclick="exportCSV()">Export CSV</button></div></div><div class="card panel"><div class="pb"><div class="toolbar"><button class="btn" onclick="addRow()">+ Row</button><button class="btn" onclick="addCol()">+ Column</button><button class="btn" onclick="clearSheet()">Clear</button></div><div class="tablewrap" style="max-height:550px"><table id="sheet"><thead></thead><tbody></tbody></table></div></div></div></section>
+
+<section class="page" id="company"><div class="head"><div><h2>Company Setup</h2><p>Business identity and financial year.</p></div><button class="btn primary" onclick="saveCompany()">Save</button></div><div class="card panel"><div class="pb form"><div class="formgrid"><div><label>Company Name *</label><input id="coName"></div><div><label>GSTIN</label><input id="coGSTIN"></div><div><label>PAN</label><input id="coPAN"></div><div><label>State</label><input id="coState"></div><div><label>Financial Year</label><select id="coFY"><option>2026-27</option><option>2025-26</option><option>2027-28</option></select></div><div class="full"><label>Address</label><textarea id="coAddress"></textarea></div></div></div></div></section>
+
+</div></main>
+
+<div class="modal" id="groupModal"><div class="modalbox"><div class="mh"><h3>Add Group</h3><button class="close" onclick="closeM('groupModal')">×</button></div><div class="mb form"><div class="formgrid"><div><label>Name *</label><input id="gn"></div><div><label>Nature</label><select id="gNature"><option>Assets</option><option>Liabilities</option><option>Income</option><option>Expenses</option></select></div><div class="full"><label>Parent</label><select id="gParent"></select></div></div></div><div class="mf"><button class="btn" onclick="closeM('groupModal')">Cancel</button><button class="btn primary" onclick="saveGroup()">Save</button></div></div></div>
+
+<div class="modal" id="ledgerModal"><div class="modalbox"><div class="mh"><h3 id="ledgerTitle">Create Ledger</h3><button class="close" onclick="closeM('ledgerModal')">×</button></div><div class="mb form"><div class="formgrid"><div><label>Ledger Name *</label><input id="ln"></div><div><label>Group *</label><select id="lGroup"></select></div><div><label>Opening Amount</label><input id="lOpening" type="number" min="0" value="0"></div><div><label>Opening Nature</label><select id="lNature"><option>Debit</option><option>Credit</option></select></div><div class="full"><label>Notes</label><textarea id="lNotes"></textarea></div></div></div><div class="mf"><button class="btn" onclick="closeM('ledgerModal')">Cancel</button><button class="btn primary" onclick="saveLedger()">Save</button></div></div></div>
+
+<div class="modal" id="partyModal"><div class="modalbox"><div class="mh"><h3>Add Party</h3><button class="close" onclick="closeM('partyModal')">×</button></div><div class="mb form"><div class="formgrid"><div><label>Name *</label><input id="pn"></div><div><label>Type *</label><select id="pType"><option>Customer</option><option>Supplier</option></select></div><div><label>GSTIN</label><input id="pGSTIN"></div><div><label>State</label><input id="pState"></div><div><label>Phone</label><input id="pPhone"></div><div><label>Credit Limit</label><input id="pLimit" type="number" min="0" value="0"></div><div class="full"><label>Address</label><textarea id="pAddress"></textarea></div></div></div><div class="mf"><button class="btn" onclick="closeM('partyModal')">Cancel</button><button class="btn primary" onclick="saveParty()">Save</button></div></div></div>
+
+<div class="modal" id="voucherModal"><div class="modalbox"><div class="mh"><h3>New Voucher</h3><button class="close" onclick="closeM('voucherModal')">×</button></div><div class="mb form"><div class="formgrid"><div><label>Type</label><select id="vType"><option>Payment</option><option>Receipt</option><option>Contra</option><option>Journal</option></select></div><div><label>Date *</label><input id="vDate" type="date"></div><div><label>Debit Ledger *</label><select id="vDebit"></select></div><div><label>Credit Ledger *</label><select id="vCredit"></select></div><div><label>Amount *</label><input id="vAmount" type="number" min="0.01" step="0.01"></div><div><label>Reference</label><input id="vRef"></div><div class="full"><label>Narration</label><textarea id="vNarration"></textarea></div></div></div><div class="mf"><button class="btn" onclick="closeM('voucherModal')">Cancel</button><button class="btn primary" onclick="saveVoucher()">Post Voucher</button></div></div></div>
+
+<div class="modal" id="invoiceModal"><div class="modalbox"><div class="mh"><h3 id="invoiceTitle">Sales Invoice</h3><button class="close" onclick="closeM('invoiceModal')">×</button></div><div class="mb form invoice">
+<div class="formgrid"><div><label>Date *</label><input id="iDate" type="date"></div><div><label>Party *</label><select id="iParty"></select></div><div><label>Invoice Number</label><input id="iNo" placeholder="Auto"></div><div><label>Place of Supply / State</label><input id="iState"></div></div>
+<div class="notice" style="margin-top:14px">Posting rule: Sales = Dr party, Cr Sales + GST output. Purchase = Dr Purchase + GST input, Cr party. This keeps the entry balanced.</div>
+<div class="tablewrap"><table><thead><tr><th>Description</th><th>HSN/SAC</th><th>Qty</th><th>Rate</th><th>Discount</th><th>GST %</th><th>Taxable</th><th></th></tr></thead><tbody id="itemRows"></tbody></table></div>
+<div style="margin:10px 0"><button class="btn" onclick="addItem()">+ Add Item</button></div>
+<div class="formgrid"><div><label>GST Mode</label><select id="iMode" onchange="calcInvoice()"><option value="intra">CGST + SGST</option><option value="inter">IGST</option></select></div><div><label>Round Off</label><input id="iRound" type="number" step="0.01" value="0" oninput="calcInvoice()"></div><div class="full"><label>Narration</label><textarea id="iNarration"></textarea></div></div>
+<div class="totals"><div><span>Taxable</span><b id="tTax">₹0.00</b></div><div><span>CGST</span><b id="tCGST">₹0.00</b></div><div><span>SGST</span><b id="tSGST">₹0.00</b></div><div><span>IGST</span><b id="tIGST">₹0.00</b></div><div class="grand"><span>Total</span><b id="tTotal">₹0.00</b></div></div>
+</div><div class="mf"><button class="btn" onclick="closeM('invoiceModal')">Cancel</button><button class="btn primary" onclick="saveInvoice()">Post Invoice</button></div></div></div>
 
 <div id="toast" style="position:fixed;right:20px;bottom:20px;background:#111827;color:#fff;padding:11px 15px;border-radius:8px;opacity:0;transform:translateY(10px);transition:.2s;z-index:200;font-size:12px"></div>
 
 <script>
-const KEY="businessDeskPhase2";
-let db=JSON.parse(localStorage.getItem(KEY)||"null")||{
- company:{name:"My Business",gstin:"",pan:"",state:"",fy:"2026-27",address:""},
- groups:[
-  {id:"g1",name:"Capital Account",nature:"Liabilities",parent:""},
-  {id:"g2",name:"Current Liabilities",nature:"Liabilities",parent:""},
-  {id:"g3",name:"Current Assets",nature:"Assets",parent:""},
-  {id:"g4",name:"Bank Accounts",nature:"Assets",parent:""},
-  {id:"g5",name:"Cash-in-Hand",nature:"Assets",parent:""},
-  {id:"g6",name:"Direct Expenses",nature:"Expenses",parent:""},
-  {id:"g7",name:"Indirect Expenses",nature:"Expenses",parent:""},
-  {id:"g8",name:"Direct Income",nature:"Income",parent:""},
-  {id:"g9",name:"Indirect Income",nature:"Income",parent:""}
- ],
- ledgers:[
-  {id:"l1",name:"Cash",group:"g5",opening:0,nature:"Debit",notes:""},
-  {id:"l2",name:"Bank",group:"g4",opening:0,nature:"Debit",notes:""},
-  {id:"l3",name:"Sales",group:"g8",opening:0,nature:"Credit",notes:""},
-  {id:"l4",name:"Purchase",group:"g6",opening:0,nature:"Debit",notes:""}
- ],
- vouchers:[],
- seq:1
+const KEY="businessDeskPhase31";
+const BASE={
+version:"3.1",
+company:{name:"My Business",gstin:"",pan:"",state:"",fy:"2026-27",address:""},
+groups:[
+{id:"g_cap",name:"Capital Account",nature:"Liabilities",parent:""},
+{id:"g_cl",name:"Current Liabilities",nature:"Liabilities",parent:""},
+{id:"g_ca",name:"Current Assets",nature:"Assets",parent:""},
+{id:"g_bank",name:"Bank Accounts",nature:"Assets",parent:""},
+{id:"g_cash",name:"Cash-in-Hand",nature:"Assets",parent:""},
+{id:"g_de",name:"Direct Expenses",nature:"Expenses",parent:""},
+{id:"g_ie",name:"Indirect Expenses",nature:"Expenses",parent:""},
+{id:"g_di",name:"Direct Income",nature:"Income",parent:""},
+{id:"g_ii",name:"Indirect Income",nature:"Income",parent:""}
+],
+ledgers:[
+{id:"l_cash",name:"Cash",group:"g_cash",opening:0,nature:"Debit"},
+{id:"l_bank",name:"Bank",group:"g_bank",opening:0,nature:"Debit"},
+{id:"l_sales",name:"Sales",group:"g_di",opening:0,nature:"Credit"},
+{id:"l_purchase",name:"Purchase",group:"g_de",opening:0,nature:"Debit"},
+{id:"l_outgst",name:"GST Output",group:"g_cl",opening:0,nature:"Credit"},
+{id:"l_ingst",name:"GST Input",group:"g_ca",opening:0,nature:"Debit"}
+],
+parties:[],vouchers:[],sales:[],purchases:[],seq:1,invoiceSeq:1
 };
-function persist(){localStorage.setItem(KEY,JSON.stringify(db));}
+let db=JSON.parse(localStorage.getItem(KEY)||"null")||structuredClone(BASE);
+db.version="3.1";db.groups??=[];db.ledgers??=[];db.parties??=[];db.vouchers??=[];db.sales??=[];db.purchases??=[];db.seq??=1;db.invoiceSeq??=1;
+function save(){localStorage.setItem(KEY,JSON.stringify(db))}
 function money(n){return "₹"+Number(n||0).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2})}
-function uid(p){return p+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
-function toast(m){let x=document.getElementById("toast");x.textContent=m;x.style.opacity=1;x.style.transform="translateY(0)";clearTimeout(window.tt);window.tt=setTimeout(()=>{x.style.opacity=0;x.style.transform="translateY(10px)"},2200)}
-function toggleSide(){document.getElementById("sidebar").classList.toggle("open")}
-function toggleDark(){document.body.classList.toggle("dark");localStorage.setItem("bdDark",document.body.classList.contains("dark"))}
-if(localStorage.getItem("bdDark")==="true")document.body.classList.add("dark")
-function go(p){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(p).classList.add("active");document.querySelectorAll(".nav").forEach(x=>x.classList.toggle("active",x.dataset.page===p));document.getElementById("sidebar").classList.remove("open");refresh()}
-document.querySelectorAll(".nav[data-page]").forEach(x=>x.onclick=()=>go(x.dataset.page));
-function closeModal(id){document.getElementById(id).classList.remove("show")}
-function openModal(id){document.getElementById(id).classList.add("show")}
-function groupById(id){return db.groups.find(x=>x.id===id)}
-function ledgerById(id){return db.ledgers.find(x=>x.id===id)}
-function groupLedgerCount(id){return db.ledgers.filter(x=>x.group===id).length}
-function ledgerTotals(id){
- let l=ledgerById(id),dr=l?.nature==="Debit"?Number(l.opening||0):0,cr=l?.nature==="Credit"?Number(l.opening||0):0;
- db.vouchers.forEach(v=>{if(v.debit===id)dr+=Number(v.amount);if(v.credit===id)cr+=Number(v.amount)});
- return {dr,cr,balance:dr-cr}
-}
-function renderGroups(){
- let q=(document.getElementById("groupSearch")?.value||"").toLowerCase();
- let body=document.getElementById("groupsBody");
- body.innerHTML=db.groups.filter(g=>g.name.toLowerCase().includes(q)).map(g=>`<tr><td><b>${esc(g.name)}</b></td><td>${g.nature}</td><td>${esc(groupById(g.parent)?.name||"Primary")}</td><td>${groupLedgerCount(g.id)}</td><td><button class="btn danger" onclick="deleteGroup('${g.id}')">Delete</button></td></tr>`).join("")||`<tr><td colspan="5" class="empty">No groups found.</td></tr>`;
-}
-function openGroup(){document.getElementById("grName").value="";document.getElementById("grParent").innerHTML='<option value="">Primary</option>'+db.groups.map(g=>`<option value="${g.id}">${esc(g.name)}</option>`).join("");openModal("groupModal")}
-function saveGroup(){
- let name=document.getElementById("grName").value.trim(),nature=document.getElementById("grNature").value,parent=document.getElementById("grParent").value;
- if(!name)return toast("Group name is required");
- if(db.groups.some(g=>g.name.toLowerCase()===name.toLowerCase()))return toast("Group already exists");
- db.groups.push({id:uid("g"),name,nature,parent});persist();closeModal("groupModal");refresh();toast("Group created");
-}
-function deleteGroup(id){
- if(groupLedgerCount(id))return toast("Cannot delete a group containing ledgers");
- if(db.groups.length<=1)return toast("At least one group is required");
- db.groups=db.groups.filter(g=>g.id!==id);persist();refresh();toast("Group deleted");
-}
-let editingLedger=null;
-function openLedger(id=null){
- editingLedger=id;
- document.getElementById("ledgerTitle").textContent=id?"Edit Ledger":"Create Ledger";
- document.getElementById("lGroup").innerHTML=db.groups.map(g=>`<option value="${g.id}">${esc(g.name)}</option>`).join("");
- if(id){let l=ledgerById(id);document.getElementById("lName").value=l.name;document.getElementById("lGroup").value=l.group;document.getElementById("lOpening").value=l.opening;document.getElementById("lNature").value=l.nature;document.getElementById("lNotes").value=l.notes||""}
- else{document.getElementById("lName").value="";document.getElementById("lOpening").value=0;document.getElementById("lNature").value="Debit";document.getElementById("lNotes").value=""}
- openModal("ledgerModal");
-}
-function saveLedger(){
- let name=document.getElementById("lName").value.trim(),group=document.getElementById("lGroup").value,opening=Number(document.getElementById("lOpening").value||0),nature=document.getElementById("lNature").value,notes=document.getElementById("lNotes").value;
- if(!name||!group)return toast("Ledger name and group are required");
- if(opening<0)return toast("Opening balance cannot be negative");
- if(db.ledgers.some(l=>l.name.toLowerCase()===name.toLowerCase()&&l.id!==editingLedger))return toast("Ledger already exists");
- if(editingLedger){let l=ledgerById(editingLedger);Object.assign(l,{name,group,opening,nature,notes})}
- else db.ledgers.push({id:uid("l"),name,group,opening,nature,notes});
- persist();closeModal("ledgerModal");refresh();toast(editingLedger?"Ledger updated":"Ledger created");
-}
-function deleteLedger(id){
- if(db.vouchers.some(v=>v.debit===id||v.credit===id))return toast("Cannot delete a ledger used in vouchers");
- db.ledgers=db.ledgers.filter(l=>l.id!==id);persist();refresh();toast("Ledger deleted");
-}
-function renderLedgers(){
- let q=(document.getElementById("ledgerSearch")?.value||"").toLowerCase(),nf=document.getElementById("ledgerNatureFilter")?.value||"",body=document.getElementById("ledgersBody");
- body.innerHTML=db.ledgers.filter(l=>(l.name.toLowerCase().includes(q)||(groupById(l.group)?.name||"").toLowerCase().includes(q))&&(!nf||l.nature===nf)).map(l=>{let t=ledgerTotals(l.id);return `<tr><td><b>${esc(l.name)}</b></td><td>${esc(groupById(l.group)?.name||"")}</td><td>${money(l.opening)} ${l.nature==="Debit"?"Dr":"Cr"}</td><td>${l.nature}</td><td>${money(Math.abs(t.balance))} ${t.balance>=0?"Dr":"Cr"}</td><td><button class="btn secondary" onclick="openLedger('${l.id}')">Edit</button> <button class="btn danger" onclick="deleteLedger('${l.id}')">Delete</button></td></tr>`}).join("")||`<tr><td colspan="6" class="empty">No ledgers found.</td></tr>`;
-}
-function fillVoucherLedgers(){
- let opts=db.ledgers.map(l=>`<option value="${l.id}">${esc(l.name)}</option>`).join("");
- document.getElementById("vDebit").innerHTML=opts;document.getElementById("vCredit").innerHTML=opts;
-}
-function openVoucher(){
- if(db.ledgers.length<2)return toast("Create at least two ledgers first");
- fillVoucherLedgers();document.getElementById("vDate").value=new Date().toISOString().slice(0,10);document.getElementById("vAmount").value="";document.getElementById("vRef").value="";document.getElementById("vNarration").value="";openModal("voucherModal");
-}
-function saveVoucher(){
- let type=document.getElementById("vType").value,date=document.getElementById("vDate").value,debit=document.getElementById("vDebit").value,credit=document.getElementById("vCredit").value,amount=Number(document.getElementById("vAmount").value),ref=document.getElementById("vRef").value.trim(),narration=document.getElementById("vNarration").value.trim();
- if(!date||!debit||!credit||!amount||amount<=0)return toast("Enter date, ledgers and valid amount");
- if(debit===credit)return toast("Debit and credit ledgers must be different");
- db.vouchers.push({id:uid("v"),no:String(db.seq++).padStart(4,"0"),date,type,debit,credit,amount,ref,narration});persist();closeModal("voucherModal");refresh();toast("Voucher saved");
-}
-function renderVouchers(){
- let q=(document.getElementById("voucherSearch")?.value||"").toLowerCase(),f=document.getElementById("voucherFilter")?.value||"",body=document.getElementById("vouchersBody");
- let arr=db.vouchers.filter(v=>(v.no.toLowerCase().includes(q)||v.type.toLowerCase().includes(q)||(ledgerById(v.debit)?.name||"").toLowerCase().includes(q)||(ledgerById(v.credit)?.name||"").toLowerCase().includes(q))&&(!f||v.type===f)).slice().reverse();
- body.innerHTML=arr.map(v=>`<tr><td>${v.no}</td><td>${v.date}</td><td><span class="badge green">${v.type}</span></td><td>${esc(ledgerById(v.debit)?.name||"")}</td><td>${esc(ledgerById(v.credit)?.name||"")}</td><td>${money(v.amount)}</td><td>${esc(v.narration||"")}</td><td><button class="btn danger" onclick="deleteVoucher('${v.id}')">Delete</button></td></tr>`).join("")||`<tr><td colspan="8" class="empty">No vouchers found.</td></tr>`;
-}
-function deleteVoucher(id){if(!confirm("Delete this voucher?"))return;db.vouchers=db.vouchers.filter(v=>v.id!==id);persist();refresh();toast("Voucher deleted")}
-function renderDaybook(){
- let d=document.getElementById("dayDate")?.value||"",t=document.getElementById("dayType")?.value||"",body=document.getElementById("dayBody");
- let arr=db.vouchers.filter(v=>(!d||v.date===d)&&(!t||v.type===t)).slice().sort((a,b)=>a.date.localeCompare(b.date)||a.no.localeCompare(b.no));
- body.innerHTML=arr.map(v=>`<tr><td>${v.date}</td><td>${v.no}</td><td>${v.type}</td><td>${esc(ledgerById(v.debit)?.name||"")}</td><td>${esc(ledgerById(v.credit)?.name||"")}</td><td>${money(v.amount)}</td><td>${esc(v.narration||"")}</td></tr>`).join("")||`<tr><td colspan="7" class="empty">No transactions for the selected filter.</td></tr>`;
-}
-function renderTrial(){
- let totalDr=0,totalCr=0,body=document.getElementById("trialBody");
- body.innerHTML=db.ledgers.map(l=>{let t=ledgerTotals(l.id),od=l.nature==="Debit"?l.opening:0,oc=l.nature==="Credit"?l.opening:0,cd=Math.max(t.balance,0),cc=Math.max(-t.balance,0);totalDr+=cd;totalCr+=cc;return `<tr><td><b>${esc(l.name)}</b></td><td>${esc(groupById(l.group)?.name||"")}</td><td>${money(od)}</td><td>${money(oc)}</td><td>${money(cd)}</td><td>${money(cc)}</td></tr>`}).join("");
- let diff=Math.abs(totalDr-totalCr);document.getElementById("trialDebit").textContent=money(totalDr);document.getElementById("trialCredit").textContent=money(totalCr);document.getElementById("trialDiff").textContent=money(diff);document.getElementById("trialStatus").textContent=diff<.005?"Balanced":"Difference";
-}
-function renderReports(){
- let sums={Assets:0,Liabilities:0,Income:0,Expenses:0};
- db.ledgers.forEach(l=>{let n=groupById(l.group)?.nature,t=ledgerTotals(l.id);if(sums[n]!==undefined)sums[n]+=Math.abs(t.balance)});
- ["Assets","Liabilities","Income","Expenses"].forEach(n=>document.getElementById("rep"+(n==="Liabilities"?"Liab":n==="Expenses"?"Expense":n)).textContent=money(sums[n]));
-}
-function renderDashboard(){
- document.getElementById("statLedgers").textContent=db.ledgers.length;document.getElementById("statVouchers").textContent=db.vouchers.length;
- let dr=db.vouchers.reduce((a,v)=>a+Number(v.amount),0),cr=dr;document.getElementById("statDebit").textContent=money(dr);document.getElementById("statCredit").textContent=money(cr);
- let body=document.getElementById("recentVouchers");body.innerHTML=db.vouchers.slice().reverse().slice(0,7).map(v=>`<tr><td>${v.no}</td><td>${v.date}</td><td>${v.type}</td><td>${esc(ledgerById(v.debit)?.name||"")} → ${esc(ledgerById(v.credit)?.name||"")}</td><td>${money(v.amount)}</td></tr>`).join("")||`<tr><td colspan="5" class="empty">No vouchers yet.</td></tr>`;
- document.getElementById("companyTop").textContent=db.company.name||"My Business";
-}
-function saveCompany(){db.company={name:document.getElementById("coName").value.trim()||"My Business",gstin:document.getElementById("coGSTIN").value.trim(),pan:document.getElementById("coPAN").value.trim(),state:document.getElementById("coState").value.trim(),fy:document.getElementById("coFY").value,address:document.getElementById("coAddress").value.trim()};persist();refresh();toast("Company saved")}
-function loadCompany(){let c=db.company;document.getElementById("coName").value=c.name;document.getElementById("coGSTIN").value=c.gstin;document.getElementById("coPAN").value=c.pan;document.getElementById("coState").value=c.state;document.getElementById("coFY").value=c.fy;document.getElementById("coAddress").value=c.address}
+function uid(p){return p+"_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,7)}
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
-function backup(){let blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="BusinessDesk_Backup.json";a.click();URL.revokeObjectURL(a.href);toast("Backup exported")}
-document.getElementById("restoreFile").onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.company||!Array.isArray(x.groups)||!Array.isArray(x.ledgers)||!Array.isArray(x.vouchers))throw 0;db=x;persist();refresh();toast("Backup restored")}catch{toast("Invalid backup file")}};r.readAsText(f);e.target.value=""}
-function globalSearch(){let q=document.getElementById("search").value.toLowerCase().trim();if(!q)return;let pages={dashboard:"dashboard",calculator:"calculator",spreadsheet:"spreadsheet",group:"groups",groups:"groups",ledger:"ledgers",ledgers:"ledgers",voucher:"vouchers",vouchers:"vouchers",daybook:"daybook","trial balance":"trial",reports:"reports",company:"company"};for(let k in pages)if(k.includes(q)){go(pages[k]);return}let l=db.ledgers.find(x=>x.name.toLowerCase().includes(q));if(l){go("ledgers");document.getElementById("ledgerSearch").value=q;renderLedgers()}}
-let calcVal="0",calcOp=null,calcPrev=null;
-function calcRender(){document.getElementById("calc").value=calcVal}
-function calcInput(x){if(x==="C"){calcVal="0";calcPrev=calcOp=null}else if(x==="⌫"){calcVal=calcVal.length>1?calcVal.slice(0,-1):"0"}else if(["+","-","×","÷"].includes(x)){calcPrev=Number(calcVal);calcOp=x;calcVal="0"}else if(x==="="){if(calcOp===null)return;let b=Number(calcVal),a=calcPrev;let r=calcOp==="+"?a+b:calcOp==="-"?a-b:calcOp==="×"?a*b:b===0?NaN:a/b;calcVal=Number.isFinite(r)?String(Number(r.toFixed(10))):"Error";calcOp=null}else{if(x==="."&&calcVal.includes("."))return;calcVal=calcVal==="0"&&x!=="."?x:calcVal+x}calcRender()}
-["C","⌫","7","8","9","÷","4","5","6","×","1","2","3","-","0",".","+","="].forEach(x=>{let b=document.createElement("button");b.className="btn secondary";b.textContent=x;b.onclick=()=>calcInput(x);document.getElementById("calcKeys").appendChild(b)});
-function gstCalc(){let a=Number(document.getElementById("gAmt").value||0),r=Number(document.getElementById("gRate").value),g=a*r/100;document.getElementById("gstResult").innerHTML=`Base Amount: <b>${money(a)}</b><br>CGST: <b>${money(g/2)}</b><br>SGST: <b>${money(g/2)}</b><br>Total GST: <b>${money(g)}</b><br>Invoice Total: <b>${money(a+g)}</b>`}
-let sr=20,sc=8;
-function sheetBuild(){
- let h=document.querySelector("#sheet thead"),b=document.querySelector("#sheet tbody");h.innerHTML="<tr><th>#</th>"+Array.from({length:sc},(_,i)=>`<th>${String.fromCharCode(65+i)}</th>`).join("")+"</tr>";b.innerHTML=Array.from({length:sr},(_,r)=>`<tr><th>${r+1}</th>`+Array.from({length:sc},(_,c)=>`<td contenteditable data-r="${r}" data-c="${c}"></td>`).join("")+"</tr>`).join("");
- let saved=JSON.parse(localStorage.getItem("bdSheet")||"null");if(saved){saved.forEach(x=>{let c=document.querySelector(`td[data-r="${x.r}"][data-c="${x.c}"]`);if(c)c.textContent=x.v})}
+function toast(m){let x=document.getElementById("toast");x.textContent=m;x.style.opacity=1;x.style.transform="translateY(0)";clearTimeout(window.tt);window.tt=setTimeout(()=>{x.style.opacity=0;x.style.transform="translateY(10px)"},2200)}
+function toggleSide(){side.classList.toggle("open")}function toggleDark(){document.body.classList.toggle("dark");localStorage.setItem("bdDark",document.body.classList.contains("dark"))}if(localStorage.getItem("bdDark")==="true")document.body.classList.add("dark")
+function go(p){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(p).classList.add("active");document.querySelectorAll(".nav[data-page]").forEach(x=>x.classList.toggle("active",x.dataset.page===p));side.classList.remove("open");refresh()}
+document.querySelectorAll(".nav[data-page]").forEach(x=>x.onclick=()=>go(x.dataset.page));
+function openM(id){document.getElementById(id).classList.add("show")}function closeM(id){document.getElementById(id).classList.remove("show")}
+function G(id){return db.groups.find(x=>x.id===id)}function L(id){return db.ledgers.find(x=>x.id===id)}function P(id){return db.parties.find(x=>x.id===id)}
+function groupNature(id){return G(id)?.nature||""}
+function partyLedger(partyId){return db.ledgers.find(l=>l.partyId===partyId)}
+/* Core accounting engine: every transaction is represented as debit/credit lines. */
+function allPostings(){
+ let a=[];
+ db.vouchers.forEach(v=>a.push({id:v.id,date:v.date,no:v.no,type:v.type,narration:v.narration||"",lines:[{ledger:v.debit,dr:+v.amount,cr:0},{ledger:v.credit,dr:0,cr:+v.amount}]}));
+ db.sales.forEach(s=>{let lines=[{ledger:s.partyLedger,dr:s.total,cr:0},{ledger:"l_sales",dr:0,cr:s.taxable}];if(s.gst)lines.push({ledger:"l_outgst",dr:0,cr:s.gst});a.push({id:s.id,date:s.date,no:s.no,type:"Sales",narration:s.narration||"",lines})});
+ db.purchases.forEach(s=>{let lines=[{ledger:"l_purchase",dr:0,cr:0}];lines=[];lines.push({ledger:"l_purchase",dr:s.taxable,cr:0});if(s.gst)lines.push({ledger:"l_ingst",dr:s.gst,cr:0});lines.push({ledger:s.partyLedger,dr:0,cr:s.total});a.push({id:s.id,date:s.date,no:s.no,type:"Purchase",narration:s.narration||"",lines})});
+ return a;
 }
-function saveSheet(){let a=[...document.querySelectorAll("#sheet td")].map(c=>({r:c.dataset.r,c:c.dataset.c,v:c.textContent}));localStorage.setItem("bdSheet",JSON.stringify(a));toast("Spreadsheet saved")}
-function addRow(){sr++;sheetBuild();toast("Row added")}
-function addCol(){sc++;sheetBuild();toast("Column added")}
-function clearSheet(){if(confirm("Clear spreadsheet?")){localStorage.removeItem("bdSheet");sheetBuild();toast("Spreadsheet cleared")}}
-function exportCSV(){let out=[];for(let r=0;r<sr;r++){let row=[];for(let c=0;c<sc;c++){let x=document.querySelector(`td[data-r="${r}"][data-c="${c}"]`)?.textContent||"";row.push('"'+x.replaceAll('"','""')+'"')}out.push(row.join(","))}let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([out.join("\n")],{type:"text/csv"}));a.download="BusinessDesk_WorkingPaper.csv";a.click()}
-function refresh(){renderDashboard();renderGroups();renderLedgers();renderVouchers();renderDaybook();renderTrial();renderReports();loadCompany()}
-sheetBuild();refresh();gstCalc();
+function ledgerTotals(id){let l=L(id),dr=Number(l?.opening||0)*(l?.nature==="Debit"?1:0),cr=Number(l?.opening||0)*(l?.nature==="Credit"?1:0);allPostings().forEach(p=>p.lines.forEach(x=>{if(x.ledger===id){dr+=x.dr;cr+=x.cr}}));return{dr,cr,balance:dr-cr}}
+function partySettlement(partyId){let led=partyLedger(partyId);if(!led)return 0;let t=ledgerTotals(led.id);return t.balance}
+function partyInvoiceTotals(p){let arr=p.type==="Customer"?db.sales:db.purchases;return arr.filter(x=>x.party===p.id).reduce((a,x)=>a+x.total,0)}
+function partyOutstanding(p){let total=partyInvoiceTotals(p),bal=partySettlement(p.id);return p.type==="Customer"?Math.max(bal,0):Math.max(-bal,0)}
+function renderGroups(){let q=(groupSearch?.value||"").toLowerCase();groupsBody.innerHTML=db.groups.filter(g=>g.name.toLowerCase().includes(q)).map(g=>`<tr><td><b>${esc(g.name)}</b></td><td>${g.nature}</td><td>${esc(G(g.parent)?.name||"Primary")}</td><td>${db.ledgers.filter(l=>l.group===g.id).length}</td><td>${g.id.startsWith("g_")?<button class="btn danger" onclick="deleteGroup('${g.id}')">Delete</button>:""}</td></tr>`).join("")||`<tr><td colspan="5" class="empty">No groups.</td></tr>`}
+function openGroup(){gn.value="";gParent.innerHTML='<option value="">Primary</option>'+db.groups.map(g=>`<option value="${g.id}">${esc(g.name)}</option>`).join("");openM("groupModal")}
+function saveGroup(){let n=gn.value.trim();if(!n)return toast("Group name required");if(db.groups.some(g=>g.name.toLowerCase()===n.toLowerCase()))return toast("Group already exists");db.groups.push({id:uid("g"),name:n,nature:gNature.value,parent:gParent.value});save();closeM("groupModal");refresh();toast("Group created")}
+function deleteGroup(id){if(db.ledgers.some(l=>l.group===id))return toast("Move/delete its ledgers first");db.groups=db.groups.filter(g=>g.id!==id);save();refresh();toast("Group deleted")}
+let editLedger=null;
+function openLedger(id=null){editLedger=id;lGroup.innerHTML=db.groups.map(g=>`<option value="${g.id}">${esc(g.name)}</option>`).join("");ledgerTitle.textContent=id?"Edit Ledger":"Create Ledger";if(id){let x=L(id);ln.value=x.name;lGroup.value=x.group;lOpening.value=x.opening;lNature.value=x.nature;lNotes.value=x.notes||""}else{ln.value="";lOpening.value=0;lNature.value="Debit";lNotes.value=""}openM("ledgerModal")}
+function saveLedger(){let n=ln.value.trim(),o=+lOpening.value||0;if(!n)return toast("Ledger name required");if(o<0)return toast("Opening cannot be negative");if(db.ledgers.some(l=>l.name.toLowerCase()===n.toLowerCase()&&l.id!==editLedger))return toast("Ledger already exists");let obj={name:n,group:lGroup.value,opening:o,nature:lNature.value,notes:lNotes.value};if(editLedger)Object.assign(L(editLedger),obj);else db.ledgers.push({id:uid("l"),...obj});save();closeM("ledgerModal");refresh();toast(editLedger?"Ledger updated":"Ledger created")}
+function deleteLedger(id){if(["l_cash","l_bank","l_sales","l_purchase","l_outgst","l_ingst"].includes(id)||allPostings().some(p=>p.lines.some(x=>x.ledger===id)))return toast("Ledger is protected or already posted");db.ledgers=db.ledgers.filter(l=>l.id!==id);save();refresh();toast("Ledger deleted")}
+function renderLedgers(){let q=(ledgerSearch?.value||"").toLowerCase(),f=ledgerFilter?.value||"";ledgersBody.innerHTML=db.ledgers.filter(l=>(l.name+" "+(G(l.group)?.name||"")).toLowerCase().includes(q)&&(!f||l.nature===f)).map(l=>{let t=ledgerTotals(l.id);return`<tr><td><b>${esc(l.name)}</b></td><td>${esc(G(l.group)?.name||"")}</td><td>${money(l.opening)} ${l.nature==="Debit"?"Dr":"Cr"}</td><td>${money(Math.abs(t.balance))} ${t.balance>=0?"Dr":"Cr"}</td><td><button class="btn" onclick="openLedger('${l.id}')">Edit</button> <button class="btn danger" onclick="deleteLedger('${l.id}')">Delete</button></td></tr>`}).join("")||`<tr><td colspan="5" class="empty">No ledgers.</td></tr>`}
+function openParty(){pn.value="";pType.value="Customer";pGSTIN.value="";pState.value=db.company.state||"";pPhone.value="";pLimit.value=0;pAddress.value="";openM("partyModal")}
+function saveParty(){let n=pn.value.trim();if(!n)return toast("Party name required");if(db.parties.some(p=>p.name.toLowerCase()===n.toLowerCase()))return toast("Party already exists");let id=uid("p"),type=pType.value;db.parties.push({id,name:n,type,gstin:pGSTIN.value.trim(),state:pState.value.trim(),phone:pPhone.value.trim(),limit:+pLimit.value||0,address:pAddress.value.trim()});let ledger={id:uid("l"),name:n,group:type==="Customer"?"g_ca":"g_cl",opening:0,nature:type==="Customer"?"Debit":"Credit",partyId:id,notes:"Auto-created party ledger"};db.ledgers.push(ledger);save();closeM("partyModal");refresh();toast("Party and linked ledger created")}
+function deleteParty(id){if(db.sales.some(x=>x.party===id)||db.purchases.some(x=>x.party===id)||allPostings().some(p=>p.lines.some(x=>x.ledger===partyLedger(id)?.id)))return toast("Party has posted transactions");let lid=partyLedger(id)?.id;db.parties=db.parties.filter(p=>p.id!==id);db.ledgers=db.ledgers.filter(l=>l.id!==lid);save();refresh();toast("Party deleted")}
+function renderParties(){let q=(partySearch?.value||"").toLowerCase(),f=partyType?.value||"";partiesBody.innerHTML=db.parties.filter(p=>(p.name+" "+p.gstin+" "+p.state).toLowerCase().includes(q)&&(!f||p.type===f)).map(p=>`<tr><td><b>${esc(p.name)}</b></td><td><span class="badge ${p.type==="Customer"?"blue":"orange"}">${p.type}</span></td><td>${esc(p.gstin)}</td><td>${esc(p.state)}</td><td>${money(p.limit)}</td><td>${money(partyOutstanding(p))}</td><td><button class="btn danger" onclick="deleteParty('${p.id}')">Delete</button></td></tr>`).join("")||`<tr><td colspan="7" class="empty">No parties.</td></tr>`}
+function ledgerOptions(){return db.ledgers.map(l=>`<option value="${l.id}">${esc(l.name)}</option>`).join("")}
+function openVoucher(){if(db.ledgers.length<2)return toast("Need at least two ledgers");vDebit.innerHTML=ledgerOptions();vCredit.innerHTML=ledgerOptions();vDate.value=new Date().toISOString().slice(0,10);vAmount.value="";vRef.value="";vNarration.value="";openM("voucherModal")}
+function saveVoucher(){let a=+vAmount.value||0;if(!vDate.value||!vDebit.value||!vCredit.value||a<=0)return toast("Complete voucher details");if(vDebit.value===vCredit.value)return toast("Debit and credit must differ");db.vouchers.push({id:uid("v"),no:String(db.seq++).padStart(5,"0"),date:vDate.value,type:vType.value,debit:vDebit.value,credit:vCredit.value,amount:a,ref:vRef.value.trim(),narration:vNarration.value.trim()});save();closeM("voucherModal");refresh();toast("Voucher posted")}
+function deleteVoucher(id){if(!confirm("Delete this voucher?"))return;db.vouchers=db.vouchers.filter(x=>x.id!==id);save();refresh();toast("Voucher deleted")}
+function renderVouchers(){let q=(voucherSearch?.value||"").toLowerCase(),f=voucherFilter?.value||"";vouchersBody.innerHTML=db.vouchers.filter(v=>(v.no+" "+v.type+" "+(L(v.debit)?.name||"")+" "+(L(v.credit)?.name||"")).toLowerCase().includes(q)&&(!f||v.type===f)).slice().reverse().map(v=>`<tr><td>${v.no}</td><td>${v.date}</td><td><span class="badge green">${v.type}</span></td><td>${esc(L(v.debit)?.name||"")}</td><td>${esc(L(v.credit)?.name||"")}</td><td>${money(v.amount)}</td><td><button class="btn danger" onclick="deleteVoucher('${v.id}')">Delete</button></td></tr>`).join("")||`<tr><td colspan="7" class="empty">No vouchers.</td></tr>`}
+let invoiceMode="sales";
+function openInvoice(mode){invoiceMode=mode;invoiceTitle.textContent=mode==="sales"?"Sales Invoice":"Purchase Invoice";iDate.value=new Date().toISOString().slice(0,10);iNo.value="";iParty.innerHTML='<option value="">Select '+(mode==="sales"?"customer":"supplier")+'</option>'+db.parties.filter(p=>p.type===(mode==="sales"?"Customer":"Supplier")).map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");iState.value=db.company.state||"";iMode.value="intra";iRound.value=0;iNarration.value="";itemRows.innerHTML="";addItem();openM("invoiceModal")}
+function addItem(d={}){let tr=document.createElement("tr");tr.innerHTML=`<td><input class="desc" value="${esc(d.name||"")}"></td><td><input class="hsn" value="${esc(d.hsn||"")}"></td><td><input class="qty" type="number" min="0.01" step="0.01" value="${d.qty??1}" oninput="calcInvoice()"></td><td><input class="rate" type="number" min="0" step="0.01" value="${d.rate??0}" oninput="calcInvoice()"></td><td><input class="discount" type="number" min="0" step="0.01" value="${d.discount??0}" oninput="calcInvoice()"></td><td><select class="gst" onchange="calcInvoice()"><option>0</option><option>5</option><option>12</option><option selected>18</option><option>28</option></select></td><td class="taxable">₹0.00</td><td><button class="btn danger" onclick="this.closest('tr').remove();calcInvoice()">×</button></td>`;if(d.gst!=null)tr.querySelector(".gst").value=d.gst;itemRows.appendChild(tr);calcInvoice()}
+function calcInvoice(){let tax=0,g=0;document.querySelectorAll("#itemRows tr").forEach(tr=>{let q=+tr.querySelector(".qty").value||0,r=+tr.querySelector(".rate").value||0,d=+tr.querySelector(".discount").value||0,rate=+tr.querySelector(".gst").value||0,t=Math.max(0,q*r-d),x=t*rate/100;tax+=t;g+=x;tr.querySelector(".taxable").textContent=money(t)});let cg=iMode.value==="intra"?g/2:0,sg=cg,ig=iMode.value==="inter"?g:0,total=tax+g+(+iRound.value||0);tTax.textContent=money(tax);tCGST.textContent=money(cg);tSGST.textContent=money(sg);tIGST.textContent=money(ig);tTotal.textContent=money(total);return{tax,g,cg,sg,ig,total}}
+function saveInvoice(){if(!iDate.value||!iParty.value)return toast("Date and party are required");let rows=[...document.querySelectorAll("#itemRows tr")].map(tr=>{let qty=+tr.querySelector(".qty").value||0,rate=+tr.querySelector(".rate").value||0,discount=+tr.querySelector(".discount").value||0,gst=+tr.querySelector(".gst").value||0,taxable=Math.max(0,qty*rate-discount);return{name:tr.querySelector(".desc").value.trim(),hsn:tr.querySelector(".hsn").value.trim(),qty,rate,discount,gst,taxable,gstAmt:taxable*gst/100}}).filter(x=>x.qty>0&&x.rate>=0);if(!rows.length)return toast("Add a valid item");let z=calcInvoice();if(Math.abs(z.total-(z.tax+z.g+(+iRound.value||0)))>.005)return toast("Invoice calculation error");let partyLedgerId=partyLedger(iParty.value)?.id;if(!partyLedgerId)return toast("Party ledger missing");let doc={id:uid(invoiceMode==="sales"?"s":"p"),no:iNo.value.trim()||((invoiceMode==="sales"?"S-":"P-")+String(db.invoiceSeq++).padStart(5,"0")),date:iDate.value,party:iParty.value,partyLedger:partyLedgerId,state:iState.value,mode:iMode.value,items:rows,taxable:z.tax,gst:z.g,cgst:z.cg,sgst:z.sg,igst:z.ig,roundoff:+iRound.value||0,total:z.total,narration:iNarration.value.trim()};(invoiceMode==="sales"?db.sales:db.purchases).push(doc);save();closeM("invoiceModal");refresh();toast((invoiceMode==="sales"?"Sales":"Purchase")+" invoice posted")}
+function deleteInvoice(id,type){if(!confirm("Delete this posted invoice? This reverses it from derived reports."))return;let a=type==="sales"?db.sales:db.purchases,i=a.findIndex(x=>x.id===id);if(i>=0)a.splice(i,1);save();refresh();toast("Invoice deleted")}
+function renderSales(){let q=(salesSearch?.value||"").toLowerCase();salesBody.innerHTML=db.sales.filter(s=>(s.no+" "+(P(s.party)?.name||"")).toLowerCase().includes(q)).slice().reverse().map(s=>`<tr><td>${s.no}</td><td>${s.date}</td><td>${esc(P(s.party)?.name||"")}</td><td>${money(s.taxable)}</td><td>${money(s.gst)}</td><td>${money(s.total)}</td><td><button class="btn danger" onclick="deleteInvoice('${s.id}','sales')">Delete</button></td></tr>`).join("")||`<tr><td colspan="7" class="empty">No sales.</td></tr>`}
+function renderPurchases(){let q=(purchaseSearch?.value||"").toLowerCase();purchaseBody.innerHTML=db.purchases.filter(s=>(s.no+" "+(P(s.party)?.name||"")).toLowerCase().includes(q)).slice().reverse().map(s=>`<tr><td>${s.no}</td><td>${s.date}</td><td>${esc(P(s.party)?.name||"")}</td><td>${money(s.taxable)}</td><td>${money(s.gst)}</td><td>${money(s.total)}</td><td><button class="btn danger" onclick="deleteInvoice('${s.id}','purchase')">Delete</button></td></tr>`).join("")||`<tr><td colspan="7" class="empty">No purchases.</td></tr>`}
+function allRows(){return allPostings().sort((a,b)=>a.date.localeCompare(b.date)||a.no.localeCompare(b.no))}
+function renderDaybook(){let d=dayDate?.value||"",f=dayFilter?.value||"";let a=allRows().filter(x=>(!d||x.date===d)&&(!f||x.type===f)).reverse();dayBody.innerHTML=a.map(x=>`<tr><td>${x.date}</td><td>${x.no}</td><td>${x.type}</td><td>${esc(x.lines.filter(y=>y.dr).map(y=>L(y.ledger)?.name||"").join(", "))}</td><td>${esc(x.lines.filter(y=>y.cr).map(y=>L(y.ledger)?.name||"").join(", "))}</td><td>${money(x.lines.reduce((a,y)=>a+y.dr,0))}</td><td>${esc(x.narration)}</td></tr>`).join("")||`<tr><td colspan="7" class="empty">No transactions.</td></tr>`}
+function trialData(){return db.ledgers.map(l=>{let t=ledgerTotals(l.id),dr=Math.max(t.balance,0),cr=Math.max(-t.balance,0);return{l,dr,cr}})}
+function renderTrial(){let a=trialData(),dr=a.reduce((s,x)=>s+x.dr,0),cr=a.reduce((s,x)=>s+x.cr,0),diff=Math.abs(dr-cr);tbDr.textContent=money(dr);tbCr.textContent=money(cr);tbDiff.textContent=money(diff);tbStatus.textContent=diff<.005?"Balanced":"Difference";tbCheck.innerHTML=diff<.005?'<div class="check good">✓ Books are balanced at the trial-balance level.</div>':'<div class="check bad">⚠ Trial balance difference detected. Review opening balances and postings.</div>';tbBody.innerHTML=a.map(x=>`<tr><td>${esc(x.l.name)}</td><td>${esc(G(x.l.group)?.name||"")}</td><td>${money(x.dr)}</td><td>${money(x.cr)}</td></tr>`).join("")}
+function renderPL(){let rev=0,de=0,ie=0,rows=[];db.ledgers.forEach(l=>{let n=groupNature(l.group),t=Math.abs(ledgerTotals(l.id).balance);if(n==="Income"){rev+=t;rows.push([l,"Income",t])}else if(n==="Expenses"){if(G(l.group)?.name==="Direct Expenses")de+=t;else ie+=t;rows.push([l,G(l.group)?.name||"Expenses",t])}});plRev.textContent=money(rev);plDirect.textContent=money(de);plIndirect.textContent=money(ie);plNet.textContent=money(rev-de-ie);plBody.innerHTML=rows.map(x=>`<tr><td>${esc(x[0].name)}</td><td>${esc(x[1])}</td><td>${money(x[2])}</td></tr>`).join("")||`<tr><td colspan="3" class="empty">No P&L data.</td></tr>`}
+function renderBS(){let assets=0,liab=0,cap=0,rows=[];db.ledgers.forEach(l=>{let n=groupNature(l.group),t=ledgerTotals(l.id).balance;if(n==="Assets"){assets+=Math.max(t,0);rows.push([l,"Assets",Math.max(t,0)])}else if(n==="Liabilities"){liab+=Math.max(-t,0);rows.push([l,"Liabilities",Math.max(-t,0)])}});let income=0;db.ledgers.forEach(l=>{let n=groupNature(l.group),t=ledgerTotals(l.id).balance;if(n==="Income")income-=t;if(n==="Expenses")income-=t});db.ledgers.filter(l=>G(l.group)?.name==="Capital Account").forEach(l=>{let t=ledgerTotals(l.id).balance;cap+=Math.max(-t,0)});cap+=income;bsAssets.textContent=money(assets);bsLiab.textContent=money(liab);bsCapital.textContent=money(cap);bsDiff.textContent=money(Math.abs(assets-liab-cap));bsBody.innerHTML=rows.map(x=>`<tr><td>${esc(x[0].name)}</td><td>${x[1]}</td><td>${money(x[2])}</td></tr>`).join("")}
+function renderGST(){let out=db.sales.reduce((a,x)=>a+x.gst,0),input=db.purchases.reduce((a,x)=>a+x.gst,0),turn=db.sales.reduce((a,x)=>a+x.taxable,0);gstOut.textContent=money(out);gstIn.textContent=money(input);gstNet.textContent=money(out-input);gstTurn.textContent=money(turn);let a=[];db.sales.forEach(x=>a.push([x.no,"Output",x.taxable,x.gst,x.cgst,x.sgst,x.igst]));db.purchases.forEach(x=>a.push([x.no,"Input",x.taxable,x.gst,x.cgst,x.sgst,x.igst]));gstBody.innerHTML=a.map(x=>`<tr><td>${x[0]}</td><td>${x[1]}</td><td>${money(x[2])}</td><td>${money(x[3])}</td><td>${money(x[4])}</td><td>${money(x[5])}</td><td>${money(x[6])}</td></tr>`).join("")||`<tr><td colspan="7" class="empty">No GST documents.</td></tr>`}
+function renderOutstanding(){let rec=0,pay=0;db.parties.forEach(p=>{let o=partyOutstanding(p);if(p.type==="Customer")rec+=o;else pay+=o});osRec.textContent=money(rec);osPay.textContent=money(pay);osC.textContent=db.parties.filter(p=>p.type==="Customer").length;osS.textContent=db.parties.filter(p=>p.type==="Supplier").length;osBody.innerHTML=db.parties.map(p=>{let total=partyInvoiceTotals(p),o=partyOutstanding(p);return`<tr><td>${esc(p.name)}</td><td>${p.type}</td><td>${money(total)}</td><td>${money(Math.max(0,total-o))}</td><td>${money(o)}</td></tr>`}).join("")||`<tr><td colspan="5" class="empty">No party balances.</td></tr>`}
+function renderDash(){dLedgers.textContent=db.ledgers.length;dParties.textContent=db.parties.length;dSales.textContent=money(db.sales.reduce((a,x)=>a+x.total,0));dPurchase.textContent=money(db.purchases.reduce((a,x)=>a+x.total,0));dOut.textContent=money(db.sales.reduce((a,x)=>a+x.gst,0));dIn.textContent=money(db.purchases.reduce((a,x)=>a+x.gst,0));dRec.textContent=money(db.parties.filter(p=>p.type==="Customer").reduce((a,p)=>a+partyOutstanding(p),0));dPay.textContent=money(db.parties.filter(p=>p.type==="Supplier").reduce((a,p)=>a+partyOutstanding(p),0));recent.innerHTML=allRows().slice().reverse().slice(0,8).map(x=>`<tr><td>${x.date}</td><td>${x.no}</td><td>${x.type}</td><td>${esc(x.lines.filter(y=>y.dr).map(y=>L(y.ledger)?.name).join(", "))}</td><td>${esc(x.lines.filter(y=>y.cr).map(y=>L(y.ledger)?.name).join(", "))}</td><td>${money(x.lines.reduce((a,y)=>a+y.dr,0))}</td></tr>`).join("")||`<tr><td colspan="6" class="empty">No transactions yet.</td></tr>`;topCompany.textContent=db.company.name||"My Business"}
+function saveCompany(){db.company={name:coName.value.trim()||"My Business",gstin:coGSTIN.value.trim(),pan:coPAN.value.trim(),state:coState.value.trim(),fy:coFY.value,address:coAddress.value.trim()};save();refresh();toast("Company saved")}
+function loadCompany(){let c=db.company;coName.value=c.name;coGSTIN.value=c.gstin;coPAN.value=c.pan;coState.value=c.state;coFY.value=c.fy;coAddress.value=c.address}
+function backup(){let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:"application/json"}));a.download="BusinessDesk_Phase3_1_Backup.json";a.click();toast("Backup exported")}
+restore.onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.company||!x.groups||!x.ledgers||!Array.isArray(x.vouchers))throw Error();db=x;save();refresh();toast("Backup restored")}catch{toast("Invalid BusinessDesk backup")}};r.readAsText(f);e.target.value=""}
+function globalSearchFn(){let q=globalSearch.value.toLowerCase().trim();if(!q)return;let m={"dashboard":"dashboard","calculator":"calculator","spreadsheet":"spreadsheet","group":"groups","ledger":"ledgers","party":"parties","customer":"parties","supplier":"parties","sales":"sales","purchase":"purchase","voucher":"vouchers","day":"daybook","trial":"trial","profit":"pl","balance":"balance","gst":"gst","outstanding":"outstanding","company":"company"};for(let k in m)if(k.includes(q)||q.includes(k)){go(m[k]);break}}
+let cv="0",op=null,first=null;function calcInput(x){if(x==="C"){cv="0";op=null;first=null}else if(x==="⌫")cv=cv.length>1?cv.slice(0,-1):"0";else if(["+","-","×","÷"].includes(x)){first=+cv;op=x;cv="0"}else if(x==="="&&op){let b=+cv,r=op==="+"?first+b:op==="-"?first-b:op==="×"?first*b:(b?first/b:NaN);cv=Number.isFinite(r)?String(+r.toFixed(10)):"Error";op=null}else if(x!=="="){if(x==="."&&cv.includes("."))return;cv=cv==="0"&&x!=="."?x:cv}calcDisplay.value=cv}
+["C","⌫","7","8","9","÷","4","5","6","×","1","2","3","-","0",".","+","="].forEach(x=>{let b=document.createElement("button");b.className="btn";b.textContent=x;b.onclick=()=>calcInput(x);calcKeys.appendChild(b)})
+function quickGST(){let a=+qa.value||0,r=+qr.value,g=a*r/100;qresult.innerHTML=`CGST: <b>${money(g/2)}</b><br>SGST: <b>${money(g/2)}</b><br>Total GST: <b>${money(g)}</b><br>Total: <b>${money(a+g)}</b>`}
+let sr=20,sc=8;function buildSheet(){sheet.querySelector("thead").innerHTML="<tr><th>#</th>"+Array.from({length:sc},(_,i)=>`<th>${String.fromCharCode(65+i)}</th>`).join("")+"</tr>";sheet.querySelector("tbody").innerHTML=Array.from({length:sr},(_,r)=>`<tr><th>${r+1}</th>`+Array.from({length:sc},(_,c)=>`<td contenteditable data-r="${r}" data-c="${c}"></td>`).join("")+"</tr>`).join("");let s=JSON.parse(localStorage.getItem("bdSheet31")||"null");if(s)s.forEach(x=>{let c=document.querySelector(`#sheet td[data-r="${x.r}"][data-c="${x.c}"]`);if(c)c.textContent=x.v})}
+function saveSheet(){localStorage.setItem("bdSheet31",JSON.stringify([...document.querySelectorAll("#sheet td")].map(c=>({r:c.dataset.r,c:c.dataset.c,v:c.textContent}))));toast("Spreadsheet saved")}function addRow(){sr++;buildSheet()}function addCol(){sc++;buildSheet()}function clearSheet(){if(confirm("Clear spreadsheet?")){localStorage.removeItem("bdSheet31");buildSheet()}}
+function exportCSV(){let out=[];for(let r=0;r<sr;r++){let row=[];for(let c=0;c<sc;c++)row.push('"'+(document.querySelector(`#sheet td[data-r="${r}"][data-c="${c}"]`)?.textContent||"").replaceAll('"','""')+'"');out.push(row.join(","))}let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([out.join("\n")],{type:"text/csv"}));a.download="BusinessDesk_WorkingPaper.csv";a.click()}
+function refresh(){renderDash();renderGroups();renderLedgers();renderParties();renderSales();renderPurchases();renderVouchers();renderDaybook();renderTrial();renderPL();renderBS();renderGST();renderOutstanding();loadCompany()}
+buildSheet();refresh();quickGST();
 </script>
 </body>
 </html>
