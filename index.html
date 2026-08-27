@@ -2,514 +2,176 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BusinessDesk — Professional Accounting Suite</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BusinessDesk Pro — Phase 4</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
-
+*{box-sizing:border-box;margin:0;padding:0}
 :root{
-    --bg:#f5f7fb;
-    --card:#ffffff;
-    --text:#182230;
-    --muted:#667085;
-    --border:#e4e7ec;
-    --primary:#2563eb;
-    --primary-dark:#1d4ed8;
-    --sidebar:#101828;
-    --sidebar-text:#d0d5dd;
-    --success:#12b76a;
-    --danger:#f04438;
-    --warning:#f79009;
+--bg:#f5f7fb;--card:#fff;--text:#182230;--muted:#667085;
+--border:#e4e7ec;--primary:#2563eb;--dark:#101828;
+--success:#12b76a;--danger:#f04438;--warning:#f79009
 }
-
-body{
-    font-family:Inter,Segoe UI,Arial,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-}
-
-button,
-input,
-select,
-textarea{
-    font:inherit;
-}
-
-button{
-    cursor:pointer;
-}
-
-.app{
-    display:flex;
-    min-height:100vh;
-}
-
-/* SIDEBAR */
+body{font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{display:flex;min-height:100vh}
 
 .sidebar{
-    width:260px;
-    background:var(--sidebar);
-    color:white;
-    position:fixed;
-    top:0;
-    bottom:0;
-    left:0;
-    overflow-y:auto;
-    z-index:1000;
+width:260px;background:var(--dark);color:#fff;position:fixed;
+left:0;top:0;bottom:0;overflow-y:auto;z-index:1000
 }
-
-.brand{
-    padding:22px 20px;
-    font-size:21px;
-    font-weight:800;
-    border-bottom:1px solid rgba(255,255,255,.08);
-}
-
-.brand span{
-    color:#60a5fa;
-}
-
-.nav{
-    padding:14px 10px 30px;
-}
-
+.brand{padding:22px 20px;font-size:22px;font-weight:800;border-bottom:1px solid #263244}
+.brand span{color:#60a5fa}
+.nav{padding:12px}
 .nav-title{
-    color:#98a2b3;
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:.08em;
-    padding:16px 12px 7px;
+font-size:11px;color:#98a2b3;text-transform:uppercase;
+letter-spacing:.08em;padding:16px 10px 7px
 }
-
 .nav-btn{
-    width:100%;
-    border:0;
-    background:transparent;
-    color:var(--sidebar-text);
-    padding:11px 13px;
-    border-radius:8px;
-    text-align:left;
-    margin:2px 0;
-    display:flex;
-    align-items:center;
-    gap:10px;
+width:100%;border:0;background:transparent;color:#d0d5dd;
+padding:11px 12px;border-radius:8px;text-align:left;margin:2px 0
 }
+.nav-btn:hover{background:#1d2939;color:#fff}
+.nav-btn.active{background:#2563eb;color:#fff}
 
-.nav-btn:hover{
-    background:#1d2939;
-    color:white;
-}
-
-.nav-btn.active{
-    background:#1d4ed8;
-    color:white;
-}
-
-/* MAIN */
-
-.main{
-    margin-left:260px;
-    width:calc(100% - 260px);
-    min-height:100vh;
-}
-
+.main{margin-left:260px;width:calc(100% - 260px);min-height:100vh}
 .topbar{
-    height:68px;
-    background:white;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 25px;
-    position:sticky;
-    top:0;
-    z-index:100;
+height:68px;background:#fff;border-bottom:1px solid var(--border);
+display:flex;align-items:center;justify-content:space-between;
+padding:0 24px;position:sticky;top:0;z-index:100
 }
-
-.topbar h2{
-    font-size:19px;
-}
-
-.top-actions{
-    display:flex;
-    gap:10px;
-    align-items:center;
-}
-
+.top-actions{display:flex;align-items:center;gap:10px}
+.topbar h2{font-size:19px}
 .search{
-    width:240px;
-    padding:9px 12px;
-    border:1px solid var(--border);
-    border-radius:8px;
+width:240px;padding:9px 12px;border:1px solid var(--border);
+border-radius:8px;background:#fff
 }
-
-.content{
-    padding:25px;
-}
-
-/* SECTIONS */
-
-.section{
-    display:none;
-}
-
-.section.active{
-    display:block;
-}
+.content{padding:24px}
+.section{display:none}
+.section.active{display:block}
 
 .page-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:15px;
-    margin-bottom:20px;
+display:flex;justify-content:space-between;align-items:center;
+gap:15px;margin-bottom:20px
 }
+.page-header h1{font-size:25px}
+.page-header p{color:var(--muted);margin-top:4px}
 
-.page-header h1{
-    font-size:25px;
-}
-
-.page-header p{
-    color:var(--muted);
-    margin-top:4px;
-}
-
-/* BUTTONS */
-
-.btn{
-    border:1px solid var(--border);
-    background:white;
-    color:var(--text);
-    padding:9px 14px;
-    border-radius:8px;
-    font-weight:600;
-}
-
-.btn:hover{
-    background:#f2f4f7;
-}
-
-.btn-primary{
-    background:var(--primary);
-    color:white;
-    border-color:var(--primary);
-}
-
-.btn-primary:hover{
-    background:var(--primary-dark);
-}
-
-.btn-danger{
-    background:#fff1f0;
-    color:var(--danger);
-    border-color:#ffd5d2;
-}
-
-.btn-success{
-    background:#ecfdf3;
-    color:#027a48;
-    border-color:#abefc6;
-}
-
-/* CARDS */
-
-.grid{
-    display:grid;
-    gap:16px;
-}
-
-.grid-4{
-    grid-template-columns:repeat(4,1fr);
-}
-
-.grid-3{
-    grid-template-columns:repeat(3,1fr);
-}
-
-.grid-2{
-    grid-template-columns:repeat(2,1fr);
-}
+.grid{display:grid;gap:16px}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-2{grid-template-columns:repeat(2,1fr)}
 
 .card{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:18px;
-    box-shadow:0 1px 2px rgba(16,24,40,.03);
+background:#fff;border:1px solid var(--border);border-radius:12px;
+padding:18px;box-shadow:0 1px 2px rgba(16,24,40,.03)
 }
+.metric-title{color:var(--muted);font-size:13px}
+.metric-value{font-size:25px;font-weight:800;margin-top:7px}
+.metric-sub{font-size:12px;color:var(--muted);margin-top:4px}
 
-.metric-title{
-    color:var(--muted);
-    font-size:13px;
+.btn{
+border:1px solid var(--border);background:#fff;color:var(--text);
+padding:9px 14px;border-radius:8px;font-weight:600
 }
-
-.metric-value{
-    font-size:25px;
-    font-weight:800;
-    margin-top:7px;
-}
-
-.metric-sub{
-    font-size:12px;
-    color:var(--muted);
-    margin-top:4px;
-}
-
-/* TABLE */
+.btn:hover{background:#f2f4f7}
+.btn-primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.btn-primary:hover{background:#1d4ed8}
+.btn-danger{background:#fff1f0;color:var(--danger);border-color:#ffd5d2}
+.btn-success{background:#ecfdf3;color:#027a48;border-color:#abefc6}
+.btn-warning{background:#fffaeb;color:#b54708;border-color:#fedf89}
 
 .table-wrap{
-    overflow:auto;
-    background:white;
-    border:1px solid var(--border);
-    border-radius:10px;
+overflow:auto;background:#fff;border:1px solid var(--border);
+border-radius:10px
 }
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    min-width:700px;
+table{width:100%;border-collapse:collapse;min-width:700px}
+th,td{
+padding:10px 12px;border-bottom:1px solid var(--border);
+font-size:13px;text-align:left
 }
+th{background:#f9fafb;color:#475467}
+tr:last-child td{border-bottom:0}
+.num{text-align:right}
 
-th,
-td{
-    padding:11px 13px;
-    border-bottom:1px solid var(--border);
-    text-align:left;
-    font-size:13px;
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.form-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:13px;font-weight:600}
+.field input,.field select,.field textarea{
+border:1px solid var(--border);border-radius:8px;
+padding:10px;background:#fff
 }
-
-th{
-    background:#f9fafb;
-    color:#475467;
-    font-weight:700;
-}
-
-tr:last-child td{
-    border-bottom:0;
-}
-
-.num{
-    text-align:right;
-}
-
-/* FORMS */
-
-.form-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:14px;
-}
-
-.form-grid-3{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:14px;
-}
-
-.field{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-}
-
-.field label{
-    font-size:13px;
-    font-weight:600;
-}
-
-.field input,
-.field select,
-.field textarea{
-    border:1px solid var(--border);
-    border-radius:8px;
-    padding:10px 11px;
-    background:white;
-}
-
-.field textarea{
-    min-height:90px;
-    resize:vertical;
-}
-
+.field textarea{min-height:85px;resize:vertical}
 .form-actions{
-    margin-top:18px;
-    display:flex;
-    justify-content:flex-end;
-    gap:10px;
+display:flex;justify-content:flex-end;gap:10px;margin-top:18px
 }
-
-/* MODAL */
 
 .modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(16,24,40,.55);
-    z-index:3000;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
+display:none;position:fixed;inset:0;background:rgba(16,24,40,.55);
+z-index:3000;align-items:center;justify-content:center;padding:20px
 }
-
-.modal.open{
-    display:flex;
-}
-
+.modal.open{display:flex}
 .modal-box{
-    width:min(800px,100%);
-    max-height:90vh;
-    overflow:auto;
-    background:white;
-    border-radius:14px;
-    padding:22px;
+width:min(900px,100%);max-height:92vh;overflow:auto;
+background:#fff;border-radius:14px;padding:22px
 }
-
 .modal-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
+display:flex;justify-content:space-between;align-items:center;
+margin-bottom:20px
 }
-
 .close{
-    border:0;
-    background:#f2f4f7;
-    width:34px;
-    height:34px;
-    border-radius:8px;
+border:0;background:#f2f4f7;width:34px;height:34px;border-radius:8px
 }
-
-/* CALCULATOR */
-
-.calculator{
-    max-width:420px;
-}
-
-.calc-display{
-    width:100%;
-    height:75px;
-    background:#101828;
-    color:white;
-    border:0;
-    border-radius:10px;
-    margin-bottom:12px;
-    padding:15px;
-    font-size:28px;
-    text-align:right;
-}
-
-.calc-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:8px;
-}
-
-.calc-grid button{
-    height:55px;
-    border:1px solid var(--border);
-    border-radius:8px;
-    background:white;
-    font-size:18px;
-}
-
-.calc-grid button:hover{
-    background:#f2f4f7;
-}
-
-/* NOTICE */
 
 .notice{
-    padding:13px 15px;
-    background:#eff8ff;
-    border:1px solid #b2ddff;
-    color:#175cd3;
-    border-radius:9px;
-    margin-bottom:18px;
+padding:13px 15px;border-radius:9px;margin-bottom:15px;
+background:#eff8ff;border:1px solid #b2ddff;color:#175cd3
+}
+.notice.success{background:#ecfdf3;border-color:#abefc6;color:#027a48}
+.notice.danger{background:#fff1f0;border-color:#fecdca;color:#b42318}
+
+.badge{
+display:inline-block;padding:4px 8px;border-radius:999px;
+font-size:11px;font-weight:700
+}
+.badge-green{background:#ecfdf3;color:#027a48}
+.badge-red{background:#fff1f0;color:#b42318}
+.badge-blue{background:#eff8ff;color:#175cd3}
+
+.calculator{max-width:430px}
+.calc-display{
+width:100%;height:72px;background:#101828;color:#fff;border:0;
+border-radius:10px;margin-bottom:12px;padding:14px;
+font-size:27px;text-align:right
+}
+.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.calc-grid button{
+height:55px;border:1px solid var(--border);
+border-radius:8px;background:#fff;font-size:18px
 }
 
-/* TOAST */
-
-.toast{
-    position:fixed;
-    bottom:25px;
-    right:25px;
-    background:#101828;
-    color:white;
-    padding:12px 16px;
-    border-radius:8px;
-    display:none;
-    z-index:5000;
+.excel-input{
+width:100%;border:1px solid #d0d5dd;
+padding:7px;border-radius:5px
 }
 
-/* MOBILE */
-
-.menu{
-    display:none;
-}
+.menu{display:none}
 
 @media(max-width:1000px){
-    .grid-4{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .grid-3{
-        grid-template-columns:repeat(2,1fr);
-    }
+.grid-4{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(2,1fr)}
 }
-
 @media(max-width:750px){
-
-    .sidebar{
-        transform:translateX(-100%);
-        transition:.2s;
-    }
-
-    .sidebar.open{
-        transform:translateX(0);
-    }
-
-    .main{
-        margin-left:0;
-        width:100%;
-    }
-
-    .menu{
-        display:block;
-        border:0;
-        background:#f2f4f7;
-        padding:8px 11px;
-        border-radius:7px;
-    }
-
-    .topbar{
-        padding:0 14px;
-    }
-
-    .search{
-        display:none;
-    }
-
-    .content{
-        padding:15px;
-    }
-
-    .grid-4,
-    .grid-3,
-    .grid-2,
-    .form-grid,
-    .form-grid-3{
-        grid-template-columns:1fr;
-    }
-
-    .page-header{
-        align-items:flex-start;
-        flex-direction:column;
-    }
+.sidebar{transform:translateX(-100%);transition:.2s}
+.sidebar.open{transform:translateX(0)}
+.main{margin-left:0;width:100%}
+.menu{display:block;border:0;background:#f2f4f7;padding:8px 11px;border-radius:7px}
+.search{display:none}
+.content{padding:15px}
+.grid-4,.grid-3,.grid-2,.form-grid,.form-grid-3{grid-template-columns:1fr}
+.page-header{flex-direction:column;align-items:flex-start}
 }
 </style>
 </head>
@@ -518,117 +180,60 @@ tr:last-child td{
 
 <div class="app">
 
-<!-- SIDEBAR -->
-
 <aside class="sidebar" id="sidebar">
 
-    <div class="brand">
-        Business<span>Desk</span>
-    </div>
+<div class="brand">Business<span>Desk</span></div>
 
-    <div class="nav">
+<div class="nav">
 
-        <div class="nav-title">Main</div>
+<div class="nav-title">Main</div>
 
-        <button class="nav-btn active" data-section="dashboard">
-            🏠 Dashboard
-        </button>
+<button class="nav-btn active" data-section="dashboard">🏠 Dashboard</button>
+<button class="nav-btn" data-section="calculator">🧮 Calculator</button>
+<button class="nav-btn" data-section="spreadsheet">📊 Excel Working</button>
 
-        <button class="nav-btn" data-section="calculator">
-            🧮 Calculator
-        </button>
+<div class="nav-title">Accounting</div>
 
-        <button class="nav-btn" data-section="spreadsheet">
-            📊 Spreadsheet
-        </button>
+<button class="nav-btn" data-section="groups">📂 Account Groups</button>
+<button class="nav-btn" data-section="ledgers">📖 Ledgers</button>
+<button class="nav-btn" data-section="parties">👥 Customers / Suppliers</button>
+<button class="nav-btn" data-section="sales">🧾 Sales</button>
+<button class="nav-btn" data-section="purchase">🛒 Purchase</button>
+<button class="nav-btn" data-section="vouchers">📒 Vouchers</button>
 
+<div class="nav-title">Reports</div>
 
-        <div class="nav-title">Accounting</div>
+<button class="nav-btn" data-section="daybook">📅 Day Book</button>
+<button class="nav-btn" data-section="ledgerreport">📖 Ledger Statement</button>
+<button class="nav-btn" data-section="trialbalance">⚖️ Trial Balance</button>
+<button class="nav-btn" data-section="profitloss">📈 Profit & Loss</button>
+<button class="nav-btn" data-section="balancesheet">🏦 Balance Sheet</button>
+<button class="nav-btn" data-section="gst">🧮 GST Summary</button>
+<button class="nav-btn" data-section="outstanding">💳 Outstanding</button>
 
-        <button class="nav-btn" data-section="groups">
-            📂 Account Groups
-        </button>
+<div class="nav-title">Administration</div>
 
-        <button class="nav-btn" data-section="ledgers">
-            📖 Ledgers
-        </button>
+<button class="nav-btn" data-section="company">🏢 Company Setup</button>
+<button class="nav-btn" data-section="backup">💾 Backup / Restore</button>
 
-        <button class="nav-btn" data-section="parties">
-            👥 Customers / Suppliers
-        </button>
-
-        <button class="nav-btn" data-section="sales">
-            🧾 Sales
-        </button>
-
-        <button class="nav-btn" data-section="purchase">
-            🛒 Purchase
-        </button>
-
-        <button class="nav-btn" data-section="vouchers">
-            📒 Vouchers
-        </button>
-
-
-        <div class="nav-title">Reports</div>
-
-        <button class="nav-btn" data-section="daybook">
-            📅 Day Book
-        </button>
-
-        <button class="nav-btn" data-section="trialbalance">
-            ⚖️ Trial Balance
-        </button>
-
-        <button class="nav-btn" data-section="profitloss">
-            📈 Profit & Loss
-        </button>
-
-        <button class="nav-btn" data-section="balancesheet">
-            🏦 Balance Sheet
-        </button>
-
-        <button class="nav-btn" data-section="gst">
-            🧮 GST Summary
-        </button>
-
-        <button class="nav-btn" data-section="outstanding">
-            💳 Outstanding
-        </button>
-
-
-        <div class="nav-title">Administration</div>
-
-        <button class="nav-btn" data-section="company">
-            🏢 Company Setup
-        </button>
-
-        <button class="nav-btn" data-section="backup">
-            💾 Backup / Restore
-        </button>
-
-    </div>
+</div>
 </aside>
-
-
-<!-- MAIN -->
 
 <main class="main">
 
 <header class="topbar">
 
-    <div class="top-actions">
-        <button class="menu" id="menuBtn">☰</button>
-        <h2 id="pageTitle">Dashboard</h2>
-    </div>
+<div class="top-actions">
+<button class="menu" id="menuBtn">☰</button>
+<h2 id="pageTitle">Dashboard</h2>
+</div>
 
-    <div class="top-actions">
-        <input class="search" id="globalSearch" placeholder="Search...">
-        <button class="btn btn-primary" onclick="openSales()">+ Sales</button>
-    </div>
+<div class="top-actions">
+<input class="search" id="globalSearch" placeholder="Search current data">
+<button class="btn btn-primary" onclick="openSales()">+ Sales</button>
+</div>
 
 </header>
-
 
 <div class="content">
 
@@ -637,84 +242,69 @@ tr:last-child td{
 
 <section class="section active" id="section-dashboard">
 
-    <div class="page-header">
-        <div>
-            <h1>Dashboard</h1>
-            <p>Overview of your business and accounting activity.</p>
-        </div>
-    </div>
+<div class="page-header">
+<div>
+<h1>Dashboard</h1>
+<p>BusinessDesk Phase 4 accounting workspace.</p>
+</div>
+</div>
 
-    <div class="grid grid-4">
+<div class="grid grid-4">
 
-        <div class="card">
-            <div class="metric-title">Total Ledgers</div>
-            <div class="metric-value" id="dashLedgers">0</div>
-            <div class="metric-sub">Accounts maintained</div>
-        </div>
+<div class="card">
+<div class="metric-title">Ledgers</div>
+<div class="metric-value" id="dashLedgers">0</div>
+<div class="metric-sub">Chart of accounts</div>
+</div>
 
-        <div class="card">
-            <div class="metric-title">Customers</div>
-            <div class="metric-value" id="dashCustomers">0</div>
-            <div class="metric-sub">Customer accounts</div>
-        </div>
+<div class="card">
+<div class="metric-title">Customers</div>
+<div class="metric-value" id="dashCustomers">0</div>
+<div class="metric-sub">Active parties</div>
+</div>
 
-        <div class="card">
-            <div class="metric-title">Sales</div>
-            <div class="metric-value" id="dashSales">₹0</div>
-            <div class="metric-sub">Total sales</div>
-        </div>
+<div class="card">
+<div class="metric-title">Sales</div>
+<div class="metric-value" id="dashSales">₹0.00</div>
+<div class="metric-sub">Total taxable + GST</div>
+</div>
 
-        <div class="card">
-            <div class="metric-title">Purchase</div>
-            <div class="metric-value" id="dashPurchase">₹0</div>
-            <div class="metric-sub">Total purchases</div>
-        </div>
+<div class="card">
+<div class="metric-title">Purchase</div>
+<div class="metric-value" id="dashPurchase">₹0.00</div>
+<div class="metric-sub">Total taxable + GST</div>
+</div>
 
-    </div>
+</div>
 
-    <br>
+<br>
 
-    <div class="grid grid-2">
+<div class="grid grid-2">
 
-        <div class="card">
-            <h3>Quick Actions</h3>
-            <br>
+<div class="card">
+<h3>Quick Actions</h3>
+<br>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<button class="btn btn-primary" onclick="openSales()">Sales Invoice</button>
+<button class="btn" onclick="openPurchase()">Purchase</button>
+<button class="btn" onclick="openVoucher()">Voucher</button>
+<button class="btn" onclick="openParty()">Party</button>
+<button class="btn" onclick="openLedger()">Ledger</button>
+</div>
+</div>
 
-            <div style="display:flex;gap:10px;flex-wrap:wrap">
+<div class="card">
+<h3>Accounting Control</h3>
+<br>
+<div id="dashboardBalanceStatus" class="notice success">
+System ready.
+</div>
+<p style="font-size:13px;color:#667085">
+Phase 4 stores transaction data locally in this browser.
+</p>
+</div>
 
-                <button class="btn btn-primary" onclick="openSales()">
-                    + Sales Invoice
-                </button>
-
-                <button class="btn" onclick="openPurchase()">
-                    + Purchase
-                </button>
-
-                <button class="btn" onclick="openVoucher()">
-                    + Voucher
-                </button>
-
-                <button class="btn" onclick="openParty()">
-                    + Customer / Supplier
-                </button>
-
-            </div>
-        </div>
-
-        <div class="card">
-            <h3>System Status</h3>
-            <br>
-
-            <div class="notice">
-                Double-entry accounting engine is active.
-            </div>
-
-            <p>
-                All transactions should maintain equal debit and credit values.
-            </p>
-        </div>
-
-    </div>
+</div>
 
 </section>
 
@@ -723,51 +313,45 @@ tr:last-child td{
 
 <section class="section" id="section-calculator">
 
-    <div class="page-header">
-        <div>
-            <h1>Calculator</h1>
-            <p>Professional business calculator.</p>
-        </div>
-    </div>
+<div class="page-header">
+<div>
+<h1>Professional Calculator</h1>
+<p>Arithmetic calculator for accounting work.</p>
+</div>
+</div>
 
-    <div class="card calculator">
+<div class="card calculator">
 
-        <input id="calcDisplay"
-               class="calc-display"
-               value="0"
-               readonly>
+<input id="calcDisplay" class="calc-display" value="0" readonly>
 
-        <div class="calc-grid">
+<div class="calc-grid">
 
-            <button onclick="calcClear()">C</button>
-            <button onclick="calcBack()">⌫</button>
-            <button onclick="calcInput('%')">%</button>
-            <button onclick="calcInput('/')">÷</button>
+<button onclick="calcClear()">C</button>
+<button onclick="calcBack()">⌫</button>
+<button onclick="calcInput('%')">%</button>
+<button onclick="calcInput('/')">÷</button>
 
-            <button onclick="calcInput('7')">7</button>
-            <button onclick="calcInput('8')">8</button>
-            <button onclick="calcInput('9')">9</button>
-            <button onclick="calcInput('*')">×</button>
+<button onclick="calcInput('7')">7</button>
+<button onclick="calcInput('8')">8</button>
+<button onclick="calcInput('9')">9</button>
+<button onclick="calcInput('*')">×</button>
 
-            <button onclick="calcInput('4')">4</button>
-            <button onclick="calcInput('5')">5</button>
-            <button onclick="calcInput('6')">6</button>
-            <button onclick="calcInput('-')">−</button>
+<button onclick="calcInput('4')">4</button>
+<button onclick="calcInput('5')">5</button>
+<button onclick="calcInput('6')">6</button>
+<button onclick="calcInput('-')">−</button>
 
-            <button onclick="calcInput('1')">1</button>
-            <button onclick="calcInput('2')">2</button>
-            <button onclick="calcInput('3')">3</button>
-            <button onclick="calcInput('+')">+</button>
+<button onclick="calcInput('1')">1</button>
+<button onclick="calcInput('2')">2</button>
+<button onclick="calcInput('3')">3</button>
+<button onclick="calcInput('+')">+</button>
 
-            <button onclick="calcInput('0')">0</button>
-            <button onclick="calcInput('.')">.</button>
-            <button onclick="calcEvaluate()" style="grid-column:span 2">
-                =
-            </button>
+<button onclick="calcInput('0')">0</button>
+<button onclick="calcInput('.')">.</button>
+<button onclick="calcEvaluate()" style="grid-column:span 2">=</button>
 
-        </div>
-
-    </div>
+</div>
+</div>
 
 </section>
 
@@ -776,48 +360,55 @@ tr:last-child td{
 
 <section class="section" id="section-spreadsheet">
 
-    <div class="page-header">
-        <div>
-            <h1>Spreadsheet</h1>
-            <p>Simple working-paper spreadsheet.</p>
-        </div>
-    </div>
+<div class="page-header">
+<div>
+<h1>Excel Working</h1>
+<p>Simple accounting working-paper grid.</p>
+</div>
 
-    <div class="card">
+<div>
+<button class="btn btn-primary" onclick="addExcelRow()">+ Add Row</button>
+<button class="btn" onclick="exportCSV()">Export CSV</button>
+</div>
+</div>
 
-        <div style="display:flex;gap:10px;margin-bottom:15px">
+<div class="card">
 
-            <button class="btn btn-primary" onclick="addSpreadsheetRow()">
-                + Add Row
-            </button>
+<div class="table-wrap">
 
-            <button class="btn" onclick="clearSpreadsheet()">
-                Clear
-            </button>
+<table id="excelTable">
 
-        </div>
+<thead>
+<tr>
+<th>#</th>
+<th>Description</th>
+<th>Qty</th>
+<th>Rate</th>
+<th>Tax %</th>
+<th>Taxable</th>
+<th>GST</th>
+<th>Total</th>
+<th>Action</th>
+</tr>
+</thead>
 
-        <div class="table-wrap">
+<tbody id="excelBody"></tbody>
 
-            <table id="spreadsheetTable">
+<tfoot>
+<tr>
+<th colspan="5">TOTAL</th>
+<th class="num" id="excelTaxableTotal">₹0.00</th>
+<th class="num" id="excelGSTTotal">₹0.00</th>
+<th class="num" id="excelGrandTotal">₹0.00</th>
+<th></th>
+</tr>
+</tfoot>
 
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Description</th>
-                        <th>Qty</th>
-                        <th>Rate</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
+</table>
 
-                <tbody id="spreadsheetBody"></tbody>
+</div>
 
-            </table>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
@@ -826,40 +417,29 @@ tr:last-child td{
 
 <section class="section" id="section-groups">
 
-    <div class="page-header">
+<div class="page-header">
+<div>
+<h1>Account Groups</h1>
+<p>Manage the accounting hierarchy.</p>
+</div>
+<button class="btn btn-primary" onclick="openGroup()">+ Add Group</button>
+</div>
 
-        <div>
-            <h1>Account Groups</h1>
-            <p>Manage accounting groups.</p>
-        </div>
+<div class="card">
 
-        <button class="btn btn-primary" onclick="openGroup()">
-            + Add Group
-        </button>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Nature</th>
+</tr>
+</thead>
+<tbody id="groupsBody"></tbody>
+</table>
+</div>
 
-    </div>
-
-    <div class="card">
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Group</th>
-                        <th>Nature</th>
-                        <th>Parent Group</th>
-                    </tr>
-                </thead>
-
-                <tbody id="groupsBody"></tbody>
-
-            </table>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
@@ -868,48 +448,38 @@ tr:last-child td{
 
 <section class="section" id="section-ledgers">
 
-    <div class="page-header">
+<div class="page-header">
+<div>
+<h1>Ledgers</h1>
+<p>Chart of accounts and opening balances.</p>
+</div>
+<button class="btn btn-primary" onclick="openLedger()">+ Add Ledger</button>
+</div>
 
-        <div>
-            <h1>Ledgers</h1>
-            <p>Maintain your chart of accounts.</p>
-        </div>
+<div class="card">
 
-        <button class="btn btn-primary" onclick="openLedger()">
-            + Add Ledger
-        </button>
+<input class="search" id="ledgerSearch"
+placeholder="Search ledger..."
+oninput="renderLedgers()">
 
-    </div>
+<br><br>
 
-    <div class="card">
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Ledger</th>
+<th>Group</th>
+<th>Opening</th>
+<th>Opening Type</th>
+<th>Balance</th>
+</tr>
+</thead>
+<tbody id="ledgersBody"></tbody>
+</table>
+</div>
 
-        <input class="search"
-               id="ledgerSearch"
-               placeholder="Search ledgers..."
-               oninput="renderLedgers()">
-
-        <br><br>
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Ledger</th>
-                        <th>Group</th>
-                        <th>Nature</th>
-                        <th class="num">Opening</th>
-                    </tr>
-                </thead>
-
-                <tbody id="ledgersBody"></tbody>
-
-            </table>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
@@ -918,49 +488,38 @@ tr:last-child td{
 
 <section class="section" id="section-parties">
 
-    <div class="page-header">
+<div class="page-header">
+<div>
+<h1>Customers / Suppliers</h1>
+<p>Maintain party master data.</p>
+</div>
+<button class="btn btn-primary" onclick="openParty()">+ Add Party</button>
+</div>
 
-        <div>
-            <h1>Customers / Suppliers</h1>
-            <p>Manage business parties.</p>
-        </div>
+<div class="card">
 
-        <button class="btn btn-primary" onclick="openParty()">
-            + Add Party
-        </button>
+<input class="search" id="partySearch"
+placeholder="Search party..."
+oninput="renderParties()">
 
-    </div>
+<br><br>
 
-    <div class="card">
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>GSTIN</th>
+<th>State</th>
+<th>Phone</th>
+</tr>
+</thead>
+<tbody id="partiesBody"></tbody>
+</table>
+</div>
 
-        <input class="search"
-               id="partySearch"
-               placeholder="Search parties..."
-               oninput="renderParties()">
-
-        <br><br>
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>GSTIN</th>
-                        <th>State</th>
-                        <th>Phone</th>
-                    </tr>
-                </thead>
-
-                <tbody id="partiesBody"></tbody>
-
-            </table>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
@@ -969,43 +528,33 @@ tr:last-child td{
 
 <section class="section" id="section-sales">
 
-    <div class="page-header">
+<div class="page-header">
+<div>
+<h1>Sales</h1>
+<p>Sales invoices and output GST.</p>
+</div>
+<button class="btn btn-primary" onclick="openSales()">+ New Sales</button>
+</div>
 
-        <div>
-            <h1>Sales</h1>
-            <p>Create and manage sales invoices.</p>
-        </div>
+<div class="card">
 
-        <button class="btn btn-primary" onclick="openSales()">
-            + New Sales Invoice
-        </button>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Invoice</th>
+<th>Date</th>
+<th>Customer</th>
+<th>Taxable</th>
+<th>GST</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody id="salesBody"></tbody>
+</table>
+</div>
 
-    </div>
-
-    <div class="card">
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Invoice No.</th>
-                        <th>Date</th>
-                        <th>Customer</th>
-                        <th class="num">Taxable</th>
-                        <th class="num">GST</th>
-                        <th class="num">Total</th>
-                    </tr>
-                </thead>
-
-                <tbody id="salesBody"></tbody>
-
-            </table>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
@@ -1014,43 +563,33 @@ tr:last-child td{
 
 <section class="section" id="section-purchase">
 
-    <div class="page-header">
+<div class="page-header">
+<div>
+<h1>Purchase</h1>
+<p>Purchase invoices and input GST.</p>
+</div>
+<button class="btn btn-primary" onclick="openPurchase()">+ New Purchase</button>
+</div>
 
-        <div>
-            <h1>Purchase</h1>
-            <p>Create and manage purchase invoices.</p>
-        </div>
+<div class="card">
 
-        <button class="btn btn-primary" onclick="openPurchase()">
-            + New Purchase
-        </button>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Invoice</th>
+<th>Date</th>
+<th>Supplier</th>
+<th>Taxable</th>
+<th>GST</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody id="purchaseBody"></tbody>
+</table>
+</div>
 
-    </div>
-
-    <div class="card">
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Invoice No.</th>
-                        <th>Date</th>
-                        <th>Supplier</th>
-                        <th class="num">Taxable</th>
-                        <th class="num">GST</th>
-                        <th class="num">Total</th>
-                    </tr>
-                </thead>
-
-                <tbody id="purchaseBody"></tbody>
-
-            </table>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
@@ -1059,43 +598,33 @@ tr:last-child td{
 
 <section class="section" id="section-vouchers">
 
-    <div class="page-header">
+<div class="page-header">
+<div>
+<h1>Vouchers</h1>
+<p>Double-entry accounting vouchers.</p>
+</div>
+<button class="btn btn-primary" onclick="openVoucher()">+ New Voucher</button>
+</div>
 
-        <div>
-            <h1>Vouchers</h1>
-            <p>Payment, receipt, contra and journal entries.</p>
-        </div>
+<div class="card">
 
-        <button class="btn btn-primary" onclick="openVoucher()">
-            + New Voucher
-        </button>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Type</th>
+<th>Reference</th>
+<th>Debit Ledger</th>
+<th>Credit Ledger</th>
+<th>Amount</th>
+</tr>
+</thead>
+<tbody id="vouchersBody"></tbody>
+</table>
+</div>
 
-    </div>
-
-    <div class="card">
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Type</th>
-                        <th>Reference</th>
-                        <th>Debit</th>
-                        <th>Credit</th>
-                        <th class="num">Amount</th>
-                    </tr>
-                </thead>
-
-                <tbody id="vouchersBody"></tbody>
-
-            </table>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
@@ -1104,39 +633,90 @@ tr:last-child td{
 
 <section class="section" id="section-daybook">
 
-    <div class="page-header">
+<div class="page-header">
+<div>
+<h1>Day Book</h1>
+<p>All posted accounting entries.</p>
+</div>
+</div>
 
-        <div>
-            <h1>Day Book</h1>
-            <p>Chronological list of accounting transactions.</p>
-        </div>
+<div class="card">
 
-    </div>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Voucher</th>
+<th>Type</th>
+<th>Reference</th>
+<th>Ledger</th>
+<th>Debit</th>
+<th>Credit</th>
+</tr>
+</thead>
+<tbody id="daybookBody"></tbody>
+</table>
+</div>
 
-    <div class="card">
+</div>
 
-        <div class="table-wrap">
+</section>
 
-            <table>
 
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Type</th>
-                        <th>Reference</th>
-                        <th>Narration</th>
-                        <th class="num">Debit</th>
-                        <th class="num">Credit</th>
-                    </tr>
-                </thead>
+<!-- LEDGER REPORT -->
 
-                <tbody id="daybookBody"></tbody>
+<section class="section" id="section-ledgerreport">
 
-            </table>
+<div class="page-header">
+<div>
+<h1>Ledger Statement</h1>
+<p>Detailed running balance of a ledger.</p>
+</div>
+</div>
 
-        </div>
+<div class="card">
 
-    </div>
+<div class="form-grid">
+
+<div class="field">
+<label>Select Ledger</label>
+<select id="reportLedger" onchange="renderLedgerReport()"></select>
+</div>
+
+<div class="field">
+<label>As on Date</label>
+<input type="date" id="reportDate"
+onchange="renderLedgerReport()">
+</div>
+
+</div>
+
+<br>
+
+<div id="ledgerSummary" class="notice">
+Select a ledger.
+</div>
+
+<div class="table-wrap">
+
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Voucher</th>
+<th>Particulars</th>
+<th>Debit</th>
+<th>Credit</th>
+<th>Running Balance</th>
+</tr>
+</thead>
+<tbody id="ledgerReportBody"></tbody>
+</table>
+
+</div>
+
+</div>
 
 </section>
 
@@ -1145,97 +725,107 @@ tr:last-child td{
 
 <section class="section" id="section-trialbalance">
 
-    <div class="page-header">
+<div class="page-header">
+<div>
+<h1>Trial Balance</h1>
+<p>Calculated from ledger balances.</p>
+</div>
+</div>
 
-        <div>
-            <h1>Trial Balance</h1>
-            <p>Debit and credit balances of all ledgers.</p>
-        </div>
+<div class="grid grid-3">
 
-    </div>
+<div class="card">
+<div class="metric-title">Total Debit</div>
+<div class="metric-value" id="tbDebit">₹0.00</div>
+</div>
 
-    <div class="grid grid-3">
+<div class="card">
+<div class="metric-title">Total Credit</div>
+<div class="metric-value" id="tbCredit">₹0.00</div>
+</div>
 
-        <div class="card">
-            <div class="metric-title">Total Debit</div>
-            <div class="metric-value" id="tbDebit">₹0</div>
-        </div>
+<div class="card">
+<div class="metric-title">Difference</div>
+<div class="metric-value" id="tbDifference">₹0.00</div>
+</div>
 
-        <div class="card">
-            <div class="metric-title">Total Credit</div>
-            <div class="metric-value" id="tbCredit">₹0</div>
-        </div>
+</div>
 
-        <div class="card">
-            <div class="metric-title">Difference</div>
-            <div class="metric-value" id="tbDifference">₹0</div>
-        </div>
+<br>
 
-    </div>
+<div class="card">
 
-    <br>
+<div id="tbStatus" class="notice success">
+Trial Balance is balanced.
+</div>
 
-    <div class="card">
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Ledger</th>
+<th>Group</th>
+<th>Debit</th>
+<th>Credit</th>
+</tr>
+</thead>
+<tbody id="tbBody"></tbody>
+</table>
+</div>
 
-        <div id="tbStatus" class="notice">
-            Trial Balance is balanced.
-        </div>
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Ledger</th>
-                        <th>Group</th>
-                        <th class="num">Debit</th>
-                        <th class="num">Credit</th>
-                    </tr>
-                </thead>
-
-                <tbody id="tbBody"></tbody>
-
-            </table>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
 
-<!-- PROFIT LOSS -->
+<!-- P&L -->
 
 <section class="section" id="section-profitloss">
 
-    <div class="page-header">
+<div class="page-header">
+<div>
+<h1>Profit & Loss</h1>
+<p>Income and expense summary.</p>
+</div>
+</div>
 
-        <div>
-            <h1>Profit & Loss</h1>
-            <p>Income and expenditure statement.</p>
-        </div>
+<div class="grid grid-3">
 
-    </div>
+<div class="card">
+<div class="metric-title">Revenue</div>
+<div class="metric-value" id="plRevenue">₹0.00</div>
+</div>
 
-    <div class="grid grid-3">
+<div class="card">
+<div class="metric-title">Expenses</div>
+<div class="metric-value" id="plExpenses">₹0.00</div>
+</div>
 
-        <div class="card">
-            <div class="metric-title">Revenue</div>
-            <div class="metric-value" id="plRevenue">₹0</div>
-        </div>
+<div class="card">
+<div class="metric-title">Net Profit / Loss</div>
+<div class="metric-value" id="plNet">₹0.00</div>
+</div>
 
-        <div class="card">
-            <div class="metric-title">Expenses</div>
-            <div class="metric-value" id="plExpenses">₹0</div>
-        </div>
+</div>
 
-        <div class="card">
-            <div class="metric-title">Net Profit / Loss</div>
-            <div class="metric-value" id="plNet">₹0</div>
-        </div>
+<br>
 
-    </div>
+<div class="card">
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Particular</th>
+<th>Nature</th>
+<th>Amount</th>
+</tr>
+</thead>
+<tbody id="plBody"></tbody>
+</table>
+</div>
+
+</div>
 
 </section>
 
@@ -1244,33 +834,54 @@ tr:last-child td{
 
 <section class="section" id="section-balancesheet">
 
-    <div class="page-header">
+<div class="page-header">
+<div>
+<h1>Balance Sheet</h1>
+<p>Assets, liabilities and capital.</p>
+</div>
+</div>
 
-        <div>
-            <h1>Balance Sheet</h1>
-            <p>Assets, liabilities and capital.</p>
-        </div>
+<div class="grid grid-3">
 
-    </div>
+<div class="card">
+<div class="metric-title">Assets</div>
+<div class="metric-value" id="bsAssets">₹0.00</div>
+</div>
 
-    <div class="grid grid-3">
+<div class="card">
+<div class="metric-title">Liabilities</div>
+<div class="metric-value" id="bsLiabilities">₹0.00</div>
+</div>
 
-        <div class="card">
-            <div class="metric-title">Assets</div>
-            <div class="metric-value" id="bsAssets">₹0</div>
-        </div>
+<div class="card">
+<div class="metric-title">Capital</div>
+<div class="metric-value" id="bsCapital">₹0.00</div>
+</div>
 
-        <div class="card">
-            <div class="metric-title">Liabilities</div>
-            <div class="metric-value" id="bsLiabilities">₹0</div>
-        </div>
+</div>
 
-        <div class="card">
-            <div class="metric-title">Capital</div>
-            <div class="metric-value" id="bsCapital">₹0</div>
-        </div>
+<br>
 
-    </div>
+<div class="card">
+
+<div id="bsStatus" class="notice success">
+Balance Sheet calculated.
+</div>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Ledger / Group</th>
+<th>Classification</th>
+<th>Balance</th>
+</tr>
+</thead>
+<tbody id="bsBody"></tbody>
+</table>
+</div>
+
+</div>
 
 </section>
 
@@ -1279,33 +890,51 @@ tr:last-child td{
 
 <section class="section" id="section-gst">
 
-    <div class="page-header">
+<div class="page-header">
+<div>
+<h1>GST Summary</h1>
+<p>Input and output GST working.</p>
+</div>
+</div>
 
-        <div>
-            <h1>GST Summary</h1>
-            <p>Input and output GST summary.</p>
-        </div>
+<div class="grid grid-3">
 
-    </div>
+<div class="card">
+<div class="metric-title">Output GST</div>
+<div class="metric-value" id="gstOutput">₹0.00</div>
+</div>
 
-    <div class="grid grid-3">
+<div class="card">
+<div class="metric-title">Input GST</div>
+<div class="metric-value" id="gstInput">₹0.00</div>
+</div>
 
-        <div class="card">
-            <div class="metric-title">Output GST</div>
-            <div class="metric-value" id="gstOutput">₹0</div>
-        </div>
+<div class="card">
+<div class="metric-title">Net GST</div>
+<div class="metric-value" id="gstNet">₹0.00</div>
+</div>
 
-        <div class="card">
-            <div class="metric-title">Input GST</div>
-            <div class="metric-value" id="gstInput">₹0</div>
-        </div>
+</div>
 
-        <div class="card">
-            <div class="metric-title">Net GST</div>
-            <div class="metric-value" id="gstNet">₹0</div>
-        </div>
+<br>
 
-    </div>
+<div class="card">
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Type</th>
+<th>Taxable</th>
+<th>GST</th>
+</tr>
+</thead>
+<tbody id="gstBody"></tbody>
+</table>
+</div>
+
+</div>
 
 </section>
 
@@ -1314,28 +943,46 @@ tr:last-child td{
 
 <section class="section" id="section-outstanding">
 
-    <div class="page-header">
+<div class="page-header">
+<div>
+<h1>Outstanding</h1>
+<p>Receivables and payables based on invoices.</p>
+</div>
+</div>
 
-        <div>
-            <h1>Outstanding</h1>
-            <p>Receivables and payables.</p>
-        </div>
+<div class="grid grid-2">
 
-    </div>
+<div class="card">
+<div class="metric-title">Receivables</div>
+<div class="metric-value" id="outReceivable">₹0.00</div>
+</div>
 
-    <div class="grid grid-2">
+<div class="card">
+<div class="metric-title">Payables</div>
+<div class="metric-value" id="outPayable">₹0.00</div>
+</div>
 
-        <div class="card">
-            <div class="metric-title">Receivables</div>
-            <div class="metric-value" id="outReceivable">₹0</div>
-        </div>
+</div>
 
-        <div class="card">
-            <div class="metric-title">Payables</div>
-            <div class="metric-value" id="outPayable">₹0</div>
-        </div>
+<br>
 
-    </div>
+<div class="card">
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Party</th>
+<th>Type</th>
+<th>Invoices</th>
+<th>Outstanding</th>
+</tr>
+</thead>
+<tbody id="outstandingBody"></tbody>
+</table>
+</div>
+
+</div>
 
 </section>
 
@@ -1344,56 +991,51 @@ tr:last-child td{
 
 <section class="section" id="section-company">
 
-    <div class="page-header">
+<div class="page-header">
+<div>
+<h1>Company Setup</h1>
+<p>Business identity and financial year.</p>
+</div>
+<button class="btn btn-primary" onclick="saveCompany()">Save Company</button>
+</div>
 
-        <div>
-            <h1>Company Setup</h1>
-            <p>Maintain company information.</p>
-        </div>
+<div class="card">
 
-        <button class="btn btn-primary" onclick="saveCompany()">
-            Save Company
-        </button>
+<div class="form-grid">
 
-    </div>
+<div class="field">
+<label>Company Name</label>
+<input id="companyName">
+</div>
 
-    <div class="card">
+<div class="field">
+<label>GSTIN</label>
+<input id="companyGSTIN">
+</div>
 
-        <div class="form-grid">
+<div class="field">
+<label>PAN</label>
+<input id="companyPAN">
+</div>
 
-            <div class="field">
-                <label>Company Name</label>
-                <input id="companyName">
-            </div>
+<div class="field">
+<label>State</label>
+<input id="companyState">
+</div>
 
-            <div class="field">
-                <label>GSTIN</label>
-                <input id="companyGSTIN">
-            </div>
+<div class="field">
+<label>Financial Year</label>
+<input id="companyFY">
+</div>
 
-            <div class="field">
-                <label>PAN</label>
-                <input id="companyPAN">
-            </div>
+<div class="field">
+<label>Address</label>
+<textarea id="companyAddress"></textarea>
+</div>
 
-            <div class="field">
-                <label>State</label>
-                <input id="companyState" value="West Bengal">
-            </div>
+</div>
 
-            <div class="field">
-                <label>Financial Year</label>
-                <input id="companyFY" value="2026-27">
-            </div>
-
-            <div class="field">
-                <label>Address</label>
-                <textarea id="companyAddress"></textarea>
-            </div>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
@@ -1402,43 +1044,40 @@ tr:last-child td{
 
 <section class="section" id="section-backup">
 
-    <div class="page-header">
+<div class="page-header">
+<div>
+<h1>Backup / Restore</h1>
+<p>Export or restore your BusinessDesk data.</p>
+</div>
+</div>
 
-        <div>
-            <h1>Backup / Restore</h1>
-            <p>Protect and restore your local business data.</p>
-        </div>
+<div class="card">
 
-    </div>
+<h3>Backup</h3>
+<br>
 
-    <div class="card">
+<button class="btn btn-primary" onclick="backupData()">
+Download Complete JSON Backup
+</button>
 
-        <h3>Backup</h3>
-        <br>
+<br><br>
+<hr>
+<br>
 
-        <button class="btn btn-primary" onclick="backupData()">
-            Download Backup
-        </button>
+<h3>Restore</h3>
+<br>
 
-        <br><br><hr><br>
+<input type="file" id="restoreFile" accept=".json">
 
-        <h3>Restore</h3>
-        <br>
+<br><br>
 
-        <input type="file"
-               id="restoreFile"
-               accept=".json">
+<button class="btn btn-danger" onclick="restoreData()">
+Restore Backup
+</button>
 
-        <br><br>
-
-        <button class="btn btn-danger" onclick="restoreData()">
-            Restore Data
-        </button>
-
-    </div>
+</div>
 
 </section>
-
 
 </div>
 </main>
@@ -1448,50 +1087,37 @@ tr:last-child td{
 <!-- GROUP MODAL -->
 
 <div class="modal" id="groupModal">
-
 <div class="modal-box">
 
-    <div class="modal-head">
-        <h2>Add Account Group</h2>
-        <button class="close" onclick="closeModal('groupModal')">×</button>
-    </div>
+<div class="modal-head">
+<h2>Add Account Group</h2>
+<button class="close" onclick="closeModal('groupModal')">×</button>
+</div>
 
-    <div class="form-grid">
+<div class="form-grid">
 
-        <div class="field">
-            <label>Group Name</label>
-            <input id="groupName">
-        </div>
+<div class="field">
+<label>Group Name</label>
+<input id="groupName">
+</div>
 
-        <div class="field">
-            <label>Nature</label>
+<div class="field">
+<label>Nature</label>
+<select id="groupNature">
+<option>Assets</option>
+<option>Liabilities</option>
+<option>Capital</option>
+<option>Income</option>
+<option>Expenses</option>
+</select>
+</div>
 
-            <select id="groupNature">
+</div>
 
-                <option>Assets</option>
-                <option>Liabilities</option>
-                <option>Income</option>
-                <option>Expenses</option>
-
-            </select>
-
-        </div>
-
-    </div>
-
-    <div class="form-actions">
-
-        <button class="btn"
-                onclick="closeModal('groupModal')">
-            Cancel
-        </button>
-
-        <button class="btn btn-primary"
-                onclick="saveGroup()">
-            Save Group
-        </button>
-
-    </div>
+<div class="form-actions">
+<button class="btn" onclick="closeModal('groupModal')">Cancel</button>
+<button class="btn btn-primary" onclick="saveGroup()">Save Group</button>
+</div>
 
 </div>
 </div>
@@ -1500,58 +1126,44 @@ tr:last-child td{
 <!-- LEDGER MODAL -->
 
 <div class="modal" id="ledgerModal">
-
 <div class="modal-box">
 
-    <div class="modal-head">
-        <h2>Add Ledger</h2>
-        <button class="close" onclick="closeModal('ledgerModal')">×</button>
-    </div>
+<div class="modal-head">
+<h2>Add Ledger</h2>
+<button class="close" onclick="closeModal('ledgerModal')">×</button>
+</div>
 
-    <div class="form-grid">
+<div class="form-grid">
 
-        <div class="field">
-            <label>Ledger Name</label>
-            <input id="ledgerName">
-        </div>
+<div class="field">
+<label>Ledger Name</label>
+<input id="ledgerName">
+</div>
 
-        <div class="field">
-            <label>Group</label>
-            <select id="ledgerGroup"></select>
-        </div>
+<div class="field">
+<label>Group</label>
+<select id="ledgerGroup"></select>
+</div>
 
-        <div class="field">
-            <label>Opening Balance</label>
-            <input id="ledgerOpening"
-                   type="number"
-                   value="0">
-        </div>
+<div class="field">
+<label>Opening Balance</label>
+<input id="ledgerOpening" type="number" min="0" value="0">
+</div>
 
-        <div class="field">
-            <label>Opening Nature</label>
+<div class="field">
+<label>Opening Type</label>
+<select id="ledgerNature">
+<option>Debit</option>
+<option>Credit</option>
+</select>
+</div>
 
-            <select id="ledgerNature">
-                <option>Debit</option>
-                <option>Credit</option>
-            </select>
+</div>
 
-        </div>
-
-    </div>
-
-    <div class="form-actions">
-
-        <button class="btn"
-                onclick="closeModal('ledgerModal')">
-            Cancel
-        </button>
-
-        <button class="btn btn-primary"
-                onclick="saveLedger()">
-            Save Ledger
-        </button>
-
-    </div>
+<div class="form-actions">
+<button class="btn" onclick="closeModal('ledgerModal')">Cancel</button>
+<button class="btn btn-primary" onclick="saveLedger()">Save Ledger</button>
+</div>
 
 </div>
 </div>
@@ -1560,67 +1172,49 @@ tr:last-child td{
 <!-- PARTY MODAL -->
 
 <div class="modal" id="partyModal">
-
 <div class="modal-box">
 
-    <div class="modal-head">
+<div class="modal-head">
+<h2>Add Customer / Supplier</h2>
+<button class="close" onclick="closeModal('partyModal')">×</button>
+</div>
 
-        <h2>Add Customer / Supplier</h2>
+<div class="form-grid">
 
-        <button class="close"
-                onclick="closeModal('partyModal')">
-            ×
-        </button>
+<div class="field">
+<label>Name</label>
+<input id="partyName">
+</div>
 
-    </div>
+<div class="field">
+<label>Type</label>
+<select id="partyType">
+<option>Customer</option>
+<option>Supplier</option>
+</select>
+</div>
 
-    <div class="form-grid">
+<div class="field">
+<label>GSTIN</label>
+<input id="partyGSTIN">
+</div>
 
-        <div class="field">
-            <label>Name</label>
-            <input id="partyName">
-        </div>
+<div class="field">
+<label>State</label>
+<input id="partyState">
+</div>
 
-        <div class="field">
-            <label>Type</label>
+<div class="field">
+<label>Phone</label>
+<input id="partyPhone">
+</div>
 
-            <select id="partyType">
-                <option>Customer</option>
-                <option>Supplier</option>
-            </select>
+</div>
 
-        </div>
-
-        <div class="field">
-            <label>GSTIN</label>
-            <input id="partyGSTIN">
-        </div>
-
-        <div class="field">
-            <label>State</label>
-            <input id="partyState">
-        </div>
-
-        <div class="field">
-            <label>Phone</label>
-            <input id="partyPhone">
-        </div>
-
-    </div>
-
-    <div class="form-actions">
-
-        <button class="btn"
-                onclick="closeModal('partyModal')">
-            Cancel
-        </button>
-
-        <button class="btn btn-primary"
-                onclick="saveParty()">
-            Save Party
-        </button>
-
-    </div>
+<div class="form-actions">
+<button class="btn" onclick="closeModal('partyModal')">Cancel</button>
+<button class="btn btn-primary" onclick="saveParty()">Save Party</button>
+</div>
 
 </div>
 </div>
@@ -1629,81 +1223,66 @@ tr:last-child td{
 <!-- VOUCHER MODAL -->
 
 <div class="modal" id="voucherModal">
-
 <div class="modal-box">
 
-    <div class="modal-head">
+<div class="modal-head">
+<h2>New Accounting Voucher</h2>
+<button class="close" onclick="closeModal('voucherModal')">×</button>
+</div>
 
-        <h2>New Voucher</h2>
+<div id="voucherValidation" class="notice">
+Debit and Credit must be equal.
+</div>
 
-        <button class="close"
-                onclick="closeModal('voucherModal')">
-            ×
-        </button>
+<div class="form-grid">
 
-    </div>
+<div class="field">
+<label>Voucher Type</label>
+<select id="voucherType">
+<option>Payment</option>
+<option>Receipt</option>
+<option>Contra</option>
+<option>Journal</option>
+</select>
+</div>
 
-    <div class="form-grid">
+<div class="field">
+<label>Date</label>
+<input id="voucherDate" type="date">
+</div>
 
-        <div class="field">
-            <label>Voucher Type</label>
+<div class="field">
+<label>Debit Ledger</label>
+<select id="voucherDebit"></select>
+</div>
 
-            <select id="voucherType">
-                <option>Payment</option>
-                <option>Receipt</option>
-                <option>Contra</option>
-                <option>Journal</option>
-            </select>
+<div class="field">
+<label>Credit Ledger</label>
+<select id="voucherCredit"></select>
+</div>
 
-        </div>
+<div class="field">
+<label>Amount</label>
+<input id="voucherAmount" type="number" min="0" step="0.01"
+oninput="validateVoucher()">
+</div>
 
-        <div class="field">
-            <label>Date</label>
-            <input id="voucherDate" type="date">
-        </div>
+<div class="field">
+<label>Reference</label>
+<input id="voucherReference">
+</div>
 
-        <div class="field">
-            <label>Debit Ledger</label>
-            <select id="voucherDebit"></select>
-        </div>
+<div class="field" style="grid-column:1/-1">
+<label>Narration</label>
+<textarea id="voucherNarration"></textarea>
+</div>
 
-        <div class="field">
-            <label>Credit Ledger</label>
-            <select id="voucherCredit"></select>
-        </div>
+</div>
 
-        <div class="field">
-            <label>Amount</label>
-            <input id="voucherAmount"
-                   type="number"
-                   min="0">
-        </div>
-
-        <div class="field">
-            <label>Reference</label>
-            <input id="voucherReference">
-        </div>
-
-        <div class="field" style="grid-column:1/-1">
-            <label>Narration</label>
-            <textarea id="voucherNarration"></textarea>
-        </div>
-
-    </div>
-
-    <div class="form-actions">
-
-        <button class="btn"
-                onclick="closeModal('voucherModal')">
-            Cancel
-        </button>
-
-        <button class="btn btn-primary"
-                onclick="saveVoucher()">
-            Post Voucher
-        </button>
-
-    </div>
+<div class="form-actions">
+<button class="btn" onclick="closeModal('voucherModal')">Cancel</button>
+<button class="btn btn-primary" onclick="saveVoucher()">Post Voucher</button>
+</div>
 
 </div>
 </div>
@@ -1712,2080 +1291,2009 @@ tr:last-child td{
 <!-- INVOICE MODAL -->
 
 <div class="modal" id="invoiceModal">
-
 <div class="modal-box">
 
-    <div class="modal-head">
+<div class="modal-head">
+<h2 id="invoiceTitle">New Invoice</h2>
+<button class="close" onclick="closeModal('invoiceModal')">×</button>
+</div>
 
-        <h2 id="invoiceModalTitle">New Sales Invoice</h2>
+<input type="hidden" id="invoiceType">
 
-        <button class="close"
-                onclick="closeModal('invoiceModal')">
-            ×
-        </button>
+<div class="form-grid">
 
-    </div>
+<div class="field">
+<label>Date</label>
+<input id="invoiceDate" type="date">
+</div>
 
-    <input type="hidden" id="invoiceType">
+<div class="field">
+<label>Party</label>
+<select id="invoiceParty"></select>
+</div>
 
-    <div class="form-grid">
+<div class="field">
+<label>Invoice Number</label>
+<input id="invoiceNumber">
+</div>
 
-        <div class="field">
-            <label>Date</label>
-            <input id="invoiceDate" type="date">
-        </div>
+<div class="field">
+<label>GST Rate %</label>
+<input id="invoiceTaxRate" type="number" value="18"
+oninput="calculateInvoice()">
+</div>
 
-        <div class="field">
-            <label>Party</label>
-            <select id="invoiceParty"></select>
-        </div>
+</div>
 
-        <div class="field">
-            <label>Invoice Number</label>
-            <input id="invoiceNumber">
-        </div>
+<br>
 
-        <div class="field">
-            <label>Tax Rate %</label>
-            <input id="invoiceTaxRate"
-                   type="number"
-                   value="18"
-                   oninput="calculateInvoice()">
-        </div>
+<div class="form-grid-3">
 
-    </div>
+<div class="field">
+<label>Description</label>
+<input id="itemDescription">
+</div>
 
-    <br>
+<div class="field">
+<label>Quantity</label>
+<input id="itemQty" type="number" value="1" min="0"
+oninput="calculateInvoice()">
+</div>
 
-    <div class="table-wrap">
+<div class="field">
+<label>Rate</label>
+<input id="itemRate" type="number" value="0" min="0"
+oninput="calculateInvoice()">
+</div>
 
-        <table>
+</div>
 
-            <thead>
-                <tr>
-                    <th>Description</th>
-                    <th>Qty</th>
-                    <th>Rate</th>
-                    <th>Taxable</th>
-                </tr>
-            </thead>
+<br>
 
-            <tbody>
+<div class="card" style="background:#f9fafb">
 
-                <tr>
+<div style="display:flex;justify-content:space-between;padding:6px">
+<span>Taxable Value</span>
+<strong id="invoiceTaxable">₹0.00</strong>
+</div>
 
-                    <td>
-                        <input id="itemDescription"
-                               style="padding:8px;width:100%"
-                               placeholder="Item / Service">
-                    </td>
+<div style="display:flex;justify-content:space-between;padding:6px">
+<span>GST</span>
+<strong id="invoiceGST">₹0.00</strong>
+</div>
 
-                    <td>
-                        <input id="itemQty"
-                               type="number"
-                               value="1"
-                               min="0"
-                               oninput="calculateInvoice()"
-                               style="padding:8px;width:90px">
-                    </td>
+<div style="display:flex;justify-content:space-between;padding:10px;border-top:1px solid #ddd">
+<strong>Grand Total</strong>
+<strong id="invoiceTotal">₹0.00</strong>
+</div>
 
-                    <td>
-                        <input id="itemRate"
-                               type="number"
-                               value="0"
-                               min="0"
-                               oninput="calculateInvoice()"
-                               style="padding:8px;width:120px">
-                    </td>
+</div>
 
-                    <td class="num"
-                        id="invoiceTaxable">
-                        ₹0
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-    <br>
-
-    <div style="display:flex;justify-content:flex-end">
-
-        <div style="width:300px">
-
-            <div style="display:flex;justify-content:space-between;padding:6px">
-                <span>Taxable</span>
-                <strong id="invoiceTaxableTotal">₹0</strong>
-            </div>
-
-            <div style="display:flex;justify-content:space-between;padding:6px">
-                <span>GST</span>
-                <strong id="invoiceGST">₹0</strong>
-            </div>
-
-            <div style="display:flex;justify-content:space-between;padding:10px;border-top:1px solid #ddd">
-                <strong>Total</strong>
-                <strong id="invoiceTotal">₹0</strong>
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="form-actions">
-
-        <button class="btn"
-                onclick="closeModal('invoiceModal')">
-            Cancel
-        </button>
-
-        <button class="btn btn-primary"
-                onclick="saveInvoice()">
-            Save Invoice
-        </button>
-
-    </div>
+<div class="form-actions">
+<button class="btn" onclick="closeModal('invoiceModal')">Cancel</button>
+<button class="btn btn-primary" onclick="saveInvoice()">Save Invoice</button>
+</div>
 
 </div>
 </div>
 
 
-<div class="toast" id="toast"></div>
+<div id="toast" style="
+position:fixed;right:25px;bottom:25px;background:#101828;
+color:#fff;padding:12px 16px;border-radius:8px;
+display:none;z-index:5000"></div>
 
 
 <script>
 
-/* =========================================================
-   DATABASE
-========================================================= */
+/* ============================================================
+   BUSINESSDESK PHASE 4 DATA ENGINE
+============================================================ */
 
-const DB_KEY = "BusinessDesk_Phase3";
+const DB_KEY="BusinessDesk_Phase4";
 
-let db = JSON.parse(
-    localStorage.getItem(DB_KEY) || "null"
-);
+function defaultDB(){
+
+return{
+
+version:4,
+
+company:{
+name:"My Company",
+gstin:"",
+pan:"",
+state:"West Bengal",
+fy:"2026-27",
+address:""
+},
+
+groups:[
+{id:"cash",name:"Cash-in-Hand",nature:"Assets"},
+{id:"bank",name:"Bank Accounts",nature:"Assets"},
+{id:"receivable",name:"Sundry Debtors",nature:"Assets"},
+{id:"payable",name:"Sundry Creditors",nature:"Liabilities"},
+{id:"capital",name:"Capital Account",nature:"Capital"},
+{id:"sales",name:"Sales",nature:"Income"},
+{id:"purchase",name:"Purchase",nature:"Expenses"},
+{id:"expenses",name:"Indirect Expenses",nature:"Expenses"}
+],
+
+ledgers:[
+{id:"cash",name:"Cash",group:"cash",opening:0,nature:"Debit"},
+{id:"bank",name:"Bank",group:"bank",opening:0,nature:"Debit"},
+{id:"sales",name:"Sales",group:"sales",opening:0,nature:"Credit"},
+{id:"purchase",name:"Purchase",group:"purchase",opening:0,nature:"Debit"},
+{id:"capital",name:"Capital",group:"capital",opening:0,nature:"Credit"}
+],
+
+parties:[],
+sales:[],
+purchases:[],
+vouchers:[],
+journalLines:[]
+
+};
+
+}
+
+let db;
+
+try{
+db=JSON.parse(localStorage.getItem(DB_KEY)||"null");
+}catch(e){
+db=null;
+}
 
 if(!db){
-
-    db = {
-
-        company:{
-            name:"My Company",
-            gstin:"",
-            pan:"",
-            state:"West Bengal",
-            fy:"2026-27",
-            address:""
-        },
-
-        groups:[
-            {
-                id:"cash",
-                name:"Cash-in-Hand",
-                nature:"Assets"
-            },
-            {
-                id:"bank",
-                name:"Bank Accounts",
-                nature:"Assets"
-            },
-            {
-                id:"receivable",
-                name:"Sundry Debtors",
-                nature:"Assets"
-            },
-            {
-                id:"payable",
-                name:"Sundry Creditors",
-                nature:"Liabilities"
-            },
-            {
-                id:"capital",
-                name:"Capital Account",
-                nature:"Liabilities"
-            },
-            {
-                id:"sales",
-                name:"Sales",
-                nature:"Income"
-            },
-            {
-                id:"purchase",
-                name:"Purchase",
-                nature:"Expenses"
-            },
-            {
-                id:"expenses",
-                name:"Indirect Expenses",
-                nature:"Expenses"
-            }
-        ],
-
-        ledgers:[
-            {
-                id:"cashLedger",
-                name:"Cash",
-                group:"cash",
-                opening:0,
-                nature:"Debit"
-            },
-
-            {
-                id:"salesLedger",
-                name:"Sales",
-                group:"sales",
-                opening:0,
-                nature:"Credit"
-            },
-
-            {
-                id:"purchaseLedger",
-                name:"Purchase",
-                group:"purchase",
-                opening:0,
-                nature:"Debit"
-            }
-        ],
-
-        parties:[],
-
-        sales:[],
-
-        purchases:[],
-
-        vouchers:[],
-
-        entries:[]
-
-    };
-
-    saveDB();
+db=defaultDB();
+saveDB();
 }
-
-
-/* =========================================================
-   BASIC FUNCTIONS
-========================================================= */
 
 function saveDB(){
-
-    localStorage.setItem(
-        DB_KEY,
-        JSON.stringify(db)
-    );
-
+localStorage.setItem(DB_KEY,JSON.stringify(db));
 }
 
-
-function money(value){
-
-    return "₹" + Number(value || 0).toLocaleString(
-        "en-IN",
-        {
-            minimumFractionDigits:2,
-            maximumFractionDigits:2
-        }
-    );
-
+function money(n){
+return "₹"+Number(n||0).toLocaleString("en-IN",{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+});
 }
-
 
 function today(){
-
-    return new Date()
-        .toISOString()
-        .split("T")[0];
-
+return new Date().toISOString().slice(0,10);
 }
 
-
-function toast(message){
-
-    const el =
-        document.getElementById("toast");
-
-    el.textContent = message;
-
-    el.style.display = "block";
-
-    setTimeout(
-        ()=>el.style.display="none",
-        2200
-    );
-
+function escapeHTML(v){
+return String(v??"")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
 }
 
+function toast(msg){
+const el=document.getElementById("toast");
+el.textContent=msg;
+el.style.display="block";
+setTimeout(()=>el.style.display="none",2200);
+}
 
 function closeModal(id){
+document.getElementById(id).classList.remove("open");
+}
 
-    document
-        .getElementById(id)
-        .classList.remove("open");
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+
+document.querySelectorAll(".nav-btn").forEach(btn=>{
+
+btn.addEventListener("click",()=>{
+
+document.querySelectorAll(".nav-btn")
+.forEach(x=>x.classList.remove("active"));
+
+btn.classList.add("active");
+
+document.querySelectorAll(".section")
+.forEach(x=>x.classList.remove("active"));
+
+const target=document.getElementById(
+"section-"+btn.dataset.section
+);
+
+if(target)target.classList.add("active");
+
+document.getElementById("pageTitle")
+.textContent=btn.textContent.trim();
+
+document.getElementById("sidebar")
+.classList.remove("open");
+
+refreshAll();
+
+});
+
+});
+
+document.getElementById("menuBtn")
+.addEventListener("click",()=>{
+document.getElementById("sidebar")
+.classList.toggle("open");
+});
+
+
+/* ============================================================
+   DASHBOARD
+============================================================ */
+
+function renderDashboard(){
+
+const sales=db.sales.reduce((a,x)=>a+Number(x.total),0);
+const purchase=db.purchases.reduce((a,x)=>a+Number(x.total),0);
+
+document.getElementById("dashLedgers")
+.textContent=db.ledgers.length;
+
+document.getElementById("dashCustomers")
+.textContent=db.parties.filter(x=>x.type==="Customer").length;
+
+document.getElementById("dashSales")
+.textContent=money(sales);
+
+document.getElementById("dashPurchase")
+.textContent=money(purchase);
+
+const totals=getJournalTotals();
+
+const status=document.getElementById(
+"dashboardBalanceStatus"
+);
+
+if(Math.abs(totals.debit-totals.credit)<0.01){
+
+status.className="notice success";
+status.textContent="✓ Double-entry journal is balanced.";
+
+}else{
+
+status.className="notice danger";
+status.textContent=
+"⚠ Journal difference: "+
+money(Math.abs(totals.debit-totals.credit));
+
+}
 
 }
 
 
-/* =========================================================
-   NAVIGATION — IMPORTANT FIX
-========================================================= */
+/* ============================================================
+   GROUPS
+============================================================ */
 
-const navButtons =
-    document.querySelectorAll(".nav-btn");
+function renderGroups(){
 
-const sections =
-    document.querySelectorAll(".section");
+const body=document.getElementById("groupsBody");
+
+body.innerHTML="";
+
+db.groups.forEach(g=>{
+
+body.innerHTML+=`
+<tr>
+<td>${escapeHTML(g.name)}</td>
+<td>${escapeHTML(g.nature)}</td>
+</tr>`;
+
+});
+
+}
+
+function openGroup(){
+
+document.getElementById("groupName").value="";
+
+document.getElementById("groupModal")
+.classList.add("open");
+
+}
+
+function saveGroup(){
+
+const name=document.getElementById("groupName")
+.value.trim();
+
+const nature=document.getElementById("groupNature").value;
+
+if(!name){
+alert("Enter group name.");
+return;
+}
+
+if(db.groups.some(g=>g.name.toLowerCase()===name.toLowerCase())){
+alert("A group with this name already exists.");
+return;
+}
+
+db.groups.push({
+id:"grp_"+Date.now(),
+name,
+nature
+});
+
+saveDB();
+closeModal("groupModal");
+refreshAll();
+toast("Account group created.");
+
+}
 
 
-navButtons.forEach(button => {
+/* ============================================================
+   LEDGERS
+============================================================ */
 
-    button.addEventListener(
-        "click",
-        function(){
+function populateLedgerGroups(){
 
-            const target =
-                this.getAttribute("data-section");
+document.getElementById("ledgerGroup").innerHTML=
+db.groups.map(g=>`
+<option value="${g.id}">
+${escapeHTML(g.name)}
+</option>`).join("");
 
-            /* Remove active from buttons */
+}
 
-            navButtons.forEach(btn =>
-                btn.classList.remove("active")
-            );
+function populateLedgerSelects(){
 
-            /* Add active to clicked button */
+const options=db.ledgers.map(l=>`
+<option value="${l.id}">
+${escapeHTML(l.name)}
+</option>`).join("");
 
-            this.classList.add("active");
+document.getElementById("voucherDebit").innerHTML=options;
+document.getElementById("voucherCredit").innerHTML=options;
+document.getElementById("reportLedger").innerHTML=options;
+
+}
+
+function ledgerMovement(id){
+
+let debit=0;
+let credit=0;
+
+db.journalLines.forEach(x=>{
+
+if(x.ledgerId===id){
+debit+=Number(x.debit||0);
+credit+=Number(x.credit||0);
+}
+
+});
+
+return{debit,credit};
+
+}
+
+function ledgerBalance(l){
+
+const m=ledgerMovement(l.id);
+
+let debit=0;
+let credit=0;
+
+if(l.nature==="Debit")debit+=Number(l.opening||0);
+else credit+=Number(l.opening||0);
+
+debit+=m.debit;
+credit+=m.credit;
+
+return{
+debit,
+credit,
+balance:Math.abs(debit-credit),
+nature:debit>=credit?"Debit":"Credit"
+};
+
+}
+
+function renderLedgers(){
+
+const body=document.getElementById("ledgersBody");
+
+const search=(document.getElementById("ledgerSearch")
+?.value||"").toLowerCase();
+
+body.innerHTML="";
+
+db.ledgers
+.filter(l=>l.name.toLowerCase().includes(search))
+.forEach(l=>{
+
+const g=db.groups.find(x=>x.id===l.group);
+const b=ledgerBalance(l);
+
+body.innerHTML+=`
+<tr>
+<td>${escapeHTML(l.name)}</td>
+<td>${g?escapeHTML(g.name):""}</td>
+<td>${money(l.opening)}</td>
+<td>${l.nature}</td>
+<td>${money(b.balance)} ${b.nature}</td>
+</tr>`;
+
+});
+
+}
+
+function openLedger(){
+
+populateLedgerGroups();
+
+document.getElementById("ledgerName").value="";
+document.getElementById("ledgerOpening").value=0;
+
+document.getElementById("ledgerModal")
+.classList.add("open");
+
+}
+
+function saveLedger(){
+
+const name=document.getElementById("ledgerName")
+.value.trim();
+
+const group=document.getElementById("ledgerGroup").value;
+
+const opening=Number(
+document.getElementById("ledgerOpening").value||0
+);
+
+const nature=document.getElementById("ledgerNature").value;
+
+if(!name){
+alert("Enter ledger name.");
+return;
+}
+
+if(db.ledgers.some(l=>l.name.toLowerCase()===name.toLowerCase())){
+alert("A ledger with this name already exists.");
+return;
+}
+
+db.ledgers.push({
+id:"led_"+Date.now(),
+name,
+group,
+opening,
+nature
+});
+
+saveDB();
+closeModal("ledgerModal");
+refreshAll();
+toast("Ledger created.");
+
+}
 
 
-            /* Hide every section */
+/* ============================================================
+   PARTIES
+============================================================ */
 
-            sections.forEach(section =>
-                section.classList.remove("active")
-            );
+function renderParties(){
+
+const body=document.getElementById("partiesBody");
+
+const search=(document.getElementById("partySearch")
+?.value||"").toLowerCase();
+
+body.innerHTML="";
+
+db.parties
+.filter(p=>p.name.toLowerCase().includes(search))
+.forEach(p=>{
+
+body.innerHTML+=`
+<tr>
+<td>${escapeHTML(p.name)}</td>
+<td>${p.type}</td>
+<td>${escapeHTML(p.gstin)}</td>
+<td>${escapeHTML(p.state)}</td>
+<td>${escapeHTML(p.phone)}</td>
+</tr>`;
+
+});
+
+}
+
+function openParty(){
+
+document.querySelectorAll(
+"#partyName,#partyGSTIN,#partyState,#partyPhone"
+).forEach(x=>x.value="");
+
+document.getElementById("partyModal")
+.classList.add("open");
+
+}
+
+function saveParty(){
+
+const name=document.getElementById("partyName")
+.value.trim();
+
+const type=document.getElementById("partyType").value;
+
+if(!name){
+alert("Enter party name.");
+return;
+}
+
+if(db.parties.some(p=>p.name.toLowerCase()===name.toLowerCase())){
+alert("Party already exists.");
+return;
+}
+
+const id="party_"+Date.now();
+
+db.parties.push({
+id,
+name,
+type,
+gstin:document.getElementById("partyGSTIN").value.trim(),
+state:document.getElementById("partyState").value.trim(),
+phone:document.getElementById("partyPhone").value.trim()
+});
+
+const ledgerId="partyLedger_"+id;
+
+db.ledgers.push({
+id:ledgerId,
+name,
+group:type==="Customer"?"receivable":"payable",
+opening:0,
+nature:type==="Customer"?"Debit":"Credit"
+});
+
+saveDB();
+closeModal("partyModal");
+refreshAll();
+
+toast("Party and linked ledger created.");
+
+}
 
 
-            /* Show requested section */
+/* ============================================================
+   JOURNAL ENGINE
+============================================================ */
 
-            const selected =
-                document.getElementById(
-                    "section-" + target
-                );
+function createJournalEntry({
 
-            if(selected){
+date,
+voucherId,
+voucherNo,
+type,
+narration,
+lines
 
-                selected.classList.add("active");
+}){
 
-            }
+const debit=lines.reduce(
+(a,x)=>a+Number(x.debit||0),0
+);
+
+const credit=lines.reduce(
+(a,x)=>a+Number(x.credit||0),0
+);
+
+if(Math.abs(debit-credit)>0.01){
+
+throw new Error(
+"Transaction is not balanced. Debit and Credit must be equal."
+);
+
+}
+
+lines.forEach(line=>{
+
+db.journalLines.push({
+
+id:"jl_"+Date.now()+"_"+Math.random(),
+
+voucherId,
+voucherNo,
+date,
+type,
+narration,
+ledgerId:line.ledgerId,
+debit:Number(line.debit||0),
+credit:Number(line.credit||0)
+
+});
+
+});
+
+}
+
+function getJournalTotals(){
+
+return db.journalLines.reduce(
+(a,x)=>{
+
+a.debit+=Number(x.debit||0);
+a.credit+=Number(x.credit||0);
+
+return a;
+
+},
+{debit:0,credit:0}
+);
+
+}
 
 
-            /* Update heading */
+/* ============================================================
+   SALES
+============================================================ */
 
-            const title =
-                this.textContent.trim();
+function populateInvoiceParties(type){
 
-            document.getElementById(
-                "pageTitle"
-            ).textContent = title;
+const list=db.parties.filter(
+p=>p.type===(type==="sales"?"Customer":"Supplier")
+);
+
+document.getElementById("invoiceParty").innerHTML=
+list.map(p=>`
+<option value="${p.id}">
+${escapeHTML(p.name)}
+</option>`).join("");
+
+}
+
+function openSales(){
+
+document.getElementById("invoiceType").value="sales";
+
+document.getElementById("invoiceTitle")
+.textContent="New Sales Invoice";
+
+openInvoice();
+
+}
+
+function openPurchase(){
+
+document.getElementById("invoiceType").value="purchase";
+
+document.getElementById("invoiceTitle")
+.textContent="New Purchase Invoice";
+
+openInvoice();
+
+}
+
+function openInvoice(){
+
+const type=document.getElementById("invoiceType").value;
+
+populateInvoiceParties(type);
+
+document.getElementById("invoiceDate").value=today();
+
+document.getElementById("invoiceNumber").value=
+(type==="sales"?"SI-":"PI-")+
+String(
+(type==="sales"?db.sales.length:db.purchases.length)+1
+).padStart(4,"0");
+
+document.getElementById("itemDescription").value="";
+document.getElementById("itemQty").value=1;
+document.getElementById("itemRate").value=0;
+document.getElementById("invoiceTaxRate").value=18;
+
+calculateInvoice();
+
+document.getElementById("invoiceModal")
+.classList.add("open");
+
+}
+
+function calculateInvoice(){
+
+const qty=Number(
+document.getElementById("itemQty").value||0
+);
+
+const rate=Number(
+document.getElementById("itemRate").value||0
+);
+
+const tax=Number(
+document.getElementById("invoiceTaxRate").value||0
+);
+
+const taxable=qty*rate;
+const gst=taxable*tax/100;
+const total=taxable+gst;
+
+document.getElementById("invoiceTaxable")
+.textContent=money(taxable);
+
+document.getElementById("invoiceGST")
+.textContent=money(gst);
+
+document.getElementById("invoiceTotal")
+.textContent=money(total);
+
+return{taxable,gst,total};
+
+}
+
+function saveInvoice(){
+
+const type=document.getElementById("invoiceType").value;
+
+const partyId=document.getElementById("invoiceParty").value;
+
+const party=db.parties.find(p=>p.id===partyId);
+
+if(!party){
+alert("Create a suitable party first.");
+return;
+}
+
+const calc=calculateInvoice();
+
+if(calc.total<=0){
+alert("Enter a valid amount.");
+return;
+}
+
+const number=document.getElementById("invoiceNumber").value.trim();
+
+const duplicate=
+(type==="sales"?db.sales:db.purchases)
+.some(x=>x.number===number);
+
+if(duplicate){
+alert("Duplicate invoice number.");
+return;
+}
+
+const invoice={
+id:"inv_"+Date.now(),
+number,
+date:document.getElementById("invoiceDate").value,
+partyId,
+partyName:party.name,
+description:document.getElementById("itemDescription").value,
+qty:Number(document.getElementById("itemQty").value),
+rate:Number(document.getElementById("itemRate").value),
+taxable:calc.taxable,
+gst:calc.gst,
+total:calc.total
+};
+
+const partyLedger=db.ledgers.find(
+l=>l.name===party.name
+);
+
+try{
+
+if(!partyLedger){
+throw new Error("Linked party ledger not found.");
+}
+
+if(type==="sales"){
+
+const salesLedger=db.ledgers.find(l=>l.id==="sales");
+
+if(!salesLedger)
+throw new Error("Sales ledger not found.");
+
+db.sales.push(invoice);
+
+createJournalEntry({
+
+date:invoice.date,
+voucherId:invoice.id,
+voucherNo:invoice.number,
+type:"Sales",
+narration:invoice.description||"Sales invoice",
+
+lines:[
+{
+ledgerId:partyLedger.id,
+debit:invoice.total
+},
+{
+ledgerId:salesLedger.id,
+credit:invoice.taxable
+}
+]
+
+});
+
+/* GST is posted separately as output GST */
+if(invoice.gst>0){
+
+let gstLedger=db.ledgers.find(
+l=>l.name==="Output GST"
+);
+
+if(!gstLedger){
+
+gstLedger={
+id:"gst_output",
+name:"Output GST",
+group:"payable",
+opening:0,
+nature:"Credit"
+};
+
+db.ledgers.push(gstLedger);
+
+}
+
+createJournalEntry({
+
+date:invoice.date,
+voucherId:invoice.id+"_gst",
+voucherNo:invoice.number,
+type:"Sales GST",
+narration:"Output GST",
+
+lines:[
+{
+ledgerId:partyLedger.id,
+debit:0
+},
+{
+ledgerId:gstLedger.id,
+credit:invoice.gst
+}
+]
+
+);
+
+}
+
+}
+else{
+
+const purchaseLedger=db.ledgers.find(
+l=>l.id==="purchase"
+);
+
+if(!purchaseLedger)
+throw new Error("Purchase ledger not found.");
+
+db.purchases.push(invoice);
+
+createJournalEntry({
+
+date:invoice.date,
+voucherId:invoice.id,
+voucherNo:invoice.number,
+type:"Purchase",
+narration:invoice.description||"Purchase invoice",
+
+lines:[
+{
+ledgerId:purchaseLedger.id,
+debit:invoice.taxable
+},
+{
+ledgerId:partyLedger.id,
+credit:invoice.total
+}
+]
+
+});
+
+if(invoice.gst>0){
+
+let gstLedger=db.ledgers.find(
+l=>l.name==="Input GST"
+);
+
+if(!gstLedger){
+
+gstLedger={
+id:"gst_input",
+name:"Input GST",
+group:"receivable",
+opening:0,
+nature:"Debit"
+};
+
+db.ledgers.push(gstLedger);
+
+}
+
+createJournalEntry({
+
+date:invoice.date,
+voucherId:invoice.id+"_gst",
+voucherNo:invoice.number,
+type:"Purchase GST",
+narration:"Input GST",
+
+lines:[
+{
+ledgerId:gstLedger.id,
+debit:invoice.gst
+},
+{
+ledgerId:partyLedger.id,
+credit:0
+}
+]
+
+);
+
+}
+
+}
+
+saveDB();
+
+closeModal("invoiceModal");
+refreshAll();
+
+toast("Invoice posted successfully.");
+
+}catch(e){
+
+alert(e.message);
+
+}
+
+}
 
 
-            /* Refresh data */
+/* ============================================================
+   VOUCHERS
+============================================================ */
 
-            refreshAll();
+function openVoucher(){
 
-            /* Close mobile menu */
+populateLedgerSelects();
 
-            document
-                .getElementById("sidebar")
-                .classList.remove("open");
+document.getElementById("voucherDate").value=today();
 
-        }
-    );
+document.getElementById("voucherAmount").value="";
+
+document.getElementById("voucherReference").value="";
+
+document.getElementById("voucherNarration").value="";
+
+validateVoucher();
+
+document.getElementById("voucherModal")
+.classList.add("open");
+
+}
+
+function validateVoucher(){
+
+const amount=Number(
+document.getElementById("voucherAmount").value||0
+);
+
+const el=document.getElementById(
+"voucherValidation"
+);
+
+if(amount>0){
+
+el.className="notice success";
+el.textContent=
+"✓ Voucher is balanced: Debit = Credit = "+money(amount);
+
+}else{
+
+el.className="notice";
+el.textContent=
+"Enter an amount. Debit and Credit will use the same value.";
+
+}
+
+}
+
+function saveVoucher(){
+
+const debit=document.getElementById("voucherDebit").value;
+const credit=document.getElementById("voucherCredit").value;
+const amount=Number(
+document.getElementById("voucherAmount").value||0
+);
+
+if(!debit||!credit||amount<=0){
+alert("Enter valid voucher details.");
+return;
+}
+
+if(debit===credit){
+alert("Debit and Credit ledgers cannot be the same.");
+return;
+}
+
+const date=document.getElementById("voucherDate").value;
+const type=document.getElementById("voucherType").value;
+const reference=document.getElementById("voucherReference").value.trim();
+const narration=document.getElementById("voucherNarration").value.trim();
+
+const voucherNo=
+type.substring(0,3).toUpperCase()+"-"+
+String(db.vouchers.length+1).padStart(5,"0");
+
+const id="v_"+Date.now();
+
+try{
+
+createJournalEntry({
+
+date,
+voucherId:id,
+voucherNo,
+type,
+narration,
+
+lines:[
+{ledgerId:debit,debit:amount},
+{ledgerId:credit,credit:amount}
+]
+
+});
+
+db.vouchers.push({
+
+id,
+number:voucherNo,
+date,
+type,
+debit,
+credit,
+amount,
+reference,
+narration
+
+});
+
+saveDB();
+
+closeModal("voucherModal");
+refreshAll();
+
+toast("Voucher posted: "+voucherNo);
+
+}catch(e){
+
+alert(e.message);
+
+}
+
+}
+
+function renderVouchers(){
+
+const body=document.getElementById("vouchersBody");
+
+body.innerHTML="";
+
+db.vouchers.forEach(v=>{
+
+const dl=db.ledgers.find(l=>l.id===v.debit);
+const cl=db.ledgers.find(l=>l.id===v.credit);
+
+body.innerHTML+=`
+<tr>
+<td>${v.date}</td>
+<td>${v.type}</td>
+<td>${escapeHTML(v.number)}</td>
+<td>${dl?escapeHTML(dl.name):""}</td>
+<td>${cl?escapeHTML(cl.name):""}</td>
+<td>${money(v.amount)}</td>
+</tr>`;
+
+});
+
+}
+
+
+/* ============================================================
+   SALES / PURCHASE TABLES
+============================================================ */
+
+function renderSales(){
+
+const body=document.getElementById("salesBody");
+
+body.innerHTML="";
+
+db.sales.forEach(x=>{
+
+body.innerHTML+=`
+<tr>
+<td>${escapeHTML(x.number)}</td>
+<td>${x.date}</td>
+<td>${escapeHTML(x.partyName)}</td>
+<td>${money(x.taxable)}</td>
+<td>${money(x.gst)}</td>
+<td>${money(x.total)}</td>
+</tr>`;
+
+});
+
+}
+
+function renderPurchase(){
+
+const body=document.getElementById("purchaseBody");
+
+body.innerHTML="";
+
+db.purchases.forEach(x=>{
+
+body.innerHTML+=`
+<tr>
+<td>${escapeHTML(x.number)}</td>
+<td>${x.date}</td>
+<td>${escapeHTML(x.partyName)}</td>
+<td>${money(x.taxable)}</td>
+<td>${money(x.gst)}</td>
+<td>${money(x.total)}</td>
+</tr>`;
+
+});
+
+}
+
+
+/* ============================================================
+   DAY BOOK
+============================================================ */
+
+function renderDaybook(){
+
+const body=document.getElementById("daybookBody");
+
+body.innerHTML="";
+
+db.journalLines
+.slice()
+.sort((a,b)=>a.date.localeCompare(b.date))
+.forEach(x=>{
+
+const ledger=db.ledgers.find(
+l=>l.id===x.ledgerId
+);
+
+body.innerHTML+=`
+<tr>
+<td>${x.date}</td>
+<td>${escapeHTML(x.voucherNo)}</td>
+<td>${escapeHTML(x.type)}</td>
+<td>${escapeHTML(x.narration)}</td>
+<td>${ledger?escapeHTML(ledger.name):""}</td>
+<td>${money(x.debit)}</td>
+<td>${money(x.credit)}</td>
+</tr>`;
+
+});
+
+}
+
+
+/* ============================================================
+   LEDGER REPORT
+============================================================ */
+
+function renderLedgerReport(){
+
+const id=document.getElementById("reportLedger").value;
+
+const ledger=db.ledgers.find(l=>l.id===id);
+
+const body=document.getElementById("ledgerReportBody");
+
+body.innerHTML="";
+
+if(!ledger)return;
+
+let balance=
+ledger.nature==="Debit"
+?Number(ledger.opening||0)
+:-Number(ledger.opening||0);
+
+const lines=db.journalLines
+.filter(x=>x.ledgerId===id)
+.sort((a,b)=>a.date.localeCompare(b.date));
+
+lines.forEach(x=>{
+
+balance+=Number(x.debit||0)-Number(x.credit||0);
+
+body.innerHTML+=`
+<tr>
+<td>${x.date}</td>
+<td>${escapeHTML(x.voucherNo)}</td>
+<td>${escapeHTML(x.narration||x.type)}</td>
+<td>${money(x.debit)}</td>
+<td>${money(x.credit)}</td>
+<td>${money(Math.abs(balance))} ${balance>=0?"Dr":"Cr"}</td>
+</tr>`;
+
+});
+
+document.getElementById("ledgerSummary")
+.textContent=
+"Closing balance: "+
+money(Math.abs(balance))+
+" "+(balance>=0?"Debit":"Credit");
+
+}
+
+
+/* ============================================================
+   TRIAL BALANCE
+============================================================ */
+
+function renderTrialBalance(){
+
+const body=document.getElementById("tbBody");
+
+body.innerHTML="";
+
+let totalDebit=0;
+let totalCredit=0;
+
+db.ledgers.forEach(l=>{
+
+const b=ledgerBalance(l);
+
+const debit=b.nature==="Debit"?b.balance:0;
+const credit=b.nature==="Credit"?b.balance:0;
+
+totalDebit+=debit;
+totalCredit+=credit;
+
+const g=db.groups.find(x=>x.id===l.group);
+
+body.innerHTML+=`
+<tr>
+<td>${escapeHTML(l.name)}</td>
+<td>${g?escapeHTML(g.name):""}</td>
+<td>${money(debit)}</td>
+<td>${money(credit)}</td>
+</tr>`;
+
+});
+
+const difference=Math.abs(totalDebit-totalCredit);
+
+document.getElementById("tbDebit")
+.textContent=money(totalDebit);
+
+document.getElementById("tbCredit")
+.textContent=money(totalCredit);
+
+document.getElementById("tbDifference")
+.textContent=money(difference);
+
+const status=document.getElementById("tbStatus");
+
+if(difference<0.01){
+
+status.className="notice success";
+status.textContent="✓ Trial Balance is balanced.";
+
+}else{
+
+status.className="notice danger";
+status.textContent=
+"⚠ Trial Balance difference: "+money(difference);
+
+}
+
+}
+
+
+/* ============================================================
+   P&L
+============================================================ */
+
+function renderPL(){
+
+let revenue=0;
+let expenses=0;
+
+db.ledgers.forEach(l=>{
+
+const g=db.groups.find(x=>x.id===l.group);
+
+const b=ledgerBalance(l);
+
+if(!g)return;
+
+if(g.nature==="Income"){
+revenue+=b.balance;
+}
+
+if(g.nature==="Expenses"){
+expenses+=b.balance;
+}
+
+});
+
+const net=revenue-expenses;
+
+document.getElementById("plRevenue")
+.textContent=money(revenue);
+
+document.getElementById("plExpenses")
+.textContent=money(expenses);
+
+document.getElementById("plNet")
+.textContent=money(net);
+
+const body=document.getElementById("plBody");
+
+body.innerHTML="";
+
+db.ledgers.forEach(l=>{
+
+const g=db.groups.find(x=>x.id===l.group);
+
+if(!g)return;
+
+if(g.nature==="Income"||g.nature==="Expenses"){
+
+const b=ledgerBalance(l);
+
+body.innerHTML+=`
+<tr>
+<td>${escapeHTML(l.name)}</td>
+<td>${g.nature}</td>
+<td>${money(b.balance)}</td>
+</tr>`;
+
+}
+
+});
+
+}
+
+
+/* ============================================================
+   BALANCE SHEET
+============================================================ */
+
+function renderBS(){
+
+let assets=0;
+let liabilities=0;
+let capital=0;
+
+const body=document.getElementById("bsBody");
+
+body.innerHTML="";
+
+db.ledgers.forEach(l=>{
+
+const g=db.groups.find(x=>x.id===l.group);
+
+if(!g)return;
+
+const b=ledgerBalance(l);
+
+let amount=b.balance;
+
+if(g.nature==="Assets")assets+=amount;
+if(g.nature==="Liabilities")liabilities+=amount;
+if(g.nature==="Capital")capital+=amount;
+
+if(
+g.nature==="Assets"||
+g.nature==="Liabilities"||
+g.nature==="Capital"
+){
+
+body.innerHTML+=`
+<tr>
+<td>${escapeHTML(l.name)}</td>
+<td>${g.nature}</td>
+<td>${money(amount)}</td>
+</tr>`;
+
+}
+
+});
+
+document.getElementById("bsAssets")
+.textContent=money(assets);
+
+document.getElementById("bsLiabilities")
+.textContent=money(liabilities);
+
+document.getElementById("bsCapital")
+.textContent=money(capital);
+
+const status=document.getElementById("bsStatus");
+
+status.className="notice success";
+status.textContent=
+"Balance Sheet calculated from current ledger balances.";
+
+}
+
+
+/* ============================================================
+   GST
+============================================================ */
+
+function renderGST(){
+
+const output=db.sales.reduce(
+(a,x)=>a+Number(x.gst),0
+);
+
+const input=db.purchases.reduce(
+(a,x)=>a+Number(x.gst),0
+);
+
+document.getElementById("gstOutput")
+.textContent=money(output);
+
+document.getElementById("gstInput")
+.textContent=money(input);
+
+document.getElementById("gstNet")
+.textContent=money(output-input);
+
+const body=document.getElementById("gstBody");
+
+body.innerHTML="";
+
+db.sales.forEach(x=>{
+
+body.innerHTML+=`
+<tr>
+<td>${escapeHTML(x.number)}</td>
+<td>Output GST</td>
+<td>${money(x.taxable)}</td>
+<td>${money(x.gst)}</td>
+</tr>`;
+
+});
+
+db.purchases.forEach(x=>{
+
+body.innerHTML+=`
+<tr>
+<td>${escapeHTML(x.number)}</td>
+<td>Input GST</td>
+<td>${money(x.taxable)}</td>
+<td>${money(x.gst)}</td>
+</tr>`;
+
+});
+
+}
+
+
+/* ============================================================
+   OUTSTANDING
+============================================================ */
+
+function renderOutstanding(){
+
+const customerMap={};
+const supplierMap={};
+
+db.sales.forEach(x=>{
+customerMap[x.partyName]=
+(customerMap[x.partyName]||0)+Number(x.total);
+});
+
+db.purchases.forEach(x=>{
+supplierMap[x.partyName]=
+(supplierMap[x.partyName]||0)+Number(x.total);
+});
+
+const receivable=
+Object.values(customerMap).reduce((a,b)=>a+b,0);
+
+const payable=
+Object.values(supplierMap).reduce((a,b)=>a+b,0);
+
+document.getElementById("outReceivable")
+.textContent=money(receivable);
+
+document.getElementById("outPayable")
+.textContent=money(payable);
+
+const body=document.getElementById(
+"outstandingBody"
+);
+
+body.innerHTML="";
+
+Object.entries(customerMap).forEach(([name,amount])=>{
+
+body.innerHTML+=`
+<tr>
+<td>${escapeHTML(name)}</td>
+<td>Customer</td>
+<td>Sales</td>
+<td>${money(amount)}</td>
+</tr>`;
+
+});
+
+Object.entries(supplierMap).forEach(([name,amount])=>{
+
+body.innerHTML+=`
+<tr>
+<td>${escapeHTML(name)}</td>
+<td>Supplier</td>
+<td>Purchase</td>
+<td>${money(amount)}</td>
+</tr>`;
+
+});
+
+}
+
+
+/* ============================================================
+   COMPANY
+============================================================ */
+
+function loadCompany(){
+
+const c=db.company;
+
+document.getElementById("companyName").value=c.name||"";
+document.getElementById("companyGSTIN").value=c.gstin||"";
+document.getElementById("companyPAN").value=c.pan||"";
+document.getElementById("companyState").value=c.state||"";
+document.getElementById("companyFY").value=c.fy||"";
+document.getElementById("companyAddress").value=c.address||"";
+
+}
+
+function saveCompany(){
+
+db.company={
+name:document.getElementById("companyName").value.trim(),
+gstin:document.getElementById("companyGSTIN").value.trim(),
+pan:document.getElementById("companyPAN").value.trim(),
+state:document.getElementById("companyState").value.trim(),
+fy:document.getElementById("companyFY").value.trim(),
+address:document.getElementById("companyAddress").value.trim()
+};
+
+saveDB();
+toast("Company details saved.");
+
+}
+
+
+/* ============================================================
+   EXCEL WORKING
+============================================================ */
+
+let excelRows=0;
+
+function addExcelRow(data={}){
+
+excelRows++;
+
+const body=document.getElementById("excelBody");
+
+const row=document.createElement("tr");
+
+row.dataset.id=excelRows;
+
+row.innerHTML=`
+
+<td>${excelRows}</td>
+
+<td>
+<input class="excel-input desc"
+value="${escapeHTML(data.description||"")}"
+placeholder="Description">
+</td>
+
+<td>
+<input class="excel-input qty"
+type="number" value="${data.qty||1}" min="0">
+</td>
+
+<td>
+<input class="excel-input rate"
+type="number" value="${data.rate||0}" min="0" step="0.01">
+</td>
+
+<td>
+<input class="excel-input tax"
+type="number" value="${data.tax||18}" min="0" step="0.01">
+</td>
+
+<td class="num taxable">₹0.00</td>
+<td class="num gst">₹0.00</td>
+<td class="num total">₹0.00</td>
+
+<td>
+<button class="btn btn-danger" onclick="removeExcelRow(this)">
+Delete
+</button>
+</td>
+
+`;
+
+body.appendChild(row);
+
+row.querySelectorAll("input")
+.forEach(i=>i.addEventListener("input",calculateExcel));
+
+calculateExcel();
+
+}
+
+function removeExcelRow(btn){
+
+btn.closest("tr").remove();
+
+calculateExcel();
+
+}
+
+function calculateExcel(){
+
+let taxable=0;
+let gst=0;
+let total=0;
+
+document.querySelectorAll("#excelBody tr")
+.forEach(row=>{
+
+const qty=Number(row.querySelector(".qty").value||0);
+const rate=Number(row.querySelector(".rate").value||0);
+const tax=Number(row.querySelector(".tax").value||0);
+
+const t=qty*rate;
+const g=t*tax/100;
+const tt=t+g;
+
+taxable+=t;
+gst+=g;
+total+=tt;
+
+row.querySelector(".taxable").textContent=money(t);
+row.querySelector(".gst").textContent=money(g);
+row.querySelector(".total").textContent=money(tt);
+
+});
+
+document.getElementById("excelTaxableTotal")
+.textContent=money(taxable);
+
+document.getElementById("excelGSTTotal")
+.textContent=money(gst);
+
+document.getElementById("excelGrandTotal")
+.textContent=money(total);
+
+}
+
+function exportCSV(){
+
+const rows=[
+[
+"Description",
+"Qty",
+"Rate",
+"Tax %",
+"Taxable",
+"GST",
+"Total"
+]
+];
+
+document.querySelectorAll("#excelBody tr")
+.forEach(row=>{
+
+const desc=row.querySelector(".desc").value;
+const qty=row.querySelector(".qty").value;
+const rate=row.querySelector(".rate").value;
+const tax=row.querySelector(".tax").value;
+
+const taxable=Number(qty)*Number(rate);
+const gst=taxable*Number(tax)/100;
+
+rows.push([
+desc,qty,rate,tax,
+taxable.toFixed(2),
+gst.toFixed(2),
+(taxable+gst).toFixed(2)
+]);
+
+});
+
+const csv=rows.map(r=>
+r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(",")
+).join("\n");
+
+const blob=new Blob([csv],{type:"text/csv"});
+
+const url=URL.createObjectURL(blob);
+
+const a=document.createElement("a");
+
+a.href=url;
+a.download="BusinessDesk_Working.csv";
+a.click();
+
+URL.revokeObjectURL(url);
+
+toast("CSV exported.");
+
+}
+
+
+/* ============================================================
+   CALCULATOR
+============================================================ */
+
+let calcExpression="";
+
+function calcInput(v){
+
+calcExpression+=v;
+
+document.getElementById("calcDisplay")
+.value=calcExpression;
+
+}
+
+function calcClear(){
+
+calcExpression="";
+
+document.getElementById("calcDisplay").value="0";
+
+}
+
+function calcBack(){
+
+calcExpression=calcExpression.slice(0,-1);
+
+document.getElementById("calcDisplay")
+.value=calcExpression||"0";
+
+}
+
+function calcEvaluate(){
+
+try{
+
+if(!/^[0-9+\-*/%.() ]+$/.test(calcExpression))
+throw new Error();
+
+const result=Function(
+"return ("+calcExpression+")"
+)();
+
+calcExpression=String(result);
+
+document.getElementById("calcDisplay")
+.value=calcExpression;
+
+}catch(e){
+
+calcExpression="";
+
+document.getElementById("calcDisplay")
+.value="Error";
+
+}
+
+}
+
+
+/* ============================================================
+   BACKUP
+============================================================ */
+
+function backupData(){
+
+const blob=new Blob(
+[
+JSON.stringify(db,null,2)
+],
+{type:"application/json"}
+);
+
+const url=URL.createObjectURL(blob);
+
+const a=document.createElement("a");
+
+a.href=url;
+
+a.download=
+"BusinessDesk_Phase4_Backup_"+
+today()+
+".json";
+
+a.click();
+
+URL.revokeObjectURL(url);
+
+toast("Backup downloaded.");
+
+}
+
+function restoreData(){
+
+const file=document.getElementById("restoreFile")
+.files[0];
+
+if(!file){
+alert("Select a JSON backup.");
+return;
+}
+
+const reader=new FileReader();
+
+reader.onload=()=>{
+
+try{
+
+const restored=JSON.parse(reader.result);
+
+if(
+!restored.groups||
+!restored.ledgers||
+!restored.journalLines
+){
+
+throw new Error();
+
+}
+
+db=restored;
+
+saveDB();
+
+loadCompany();
+
+refreshAll();
+
+alert("Backup restored successfully.");
+
+}catch(e){
+
+alert("Invalid BusinessDesk backup.");
+
+}
+
+};
+
+reader.readAsText(file);
+
+}
+
+
+/* ============================================================
+   GLOBAL SEARCH
+============================================================ */
+
+document.getElementById("globalSearch")
+.addEventListener("input",function(){
+
+const term=this.value.toLowerCase().trim();
+
+if(!term)return;
+
+const active=document.querySelector(
+".section.active"
+);
+
+if(!active)return;
+
+active.querySelectorAll("tbody tr")
+.forEach(row=>{
+
+row.style.display=
+row.textContent.toLowerCase().includes(term)
+?"":"none";
+
+});
 
 });
 
 
-/* Mobile menu */
+/* ============================================================
+   MODAL OUTSIDE CLICK / ESC
+============================================================ */
 
-document
-    .getElementById("menuBtn")
-    .addEventListener(
-        "click",
-        ()=>{
-            document
-                .getElementById("sidebar")
-                .classList.toggle("open");
-        }
-    );
+document.querySelectorAll(".modal")
+.forEach(modal=>{
 
+modal.addEventListener("click",e=>{
 
-/* =========================================================
-   DASHBOARD
-========================================================= */
+if(e.target===modal)
+modal.classList.remove("open");
 
-function renderDashboard(){
+});
 
-    document.getElementById(
-        "dashLedgers"
-    ).textContent = db.ledgers.length;
+});
 
-    document.getElementById(
-        "dashCustomers"
-    ).textContent =
-        db.parties.filter(
-            p=>p.type==="Customer"
-        ).length;
+document.addEventListener("keydown",e=>{
 
-    document.getElementById(
-        "dashSales"
-    ).textContent =
-        money(
-            db.sales.reduce(
-                (a,b)=>a+Number(b.total),
-                0
-            )
-        );
+if(e.key==="Escape"){
 
-    document.getElementById(
-        "dashPurchase"
-    ).textContent =
-        money(
-            db.purchases.reduce(
-                (a,b)=>a+Number(b.total),
-                0
-            )
-        );
+document.querySelectorAll(".modal.open")
+.forEach(x=>x.classList.remove("open"));
 
 }
 
+});
 
-/* =========================================================
-   GROUPS
-========================================================= */
 
-function renderGroups(){
-
-    const body =
-        document.getElementById("groupsBody");
-
-    body.innerHTML = "";
-
-    db.groups.forEach(group => {
-
-        body.innerHTML += `
-            <tr>
-                <td>${escapeHTML(group.name)}</td>
-                <td>${group.nature}</td>
-                <td>Primary</td>
-            </tr>
-        `;
-
-    });
-
-}
-
-
-function openGroup(){
-
-    document
-        .getElementById("groupModal")
-        .classList.add("open");
-
-    document
-        .getElementById("groupName")
-        .value="";
-
-}
-
-
-function saveGroup(){
-
-    const name =
-        document
-            .getElementById("groupName")
-            .value
-            .trim();
-
-    const nature =
-        document
-            .getElementById("groupNature")
-            .value;
-
-    if(!name){
-
-        alert("Enter group name.");
-
-        return;
-
-    }
-
-    db.groups.push({
-
-        id:"g_"+Date.now(),
-
-        name,
-
-        nature
-
-    });
-
-    saveDB();
-
-    closeModal("groupModal");
-
-    renderGroups();
-
-    populateLedgerGroups();
-
-    toast("Group saved successfully");
-
-}
-
-
-/* =========================================================
-   LEDGERS
-========================================================= */
-
-function populateLedgerGroups(){
-
-    const select =
-        document.getElementById("ledgerGroup");
-
-    select.innerHTML =
-        db.groups.map(
-            g=>`
-                <option value="${g.id}">
-                    ${escapeHTML(g.name)}
-                </option>
-            `
-        ).join("");
-
-}
-
-
-function populateLedgerSelects(){
-
-    const options =
-        db.ledgers.map(
-            l=>`
-                <option value="${l.id}">
-                    ${escapeHTML(l.name)}
-                </option>
-            `
-        ).join("");
-
-    document.getElementById(
-        "voucherDebit"
-    ).innerHTML = options;
-
-    document.getElementById(
-        "voucherCredit"
-    ).innerHTML = options;
-
-}
-
-
-function renderLedgers(){
-
-    const body =
-        document.getElementById("ledgersBody");
-
-    const search =
-        document
-            .getElementById("ledgerSearch")
-            .value
-            .toLowerCase();
-
-    body.innerHTML="";
-
-    db.ledgers
-        .filter(
-            l=>l.name.toLowerCase().includes(search)
-        )
-        .forEach(l=>{
-
-            const group =
-                db.groups.find(
-                    g=>g.id===l.group
-                );
-
-            body.innerHTML += `
-                <tr>
-                    <td>${escapeHTML(l.name)}</td>
-                    <td>${group ? escapeHTML(group.name) : ""}</td>
-                    <td>${l.nature}</td>
-                    <td class="num">${money(l.opening)}</td>
-                </tr>
-            `;
-
-        });
-
-}
-
-
-function openLedger(){
-
-    populateLedgerGroups();
-
-    document
-        .getElementById("ledgerModal")
-        .classList.add("open");
-
-}
-
-
-function saveLedger(){
-
-    const name =
-        document
-            .getElementById("ledgerName")
-            .value
-            .trim();
-
-    const group =
-        document
-            .getElementById("ledgerGroup")
-            .value;
-
-    const opening =
-        Number(
-            document
-                .getElementById("ledgerOpening")
-                .value || 0
-        );
-
-    const nature =
-        document
-            .getElementById("ledgerNature")
-            .value;
-
-    if(!name){
-
-        alert("Enter ledger name.");
-
-        return;
-
-    }
-
-    db.ledgers.push({
-
-        id:"l_"+Date.now(),
-
-        name,
-
-        group,
-
-        opening,
-
-        nature
-
-    });
-
-    saveDB();
-
-    closeModal("ledgerModal");
-
-    renderLedgers();
-
-    populateLedgerSelects();
-
-    renderTrialBalance();
-
-    toast("Ledger saved successfully");
-
-}
-
-
-/* =========================================================
-   PARTIES
-========================================================= */
-
-function renderParties(){
-
-    const body =
-        document.getElementById("partiesBody");
-
-    const search =
-        document
-            .getElementById("partySearch")
-            .value
-            .toLowerCase();
-
-    body.innerHTML="";
-
-    db.parties
-        .filter(
-            p=>p.name.toLowerCase().includes(search)
-        )
-        .forEach(p=>{
-
-            body.innerHTML += `
-                <tr>
-                    <td>${escapeHTML(p.name)}</td>
-                    <td>${p.type}</td>
-                    <td>${escapeHTML(p.gstin)}</td>
-                    <td>${escapeHTML(p.state)}</td>
-                    <td>${escapeHTML(p.phone)}</td>
-                </tr>
-            `;
-
-        });
-
-}
-
-
-function openParty(){
-
-    document
-        .getElementById("partyModal")
-        .classList.add("open");
-
-}
-
-
-function saveParty(){
-
-    const name =
-        document
-            .getElementById("partyName")
-            .value
-            .trim();
-
-    const type =
-        document
-            .getElementById("partyType")
-            .value;
-
-    if(!name){
-
-        alert("Enter party name.");
-
-        return;
-
-    }
-
-    const party={
-
-        id:"p_"+Date.now(),
-
-        name,
-
-        type,
-
-        gstin:document
-            .getElementById("partyGSTIN")
-            .value,
-
-        state:document
-            .getElementById("partyState")
-            .value,
-
-        phone:document
-            .getElementById("partyPhone")
-            .value
-
-    };
-
-    db.parties.push(party);
-
-
-    /* Create corresponding ledger */
-
-    db.ledgers.push({
-
-        id:"partyLedger_"+party.id,
-
-        name:party.name,
-
-        group:
-            type==="Customer"
-            ?"receivable"
-            :"payable",
-
-        opening:0,
-
-        nature:
-            type==="Customer"
-            ?"Debit"
-            :"Credit"
-
-    });
-
-
-    saveDB();
-
-    closeModal("partyModal");
-
-    renderParties();
-
-    renderLedgers();
-
-    populateInvoiceParties();
-
-    populateLedgerSelects();
-
-    renderDashboard();
-
-    toast("Party saved successfully");
-
-}
-
-
-/* =========================================================
-   INVOICE
-========================================================= */
-
-function populateInvoiceParties(){
-
-    const select =
-        document.getElementById("invoiceParty");
-
-    select.innerHTML =
-        db.parties.map(
-            p=>`
-                <option value="${p.id}">
-                    ${escapeHTML(p.name)}
-                </option>
-            `
-        ).join("");
-
-}
-
-
-function openSales(){
-
-    document.getElementById(
-        "invoiceType"
-    ).value="sales";
-
-    document.getElementById(
-        "invoiceModalTitle"
-    ).textContent="New Sales Invoice";
-
-    openInvoice();
-
-}
-
-
-function openPurchase(){
-
-    document.getElementById(
-        "invoiceType"
-    ).value="purchase";
-
-    document.getElementById(
-        "invoiceModalTitle"
-    ).textContent="New Purchase Invoice";
-
-    openInvoice();
-
-}
-
-
-function openInvoice(){
-
-    populateInvoiceParties();
-
-    document.getElementById(
-        "invoiceDate"
-    ).value=today();
-
-    document.getElementById(
-        "invoiceNumber"
-    ).value=
-        "INV-"+(db.sales.length+db.purchases.length+1);
-
-    document.getElementById(
-        "itemDescription"
-    ).value="";
-
-    document.getElementById(
-        "itemQty"
-    ).value=1;
-
-    document.getElementById(
-        "itemRate"
-    ).value=0;
-
-    document.getElementById(
-        "invoiceTaxRate"
-    ).value=18;
-
-    calculateInvoice();
-
-    document
-        .getElementById("invoiceModal")
-        .classList.add("open");
-
-}
-
-
-function calculateInvoice(){
-
-    const qty =
-        Number(
-            document.getElementById(
-                "itemQty"
-            ).value || 0
-        );
-
-    const rate =
-        Number(
-            document.getElementById(
-                "itemRate"
-            ).value || 0
-        );
-
-    const taxRate =
-        Number(
-            document.getElementById(
-                "invoiceTaxRate"
-            ).value || 0
-        );
-
-    const taxable =
-        qty*rate;
-
-    const gst =
-        taxable*taxRate/100;
-
-    const total =
-        taxable+gst;
-
-    document.getElementById(
-        "invoiceTaxable"
-    ).textContent=money(taxable);
-
-    document.getElementById(
-        "invoiceTaxableTotal"
-    ).textContent=money(taxable);
-
-    document.getElementById(
-        "invoiceGST"
-    ).textContent=money(gst);
-
-    document.getElementById(
-        "invoiceTotal"
-    ).textContent=money(total);
-
-}
-
-
-function saveInvoice(){
-
-    const type =
-        document.getElementById(
-            "invoiceType"
-        ).value;
-
-    const partyId =
-        document.getElementById(
-            "invoiceParty"
-        ).value;
-
-    if(!partyId){
-
-        alert(
-            "Please create/select a customer or supplier first."
-        );
-
-        return;
-
-    }
-
-    const qty =
-        Number(
-            document.getElementById(
-                "itemQty"
-            ).value || 0
-        );
-
-    const rate =
-        Number(
-            document.getElementById(
-                "itemRate"
-            ).value || 0
-        );
-
-    const taxRate =
-        Number(
-            document.getElementById(
-                "invoiceTaxRate"
-            ).value || 0
-        );
-
-    const taxable =
-        qty*rate;
-
-    const gst =
-        taxable*taxRate/100;
-
-    const total =
-        taxable+gst;
-
-    if(total<=0){
-
-        alert("Enter a valid item amount.");
-
-        return;
-
-    }
-
-    const party =
-        db.parties.find(
-            p=>p.id===partyId
-        );
-
-    const invoice={
-
-        id:"inv_"+Date.now(),
-
-        number:
-            document.getElementById(
-                "invoiceNumber"
-            ).value,
-
-        date:
-            document.getElementById(
-                "invoiceDate"
-            ).value,
-
-        partyId,
-
-        partyName:party.name,
-
-        description:
-            document.getElementById(
-                "itemDescription"
-            ).value,
-
-        qty,
-
-        rate,
-
-        taxable,
-
-        gst,
-
-        total
-
-    };
-
-
-    if(type==="sales"){
-
-        db.sales.push(invoice);
-
-        postEntry(
-            invoice.date,
-            "Sales",
-            invoice.number,
-            party.name,
-            total,
-            total
-        );
-
-    }
-    else{
-
-        db.purchases.push(invoice);
-
-        postEntry(
-            invoice.date,
-            "Purchase",
-            invoice.number,
-            party.name,
-            total,
-            total
-        );
-
-    }
-
-
-    saveDB();
-
-    closeModal("invoiceModal");
-
-    refreshAll();
-
-    toast(
-        type==="sales"
-        ?"Sales invoice saved"
-        :"Purchase invoice saved"
-    );
-
-}
-
-
-/* =========================================================
-   ENTRIES
-========================================================= */
-
-function postEntry(
-    date,
-    type,
-    reference,
-    narration,
-    debit,
-    credit
-){
-
-    db.entries.push({
-
-        id:"e_"+Date.now()+"_"+Math.random(),
-
-        date,
-
-        type,
-
-        reference,
-
-        narration,
-
-        debit:Number(debit),
-
-        credit:Number(credit)
-
-    });
-
-}
-
-
-/* =========================================================
-   SALES / PURCHASE TABLES
-========================================================= */
-
-function renderSales(){
-
-    const body =
-        document.getElementById("salesBody");
-
-    body.innerHTML="";
-
-    db.sales.forEach(s=>{
-
-        body.innerHTML += `
-            <tr>
-                <td>${escapeHTML(s.number)}</td>
-                <td>${s.date}</td>
-                <td>${escapeHTML(s.partyName)}</td>
-                <td class="num">${money(s.taxable)}</td>
-                <td class="num">${money(s.gst)}</td>
-                <td class="num">${money(s.total)}</td>
-            </tr>
-        `;
-
-    });
-
-}
-
-
-function renderPurchase(){
-
-    const body =
-        document.getElementById(
-            "purchaseBody"
-        );
-
-    body.innerHTML="";
-
-    db.purchases.forEach(p=>{
-
-        body.innerHTML += `
-            <tr>
-                <td>${escapeHTML(p.number)}</td>
-                <td>${p.date}</td>
-                <td>${escapeHTML(p.partyName)}</td>
-                <td class="num">${money(p.taxable)}</td>
-                <td class="num">${money(p.gst)}</td>
-                <td class="num">${money(p.total)}</td>
-            </tr>
-        `;
-
-    });
-
-}
-
-
-/* =========================================================
-   VOUCHERS
-========================================================= */
-
-function openVoucher(){
-
-    populateLedgerSelects();
-
-    document.getElementById(
-        "voucherDate"
-    ).value=today();
-
-    document
-        .getElementById("voucherModal")
-        .classList.add("open");
-
-}
-
-
-function saveVoucher(){
-
-    const debitLedger =
-        document.getElementById(
-            "voucherDebit"
-        ).value;
-
-    const creditLedger =
-        document.getElementById(
-            "voucherCredit"
-        ).value;
-
-    const amount =
-        Number(
-            document.getElementById(
-                "voucherAmount"
-            ).value || 0
-        );
-
-    if(!debitLedger ||
-       !creditLedger ||
-       amount<=0){
-
-        alert(
-            "Please enter debit ledger, credit ledger and amount."
-        );
-
-        return;
-
-    }
-
-    if(debitLedger===creditLedger){
-
-        alert(
-            "Debit and Credit ledger cannot be the same."
-        );
-
-        return;
-
-    }
-
-    const voucher={
-
-        id:"v_"+Date.now(),
-
-        type:
-            document.getElementById(
-                "voucherType"
-            ).value,
-
-        date:
-            document.getElementById(
-                "voucherDate"
-            ).value,
-
-        debit:debitLedger,
-
-        credit:creditLedger,
-
-        amount,
-
-        reference:
-            document.getElementById(
-                "voucherReference"
-            ).value,
-
-        narration:
-            document.getElementById(
-                "voucherNarration"
-            ).value
-
-    };
-
-    db.vouchers.push(voucher);
-
-
-    postEntry(
-        voucher.date,
-        voucher.type,
-        voucher.reference,
-        voucher.narration,
-        amount,
-        amount
-    );
-
-
-    saveDB();
-
-    closeModal("voucherModal");
-
-    refreshAll();
-
-    toast("Voucher posted successfully");
-
-}
-
-
-function renderVouchers(){
-
-    const body =
-        document.getElementById(
-            "vouchersBody"
-        );
-
-    body.innerHTML="";
-
-    db.vouchers.forEach(v=>{
-
-        const debit =
-            db.ledgers.find(
-                l=>l.id===v.debit
-            );
-
-        const credit =
-            db.ledgers.find(
-                l=>l.id===v.credit
-            );
-
-        body.innerHTML += `
-            <tr>
-                <td>${v.date}</td>
-                <td>${v.type}</td>
-                <td>${escapeHTML(v.reference)}</td>
-                <td>${debit ? escapeHTML(debit.name) : ""}</td>
-                <td>${credit ? escapeHTML(credit.name) : ""}</td>
-                <td class="num">${money(v.amount)}</td>
-            </tr>
-        `;
-
-    });
-
-}
-
-
-/* =========================================================
-   DAY BOOK
-========================================================= */
-
-function renderDaybook(){
-
-    const body =
-        document.getElementById(
-            "daybookBody"
-        );
-
-    body.innerHTML="";
-
-    db.entries
-        .slice()
-        .reverse()
-        .forEach(e=>{
-
-            body.innerHTML += `
-                <tr>
-                    <td>${e.date}</td>
-                    <td>${e.type}</td>
-                    <td>${escapeHTML(e.reference)}</td>
-                    <td>${escapeHTML(e.narration)}</td>
-                    <td class="num">${money(e.debit)}</td>
-                    <td class="num">${money(e.credit)}</td>
-                </tr>
-            `;
-
-        });
-
-}
-
-
-/* =========================================================
-   TRIAL BALANCE
-========================================================= */
-
-function renderTrialBalance(){
-
-    const body =
-        document.getElementById(
-            "tbBody"
-        );
-
-    body.innerHTML="";
-
-    let totalDebit=0;
-    let totalCredit=0;
-
-    db.ledgers.forEach(l=>{
-
-        let debit=0;
-        let credit=0;
-
-        const opening =
-            Number(l.opening || 0);
-
-        if(l.nature==="Debit")
-            debit += opening;
-        else
-            credit += opening;
-
-
-        db.entries.forEach(e=>{
-
-            /*
-             Basic transaction engine.
-             Future backend phase will use
-             individual journal lines.
-            */
-
-            if(e.type==="Sales" &&
-               l.name==="Sales"){
-
-                credit += e.credit;
-
-            }
-
-            if(e.type==="Purchase" &&
-               l.name==="Purchase"){
-
-                debit += e.debit;
-
-            }
-
-        });
-
-
-        totalDebit += debit;
-        totalCredit += credit;
-
-
-        body.innerHTML += `
-            <tr>
-                <td>${escapeHTML(l.name)}</td>
-                <td>
-                    ${
-                        db.groups.find(
-                            g=>g.id===l.group
-                        )?.name || ""
-                    }
-                </td>
-                <td class="num">${money(debit)}</td>
-                <td class="num">${money(credit)}</td>
-            </tr>
-        `;
-
-    });
-
-
-    document.getElementById(
-        "tbDebit"
-    ).textContent=money(totalDebit);
-
-    document.getElementById(
-        "tbCredit"
-    ).textContent=money(totalCredit);
-
-    const difference =
-        Math.abs(
-            totalDebit-totalCredit
-        );
-
-    document.getElementById(
-        "tbDifference"
-    ).textContent=money(difference);
-
-    document.getElementById(
-        "tbStatus"
-    ).textContent =
-        difference<0.01
-        ?"Trial Balance is balanced."
-        :"Trial Balance has a difference of "+money(difference);
-
-}
-
-
-/* =========================================================
-   P&L
-========================================================= */
-
-function renderPL(){
-
-    const revenue =
-        db.sales.reduce(
-            (a,b)=>a+Number(b.taxable),
-            0
-        );
-
-    const expenses =
-        db.purchases.reduce(
-            (a,b)=>a+Number(b.taxable),
-            0
-        );
-
-    const net =
-        revenue-expenses;
-
-    document.getElementById(
-        "plRevenue"
-    ).textContent=money(revenue);
-
-    document.getElementById(
-        "plExpenses"
-    ).textContent=money(expenses);
-
-    document.getElementById(
-        "plNet"
-    ).textContent=money(net);
-
-}
-
-
-/* =========================================================
-   BALANCE SHEET
-========================================================= */
-
-function renderBS(){
-
-    const receivables =
-        db.sales.reduce(
-            (a,b)=>a+Number(b.total),
-            0
-        );
-
-    const payables =
-        db.purchases.reduce(
-            (a,b)=>a+Number(b.total),
-            0
-        );
-
-    const capital=0;
-
-    document.getElementById(
-        "bsAssets"
-    ).textContent=money(receivables);
-
-    document.getElementById(
-        "bsLiabilities"
-    ).textContent=money(payables);
-
-    document.getElementById(
-        "bsCapital"
-    ).textContent=money(capital);
-
-}
-
-
-/* =========================================================
-   GST
-========================================================= */
-
-function renderGST(){
-
-    const output =
-        db.sales.reduce(
-            (a,b)=>a+Number(b.gst),
-            0
-        );
-
-    const input =
-        db.purchases.reduce(
-            (a,b)=>a+Number(b.gst),
-            0
-        );
-
-    document.getElementById(
-        "gstOutput"
-    ).textContent=money(output);
-
-    document.getElementById(
-        "gstInput"
-    ).textContent=money(input);
-
-    document.getElementById(
-        "gstNet"
-    ).textContent=
-        money(output-input);
-
-}
-
-
-/* =========================================================
-   OUTSTANDING
-========================================================= */
-
-function renderOutstanding(){
-
-    const receivable =
-        db.sales.reduce(
-            (a,b)=>a+Number(b.total),
-            0
-        );
-
-    const payable =
-        db.purchases.reduce(
-            (a,b)=>a+Number(b.total),
-            0
-        );
-
-    document.getElementById(
-        "outReceivable"
-    ).textContent=money(receivable);
-
-    document.getElementById(
-        "outPayable"
-    ).textContent=money(payable);
-
-}
-
-
-/* =========================================================
-   COMPANY
-========================================================= */
-
-function loadCompany(){
-
-    const c=db.company;
-
-    document.getElementById(
-        "companyName"
-    ).value=c.name || "";
-
-    document.getElementById(
-        "companyGSTIN"
-    ).value=c.gstin || "";
-
-    document.getElementById(
-        "companyPAN"
-    ).value=c.pan || "";
-
-    document.getElementById(
-        "companyState"
-    ).value=c.state || "";
-
-    document.getElementById(
-        "companyFY"
-    ).value=c.fy || "";
-
-    document.getElementById(
-        "companyAddress"
-    ).value=c.address || "";
-
-}
-
-
-function saveCompany(){
-
-    db.company={
-
-        name:
-            document.getElementById(
-                "companyName"
-            ).value,
-
-        gstin:
-            document.getElementById(
-                "companyGSTIN"
-            ).value,
-
-        pan:
-            document.getElementById(
-                "companyPAN"
-            ).value,
-
-        state:
-            document.getElementById(
-                "companyState"
-            ).value,
-
-        fy:
-            document.getElementById(
-                "companyFY"
-            ).value,
-
-        address:
-            document.getElementById(
-                "companyAddress"
-            ).value
-
-    };
-
-    saveDB();
-
-    toast("Company details saved");
-
-}
-
-
-/* =========================================================
-   CALCULATOR
-========================================================= */
-
-let calcExpression="";
-
-function calcInput(value){
-
-    calcExpression += value;
-
-    document.getElementById(
-        "calcDisplay"
-    ).value=calcExpression;
-
-}
-
-
-function calcClear(){
-
-    calcExpression="";
-
-    document.getElementById(
-        "calcDisplay"
-    ).value="0";
-
-}
-
-
-function calcBack(){
-
-    calcExpression =
-        calcExpression.slice(0,-1);
-
-    document.getElementById(
-        "calcDisplay"
-    ).value =
-        calcExpression || "0";
-
-}
-
-
-function calcEvaluate(){
-
-    try{
-
-        /*
-         Only allow calculator characters.
-         */
-
-        if(!/^[0-9+\-*/%.() ]+$/.test(
-            calcExpression
-        )){
-
-            throw new Error();
-
-        }
-
-        const result =
-            Function(
-                "return ("+
-                calcExpression+
-                ")"
-            )();
-
-        calcExpression =
-            String(result);
-
-        document.getElementById(
-            "calcDisplay"
-        ).value=calcExpression;
-
-    }
-    catch{
-
-        document.getElementById(
-            "calcDisplay"
-        ).value="Error";
-
-        calcExpression="";
-
-    }
-
-}
-
-
-/* =========================================================
-   SPREADSHEET
-========================================================= */
-
-let spreadsheetRows=0;
-
-function addSpreadsheetRow(){
-
-    spreadsheetRows++;
-
-    const body =
-        document.getElementById(
-            "spreadsheetBody"
-        );
-
-    body.innerHTML += `
-
-        <tr>
-
-            <td>${spreadsheetRows}</td>
-
-            <td>
-                <input
-                    style="width:100%;padding:7px"
-                    placeholder="Description">
-            </td>
-
-            <td>
-                <input
-                    type="number"
-                    value="1"
-                    style="width:90px;padding:7px">
-            </td>
-
-            <td>
-                <input
-                    type="number"
-                    value="0"
-                    style="width:110px;padding:7px">
-            </td>
-
-            <td class="num">₹0.00</td>
-
-        </tr>
-    `;
-
-}
-
-
-function clearSpreadsheet(){
-
-    document.getElementById(
-        "spreadsheetBody"
-    ).innerHTML="";
-
-    spreadsheetRows=0;
-
-}
-
-
-/* =========================================================
-   BACKUP / RESTORE
-========================================================= */
-
-function backupData(){
-
-    const blob =
-        new Blob(
-            [
-                JSON.stringify(
-                    db,
-                    null,
-                    2
-                )
-            ],
-            {
-                type:"application/json"
-            }
-        );
-
-    const url =
-        URL.createObjectURL(blob);
-
-    const a =
-        document.createElement("a");
-
-    a.href=url;
-
-    a.download=
-        "BusinessDesk_Backup_"+
-        today()+
-        ".json";
-
-    a.click();
-
-    URL.revokeObjectURL(url);
-
-    toast("Backup downloaded");
-
-}
-
-
-function restoreData(){
-
-    const file =
-        document.getElementById(
-            "restoreFile"
-        ).files[0];
-
-    if(!file){
-
-        alert("Select a backup file.");
-
-        return;
-
-    }
-
-    const reader =
-        new FileReader();
-
-    reader.onload=function(){
-
-        try{
-
-            const data =
-                JSON.parse(
-                    reader.result
-                );
-
-            if(
-                !data ||
-                !Array.isArray(data.ledgers) ||
-                !Array.isArray(data.groups)
-            ){
-
-                throw new Error();
-
-            }
-
-            db=data;
-
-            saveDB();
-
-            refreshAll();
-
-            loadCompany();
-
-            toast("Data restored successfully");
-
-        }
-        catch{
-
-            alert(
-                "Invalid BusinessDesk backup file."
-            );
-
-        }
-
-    };
-
-    reader.readAsText(file);
-
-}
-
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHTML(value){
-
-    return String(value ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-
-}
-
-
-/* =========================================================
-   REFRESH EVERYTHING
-========================================================= */
+/* ============================================================
+   MASTER REFRESH
+============================================================ */
 
 function refreshAll(){
 
-    renderDashboard();
+renderDashboard();
+renderGroups();
+renderLedgers();
+renderParties();
+renderSales();
+renderPurchase();
+renderVouchers();
+renderDaybook();
+renderLedgerReport();
+renderTrialBalance();
+renderPL();
+renderBS();
+renderGST();
+renderOutstanding();
 
-    renderGroups();
-
-    renderLedgers();
-
-    renderParties();
-
-    renderSales();
-
-    renderPurchase();
-
-    renderVouchers();
-
-    renderDaybook();
-
-    renderTrialBalance();
-
-    renderPL();
-
-    renderBS();
-
-    renderGST();
-
-    renderOutstanding();
-
-    populateLedgerGroups();
-
-    populateLedgerSelects();
-
-    populateInvoiceParties();
+populateLedgerGroups();
+populateLedgerSelects();
 
 }
 
 
-/* =========================================================
-   CLOSE MODAL WHEN CLICKING OUTSIDE
-========================================================= */
+/* ============================================================
+   START
+============================================================ */
 
-document
-    .querySelectorAll(".modal")
-    .forEach(modal=>{
+document.addEventListener("DOMContentLoaded",()=>{
 
-        modal.addEventListener(
-            "click",
-            function(event){
+loadCompany();
 
-                if(event.target===modal){
+refreshAll();
 
-                    modal.classList.remove(
-                        "open"
-                    );
+if(document.querySelectorAll("#excelBody tr").length===0){
 
-                }
+addExcelRow();
+addExcelRow();
+addExcelRow();
 
-            }
-        );
+}
 
-    });
-
-
-/* ESCAPE KEY */
-
-document.addEventListener(
-    "keydown",
-    function(event){
-
-        if(event.key==="Escape"){
-
-            document
-                .querySelectorAll(".modal.open")
-                .forEach(
-                    modal=>
-                        modal.classList.remove(
-                            "open"
-                        )
-                );
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   INITIALIZE
-========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function(){
-
-        loadCompany();
-
-        refreshAll();
-
-        /* Put one spreadsheet row */
-
-        addSpreadsheetRow();
-
-    }
-);
+});
 
 </script>
 
