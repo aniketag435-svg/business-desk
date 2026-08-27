@@ -2289,30 +2289,71 @@ const Calculator = {
     },
 
 
-    percent(){
+function calcPercent(){
 
-        const value =
-            Number(this.display);
+    const current = numberValue(calcState.current);
 
+    /* Nothing useful to calculate */
+    if (!Number.isFinite(current)) {
+        calcState.current = "Error";
+        updateCalculator();
+        return;
+    }
 
-        if(
-            !Number.isFinite(value)
-        ){
+    /*
+     * If an operator and first number already exist,
+     * calculate the percentage relative to the first number.
+     *
+     * Example:
+     * 100 + 10%  -> 110
+     * 100 - 10%  -> 90
+     * 100 × 10%  -> 10
+     * 100 ÷ 10%  -> 1000
+     */
+    if (
+        calcState.previous !== null &&
+        calcState.operator
+    ) {
 
+        const previous =
+            numberValue(calcState.previous);
+
+        if (!Number.isFinite(previous)) {
+            calcState.current = "Error";
+            updateCalculator();
             return;
-
         }
 
+        const percentValue =
+            previous * current / 100;
 
-        this.display =
+        calcState.current =
             String(
-                value / 100
+                Math.round(
+                    percentValue * 100000000
+                ) / 100000000
             );
 
+    } else {
 
-        this.update();
+        /*
+         * Standalone percentage:
+         *
+         * 18% -> 0.18
+         * 50% -> 0.5
+         */
+        calcState.current =
+            String(
+                Math.round(
+                    (current / 100) * 100000000
+                ) / 100000000
+            );
 
-    },
+    }
+
+    updateCalculator();
+
+},
 
 
     operator(op){
