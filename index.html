@@ -8955,857 +8955,1951 @@ document.addEventListener(
 
 
 <script>
+<!-- ============================================================
+     PHASE 4 — BUSINESSDESK PROFESSIONAL CONTROL LAYER
+     
+     REPLACEMENT VERSION — PHASE 4 ONLY
+
+     IMPORTANT:
+     • Delete ALL previous Phase 4 blocks first.
+     • Keep Phase 1, Phase 2 and Phase 3 unchanged.
+     • Paste this entire block immediately before </body>.
+     • This version intentionally does NOT redefine:
+          db
+          P4
+          showSection()
+          showTab()
+          saveDB()
+          renderAll()
+          calculateSpreadsheet()
+     • It uses the unique BD4 namespace to prevent collisions.
+     ============================================================ -->
+
+
+<style>
 
 /* ============================================================
-   PHASE 4 ENGINE
-============================================================ */
+   PHASE 4 — STATUS BAR
+   ============================================================ */
 
-(function(){
+.bd4-status-bar{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
 
-"use strict";
+    height:30px;
 
+    z-index:9990;
 
-/* ============================================================
-   INTERNAL STATE
-============================================================ */
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
 
-const P4 = {
+    padding:0 14px;
 
-    version:"4.1.0",
+    box-sizing:border-box;
 
-    initialized:false,
+    background:#111827;
+    color:#d1d5db;
 
-    audit:[],
+    border-top:1px solid #374151;
 
-    maxAuditEntries:500,
+    font-family:Arial,sans-serif;
+    font-size:11px;
 
-    calculating:false,
+    user-select:none;
+}
 
-    dirty:false,
+.bd4-status-left,
+.bd4-status-right{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
 
-    lastSave:null,
+.bd4-status-dot{
+    display:inline-block;
 
-    lastCalculation:null,
+    width:7px;
+    height:7px;
 
-    lastError:null,
+    margin-right:5px;
 
-    calculationCount:0,
+    border-radius:50%;
 
-    saveCount:0
+    background:#22c55e;
+}
 
-};
+.bd4-status-dot.warning{
+    background:#f59e0b;
+}
 
-window.P4 = P4;
-
-
-/* ============================================================
-   BASIC HELPERS
-============================================================ */
-
-function p4$(id){
-
-    return document.getElementById(id);
-
+.bd4-status-dot.error{
+    background:#ef4444;
 }
 
 
-function p4Escape(value){
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
 
-    return String(value ?? "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+.bd4-progress{
+    position:fixed;
 
-}
+    top:0;
+    left:0;
 
+    width:0;
+    height:3px;
 
-function p4Time(){
+    z-index:99999;
 
-    return new Date().toLocaleString();
+    background:#2563eb;
 
-}
-
-
-function p4SetProgress(value){
-
-    const bar=p4$("p4Progress");
-
-    if(!bar){
-        return;
-    }
-
-    value=Math.max(
-        0,
-        Math.min(100,value)
-    );
-
-    bar.style.width=value+"%";
-
-    if(value>=100){
-
-        setTimeout(
-            function(){
-
-                bar.style.width="0%";
-
-            },
-            400
-        );
-
-    }
-
+    transition:width .2s ease;
 }
 
 
 /* ============================================================
    TOAST
-============================================================ */
+   ============================================================ */
 
-window.p4Toast=function(
-    message,
-    type="success",
-    title=""
-){
+.bd4-toast-container{
+    position:fixed;
 
-    const container=
-        p4$("p4ToastContainer");
+    top:18px;
+    right:18px;
 
-    if(!container){
-        return;
+    width:min(390px,calc(100vw - 36px));
+
+    z-index:99999;
+}
+
+.bd4-toast{
+    margin-bottom:10px;
+
+    padding:12px 14px;
+
+    border-radius:8px;
+
+    background:#111827;
+    color:#fff;
+
+    border-left:4px solid #2563eb;
+
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.22);
+
+    font-family:Arial,sans-serif;
+    font-size:12px;
+
+    line-height:1.5;
+
+    transition:
+        opacity .25s ease,
+        transform .25s ease;
+}
+
+.bd4-toast.success{
+    border-left-color:#22c55e;
+}
+
+.bd4-toast.warning{
+    border-left-color:#f59e0b;
+}
+
+.bd4-toast.error{
+    border-left-color:#ef4444;
+}
+
+.bd4-toast-title{
+    margin-bottom:3px;
+    font-weight:700;
+}
+
+
+/* ============================================================
+   AUDIT BUTTON
+   ============================================================ */
+
+.bd4-audit-button{
+
+    position:fixed;
+
+    right:14px;
+    bottom:40px;
+
+    z-index:9991;
+
+    padding:8px 12px;
+
+    border:0;
+    border-radius:7px;
+
+    background:#374151;
+    color:#fff;
+
+    font-family:Arial,sans-serif;
+    font-size:11px;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.18);
+}
+
+.bd4-audit-button:hover{
+    opacity:.9;
+}
+
+
+/* ============================================================
+   AUDIT PANEL
+   ============================================================ */
+
+.bd4-audit-panel{
+
+    position:fixed;
+
+    right:14px;
+    bottom:76px;
+
+    width:min(470px,calc(100vw - 28px));
+
+    max-height:520px;
+
+    z-index:9992;
+
+    display:none;
+
+    overflow:hidden;
+
+    background:#fff;
+    color:#111827;
+
+    border:1px solid #d1d5db;
+
+    border-radius:10px;
+
+    box-shadow:
+        0 15px 45px rgba(0,0,0,.22);
+
+    font-family:Arial,sans-serif;
+}
+
+.bd4-audit-panel.open{
+    display:block;
+}
+
+.bd4-audit-header{
+
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    padding:11px 13px;
+
+    border-bottom:1px solid #e5e7eb;
+
+    font-weight:700;
+}
+
+.bd4-audit-actions{
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+
+.bd4-small-button{
+
+    padding:5px 8px;
+
+    border:1px solid #d1d5db;
+
+    border-radius:5px;
+
+    background:#fff;
+    color:#374151;
+
+    font-size:10px;
+
+    cursor:pointer;
+}
+
+.bd4-small-button:hover{
+    background:#f3f4f6;
+}
+
+.bd4-audit-body{
+
+    max-height:440px;
+
+    overflow-y:auto;
+
+    padding:8px 13px 13px;
+}
+
+.bd4-audit-item{
+
+    padding:9px 0;
+
+    border-bottom:1px solid #e5e7eb;
+
+    font-size:11px;
+
+    line-height:1.45;
+}
+
+.bd4-audit-item:last-child{
+    border-bottom:0;
+}
+
+.bd4-audit-time{
+    color:#6b7280;
+    font-size:10px;
+}
+
+.bd4-audit-action{
+    margin-top:2px;
+    font-weight:700;
+}
+
+.bd4-audit-details{
+    margin-top:2px;
+    color:#374151;
+}
+
+
+/* ============================================================
+   DIAGNOSTIC MODAL
+   ============================================================ */
+
+.bd4-modal{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:99998;
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    box-sizing:border-box;
+
+    background:rgba(0,0,0,.55);
+}
+
+.bd4-modal.open{
+    display:flex;
+}
+
+.bd4-modal-card{
+
+    width:min(850px,100%);
+
+    max-height:86vh;
+
+    overflow:auto;
+
+    background:#fff;
+    color:#111827;
+
+    border-radius:12px;
+
+    box-shadow:
+        0 20px 70px rgba(0,0,0,.30);
+
+    font-family:Arial,sans-serif;
+}
+
+.bd4-modal-header{
+
+    position:sticky;
+
+    top:0;
+
+    z-index:2;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    padding:13px 17px;
+
+    background:#fff;
+
+    border-bottom:1px solid #e5e7eb;
+}
+
+.bd4-modal-body{
+    padding:17px;
+}
+
+.bd4-diagnostic-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(180px,1fr));
+
+    gap:10px;
+}
+
+.bd4-diagnostic-card{
+
+    padding:11px;
+
+    border:1px solid #e5e7eb;
+
+    border-radius:8px;
+}
+
+.bd4-diagnostic-label{
+
+    color:#6b7280;
+
+    font-size:10px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.04em;
+}
+
+.bd4-diagnostic-value{
+
+    margin-top:4px;
+
+    font-size:17px;
+
+    font-weight:700;
+}
+
+.bd4-ok{
+    color:#15803d;
+}
+
+.bd4-warning{
+    color:#b45309;
+}
+
+.bd4-error{
+    color:#b91c1c;
+}
+
+.bd4-diagnostic-list{
+
+    margin:7px 0 0 18px;
+
+    padding:0;
+
+    line-height:1.7;
+
+    font-size:11px;
+}
+
+
+/* ============================================================
+   VALIDATION NOTICE
+   ============================================================ */
+
+.bd4-validation{
+
+    position:fixed;
+
+    top:18px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:min(650px,calc(100vw - 30px));
+
+    z-index:9997;
+
+    display:none;
+
+    padding:12px 14px;
+
+    border-radius:8px;
+
+    background:#fffbeb;
+
+    color:#78350f;
+
+    border:1px solid #f59e0b;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.12);
+
+    font-family:Arial,sans-serif;
+
+    font-size:11px;
+
+    line-height:1.5;
+}
+
+.bd4-validation.open{
+    display:block;
+}
+
+.bd4-validation.error{
+
+    background:#fef2f2;
+
+    color:#991b1b;
+
+    border-color:#ef4444;
+}
+
+.bd4-validation.success{
+
+    background:#f0fdf4;
+
+    color:#166534;
+
+    border-color:#22c55e;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media(max-width:700px){
+
+    .bd4-status-right{
+        display:none;
     }
 
-    const toast=
-        document.createElement("div");
+    .bd4-status-bar{
+        font-size:9px;
+    }
 
-    toast.className=
-        "p4-toast "+type;
+    .bd4-audit-panel{
+        right:8px;
+        bottom:70px;
+        width:calc(100vw - 16px);
+    }
 
-    toast.innerHTML=
+    .bd4-toast-container{
+        top:10px;
+        right:10px;
+        width:calc(100vw - 20px);
+    }
 
-        (
-            title
-            ?
-            `<div class="p4-toast-title">
-                ${p4Escape(title)}
-             </div>`
-            :
-            ""
-        )
+}
 
-        +
+</style>
 
-        `<div>
-            ${p4Escape(message)}
-         </div>`;
 
-    container.appendChild(toast);
+<!-- ============================================================
+     PHASE 4 UI
+     ============================================================ -->
 
-    setTimeout(
-        function(){
+<div
+    id="bd4Progress"
+    class="bd4-progress">
+</div>
 
-            toast.style.opacity="0";
 
-            toast.style.transform=
-                "translateX(20px)";
+<div
+    id="bd4ToastContainer"
+    class="bd4-toast-container">
+</div>
+
+
+<div
+    id="bd4Validation"
+    class="bd4-validation">
+</div>
+
+
+<div class="bd4-status-bar">
+
+    <div class="bd4-status-left">
+
+        <span>
+
+            <span
+                id="bd4StatusDot"
+                class="bd4-status-dot">
+            </span>
+
+            <span id="bd4SystemStatus">
+                System Ready
+            </span>
+
+        </span>
+
+        <span id="bd4DataStatus">
+            Data: Ready
+        </span>
+
+    </div>
+
+
+    <div class="bd4-status-right">
+
+        <span id="bd4RecordStatus">
+            Records: 0
+        </span>
+
+        <span id="bd4TransactionStatus">
+            Transactions: 0
+        </span>
+
+        <span>
+            Phase 4
+        </span>
+
+    </div>
+
+</div>
+
+
+<button
+    type="button"
+    class="bd4-audit-button"
+    onclick="BD4.toggleAudit()"
+>
+    📝 Audit Log
+</button>
+
+
+<div
+    id="bd4AuditPanel"
+    class="bd4-audit-panel"
+>
+
+    <div class="bd4-audit-header">
+
+        <span>
+            BusinessDesk Audit Log
+        </span>
+
+
+        <div class="bd4-audit-actions">
+
+            <button
+                type="button"
+                class="bd4-small-button"
+                onclick="BD4.exportAudit()"
+            >
+                Export
+            </button>
+
+            <button
+                type="button"
+                class="bd4-small-button"
+                onclick="BD4.clearAudit()"
+            >
+                Clear
+            </button>
+
+            <button
+                type="button"
+                class="bd4-small-button"
+                onclick="BD4.toggleAudit()"
+            >
+                Close
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="bd4AuditBody"
+        class="bd4-audit-body"
+    >
+
+        <div style="color:#6b7280;font-size:11px;">
+            No audit events yet.
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ============================================================
+     DIAGNOSTICS MODAL
+     ============================================================ -->
+
+<div
+    id="bd4DiagnosticModal"
+    class="bd4-modal"
+>
+
+    <div class="bd4-modal-card">
+
+        <div class="bd4-modal-header">
+
+            <strong>
+                BusinessDesk System Diagnostics
+            </strong>
+
+            <button
+                type="button"
+                class="bd4-small-button"
+                onclick="BD4.closeDiagnostics()"
+            >
+                Close
+            </button>
+
+        </div>
+
+
+        <div
+            id="bd4DiagnosticBody"
+            class="bd4-modal-body"
+        >
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ============================================================
+   PHASE 4 — BUSINESSDESK CONTROL ENGINE
+   ============================================================ */
+
+(function(){
+
+    "use strict";
+
+
+    /* ========================================================
+       UNIQUE NAMESPACE
+       
+       This is deliberately BD4 instead of P4.
+       It prevents collisions with previous code.
+       ======================================================== */
+
+    const BD4 = {
+
+        version:"4.2.0",
+
+        initialized:false,
+
+        dirty:false,
+
+        busy:false,
+
+        calculationCount:0,
+
+        saveCount:0,
+
+        lastError:null,
+
+        lastValidation:null,
+
+        audit:[],
+
+        maxAuditEntries:500,
+
+        storageKey:
+            "businessdesk_bd4_audit"
+
+    };
+
+
+    window.BD4 = BD4;
+
+
+    /* ========================================================
+       SAFE HELPERS
+       ======================================================== */
+
+    function byId(id){
+
+        return document.getElementById(id);
+
+    }
+
+
+    function text(value){
+
+        if(
+            value === null ||
+            value === undefined
+        ){
+
+            return "";
+
+        }
+
+        return String(value);
+
+    }
+
+
+    function escapeHTML(value){
+
+        return text(value)
+
+            .replace(/&/g,"&amp;")
+
+            .replace(/</g,"&lt;")
+
+            .replace(/>/g,"&gt;")
+
+            .replace(/"/g,"&quot;")
+
+            .replace(/'/g,"&#039;");
+
+    }
+
+
+    function safeNumber(value){
+
+        const number =
+            Number(value);
+
+        return Number.isFinite(number)
+            ? number
+            : 0;
+
+    }
+
+
+    function currentTime(){
+
+        return new Date()
+            .toLocaleString();
+
+    }
+
+
+    function setProgress(value){
+
+        const bar =
+            byId("bd4Progress");
+
+        if(!bar){
+            return;
+        }
+
+
+        const number =
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    safeNumber(value)
+                )
+            );
+
+
+        bar.style.width =
+            number + "%";
+
+
+        if(number >= 100){
 
             setTimeout(
                 function(){
 
-                    toast.remove();
+                    bar.style.width =
+                        "0%";
 
                 },
-                250
+                350
             );
 
-        },
-        4500
-    );
-
-};
-
-
-/* ============================================================
-   STATUS
-============================================================ */
-
-function p4Status(
-    message,
-    state="ready"
-){
-
-    const label=
-        p4$("p4SystemStatus");
-
-    const dot=
-        p4$("p4StatusDot");
-
-    if(!label || !dot){
-        return;
-    }
-
-    label.textContent=message;
-
-    dot.className=
-        "p4-status-dot";
-
-    if(state==="warning"){
-
-        dot.classList.add("warning");
+        }
 
     }
 
-    if(state==="error"){
 
-        dot.classList.add("error");
+    /* ========================================================
+       TOAST
+       ======================================================== */
 
-    }
+    BD4.toast = function(
+        message,
+        type,
+        title
+    ){
 
-}
+        const container =
+            byId("bd4ToastContainer");
 
-
-/* ============================================================
-   DATA COUNTS
-============================================================ */
-
-function p4UpdateCounts(){
-
-    let records=0;
-
-    let transactions=0;
-
-    try{
-
-        if(!window.db){
+        if(!container){
             return;
         }
 
-        records=
-            db.sales.length+
-            db.purchases.length+
-            db.vouchers.length+
-            db.parties.length+
-            db.ledgers.length+
-            db.groups.length+
-            db.spreadsheet.length;
 
-        transactions=
-            db.journal.length;
+        type =
+            type || "success";
 
-    }catch(error){
-
-        records=0;
-
-        transactions=0;
-
-    }
-
-    const recordElement=
-        p4$("p4RecordStatus");
-
-    const transactionElement=
-        p4$("p4TransactionStatus");
-
-    if(recordElement){
-
-        recordElement.textContent=
-            "Records: "+
-            records.toLocaleString();
-
-    }
-
-    if(transactionElement){
-
-        transactionElement.textContent=
-            "Transactions: "+
-            transactions.toLocaleString();
-
-    }
-
-    const dataStatus=
-        p4$("p4DataStatus");
-
-    if(dataStatus){
-
-        dataStatus.textContent=
-            records>0
-            ?
-            "Local data active"
-            :
-            "No business records";
-
-    }
-
-}
+        title =
+            title || "";
 
 
-/* ============================================================
-   AUDIT LOG
-============================================================ */
-
-window.p4Audit=function(
-    action,
-    details="",
-    type="INFO"
-){
-
-    P4.audit.push({
-
-        time:p4Time(),
-
-        action:String(action),
-
-        details:String(details),
-
-        type:String(type)
-
-    });
-
-    if(
-        P4.audit.length>
-        P4.maxAuditEntries
-    ){
-
-        P4.audit.shift();
-
-    }
-
-    p4RenderAudit();
-
-};
+        const toast =
+            document.createElement("div");
 
 
-function p4RenderAudit(){
+        toast.className =
+            "bd4-toast " + type;
 
-    const body=
-        p4$("p4AuditBody");
 
-    if(!body){
-        return;
-    }
+        toast.innerHTML =
 
-    if(!P4.audit.length){
+            (
+                title
 
-        body.innerHTML=
-            `<div
-                style="color:#6b7280;font-size:11px;">
-                No audit events.
-             </div>`;
+                ?
 
-        return;
+                "<div class='bd4-toast-title'>" +
+                    escapeHTML(title) +
+                "</div>"
 
-    }
+                :
 
-    body.innerHTML=
-
-        P4.audit
-            .slice()
-            .reverse()
-            .map(
-                function(item){
-
-                    return `
-
-                        <div
-                            class="p4-audit-item">
-
-                            <div
-                                class="p4-audit-time">
-
-                                ${p4Escape(item.time)}
-
-                            </div>
-
-                            <div
-                                class="p4-audit-type">
-
-                                ${p4Escape(item.type)}
-                                ·
-                                ${p4Escape(item.action)}
-
-                            </div>
-
-                            ${
-                                item.details
-                                ?
-                                `<div>
-                                    ${p4Escape(
-                                        item.details
-                                    )}
-                                 </div>`
-                                :
-                                ""
-                            }
-
-                        </div>
-
-                    `;
-
-                }
+                ""
             )
-            .join("");
 
-}
+            +
 
-
-window.p4ToggleAudit=function(){
-
-    const panel=
-        p4$("p4AuditPanel");
-
-    if(!panel){
-        return;
-    }
-
-    panel.classList.toggle("open");
-
-};
+            "<div>" +
+                escapeHTML(message) +
+            "</div>";
 
 
-window.p4ClearAudit=function(){
-
-    if(
-        !confirm(
-            "Clear the current audit log?"
-        )
-    ){
-
-        return;
-
-    }
-
-    P4.audit=[];
-
-    p4RenderAudit();
-
-    p4Audit(
-        "AUDIT_RESET",
-        "Audit log was cleared by the user.",
-        "USER"
-    );
-
-};
-
-
-/* ============================================================
-   AUDIT EXPORT
-============================================================ */
-
-window.p4ExportAudit=function(){
-
-    if(!P4.audit.length){
-
-        p4Toast(
-            "There are no audit events to export.",
-            "warning",
-            "Audit Log"
+        container.appendChild(
+            toast
         );
 
-        return;
 
-    }
+        setTimeout(
+            function(){
 
-    const rows=[
+                toast.style.opacity =
+                    "0";
 
-        [
-            "Time",
-            "Type",
-            "Action",
-            "Details"
-        ]
-
-    ];
+                toast.style.transform =
+                    "translateX(20px)";
 
 
-    P4.audit.forEach(
-        function(item){
+                setTimeout(
+                    function(){
 
-            rows.push([
+                        if(toast.parentNode){
 
-                item.time,
+                            toast.parentNode
+                                .removeChild(toast);
 
-                item.type,
+                        }
 
-                item.action,
+                    },
+                    250
+                );
 
-                item.details
+            },
+            4200
+        );
 
-            ]);
+    };
+
+
+    /* ========================================================
+       STATUS
+       ======================================================== */
+
+    BD4.setStatus = function(
+        message,
+        state
+    ){
+
+        const label =
+            byId("bd4SystemStatus");
+
+        const dot =
+            byId("bd4StatusDot");
+
+
+        if(label){
+
+            label.textContent =
+                text(message);
 
         }
-    );
 
 
-    const csv=
+        if(dot){
 
-        rows
-            .map(
-                function(row){
-
-                    return row
-                        .map(
-                            function(value){
-
-                                return '"' +
-                                    String(
-                                        value ?? ""
-                                    )
-                                    .replace(
-                                        /"/g,
-                                        '""'
-                                    ) +
-                                    '"';
-
-                            }
-                        )
-                        .join(",");
-
-                }
-            )
-            .join("\n");
+            dot.className =
+                "bd4-status-dot";
 
 
-    const blob=
-        new Blob(
-            [csv],
-            {
-                type:
-                    "text/csv;charset=utf-8;"
+            if(state === "warning"){
+
+                dot.classList.add(
+                    "warning"
+                );
+
             }
-        );
 
 
-    const url=
-        URL.createObjectURL(blob);
+            if(state === "error"){
 
-
-    const a=
-        document.createElement("a");
-
-    a.href=url;
-
-    a.download=
-        "BusinessDesk-Audit-" +
-        new Date()
-            .toISOString()
-            .slice(0,10) +
-        ".csv";
-
-
-    document.body.appendChild(a);
-
-    a.click();
-
-    a.remove();
-
-    URL.revokeObjectURL(url);
-
-
-    p4Audit(
-        "AUDIT_EXPORTED",
-        "Audit log exported to CSV.",
-        "USER"
-    );
-
-};
-
-
-/* ============================================================
-   DATA VALIDATION
-============================================================ */
-
-function p4ValidateDB(){
-
-    const issues=[];
-
-    const warnings=[];
-
-
-    if(
-        typeof db!=="object" ||
-        !db
-    ){
-
-        issues.push(
-            "Application database object is unavailable."
-        );
-
-        return {
-
-            valid:false,
-
-            issues:issues,
-
-            warnings:warnings
-
-        };
-
-    }
-
-
-    const requiredArrays=[
-
-        "groups",
-        "ledgers",
-        "parties",
-        "sales",
-        "purchases",
-        "vouchers",
-        "journal",
-        "spreadsheet"
-
-    ];
-
-
-    requiredArrays.forEach(
-        function(key){
-
-            if(!Array.isArray(db[key])){
-
-                issues.push(
-                    "Database collection '" +
-                    key +
-                    "' is not an array."
+                dot.classList.add(
+                    "error"
                 );
 
             }
 
         }
-    );
+
+    };
 
 
-    if(
-        !db.company ||
-        typeof db.company!=="object"
-    ){
+    /* ========================================================
+       DATABASE ACCESS
+       
+       Important:
+       We NEVER redeclare db.
+       ======================================================== */
 
-        issues.push(
-            "Company configuration is missing."
-        );
+    function getDatabase(){
+
+        try{
+
+            if(
+                typeof window.db ===
+                "object" &&
+
+                window.db !== null
+            ){
+
+                return window.db;
+
+            }
+
+        }catch(error){
+
+            return null;
+
+        }
+
+
+        return null;
 
     }
 
 
-    /* --------------------------------------------------------
-       DUPLICATE IDS
-    -------------------------------------------------------- */
+    /* ========================================================
+       DATABASE STATISTICS
+       ======================================================== */
 
-    const idMap=new Map();
+    function databaseStats(){
+
+        const db =
+            getDatabase();
 
 
-    requiredArrays.forEach(
-        function(key){
+        const stats = {
 
-            if(!Array.isArray(db[key])){
-                return;
+            sales:0,
+
+            purchases:0,
+
+            vouchers:0,
+
+            journal:0,
+
+            ledgers:0,
+
+            parties:0,
+
+            groups:0,
+
+            spreadsheetRows:0
+
+        };
+
+
+        if(!db){
+
+            return stats;
+
+        }
+
+
+        const arrayNames = [
+
+            "sales",
+
+            "purchases",
+
+            "vouchers",
+
+            "journal",
+
+            "ledgers",
+
+            "parties",
+
+            "groups"
+
+        ];
+
+
+        arrayNames.forEach(
+            function(name){
+
+                const value =
+                    db[name];
+
+
+                if(
+                    Array.isArray(value)
+                ){
+
+                    stats[name] =
+                        value.length;
+
+                }else if(
+                    value &&
+                    typeof value ===
+                    "object"
+                ){
+
+                    stats[name] =
+                        Object.keys(value)
+                            .length;
+
+                }
+
+            }
+        );
+
+
+        if(
+            db.spreadsheet &&
+            Array.isArray(
+                db.spreadsheet.rows
+            )
+        ){
+
+            stats.spreadsheetRows =
+                db.spreadsheet.rows.length;
+
+        }
+
+
+        return stats;
+
+    }
+
+
+    /* ========================================================
+       TOTAL RECORDS
+       ======================================================== */
+
+    function totalRecords(stats){
+
+        return Object.keys(stats)
+            .reduce(
+                function(total,key){
+
+                    return total +
+                        safeNumber(
+                            stats[key]
+                        );
+
+                },
+                0
+            );
+
+    }
+
+
+    /* ========================================================
+       LOAD AUDIT
+       ======================================================== */
+
+    function loadAudit(){
+
+        try{
+
+            const saved =
+                localStorage.getItem(
+                    BD4.storageKey
+                );
+
+
+            if(!saved){
+
+                return [];
+
             }
 
-            db[key].forEach(
-                function(item,index){
+
+            const parsed =
+                JSON.parse(saved);
+
+
+            if(
+                !Array.isArray(parsed)
+            ){
+
+                return [];
+
+            }
+
+
+            return parsed.slice(
+                -BD4.maxAuditEntries
+            );
+
+        }catch(error){
+
+            return [];
+
+        }
+
+    }
+
+
+    /* ========================================================
+       SAVE AUDIT
+       ======================================================== */
+
+    function saveAudit(){
+
+        try{
+
+            localStorage.setItem(
+                BD4.storageKey,
+                JSON.stringify(
+                    BD4.audit
+                )
+            );
+
+        }catch(error){
+
+            /*
+             * Audit-storage failure must
+             * never break accounting work.
+             */
+
+        }
+
+    }
+
+
+    BD4.audit =
+        loadAudit();
+
+
+    /* ========================================================
+       AUDIT EVENT
+       ======================================================== */
+
+    BD4.log = function(
+        action,
+        details,
+        type
+    ){
+
+        const entry = {
+
+            time:
+                currentTime(),
+
+            timestamp:
+                new Date().toISOString(),
+
+            type:
+                type || "INFO",
+
+            action:
+                text(action),
+
+            details:
+                text(details)
+
+        };
+
+
+        BD4.audit.push(
+            entry
+        );
+
+
+        if(
+            BD4.audit.length >
+            BD4.maxAuditEntries
+        ){
+
+            BD4.audit =
+                BD4.audit.slice(
+                    -BD4.maxAuditEntries
+                );
+
+        }
+
+
+        saveAudit();
+
+        BD4.renderAudit();
+
+    };
+
+
+    /* ========================================================
+       AUDIT PANEL
+       ======================================================== */
+
+    BD4.toggleAudit = function(){
+
+        const panel =
+            byId("bd4AuditPanel");
+
+        if(!panel){
+            return;
+        }
+
+
+        panel.classList.toggle(
+            "open"
+        );
+
+
+        if(
+            panel.classList.contains(
+                "open"
+            )
+        ){
+
+            BD4.renderAudit();
+
+        }
+
+    };
+
+
+    BD4.renderAudit = function(){
+
+        const body =
+            byId("bd4AuditBody");
+
+        if(!body){
+            return;
+        }
+
+
+        if(
+            !BD4.audit.length
+        ){
+
+            body.innerHTML =
+                "<div style='color:#6b7280;font-size:11px;'>" +
+                "No audit events yet." +
+                "</div>";
+
+            return;
+
+        }
+
+
+        body.innerHTML =
+            BD4.audit
+                .slice()
+                .reverse()
+                .map(
+                    function(item){
+
+                        return (
+
+                            "<div class='bd4-audit-item'>" +
+
+                                "<div class='bd4-audit-time'>" +
+                                    escapeHTML(
+                                        item.time
+                                    ) +
+                                "</div>" +
+
+                                "<div class='bd4-audit-action'>" +
+
+                                    escapeHTML(
+                                        item.type
+                                    ) +
+
+                                    " · " +
+
+                                    escapeHTML(
+                                        item.action
+                                    ) +
+
+                                "</div>" +
+
+                                (
+                                    item.details
+
+                                    ?
+
+                                    "<div class='bd4-audit-details'>" +
+                                        escapeHTML(
+                                            item.details
+                                        ) +
+                                    "</div>"
+
+                                    :
+
+                                    ""
+                                ) +
+
+                            "</div>"
+
+                        );
+
+                    }
+                )
+                .join("");
+
+    };
+
+
+    /* ========================================================
+       CLEAR AUDIT
+       ======================================================== */
+
+    BD4.clearAudit = function(){
+
+        if(
+            !window.confirm(
+                "Clear the Phase 4 audit log?"
+            )
+        ){
+
+            return;
+
+        }
+
+
+        BD4.audit = [];
+
+        saveAudit();
+
+        BD4.renderAudit();
+
+
+        BD4.log(
+            "AUDIT_RESET",
+            "Audit log was manually cleared.",
+            "SYSTEM"
+        );
+
+    };
+
+
+    /* ========================================================
+       EXPORT AUDIT
+       ======================================================== */
+
+    BD4.exportAudit = function(){
+
+        if(
+            !BD4.audit.length
+        ){
+
+            BD4.toast(
+                "There are no audit events to export.",
+                "warning",
+                "Audit Log"
+            );
+
+            return;
+
+        }
+
+
+        const rows = [
+
+            [
+                "Timestamp",
+                "Time",
+                "Type",
+                "Action",
+                "Details"
+            ]
+
+        ];
+
+
+        BD4.audit.forEach(
+            function(item){
+
+                rows.push([
+
+                    item.timestamp,
+
+                    item.time,
+
+                    item.type,
+
+                    item.action,
+
+                    item.details
+
+                ]);
+
+            }
+        );
+
+
+        const csv =
+            rows
+                .map(
+                    function(row){
+
+                        return row
+                            .map(
+                                function(cell){
+
+                                    return '"' +
+
+                                        text(cell)
+                                            .replace(
+                                                /"/g,
+                                                '""'
+                                            ) +
+
+                                        '"';
+
+                                }
+                            )
+                            .join(",");
+
+                    }
+                )
+                .join("\n");
+
+
+        const blob =
+            new Blob(
+                [csv],
+                {
+                    type:
+                        "text/csv;charset=utf-8"
+                }
+            );
+
+
+        const url =
+            URL.createObjectURL(
+                blob
+            );
+
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+
+        link.href =
+            url;
+
+
+        link.download =
+            "BusinessDesk_Phase4_Audit_" +
+
+            new Date()
+                .toISOString()
+                .slice(0,10) +
+
+            ".csv";
+
+
+        document.body.appendChild(
+            link
+        );
+
+
+        link.click();
+
+
+        document.body.removeChild(
+            link
+        );
+
+
+        URL.revokeObjectURL(
+            url
+        );
+
+
+        BD4.log(
+            "AUDIT_EXPORT",
+            "Audit log exported to CSV.",
+            "SYSTEM"
+        );
+
+    };
+
+
+    /* ========================================================
+       DATABASE VALIDATION
+       ======================================================== */
+
+    BD4.validateData = function(){
+
+        const db =
+            getDatabase();
+
+
+        const result = {
+
+            valid:true,
+
+            errors:[],
+
+            warnings:[],
+
+            stats:
+                databaseStats()
+
+        };
+
+
+        if(!db){
+
+            result.valid =
+                false;
+
+            result.errors.push(
+                "Database object 'db' is unavailable."
+            );
+
+            return result;
+
+        }
+
+
+        /* ----------------------------------------------------
+           Required collections
+           ---------------------------------------------------- */
+
+        const collections = [
+
+            "sales",
+
+            "purchases",
+
+            "vouchers",
+
+            "journal",
+
+            "ledgers",
+
+            "parties",
+
+            "groups"
+
+        ];
+
+
+        collections.forEach(
+            function(name){
+
+                if(
+                    db[name] !== undefined &&
+
+                    !Array.isArray(
+                        db[name]
+                    ) &&
+
+                    (
+                        typeof db[name] !==
+                        "object" ||
+
+                        db[name] === null
+                    )
+                ){
+
+                    result.valid =
+                        false;
+
+                    result.errors.push(
+                        "Invalid database collection: " +
+                        name
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* ----------------------------------------------------
+           Journal validation
+           ---------------------------------------------------- */
+
+        if(
+            Array.isArray(
+                db.journal
+            )
+        ){
+
+            let invalidEntries = 0;
+
+            let debitTotal = 0;
+
+            let creditTotal = 0;
+
+
+            db.journal.forEach(
+                function(journal){
 
                     if(
-                        !item ||
-                        typeof item!=="object"
+                        !journal ||
+                        !Array.isArray(
+                            journal.entries
+                        )
                     ){
 
-                        issues.push(
-                            key+
-                            "["+
-                            index+
-                            "] is not a valid object."
-                        );
+                        invalidEntries++;
 
                         return;
 
                     }
 
-                    if(!item.id){
 
-                        warnings.push(
-                            key+
-                            "["+
-                            index+
-                            "] has no ID."
-                        );
+                    let entryDebit = 0;
 
-                        return;
+                    let entryCredit = 0;
 
-                    }
 
-                    const id=
-                        String(item.id);
+                    journal.entries.forEach(
+                        function(entry){
 
-                    if(idMap.has(id)){
+                            if(!entry){
 
-                        issues.push(
-                            "Duplicate record ID: "+
-                            id+
-                            " ("+
-                            idMap.get(id)+
-                            " and "+
-                            key+
-                            ")"
-                        );
+                                invalidEntries++;
 
-                    }else{
+                                return;
 
-                        idMap.set(
-                            id,
-                            key
-                        );
+                            }
+
+
+                            const debit =
+                                safeNumber(
+                                    entry.debit
+                                );
+
+
+                            const credit =
+                                safeNumber(
+                                    entry.credit
+                                );
+
+
+                            if(
+                                debit < 0 ||
+                                credit < 0
+                            ){
+
+                                invalidEntries++;
+
+                            }
+
+
+                            if(
+                                debit > 0 &&
+                                credit > 0
+                            ){
+
+                                invalidEntries++;
+
+                            }
+
+
+                            if(
+                                debit === 0 &&
+                                credit === 0
+                            ){
+
+                                invalidEntries++;
+
+                            }
+
+
+                            if(
+                                !text(
+                                    entry.ledger
+                                ).trim()
+                            ){
+
+                                invalidEntries++;
+
+                            }
+
+
+                            entryDebit +=
+                                debit;
+
+                            entryCredit +=
+                                credit;
+
+                        }
+                    );
+
+
+                    debitTotal +=
+                        entryDebit;
+
+                    creditTotal +=
+                        entryCredit;
+
+
+                    if(
+                        Math.abs(
+                            entryDebit -
+                            entryCredit
+                        ) > 0.005
+                    ){
+
+                        invalidEntries++;
 
                     }
 
                 }
             );
 
+
+            if(
+                invalidEntries > 0
+            ){
+
+                result.valid =
+                    false;
+
+                result.errors.push(
+                    invalidEntries +
+                    " journal validation issue(s) detected."
+                );
+
+            }
+
+
+            if(
+                Math.abs(
+                    debitTotal -
+                    creditTotal
+                ) > 0.005
+            ){
+
+                result.valid =
+                    false;
+
+                result.errors.push(
+                    "Overall journal debit/credit totals are not balanced."
+                );
+
+            }
+
         }
-    );
 
 
-    /* --------------------------------------------------------
-       JOURNAL VALIDATION
-    -------------------------------------------------------- */
+        /* ----------------------------------------------------
+           Duplicate IDs
+           ---------------------------------------------------- */
 
-    const ledgerNames=
-        new Set(
-            Array.isArray(db.ledgers)
-            ?
-            db.ledgers.map(
-                function(ledger){
+        collections.forEach(
+            function(name){
 
-                    return String(
-                        ledger.name ?? ""
-                    );
-
-                }
-            )
-            :
-            []
-        );
-
-
-    if(Array.isArray(db.journal)){
-
-        db.journal.forEach(
-            function(entry,index){
-
-                if(
-                    !entry ||
-                    typeof entry!=="object"
-                ){
-
-                    issues.push(
-                        "Journal entry "+
-                        (index+1)+
-                        " is invalid."
-                    );
-
-                    return;
-
-                }
+                const collection =
+                    db[name];
 
 
                 if(
                     !Array.isArray(
-                        entry.entries
+                        collection
                     )
                 ){
-
-                    issues.push(
-                        "Journal entry "+
-                        (index+1)+
-                        " has no entry lines."
-                    );
 
                     return;
 
                 }
 
 
-                let debit=0;
+                const ids =
+                    new Set();
 
-                let credit=0;
+                let duplicates = 0;
 
 
-                entry.entries.forEach(
-                    function(line){
+                collection.forEach(
+                    function(item){
 
-                        if(!line){
+                        if(!item){
                             return;
                         }
 
-                        const d=
-                            Number(
-                                line.debit
-                            ) || 0;
 
-                        const c=
-                            Number(
-                                line.credit
-                            ) || 0;
-
-                        debit+=d;
-
-                        credit+=c;
+                        const id =
+                            item.id ??
+                            item._id;
 
 
                         if(
-                            line.ledger &&
-                            !ledgerNames.has(
-                                String(
-                                    line.ledger
-                                )
-                            )
+                            id === null ||
+                            id === undefined ||
+                            text(id) === ""
                         ){
 
-                            warnings.push(
-                                "Journal entry "+
-                                (index+1)+
-                                " references ledger '" +
-                                String(
-                                    line.ledger
-                                )+
-                                "' which is not in the current ledger master."
-                            );
+                            return;
 
                         }
 
 
+                        const key =
+                            text(id);
+
+
                         if(
-                            d<0 ||
-                            c<0
+                            ids.has(key)
                         ){
 
-                            issues.push(
-                                "Negative debit/credit in journal entry "+
-                                (index+1)+"."
-                            );
+                            duplicates++;
 
                         }
+
+
+                        ids.add(key);
 
                     }
                 );
 
 
-                const difference=
-                    Math.abs(
-                        debit-credit
-                    );
-
-
                 if(
-                    difference>0.005
+                    duplicates > 0
                 ){
 
-                    issues.push(
-                        "Unbalanced journal entry "+
-                        (index+1)+
-                        ": Debit "+
-                        debit.toFixed(2)+
-                        " vs Credit "+
-                        credit.toFixed(2)
+                    result.valid =
+                        false;
+
+                    result.errors.push(
+                        duplicates +
+                        " duplicate ID(s) found in " +
+                        name +
+                        "."
                     );
 
                 }
@@ -9813,276 +10907,1375 @@ function p4ValidateDB(){
             }
         );
 
-    }
+
+        /* ----------------------------------------------------
+           Empty database
+           ---------------------------------------------------- */
+
+        if(
+            totalRecords(
+                result.stats
+            ) === 0
+        ){
+
+            result.warnings.push(
+                "The database currently contains no records."
+            );
+
+        }
 
 
-    /* --------------------------------------------------------
-       LEDGER VALIDATION
-    -------------------------------------------------------- */
+        BD4.lastValidation =
+            result;
 
-    if(Array.isArray(db.ledgers)){
 
-        const names=new Set();
+        return result;
 
-        db.ledgers.forEach(
-            function(ledger,index){
+    };
 
-                const name=
-                    String(
-                        ledger.name ?? ""
+
+    /* ========================================================
+       VALIDATION NOTICE
+       ======================================================== */
+
+    BD4.showValidation =
+        function(result){
+
+            const panel =
+                byId("bd4Validation");
+
+            if(!panel){
+                return;
+            }
+
+
+            panel.className =
+                "bd4-validation";
+
+
+            if(
+                result.valid &&
+                result.warnings.length === 0
+            ){
+
+                panel.classList.add(
+                    "success"
+                );
+
+
+                panel.innerHTML =
+                    "<strong>✓ Data Validation Passed</strong>" +
+
+                    "<div>" +
+                    "Current database checks passed successfully." +
+                    "</div>";
+
+
+                panel.classList.add(
+                    "open"
+                );
+
+
+                setTimeout(
+                    function(){
+
+                        panel.classList.remove(
+                            "open"
+                        );
+
+                    },
+                    2500
+                );
+
+
+                return;
+
+            }
+
+
+            if(
+                !result.valid
+            ){
+
+                panel.classList.add(
+                    "error"
+                );
+
+            }
+
+
+            let html =
+                "<strong>" +
+
+                (
+                    result.valid
+                        ? "⚠ Validation Warning"
+                        : "✕ Validation Issue"
+                ) +
+
+                "</strong>";
+
+
+            if(
+                result.errors.length
+            ){
+
+                html +=
+                    "<div style='margin-top:5px;font-weight:700;'>" +
+                    "Errors" +
+                    "</div>" +
+
+                    "<ul class='bd4-diagnostic-list'>" +
+
+                    result.errors
+                        .map(
+                            function(error){
+
+                                return (
+                                    "<li>" +
+                                    escapeHTML(error) +
+                                    "</li>"
+                                );
+
+                            }
+                        )
+                        .join("") +
+
+                    "</ul>";
+
+            }
+
+
+            if(
+                result.warnings.length
+            ){
+
+                html +=
+                    "<div style='margin-top:5px;font-weight:700;'>" +
+                    "Warnings" +
+                    "</div>" +
+
+                    "<ul class='bd4-diagnostic-list'>" +
+
+                    result.warnings
+                        .map(
+                            function(warning){
+
+                                return (
+                                    "<li>" +
+                                    escapeHTML(warning) +
+                                    "</li>"
+                                );
+
+                            }
+                        )
+                        .join("") +
+
+                    "</ul>";
+
+            }
+
+
+            panel.innerHTML =
+                html;
+
+
+            panel.classList.add(
+                "open"
+            );
+
+    };
+
+
+    /* ========================================================
+       STATUS UPDATE
+       ======================================================== */
+
+    BD4.updateStatus =
+        function(){
+
+            const db =
+                getDatabase();
+
+
+            const stats =
+                databaseStats();
+
+
+            const records =
+                totalRecords(
+                    stats
+                );
+
+
+            const recordElement =
+                byId(
+                    "bd4RecordStatus"
+                );
+
+
+            const transactionElement =
+                byId(
+                    "bd4TransactionStatus"
+                );
+
+
+            const dataElement =
+                byId(
+                    "bd4DataStatus"
+                );
+
+
+            if(recordElement){
+
+                recordElement.textContent =
+                    "Records: " +
+                    records.toLocaleString();
+
+            }
+
+
+            if(transactionElement){
+
+                transactionElement.textContent =
+                    "Transactions: " +
+
+                    (
+                        stats.sales +
+                        stats.purchases +
+                        stats.vouchers +
+                        stats.journal
                     )
-                    .trim()
-                    .toLowerCase();
+                    .toLocaleString();
+
+            }
 
 
-                if(!name){
+            if(dataElement){
 
-                    issues.push(
-                        "Ledger "+
-                        (index+1)+
-                        " has no name."
+                dataElement.textContent =
+                    db
+                        ? (
+                            records > 0
+                                ? "Data: Loaded"
+                                : "Data: Empty"
+                        )
+                        : "Data: Unavailable";
+
+            }
+
+    };
+
+
+    /* ========================================================
+       SYSTEM DIAGNOSTICS
+       ======================================================== */
+
+    BD4.runDiagnostics =
+        function(){
+
+            const db =
+                getDatabase();
+
+
+            const validation =
+                BD4.validateData();
+
+
+            const sections =
+                document.querySelectorAll(
+                    "[id^='section-']"
+                );
+
+
+            const navigation =
+                document.querySelectorAll(
+                    "[data-section]"
+                );
+
+
+            const visibleSections =
+                Array.from(
+                    sections
+                )
+                .filter(
+                    function(section){
+
+                        const style =
+                            window.getComputedStyle(
+                                section
+                            );
+
+
+                        return (
+                            style.display !==
+                                "none" &&
+
+                            section.offsetParent !==
+                                null
+                        );
+
+                    }
+                );
+
+
+            const stats =
+                validation.stats;
+
+
+            const report = {
+
+                phase:
+                    "Phase 4",
+
+                version:
+                    BD4.version,
+
+                database:
+                    !!db,
+
+                dataValid:
+                    validation.valid,
+
+                errors:
+                    validation.errors.length,
+
+                warnings:
+                    validation.warnings.length,
+
+                navigationItems:
+                    navigation.length,
+
+                sectionElements:
+                    sections.length,
+
+                visibleSections:
+                    visibleSections.length,
+
+                auditEntries:
+                    BD4.audit.length,
+
+                calculations:
+                    BD4.calculationCount,
+
+                saves:
+                    BD4.saveCount,
+
+                unsavedChanges:
+                    BD4.dirty,
+
+                busy:
+                    BD4.busy,
+
+                records:
+                    totalRecords(stats),
+
+                sales:
+                    stats.sales,
+
+                purchases:
+                    stats.purchases,
+
+                vouchers:
+                    stats.vouchers,
+
+                journal:
+                    stats.journal,
+
+                ledgers:
+                    stats.ledgers,
+
+                parties:
+                    stats.parties,
+
+                groups:
+                    stats.groups,
+
+                spreadsheetRows:
+                    stats.spreadsheetRows
+
+            };
+
+
+            BD4.showDiagnostics(
+                report,
+                validation
+            );
+
+
+            BD4.log(
+                "SYSTEM_DIAGNOSTICS",
+                "Diagnostics executed.",
+                "SYSTEM"
+            );
+
+
+            return report;
+
+    };
+
+
+    /* ========================================================
+       DIAGNOSTIC DISPLAY
+       ======================================================== */
+
+    BD4.showDiagnostics =
+        function(
+            report,
+            validation
+        ){
+
+            const modal =
+                byId(
+                    "bd4DiagnosticModal"
+                );
+
+
+            const body =
+                byId(
+                    "bd4DiagnosticBody"
+                );
+
+
+            if(
+                !modal ||
+                !body
+            ){
+
+                return;
+
+            }
+
+
+            function card(
+                label,
+                value,
+                className
+            ){
+
+                return (
+
+                    "<div class='bd4-diagnostic-card'>" +
+
+                        "<div class='bd4-diagnostic-label'>" +
+                            escapeHTML(label) +
+                        "</div>" +
+
+                        "<div class='bd4-diagnostic-value " +
+                            (className || "") +
+                        "'>" +
+
+                            escapeHTML(
+                                value
+                            ) +
+
+                        "</div>" +
+
+                    "</div>"
+
+                );
+
+            }
+
+
+            let html =
+
+                "<div class='bd4-diagnostic-grid'>";
+
+
+            html += card(
+                "Phase",
+                report.phase
+            );
+
+
+            html += card(
+                "Version",
+                report.version
+            );
+
+
+            html += card(
+                "Database",
+                report.database
+                    ? "Available"
+                    : "Unavailable",
+                report.database
+                    ? "bd4-ok"
+                    : "bd4-error"
+            );
+
+
+            html += card(
+                "Data Validation",
+                report.dataValid
+                    ? "Passed"
+                    : "Failed",
+                report.dataValid
+                    ? "bd4-ok"
+                    : "bd4-error"
+            );
+
+
+            html += card(
+                "Total Records",
+                report.records
+            );
+
+
+            html += card(
+                "Transactions",
+                report.sales +
+                report.purchases +
+                report.vouchers +
+                report.journal
+            );
+
+
+            html += card(
+                "Sections",
+                report.sectionElements
+            );
+
+
+            html += card(
+                "Navigation",
+                report.navigationItems
+            );
+
+
+            html += card(
+                "Visible Sections",
+                report.visibleSections
+            );
+
+
+            html += card(
+                "Audit Entries",
+                report.auditEntries
+            );
+
+
+            html += card(
+                "Calculations",
+                report.calculations
+            );
+
+
+            html += card(
+                "Application State",
+                report.busy
+                    ? "Busy"
+                    : (
+                        report.unsavedChanges
+                            ? "Unsaved"
+                            : "Ready"
+                    )
+            );
+
+
+            html +=
+                "</div>";
+
+
+            html +=
+                "<h3 style='margin:20px 0 8px;'>" +
+                "Database Statistics" +
+                "</h3>";
+
+
+            html +=
+                "<div class='bd4-diagnostic-grid'>";
+
+
+            html += card(
+                "Sales",
+                report.sales
+            );
+
+
+            html += card(
+                "Purchases",
+                report.purchases
+            );
+
+
+            html += card(
+                "Vouchers",
+                report.vouchers
+            );
+
+
+            html += card(
+                "Journal",
+                report.journal
+            );
+
+
+            html += card(
+                "Ledgers",
+                report.ledgers
+            );
+
+
+            html += card(
+                "Parties",
+                report.parties
+            );
+
+
+            html += card(
+                "Groups",
+                report.groups
+            );
+
+
+            html += card(
+                "Spreadsheet Rows",
+                report.spreadsheetRows
+            );
+
+
+            html +=
+                "</div>";
+
+
+            if(
+                validation.errors.length
+            ){
+
+                html +=
+
+                    "<h3 style='margin:20px 0 8px;color:#b91c1c;'>" +
+                    "Errors" +
+                    "</h3>" +
+
+                    "<ul class='bd4-diagnostic-list'>" +
+
+                    validation.errors
+                        .map(
+                            function(error){
+
+                                return (
+                                    "<li>" +
+                                    escapeHTML(error) +
+                                    "</li>"
+                                );
+
+                            }
+                        )
+                        .join("") +
+
+                    "</ul>";
+
+            }
+
+
+            if(
+                validation.warnings.length
+            ){
+
+                html +=
+
+                    "<h3 style='margin:20px 0 8px;color:#b45309;'>" +
+                    "Warnings" +
+                    "</h3>" +
+
+                    "<ul class='bd4-diagnostic-list'>" +
+
+                    validation.warnings
+                        .map(
+                            function(warning){
+
+                                return (
+                                    "<li>" +
+                                    escapeHTML(warning) +
+                                    "</li>"
+                                );
+
+                            }
+                        )
+                        .join("") +
+
+                    "</ul>";
+
+            }
+
+
+            body.innerHTML =
+                html;
+
+
+            modal.classList.add(
+                "open"
+            );
+
+    };
+
+
+    BD4.closeDiagnostics =
+        function(){
+
+            const modal =
+                byId(
+                    "bd4DiagnosticModal"
+                );
+
+
+            if(modal){
+
+                modal.classList.remove(
+                    "open"
+                );
+
+            }
+
+    };
+
+
+    /* ========================================================
+       MARK DATA DIRTY
+       ======================================================== */
+
+    BD4.markDirty =
+        function(reason){
+
+            BD4.dirty =
+                true;
+
+
+            BD4.setStatus(
+                "Unsaved Changes",
+                "warning"
+            );
+
+
+            BD4.log(
+                "DATA_CHANGED",
+                reason ||
+                "Application data changed.",
+                "USER"
+            );
+
+    };
+
+
+    /* ========================================================
+       MARK DATA CLEAN
+       ======================================================== */
+
+    BD4.markClean =
+        function(){
+
+            BD4.dirty =
+                false;
+
+
+            BD4.setStatus(
+                "System Ready",
+                "ready"
+            );
+
+    };
+
+
+    /* ========================================================
+       NAVIGATION MONITOR
+       
+       IMPORTANT:
+       This does NOT replace showSection().
+       It only observes clicks.
+       ======================================================== */
+
+    function installNavigationMonitor(){
+
+        if(
+            BD4.navigationInstalled
+        ){
+
+            return;
+
+        }
+
+
+        BD4.navigationInstalled =
+            true;
+
+
+        document.addEventListener(
+            "click",
+            function(event){
+
+                const button =
+                    event.target.closest(
+                        "[data-section]"
                     );
+
+
+                if(!button){
 
                     return;
 
                 }
 
 
-                if(names.has(name)){
-
-                    issues.push(
-                        "Duplicate ledger name: "+
-                        ledger.name
-                    );
-
-                }
-
-                names.add(name);
-
-
-                const opening=
-                    Number(
-                        ledger.opening
+                const section =
+                    button.getAttribute(
+                        "data-section"
                     );
 
 
-                if(
-                    !Number.isFinite(
-                        opening
-                    )
-                ){
-
-                    issues.push(
-                        "Invalid opening balance for ledger: "+
-                        ledger.name
-                    );
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /* --------------------------------------------------------
-       PARTY VALIDATION
-    -------------------------------------------------------- */
-
-    if(Array.isArray(db.parties)){
-
-        const names=new Set();
-
-        db.parties.forEach(
-            function(party,index){
-
-                const name=
-                    String(
-                        party.name ?? ""
-                    )
-                    .trim()
-                    .toLowerCase();
-
-
-                if(!name){
-
-                    issues.push(
-                        "Party "+
-                        (index+1)+
-                        " has no name."
-                    );
+                if(!section){
 
                     return;
 
                 }
 
 
-                if(names.has(name)){
+                setTimeout(
+                    function(){
 
-                    warnings.push(
-                        "Duplicate party name: "+
-                        party.name
+                        const target =
+                            byId(
+                                "section-" +
+                                section
+                            );
+
+
+                        if(!target){
+
+                            BD4.log(
+                                "NAVIGATION_WARNING",
+                                "No section element found for: " +
+                                section,
+                                "WARNING"
+                            );
+
+                            return;
+
+                        }
+
+
+                        BD4.log(
+                            "SECTION_OPENED",
+                            "Section: " +
+                            section,
+                            "USER"
+                        );
+
+
+                        BD4.updateStatus();
+
+                    },
+                    80
+                );
+
+            },
+            true
+        );
+
+    }
+
+
+    /* ========================================================
+       CLICK MONITOR FOR COMMON DATA ACTIONS
+       
+       This does NOT replace existing functions.
+       ======================================================== */
+
+    function installActionMonitor(){
+
+        if(
+            BD4.actionMonitorInstalled
+        ){
+
+            return;
+
+        }
+
+
+        BD4.actionMonitorInstalled =
+            true;
+
+
+        document.addEventListener(
+            "click",
+            function(event){
+
+                const element =
+                    event.target.closest(
+                        "button,input[type='button'],input[type='submit']"
                     );
+
+
+                if(!element){
+
+                    return;
 
                 }
 
-                names.add(name);
 
-
-                if(
-                    party.gstin &&
-                    !/^[0-9A-Za-z-]{5,20}$/.test(
-                        String(party.gstin).trim()
+                const textValue =
+                    (
+                        element.innerText ||
+                        element.value ||
+                        element.getAttribute(
+                            "aria-label"
+                        ) ||
+                        ""
                     )
-                ){
+                    .trim()
+                    .toLowerCase();
 
-                    warnings.push(
-                        "GSTIN format should be reviewed for party: "+
-                        party.name
-                    );
+
+                if(!textValue){
+
+                    return;
 
                 }
 
-            }
+
+                const keywords = [
+
+                    "save",
+
+                    "submit",
+
+                    "calculate",
+
+                    "post",
+
+                    "create",
+
+                    "add",
+
+                    "update",
+
+                    "restore",
+
+                    "import"
+
+                ];
+
+
+                const matched =
+                    keywords.some(
+                        function(keyword){
+
+                            return textValue
+                                .includes(
+                                    keyword
+                                );
+
+                        }
+                    );
+
+
+                if(!matched){
+
+                    return;
+
+                }
+
+
+                setTimeout(
+                    function(){
+
+                        BD4.updateStatus();
+
+                    },
+                    100
+                );
+
+            },
+            true
         );
 
     }
 
 
-    /* --------------------------------------------------------
-       SALES VALIDATION
-    -------------------------------------------------------- */
+    /* ========================================================
+       GLOBAL ERROR HANDLING
+       
+       Does not stop the application.
+       ======================================================== */
 
-    if(Array.isArray(db.sales)){
+    window.addEventListener(
+        "error",
+        function(event){
 
-        db.sales.forEach(
-            function(sale,index){
+            /*
+             * Ignore errors generated before Phase 4
+             * initializes.
+             */
 
-                const total=
-                    Number(
-                        sale.total
+            if(
+                !BD4.initialized
+            ){
+
+                return;
+
+            }
+
+
+            BD4.lastError =
+                event.error ||
+                new Error(
+                    event.message ||
+                    "Unknown JavaScript error."
+                );
+
+
+            BD4.setStatus(
+                "System Error",
+                "error"
+            );
+
+
+            BD4.log(
+                "JAVASCRIPT_ERROR",
+                event.message ||
+                "Unknown JavaScript error.",
+                "ERROR"
+            );
+
+    });
+
+
+    window.addEventListener(
+        "unhandledrejection",
+        function(event){
+
+            if(
+                !BD4.initialized
+            ){
+
+                return;
+
+            }
+
+
+            BD4.lastError =
+                event.reason;
+
+
+            BD4.setStatus(
+                "Operation Error",
+                "error"
+            );
+
+
+            BD4.log(
+                "UNHANDLED_PROMISE",
+                text(
+                    event.reason &&
+                    event.reason.message
+                        ? event.reason.message
+                        : event.reason
+                ),
+                "ERROR"
+            );
+
+    });
+
+
+    /* ========================================================
+       UNSAVED DATA WARNING
+       ======================================================== */
+
+    window.addEventListener(
+        "beforeunload",
+        function(event){
+
+            if(
+                !BD4.dirty ||
+                BD4.busy
+            ){
+
+                return;
+
+            }
+
+
+            event.preventDefault();
+
+            event.returnValue =
+                "You have unsaved changes.";
+
+            return event.returnValue;
+
+    });
+
+
+    /* ========================================================
+       KEYBOARD SHORTCUTS
+       
+       Ctrl + Shift + A = Audit
+       Ctrl + Shift + D = Diagnostics
+       Escape = Close
+       ======================================================== */
+
+    document.addEventListener(
+        "keydown",
+        function(event){
+
+            if(
+                event.ctrlKey &&
+                event.shiftKey &&
+                event.key.toLowerCase() === "a"
+            ){
+
+                event.preventDefault();
+
+                BD4.toggleAudit();
+
+            }
+
+
+            if(
+                event.ctrlKey &&
+                event.shiftKey &&
+                event.key.toLowerCase() === "d"
+            ){
+
+                event.preventDefault();
+
+                BD4.runDiagnostics();
+
+            }
+
+
+            if(
+                event.key === "Escape"
+            ){
+
+                BD4.closeDiagnostics();
+
+
+                const panel =
+                    byId(
+                        "bd4AuditPanel"
                     );
 
 
-                if(
-                    !Number.isFinite(total)
-                ){
+                if(panel){
 
-                    issues.push(
-                        "Invalid sales total in record "+
-                        (index+1)+"."
-                    );
-
-                }
-
-
-                if(
-                    total<0
-                ){
-
-                    warnings.push(
-                        "Negative sales total in record "+
-                        (index+1)+
-                        "; review whether this is an adjustment."
+                    panel.classList.remove(
+                        "open"
                     );
 
                 }
 
             }
+
+        }
+    );
+
+
+    /* ========================================================
+       PERIODIC STATUS MONITOR
+       ======================================================== */
+
+    function startStatusMonitor(){
+
+        BD4.updateStatus();
+
+
+        if(
+            BD4.statusTimer
+        ){
+
+            clearInterval(
+                BD4.statusTimer
+            );
+
+        }
+
+
+        BD4.statusTimer =
+            setInterval(
+                function(){
+
+                    try{
+
+                        BD4.updateStatus();
+
+                    }catch(error){
+
+                        /*
+                         * Never allow monitoring
+                         * to interfere with application.
+                         */
+
+                    }
+
+                },
+                2000
+            );
+
+    }
+
+
+    /* ========================================================
+       PERIODIC VALIDATION
+       ======================================================== */
+
+    function startValidationMonitor(){
+
+        if(
+            BD4.validationTimer
+        ){
+
+            clearInterval(
+                BD4.validationTimer
+            );
+
+        }
+
+
+        BD4.validationTimer =
+            setInterval(
+                function(){
+
+                    try{
+
+                        const result =
+                            BD4.validateData();
+
+
+                        if(
+                            !result.valid
+                        ){
+
+                            BD4.setStatus(
+                                "Data Validation Issue",
+                                "warning"
+                            );
+
+                        }
+
+                    }catch(error){
+
+                        /*
+                         * Validation must never
+                         * break the application.
+                         */
+
+                    }
+
+                },
+                10000
+            );
+
+    }
+
+
+    /* ========================================================
+       INITIALIZATION
+       ======================================================== */
+
+    function initialize(){
+
+        if(
+            BD4.initialized
+        ){
+
+            return;
+
+        }
+
+
+        BD4.initialized =
+            true;
+
+
+        installNavigationMonitor();
+
+        installActionMonitor();
+
+        startStatusMonitor();
+
+        startValidationMonitor();
+
+
+        BD4.renderAudit();
+
+        BD4.updateStatus();
+
+
+        const validation =
+            BD4.validateData();
+
+
+        if(
+            !validation.valid
+        ){
+
+            BD4.setStatus(
+                "Validation Warning",
+                "warning"
+            );
+
+        }else{
+
+            BD4.setStatus(
+                "System Ready",
+                "ready"
+            );
+
+        }
+
+
+        BD4.log(
+            "PHASE4_INITIALIZED",
+            "BusinessDesk Phase 4 control layer initialized.",
+            "SYSTEM"
         );
 
     }
 
 
-    /* --------------------------------------------------------
-       PURCHASE VALIDATION
-    -------------------------------------------------------- */
+    /* ========================================================
+       SAFE INITIALIZATION
+       ======================================================== */
 
-    if(Array.isArray(db.purchases)){
+    if(
+        document.readyState ===
+        "loading"
+    ){
 
-        db.purchases.forEach(
-            function(purchase,index){
+        document.addEventListener(
+            "DOMContentLoaded",
+            function(){
 
-                const total=
-                    Number(
-                        purchase.total
-                    );
+                setTimeout(
+                    initialize,
+                    200
+                );
 
-
-                if(
-                    !Number.isFinite(total)
-                ){
-
-                    issues.push(
-                        "Invalid purchase total in record "+
-                        (index+1)+"."
-                    );
-
-                }
-
-
-                if(
-                    total<0
-                ){
-
-                    warnings.push(
-                        "Negative purchase total in record "+
-                        (index+1)+
-                        "; review whether this is an adjustment."
-                    );
-
-                }
-
+            },
+            {
+                once:true
             }
         );
 
+    }else{
+
+        setTimeout(
+            initialize,
+            200
+        );
+
     }
 
 
-    /* --------------------------------------------------------
-       SPREADSHEET VALIDATION
-    -------------------------------------------------------- */
+})();
 
-    if(Array.isArray(db.spreadsheet)){
-
-        db.spreadsheet.forEach(
-            function(row,index){
-
-                const qty=
-                    Number(row.qty);
-
-                const rate=
-                    Number(row.rate);
-
-                const gst=
-                    Number(row.gst);
+</script>
 
 
-                if(
-                    !Number.isFinite(qty) ||
-                    qty<0
-                ){
-
-                    issues.push(
-                        "Invalid quantity in spreadsheet row "+
-                        (index+1)+"."
-                    );
-
-                }
-
-
-                if(
-                    !Number.isFinite(rate) ||
-                    rate<0
-                ){
-
-                    issues.push(
-                        "Invalid rate in spreadsheet row "+
-                        (index+1)+"."
-                    );
-
-                }
-
-</body>
-</html>
-               
+<!-- ============================================================
+     PHASE 4 END
+     ============================================================ -->
+   </body>
+   </html>
