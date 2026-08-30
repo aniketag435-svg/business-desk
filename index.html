@@ -431,10 +431,6 @@ th{
 
 <div class="app">
 
-<!-- =========================================================
-     PHASE 1 — APPLICATION CORE / NAVIGATION
-     ========================================================= -->
-
 <aside class="sidebar">
 
  <div class="brand">
@@ -560,9 +556,7 @@ th{
 </section>
 
 
-<!-- =========================================================
-     PHASE 2 — CALCULATOR
-     ========================================================= -->
+<!-- PHASE 2 — CALCULATOR -->
 
 <section class="section" id="section-calculator">
 
@@ -716,9 +710,7 @@ th{
 </section>
 
 
-<!-- =========================================================
-     PHASE 3 — SALES
-     ========================================================= -->
+<!-- PHASE 3 — SALES -->
 
 <section class="section" id="section-sales">
 
@@ -734,11 +726,8 @@ th{
 
  <div class="toolbar">
 
-  <button class="btn btn-primary"
-          onclick="openSaleModal()">
-
+  <button class="btn btn-primary" onclick="openSaleModal()">
    + New Sales Invoice
-
   </button>
 
  </div>
@@ -790,11 +779,8 @@ th{
 
  <div class="toolbar">
 
-  <button class="btn btn-primary"
-          onclick="openPurchaseModal()">
-
+  <button class="btn btn-primary" onclick="openPurchaseModal()">
    + New Purchase
-
   </button>
 
  </div>
@@ -846,11 +832,8 @@ th{
 
  <div class="toolbar">
 
-  <button class="btn btn-primary"
-          onclick="openPartyModal()">
-
+  <button class="btn btn-primary" onclick="openPartyModal()">
    + Add Party
-
   </button>
 
  </div>
@@ -899,11 +882,8 @@ th{
 
  <div class="toolbar">
 
-  <button class="btn btn-primary"
-          onclick="openVoucherModal()">
-
+  <button class="btn btn-primary" onclick="openVoucherModal()">
    + New Voucher
-
   </button>
 
  </div>
@@ -1000,24 +980,18 @@ th{
    <tbody>
 
     <tr>
-     <th>Output GST on Sales</th>
-     <td class="right" id="gstOutput">
-      ₹0.00
-     </td>
+     <td><b>Output GST</b></td>
+     <td class="right" id="gstOutput">₹0.00</td>
     </tr>
 
     <tr>
-     <th>Input GST on Purchases</th>
-     <td class="right" id="gstInput">
-      ₹0.00
-     </td>
+     <td><b>Input GST</b></td>
+     <td class="right" id="gstInput">₹0.00</td>
     </tr>
 
     <tr>
-     <th>Net GST</th>
-     <td class="right" id="gstNet">
-      ₹0.00
-     </td>
+     <td><b>Net GST Payable</b></td>
+     <td class="right" id="gstNet">₹0.00</td>
     </tr>
 
    </tbody>
@@ -1038,7 +1012,7 @@ th{
   <h1>Outstanding</h1>
 
   <p>
-   Receivables and payables.
+   Customer and supplier balances.
   </p>
 
  </div>
@@ -1046,22 +1020,36 @@ th{
  <div class="grid grid-2">
 
   <div class="card">
-
-   <b>Customer Receivable</b>
-
-   <div class="metric" id="receivable">
-    ₹0.00
-   </div>
-
+   <b>Customer Outstanding</b>
+   <div class="metric" id="outstandingCustomers">₹0.00</div>
   </div>
 
   <div class="card">
+   <b>Supplier Outstanding</b>
+   <div class="metric" id="outstandingSuppliers">₹0.00</div>
+  </div>
 
-   <b>Supplier Payable</b>
+ </div>
 
-   <div class="metric" id="payable">
-    ₹0.00
-   </div>
+ <div class="card">
+
+  <div class="table-wrap">
+
+   <table>
+
+    <thead>
+
+     <tr>
+      <th>Party</th>
+      <th>Type</th>
+      <th>Outstanding</th>
+     </tr>
+
+    </thead>
+
+    <tbody id="outstandingBody"></tbody>
+
+   </table>
 
   </div>
 
@@ -1070,7 +1058,7 @@ th{
 </section>
 
 
-<!-- SYSTEM CONTROLS -->
+<!-- CONTROLS -->
 
 <section class="section" id="section-controls">
 
@@ -1079,2818 +1067,643 @@ th{
   <h1>System Controls</h1>
 
   <p>
-   Diagnostics and local data controls.
+   Manage application data and settings.
   </p>
 
  </div>
 
  <div class="card">
 
-  <div id="diagnostics"
-       class="notice success">
-  </div>
+  <b>Actions</b>
 
- </div>
-
- <div class="toolbar">
-
-  <button class="btn"
-          onclick="backupData()">
-   Export Backup
-  </button>
-
-  <button class="btn btn-danger"
-          onclick="clearAllData()">
-   Clear All Data
-  </button>
+  <p>
+   <button class="btn btn-primary" onclick="loadSampleData()">Load Sample Data</button>
+   <button class="btn btn-danger" onclick="clearAllData()">Clear All Data</button>
+  </p>
 
  </div>
 
 </section>
 
 </div>
+
 </main>
+
 </div>
 
 
-<!-- =========================================================
-     MODAL
-     ========================================================= -->
+<!-- MODALS -->
 
-<div class="modal-backdrop" id="modalBackdrop">
-
+<!-- Sales Modal -->
+<div class="modal-backdrop" id="saleModal">
  <div class="modal">
-
   <div class="modal-head">
-
-   <h2 id="modalTitle"></h2>
-
-   <button class="close"
-           onclick="closeModal()">
-    ×
-   </button>
-
+   <h2>New Sales Invoice</h2>
+   <button class="close" onclick="closeSaleModal()">×</button>
   </div>
-
-  <div id="modalBody"></div>
-
+  <form onsubmit="saveSale(event)">
+   <div class="form-grid">
+    <div class="field">
+     <label>Invoice No.</label>
+     <input type="text" id="saleInvoiceNo" readonly>
+    </div>
+    <div class="field">
+     <label>Date</label>
+     <input type="date" id="saleDate" required>
+    </div>
+    <div class="field">
+     <label>Customer</label>
+     <select id="saleCustomer" required>
+      <option value="">-- Select Customer --</option>
+     </select>
+    </div>
+    <div class="field">
+     <label>Taxable Amount</label>
+     <input type="number" id="saleTaxable" step="0.01" required>
+    </div>
+    <div class="field">
+     <label>GST Rate (%)</label>
+     <input type="number" id="saleGSTRate" value="18" step="0.01">
+    </div>
+    <div class="field">
+     <label>Total</label>
+     <input type="text" id="saleTotal" readonly>
+    </div>
+   </div>
+   <button type="submit" class="btn btn-primary">Save</button>
+  </form>
  </div>
-
 </div>
 
+<!-- Purchase Modal -->
+<div class="modal-backdrop" id="purchaseModal">
+ <div class="modal">
+  <div class="modal-head">
+   <h2>New Purchase</h2>
+   <button class="close" onclick="closePurchaseModal()">×</button>
+  </div>
+  <form onsubmit="savePurchase(event)">
+   <div class="form-grid">
+    <div class="field">
+     <label>Bill No.</label>
+     <input type="text" id="purchaseBillNo" readonly>
+    </div>
+    <div class="field">
+     <label>Date</label>
+     <input type="date" id="purchaseDate" required>
+    </div>
+    <div class="field">
+     <label>Supplier</label>
+     <select id="purchaseSupplier" required>
+      <option value="">-- Select Supplier --</option>
+     </select>
+    </div>
+    <div class="field">
+     <label>Taxable Amount</label>
+     <input type="number" id="purchaseTaxable" step="0.01" required>
+    </div>
+    <div class="field">
+     <label>GST Rate (%)</label>
+     <input type="number" id="purchaseGSTRate" value="18" step="0.01">
+    </div>
+    <div class="field">
+     <label>Total</label>
+     <input type="text" id="purchaseTotal" readonly>
+    </div>
+   </div>
+   <button type="submit" class="btn btn-primary">Save</button>
+  </form>
+ </div>
+</div>
+
+<!-- Party Modal -->
+<div class="modal-backdrop" id="partyModal">
+ <div class="modal">
+  <div class="modal-head">
+   <h2>Add Party</h2>
+   <button class="close" onclick="closePartyModal()">×</button>
+  </div>
+  <form onsubmit="saveParty(event)">
+   <div class="form-grid">
+    <div class="field">
+     <label>Name</label>
+     <input type="text" id="partyName" required>
+    </div>
+    <div class="field">
+     <label>Type</label>
+     <select id="partyType" required>
+      <option value="">-- Select Type --</option>
+      <option value="Customer">Customer</option>
+      <option value="Supplier">Supplier</option>
+     </select>
+    </div>
+    <div class="field">
+     <label>GSTIN</label>
+     <input type="text" id="partyGSTIN">
+    </div>
+    <div class="field">
+     <label>Phone</label>
+     <input type="tel" id="partyPhone">
+    </div>
+   </div>
+   <button type="submit" class="btn btn-primary">Save</button>
+  </form>
+ </div>
+</div>
+
+<!-- Voucher Modal -->
+<div class="modal-backdrop" id="voucherModal">
+ <div class="modal">
+  <div class="modal-head">
+   <h2>New Voucher</h2>
+   <button class="close" onclick="closeVoucherModal()">×</button>
+  </div>
+  <form onsubmit="saveVoucher(event)">
+   <div class="form-grid">
+    <div class="field">
+     <label>Voucher No.</label>
+     <input type="text" id="voucherNo" readonly>
+    </div>
+    <div class="field">
+     <label>Date</label>
+     <input type="date" id="voucherDate" required>
+    </div>
+    <div class="field">
+     <label>Type</label>
+     <select id="voucherType" required>
+      <option value="">-- Select Type --</option>
+      <option value="Journal">Journal</option>
+      <option value="Deposit">Deposit</option>
+      <option value="Withdrawal">Withdrawal</option>
+     </select>
+    </div>
+    <div class="field">
+     <label>Debit Account</label>
+     <input type="text" id="voucherDebit" required>
+    </div>
+    <div class="field">
+     <label>Credit Account</label>
+     <input type="text" id="voucherCredit" required>
+    </div>
+    <div class="field">
+     <label>Amount</label>
+     <input type="number" id="voucherAmount" step="0.01" required>
+    </div>
+   </div>
+   <button type="submit" class="btn btn-primary">Save</button>
+  </form>
+ </div>
+</div>
 
 <script>
 
-"use strict";
+// ========================================
+// DATA MANAGEMENT
+// ========================================
 
-
-/* =========================================================
-   PHASE 1 — CORE DATABASE
-   ========================================================= */
-
-const STORAGE_KEY =
- "businessdesk_phase123_v2";
-
-
-function defaultDB(){
-
- return {
-  sales:[],
-  purchases:[],
-  parties:[],
-  vouchers:[],
-  journal:[],
-  calculatorHistory:[]
- };
-
+function getStore(key) {
+ return JSON.parse(localStorage.getItem(key) || '[]');
 }
 
-
-function loadDB(){
-
- try{
-
-  const raw =
-   localStorage.getItem(STORAGE_KEY);
-
-  if(!raw)
-   return defaultDB();
-
-  const saved =
-   JSON.parse(raw);
-
-  const fresh =
-   defaultDB();
-
-  Object.keys(fresh).forEach(k=>{
-
-   if(Array.isArray(saved[k]))
-    fresh[k]=saved[k];
-
-  });
-
-  return fresh;
-
- }catch(error){
-
-  return defaultDB();
-
- }
-
+function saveStore(key, data) {
+ localStorage.setItem(key, JSON.stringify(data));
 }
 
+// ========================================
+// SECTION NAVIGATION
+// ========================================
 
-let db=loadDB();
-
-
-function saveDB(){
-
- localStorage.setItem(
-  STORAGE_KEY,
-  JSON.stringify(db)
- );
-
-}
-
-
-function money(value){
-
- return "₹"+Number(value||0)
-  .toLocaleString(
-   "en-IN",
-   {
-    minimumFractionDigits:2,
-    maximumFractionDigits:2
-   }
-  );
-
-}
-
-
-function num(value){
-
- const n=Number(value);
-
- return Number.isFinite(n)
-  ? n
-  : 0;
-
-}
-
-
-function esc(value){
-
- return String(value??"")
-  .replace(
-   /[&<>"']/g,
-   function(match){
-
-    return {
-     "&":"&amp;",
-     "<":"&lt;",
-     ">":"&gt;",
-     '"':"&quot;",
-     "'":"&#039;"
-    }[match];
-
-   }
-  );
-
-}
-
-
-function uid(prefix){
-
- return prefix+
-  "_"+
-  Date.now().toString(36)+
-  "_"+
-  Math.random()
-   .toString(36)
-   .slice(2,8);
-
-}
-
-
-function today(){
-
- return new Date()
-  .toISOString()
-  .slice(0,10);
-
-}
-
-
-function nextNumber(
- prefix,
- records,
- field
-){
-
- let max=0;
-
- records.forEach(record=>{
-
-  const match =
-   String(record[field]||"")
-   .match(
-    new RegExp(
-     "^"+
-     prefix.replace(
-      /[.*+?^${}()|[\]\\]/g,
-      "\\$&"
-     )+
-     "(\\d+)$",
-     "i"
-    )
-   );
-
-  if(match){
-
-   max=
-    Math.max(
-     max,
-     Number(match[1])
-    );
-
-  }
-
+document.querySelectorAll('.nav-button').forEach(btn => {
+ btn.addEventListener('click', () => {
+  const section = btn.dataset.section;
+  
+  document.querySelectorAll('.nav-button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('section-' + section).classList.add('active');
+  
+  document.getElementById('headerTitle').textContent = section.charAt(0).toUpperCase() + section.slice(1);
+  
+  updateSectionData(section);
  });
+});
 
- return prefix+
-  String(max+1)
-   .padStart(4,"0");
-
+function updateSectionData(section) {
+ switch(section) {
+  case 'sales':
+   renderSalesTable();
+   break;
+  case 'purchases':
+   renderPurchasesTable();
+   break;
+  case 'parties':
+   renderPartiesTable();
+   break;
+  case 'vouchers':
+   renderVouchersTable();
+   break;
+  case 'reports':
+   updateReports();
+   break;
+  case 'gst':
+   updateGST();
+   break;
+  case 'outstanding':
+   updateOutstanding();
+   break;
+ }
 }
 
+// ========================================
+// CALCULATOR
+// ========================================
 
-/* =========================================================
-   NAVIGATION
-   ========================================================= */
+let calc = { display: '0', lastOp: null, lastVal: null, memory: 0 };
+const calcHistory = [];
 
-const titles={
-
- dashboard:[
-  "Dashboard",
-  "BusinessDesk Enterprise Suite"
- ],
-
- calculator:[
-  "Calculator",
-  "Professional Calculator"
- ],
-
- sales:[
-  "Sales",
-  "Sales Management"
- ],
-
- purchases:[
-  "Purchases",
-  "Purchase Management"
- ],
-
- parties:[
-  "Parties",
-  "Party Management"
- ],
-
- vouchers:[
-  "Vouchers",
-  "Voucher Management"
- ],
-
- reports:[
-  "Reports",
-  "Business Reports"
- ],
-
- gst:[
-  "GST",
-  "GST Management"
- ],
-
- outstanding:[
-  "Outstanding",
-  "Outstanding Balances"
- ],
-
- controls:[
-  "System Controls",
-  "Application Control Center"
- ]
-
-};
-
-
-document
- .querySelectorAll(".nav-button")
- .forEach(button=>{
-
-  button.addEventListener(
-   "click",
-   ()=>{
-    navigate(
-     button.dataset.section
-    );
-   }
-  );
-
+document.querySelectorAll('.calc-btn').forEach(btn => {
+ btn.addEventListener('click', () => {
+  if (btn.dataset.n !== undefined) {
+   calc.display = calc.display === '0' ? btn.dataset.n : calc.display + btn.dataset.n;
+  } else if (btn.dataset.o) {
+   handleCalcOperator(btn.dataset.o);
+  } else if (btn.dataset.a === 'clear') {
+   calc = { display: '0', lastOp: null, lastVal: null, memory: 0 };
+  } else if (btn.dataset.a === 'back') {
+   calc.display = calc.display.slice(0, -1) || '0';
+  } else if (btn.dataset.a === 'dot') {
+   if (!calc.display.includes('.')) calc.display += '.';
+  } else if (btn.dataset.a === 'percent') {
+   calc.display = String(parseFloat(calc.display) / 100);
+  } else if (btn.dataset.a === 'sign') {
+   calc.display = String(-parseFloat(calc.display));
+  } else if (btn.dataset.a === 'equals') {
+   handleCalcEquals();
+  }
+  document.getElementById('calcValue').textContent = calc.display;
  });
+});
 
-
-function navigate(name){
-
- const target =
-  document.getElementById(
-   "section-"+name
-  );
-
- if(!target)
-  return;
-
- document
-  .querySelectorAll(".section")
-  .forEach(section=>{
-   section.classList.remove(
-    "active"
-   );
-  });
-
- document
-  .querySelectorAll(".nav-button")
-  .forEach(button=>{
-   button.classList.toggle(
-    "active",
-    button.dataset.section===name
-   );
-  });
-
- target.classList.add("active");
-
- const title =
-  titles[name] ||
-  [
-   "BusinessDesk",
-   "Enterprise Suite"
-  ];
-
- document.getElementById(
-  "headerTitle"
- ).textContent=title[0];
-
- document.getElementById(
-  "headerSubtitle"
- ).textContent=title[1];
-
- refreshAll();
-
-}
-
-
-/* =========================================================
-   PHASE 2 — CALCULATOR
-   ========================================================= */
-
-const calc={
-
- current:"0",
-
- previous:null,
-
- operator:null,
-
- waiting:false,
-
- expression:"",
-
- history:[]
-
-};
-
-
-function fmt(value){
-
- if(!Number.isFinite(value))
-  return "Error";
-
- if(Object.is(value,-0))
-  value=0;
-
- return String(
-  Math.round(
-   (value+Number.EPSILON)*
-   10000000000
-  )/
-  10000000000
- );
-
-}
-
-
-function calcDisplay(){
-
- document.getElementById(
-  "calcValue"
- ).textContent=
-  calc.current;
-
- document.getElementById(
-  "calcHistory"
- ).textContent=
-  calc.expression||"";
-
-}
-
-
-function calcClear(){
-
- calc.current="0";
-
- calc.previous=null;
-
- calc.operator=null;
-
- calc.waiting=false;
-
- calc.expression="";
-
- calcDisplay();
-
-}
-
-
-function calcInput(value){
-
- if(calc.current==="Error")
-  calcClear();
-
- if(calc.waiting){
-
-  calc.current=
-   String(value);
-
-  calc.waiting=false;
-
- }else if(calc.current==="0"){
-
-  calc.current=
-   String(value);
-
- }else{
-
-  calc.current+=
-   String(value);
-
+function handleCalcOperator(op) {
+ if (calc.lastOp) {
+  const result = performCalcOperation(calc.lastVal, parseFloat(calc.display), calc.lastOp);
+  calc.display = String(result);
+  calcHistory.push(`${calc.lastVal} ${calc.lastOp} ${calc.display}`);
  }
-
- calcDisplay();
-
+ calc.lastVal = parseFloat(calc.display);
+ calc.lastOp = op;
+ calc.display = '0';
 }
 
-
-function calcDot(){
-
- if(calc.current==="Error")
-  calcClear();
-
- if(calc.waiting){
-
-  calc.current="0.";
-
-  calc.waiting=false;
-
- }else if(
-  !calc.current.includes(".")
- ){
-
-  calc.current+=".";
-
+function handleCalcEquals() {
+ if (calc.lastOp) {
+  const result = performCalcOperation(calc.lastVal, parseFloat(calc.display), calc.lastOp);
+  calcHistory.push(`${calc.lastVal} ${calc.lastOp} ${calc.display} = ${result}`);
+  updateCalcHistoryList();
+  calc.display = String(result);
+  calc.lastOp = null;
+  calc.lastVal = null;
  }
-
- calcDisplay();
-
 }
 
-
-function operate(a,b,op){
-
- if(op==="+")
-  return a+b;
-
- if(op==="-")
-  return a-b;
-
- if(op==="*")
-  return a*b;
-
- if(op==="/")
-  return b===0
-   ? null
-   : a/b;
-
- return null;
-
-}
-
-
-function symbol(op){
-
- return {
-
-  "+":"+",
-  "-":"−",
-  "*":"×",
-  "/":"÷"
-
- }[op]||op;
-
-}
-
-
-function calcSetOp(op){
-
- if(calc.current==="Error")
-  return;
-
- const value=
-  num(calc.current);
-
- if(
-  calc.operator!==null &&
-  calc.previous!==null &&
-  !calc.waiting
- ){
-
-  const result=
-   operate(
-    calc.previous,
-    value,
-    calc.operator
-   );
-
-  if(result===null){
-
-   calcError();
-
-   return;
-
-  }
-
-  calc.previous=result;
-
-  calc.current=
-   fmt(result);
-
- }else{
-
-  calc.previous=value;
-
+function performCalcOperation(a, b, op) {
+ switch(op) {
+  case '+': return a + b;
+  case '-': return a - b;
+  case '*': return a * b;
+  case '/': return b !== 0 ? a / b : 0;
+  default: return b;
  }
-
- calc.operator=op;
-
- calc.waiting=true;
-
- calc.expression=
-  fmt(calc.previous)+
-  " "+
-  symbol(op);
-
- calcDisplay();
-
 }
 
-
-/*
-==========================================================
-FIXED PERCENTAGE LOGIC
-==========================================================
-
-100 + 10% = 110
-100 - 10% = 90
-100 × 10% = 10
-100 ÷ 10% = 1000
-10%       = 0.1
-*/
-
-function calcPercent(){
-
- if(calc.current==="Error")
-  return;
-
- const rate=
-  num(calc.current);
-
-
- /* Standalone percentage */
-
- if(
-  calc.operator===null ||
-  calc.previous===null
- ){
-
-  calc.current=
-   fmt(rate/100);
-
-  calc.waiting=true;
-
-  calc.expression=
-   fmt(rate)+"%";
-
-  calcDisplay();
-
-  return;
-
- }
-
-
- const base=
-  calc.previous;
-
-
- /*
-  Addition/subtraction:
-  percentage means percentage
-  OF the base.
- */
-
- if(
-  calc.operator==="+" ||
-  calc.operator==="-"
- ){
-
-  calc.current=
-   fmt(
-    base*rate/100
-   );
-
- }else{
-
-  /*
-   Multiplication/division:
-   convert percentage to decimal.
-  */
-
-  calc.current=
-   fmt(rate/100);
-
- }
-
- calc.waiting=false;
-
- calc.expression=
-  fmt(base)+
-  " "+
-  symbol(calc.operator)+
-  " "+
-  fmt(rate)+
-  "%";
-
- calcDisplay();
-
+function updateCalcHistoryList() {
+ const list = document.getElementById('calcHistoryList');
+ list.innerHTML = calcHistory.slice(-5).map(h => `<p class="muted">${h}</p>`).join('');
 }
 
+// ========================================
+// SALES
+// ========================================
 
-function calcEquals(){
+function openSaleModal() {
+ document.getElementById('saleInvoiceNo').value = 'INV-' + (getStore('sales').length + 1001);
+ document.getElementById('saleDate').valueAsDate = new Date();
+ document.getElementById('saleModal').classList.add('open');
+}
 
- if(
-  calc.operator===null ||
-  calc.previous===null ||
-  calc.current==="Error"
- )
-  return;
+function closeSaleModal() {
+ document.getElementById('saleModal').classList.remove('open');
+}
 
- const a=
-  calc.previous;
-
- const b=
-  num(calc.current);
-
- const op=
-  calc.operator;
-
- const result=
-  operate(a,b,op);
-
- if(result===null){
-
-  calcError();
-
-  return;
-
- }
-
- const expression=
-  (
-   calc.expression ||
-   fmt(a)+" "+symbol(op)
-  )+
-  " "+
-  fmt(b)+
-  " =";
-
- calc.current=
-  fmt(result);
-
- calc.history.unshift({
-
-  expression,
-
-  result:calc.current
-
+function saveSale(e) {
+ e.preventDefault();
+ const sales = getStore('sales');
+ const taxable = parseFloat(document.getElementById('saleTaxable').value);
+ const gstRate = parseFloat(document.getElementById('saleGSTRate').value);
+ const gst = taxable * gstRate / 100;
+ const total = taxable + gst;
+ 
+ sales.push({
+  invoiceNo: document.getElementById('saleInvoiceNo').value,
+  date: document.getElementById('saleDate').value,
+  customer: document.getElementById('saleCustomer').value,
+  taxable: taxable,
+  gst: gst,
+  total: total,
+  outstanding: total
  });
-
- calc.history=
-  calc.history.slice(0,20);
-
- db.calculatorHistory=
-  calc.history;
-
- saveDB();
-
- calc.previous=null;
-
- calc.operator=null;
-
- calc.waiting=true;
-
- calc.expression=
-  expression;
-
- calcDisplay();
-
- renderCalcHistory();
-
+ 
+ saveStore('sales', sales);
+ closeSaleModal();
+ renderSalesTable();
+ updateDashboard();
 }
 
-
-function calcBack(){
-
- if(
-  calc.waiting ||
-  calc.current==="Error"
- )
-  return;
-
- if(
-  calc.current.length<=1 ||
-  calc.current==="-"
- ){
-
-  calc.current="0";
-
- }else{
-
-  calc.current=
-   calc.current.slice(0,-1);
-
- }
-
- calcDisplay();
-
+function renderSalesTable() {
+ const sales = getStore('sales');
+ const body = document.getElementById('salesBody');
+ body.innerHTML = sales.map(s => `
+  <tr>
+   <td>${s.invoiceNo}</td>
+   <td>${s.date}</td>
+   <td>${s.customer}</td>
+   <td class="right">₹${s.taxable.toFixed(2)}</td>
+   <td class="right">₹${s.gst.toFixed(2)}</td>
+   <td class="right">₹${s.total.toFixed(2)}</td>
+   <td class="right">₹${s.outstanding.toFixed(2)}</td>
+  </tr>
+ `).join('');
 }
 
+// ========================================
+// PURCHASES
+// ========================================
 
-function calcSign(){
-
- if(
-  calc.current==="0" ||
-  calc.current==="Error"
- )
-  return;
-
- calc.current=
-  calc.current.startsWith("-")
-   ? calc.current.slice(1)
-   : "-"+calc.current;
-
- calcDisplay();
-
+function openPurchaseModal() {
+ document.getElementById('purchaseBillNo').value = 'PB-' + (getStore('purchases').length + 5001);
+ document.getElementById('purchaseDate').valueAsDate = new Date();
+ document.getElementById('purchaseModal').classList.add('open');
 }
 
-
-function calcError(){
-
- calc.current="Error";
-
- calc.previous=null;
-
- calc.operator=null;
-
- calc.waiting=true;
-
- calc.expression=
-  "Calculation error";
-
- calcDisplay();
-
+function closePurchaseModal() {
+ document.getElementById('purchaseModal').classList.remove('open');
 }
 
-
-document
- .querySelector(".calc-grid")
- .addEventListener(
-  "click",
-  event=>{
-
-   const button=
-    event.target.closest(
-     "button"
-    );
-
-   if(!button)
-    return;
-
-
-   if(
-    button.dataset.n!==undefined
-   ){
-
-    calcInput(
-     button.dataset.n
-    );
-
-    return;
-
-   }
-
-
-   if(
-    button.dataset.o!==undefined
-   ){
-
-    calcSetOp(
-     button.dataset.o
-    );
-
-    return;
-
-   }
-
-
-   const action=
-    button.dataset.a;
-
-
-   if(action==="clear")
-    calcClear();
-
-   else if(action==="back")
-    calcBack();
-
-   else if(action==="percent")
-    calcPercent();
-
-   else if(action==="dot")
-    calcDot();
-
-   else if(action==="sign")
-    calcSign();
-
-   else if(action==="equals")
-    calcEquals();
-
-  }
- );
-
-
-document.addEventListener(
- "keydown",
- event=>{
-
-  const target=
-   event.target;
-
-  if(
-   target &&
-   (
-    target.tagName==="INPUT" ||
-    target.tagName==="TEXTAREA" ||
-    target.tagName==="SELECT" ||
-    target.isContentEditable
-   )
-  )
-   return;
-
-
-  if(/^[0-9]$/.test(event.key))
-   calcInput(event.key);
-
-  else if(event.key==="."){
-   calcDot();
-  }
-
-  else if(
-   ["+","-","*","/"]
-    .includes(event.key)
-  ){
-
-   calcSetOp(event.key);
-
-  }
-
-  else if(event.key==="%"){
-
-   calcPercent();
-
-  }
-
-  else if(
-   event.key==="Enter" ||
-   event.key==="="
-  ){
-
-   event.preventDefault();
-
-   calcEquals();
-
-  }
-
-  else if(event.key==="Backspace"){
-
-   calcBack();
-
-  }
-
-  else if(event.key==="Escape"){
-
-   calcClear();
-
-  }
-
+function savePurchase(e) {
+ e.preventDefault();
+ const purchases = getStore('purchases');
+ const taxable = parseFloat(document.getElementById('purchaseTaxable').value);
+ const gstRate = parseFloat(document.getElementById('purchaseGSTRate').value);
+ const gst = taxable * gstRate / 100;
+ const total = taxable + gst;
+ 
+ purchases.push({
+  billNo: document.getElementById('purchaseBillNo').value,
+  date: document.getElementById('purchaseDate').value,
+  supplier: document.getElementById('purchaseSupplier').value,
+  taxable: taxable,
+  gst: gst,
+  total: total,
+  outstanding: total
  });
-
-
-function renderCalcHistory(){
-
- const element=
-  document.getElementById(
-   "calcHistoryList"
-  );
-
- if(
-  !calc.history.length
- ){
-
-  element.innerHTML=
-   '<p class="muted">No calculations yet.</p>';
-
-  return;
-
- }
-
- element.innerHTML=
-  calc.history
-   .map(item=>`
-
-    <div style="
-     padding:8px 0;
-     border-bottom:1px solid var(--border)
-    ">
-
-     <div class="muted">
-      ${esc(item.expression)}
-     </div>
-
-     <b>
-      ${esc(item.result)}
-     </b>
-
-    </div>
-
-   `)
-   .join("");
-
+ 
+ saveStore('purchases', purchases);
+ closePurchaseModal();
+ renderPurchasesTable();
+ updateDashboard();
 }
 
-
-/* =========================================================
-   PHASE 3 — MODAL
-   ========================================================= */
-
-function openModal(
- title,
- body
-){
-
- document.getElementById(
-  "modalTitle"
- ).textContent=title;
-
- document.getElementById(
-  "modalBody"
- ).innerHTML=body;
-
- document.getElementById(
-  "modalBackdrop"
- ).classList.add("open");
-
+function renderPurchasesTable() {
+ const purchases = getStore('purchases');
+ const body = document.getElementById('purchaseBody');
+ body.innerHTML = purchases.map(p => `
+  <tr>
+   <td>${p.billNo}</td>
+   <td>${p.date}</td>
+   <td>${p.supplier}</td>
+   <td class="right">₹${p.taxable.toFixed(2)}</td>
+   <td class="right">₹${p.gst.toFixed(2)}</td>
+   <td class="right">₹${p.total.toFixed(2)}</td>
+   <td class="right">₹${p.outstanding.toFixed(2)}</td>
+  </tr>
+ `).join('');
 }
 
+// ========================================
+// PARTIES
+// ========================================
 
-function closeModal(){
-
- document.getElementById(
-  "modalBackdrop"
- ).classList.remove("open");
-
+function openPartyModal() {
+ document.getElementById('partyModal').classList.add('open');
 }
 
-
-document
- .getElementById("modalBackdrop")
- .addEventListener(
-  "click",
-  event=>{
-
-   if(
-    event.target.id===
-    "modalBackdrop"
-   ){
-
-    closeModal();
-
-   }
-
-  }
- );
-
-
-/* =========================================================
-   PARTIES
-   ========================================================= */
-
-function openPartyModal(){
-
- openModal(
-  "Add Party",
-
-  `
-  <div class="form-grid">
-
-   <div class="field">
-
-    <label>Name *</label>
-
-    <input id="partyName">
-
-   </div>
-
-
-   <div class="field">
-
-    <label>Type</label>
-
-    <select id="partyType">
-
-     <option>
-      Customer
-     </option>
-
-     <option>
-      Supplier
-     </option>
-
-    </select>
-
-   </div>
-
-
-   <div class="field">
-
-    <label>GSTIN</label>
-
-    <input id="partyGSTIN">
-
-   </div>
-
-
-   <div class="field">
-
-    <label>Phone</label>
-
-    <input id="partyPhone">
-
-   </div>
-
-  </div>
-
-  <br>
-
-  <button
-   class="btn btn-primary"
-   onclick="saveParty()">
-
-   Save Party
-
-  </button>
-  `
- );
-
+function closePartyModal() {
+ document.getElementById('partyModal').classList.remove('open');
 }
 
-
-function saveParty(){
-
- const name=
-  document
-   .getElementById("partyName")
-   .value
-   .trim();
-
- const type=
-  document
-   .getElementById("partyType")
-   .value;
-
- const gstin=
-  document
-   .getElementById("partyGSTIN")
-   .value
-   .trim();
-
- const phone=
-  document
-   .getElementById("partyPhone")
-   .value
-   .trim();
-
-
- if(!name){
-
-  alert(
-   "Party name is required."
-  );
-
-  return;
-
- }
-
-
- if(
-  db.parties.some(
-   party=>
-    party.name.toLowerCase()===
-    name.toLowerCase() &&
-    party.type===type
-  )
- ){
-
-  alert(
-   "This party already exists."
-  );
-
-  return;
-
- }
-
-
- db.parties.push({
-
-  id:uid("PTY"),
-
-  name,
-
-  type,
-
-  gstin,
-
-  phone
-
+function saveParty(e) {
+ e.preventDefault();
+ const parties = getStore('parties');
+ parties.push({
+  name: document.getElementById('partyName').value,
+  type: document.getElementById('partyType').value,
+  gstin: document.getElementById('partyGSTIN').value,
+  phone: document.getElementById('partyPhone').value
  });
-
-
- saveDB();
-
- closeModal();
-
- refreshAll();
-
+ 
+ saveStore('parties', parties);
+ closePartyModal();
+ renderPartiesTable();
+ updatePartySelects();
 }
 
-
-/* =========================================================
-   PARTY OPTIONS
-   ========================================================= */
-
-function partyOptions(type){
-
- return db.parties
-
-  .filter(
-   party=>
-    party.type===type
-  )
-
-  .map(
-   party=>
-    `
-    <option value="${esc(party.id)}">
-     ${esc(party.name)}
-    </option>
-    `
-  )
-
-  .join("");
-
+function renderPartiesTable() {
+ const parties = getStore('parties');
+ const body = document.getElementById('partyBody');
+ body.innerHTML = parties.map(p => `
+  <tr>
+   <td>${p.name}</td>
+   <td>${p.type}</td>
+   <td>${p.gstin}</td>
+   <td>${p.phone}</td>
+  </tr>
+ `).join('');
 }
 
-
-/* =========================================================
-   SALES
-   ========================================================= */
-
-function openSaleModal(){
-
- if(
-  !db.parties.some(
-   party=>
-    party.type==="Customer"
-  )
- ){
-
-  alert(
-   "Add a Customer party first."
-  );
-
-  return;
-
- }
-
-
- const invoice=
-  nextNumber(
-   "SI-",
-   db.sales,
-   "invoiceNo"
-  );
-
-
- openModal(
-
-  "New Sales Invoice",
-
-  `
-  <div class="form-grid">
-
-
-   <div class="field">
-
-    <label>Invoice No.</label>
-
-    <input
-     id="saleInvoice"
-     value="${invoice}"
-    >
-
-   </div>
-
-
-   <div class="field">
-
-    <label>Date</label>
-
-    <input
-     id="saleDate"
-     type="date"
-     value="${today()}"
-    >
-
-   </div>
-
-
-   <div class="field">
-
-    <label>Customer *</label>
-
-    <select id="saleParty">
-
-     ${partyOptions("Customer")}
-
-    </select>
-
-   </div>
-
-
-   <div class="field">
-
-    <label>Taxable Amount *</label>
-
-    <input
-     id="saleTaxable"
-     type="number"
-     step="0.01"
-     min="0"
-    >
-
-   </div>
-
-
-   <div class="field">
-
-    <label>GST Rate %</label>
-
-    <input
-     id="saleRate"
-     type="number"
-     step="0.01"
-     min="0"
-     value="18"
-    >
-
-   </div>
-
-
-   <div class="field">
-
-    <label>Paid Amount</label>
-
-    <input
-     id="salePaid"
-     type="number"
-     step="0.01"
-     min="0"
-     value="0"
-    >
-
-   </div>
-
-  </div>
-
-
-  <br>
-
-
-  <button
-   class="btn btn-primary"
-   onclick="saveSale()">
-
-   Post Sales Invoice
-
-  </button>
-  `
-
- );
-
+function updatePartySelects() {
+ const parties = getStore('parties');
+ const customers = parties.filter(p => p.type === 'Customer');
+ const suppliers = parties.filter(p => p.type === 'Supplier');
+ 
+ document.getElementById('saleCustomer').innerHTML = '<option value="">-- Select Customer --</option>' +
+  customers.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+ 
+ document.getElementById('purchaseSupplier').innerHTML = '<option value="">-- Select Supplier --</option>' +
+  suppliers.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
 }
 
+// ========================================
+// VOUCHERS
+// ========================================
 
-function saveSale(){
+function openVoucherModal() {
+ document.getElementById('voucherNo').value = 'V-' + (getStore('vouchers').length + 2001);
+ document.getElementById('voucherDate').valueAsDate = new Date();
+ document.getElementById('voucherModal').classList.add('open');
+}
 
- const invoiceNo=
-  document
-   .getElementById("saleInvoice")
-   .value
-   .trim();
+function closeVoucherModal() {
+ document.getElementById('voucherModal').classList.remove('open');
+}
 
- const date=
-  document
-   .getElementById("saleDate")
-   .value ||
-  today();
-
- const party=
-  db.parties.find(
-   p=>
-    p.id===
-    document
-     .getElementById("saleParty")
-     .value
-  );
-
- const taxable=
-  num(
-   document
-    .getElementById("saleTaxable")
-    .value
-  );
-
- const rate=
-  num(
-   document
-    .getElementById("saleRate")
-    .value
-  );
-
- const paid=
-  num(
-   document
-    .getElementById("salePaid")
-    .value
-  );
-
-
- if(
-  !invoiceNo ||
-  !party ||
-  taxable<=0 ||
-  rate<0 ||
-  paid<0
- ){
-
-  alert(
-   "Enter valid sales details."
-  );
-
-  return;
-
- }
-
-
- if(
-  db.sales.some(
-   sale=>
-    sale.invoiceNo.toLowerCase()===
-    invoiceNo.toLowerCase()
-  )
- ){
-
-  alert(
-   "Invoice number already exists."
-  );
-
-  return;
-
- }
-
-
- const gst=
-  taxable*rate/100;
-
- const total=
-  taxable+gst;
-
-
- if(paid>total){
-
-  alert(
-   "Paid amount cannot exceed invoice total."
-  );
-
-  return;
-
- }
-
-
- db.sales.push({
-
-  id:uid("SAL"),
-
-  invoiceNo,
-
-  date,
-
-  partyId:party.id,
-
-  partyName:party.name,
-
-  taxable,
-
-  rate,
-
-  gst,
-
-  total,
-
-  paid,
-
-  outstanding:
-   total-paid
-
+function saveVoucher(e) {
+ e.preventDefault();
+ const vouchers = getStore('vouchers');
+ vouchers.push({
+  no: document.getElementById('voucherNo').value,
+  date: document.getElementById('voucherDate').value,
+  type: document.getElementById('voucherType').value,
+  debit: document.getElementById('voucherDebit').value,
+  credit: document.getElementById('voucherCredit').value,
+  amount: parseFloat(document.getElementById('voucherAmount').value)
  });
-
-
- db.journal.push({
-
-  id:uid("JRN"),
-
-  date,
-
-  source:invoiceNo,
-
-  lines:[
-
-   {
-    account:
-     "Customer Receivable",
-    debit:total,
-    credit:0
-   },
-
-   {
-    account:"Sales",
-    debit:0,
-    credit:taxable
-   },
-
-   {
-    account:"Output GST",
-    debit:0,
-    credit:gst
-   }
-
-  ]
-
- });
-
-
- if(paid>0){
-
-  db.journal.push({
-
-   id:uid("JRN"),
-
-   date,
-
-   source:
-    invoiceNo+"-PAY",
-
-   lines:[
-
-    {
-     account:"Cash/Bank",
-     debit:paid,
-     credit:0
-    },
-
-    {
-     account:
-      "Customer Receivable",
-     debit:0,
-     credit:paid
-    }
-
-   ]
-
-  });
-
- }
-
-
- saveDB();
-
- closeModal();
-
- refreshAll();
-
- alert(
-  "Sales invoice "+
-  invoiceNo+
-  " posted successfully."
- );
-
+ 
+ saveStore('vouchers', vouchers);
+ closeVoucherModal();
+ renderVouchersTable();
 }
 
-
-/* =========================================================
-   PURCHASES
-   ========================================================= */
-
-function openPurchaseModal(){
-
- if(
-  !db.parties.some(
-   party=>
-    party.type==="Supplier"
-  )
- ){
-
-  alert(
-   "Add a Supplier party first."
-  );
-
-  return;
-
- }
-
-
- const billNo=
-  nextNumber(
-   "PI-",
-   db.purchases,
-   "billNo"
-  );
-
-
- openModal(
-
-  "New Purchase",
-
-  `
-  <div class="form-grid">
-
-
-   <div class="field">
-
-    <label>Bill No.</label>
-
-    <input
-     id="purchaseBill"
-     value="${billNo}"
-    >
-
-   </div>
-
-
-   <div class="field">
-
-    <label>Date</label>
-
-    <input
-     id="purchaseDate"
-     type="date"
-     value="${today()}"
-    >
-
-   </div>
-
-
-   <div class="field">
-
-    <label>Supplier *</label>
-
-    <select id="purchaseParty">
-
-     ${partyOptions("Supplier")}
-
-    </select>
-
-   </div>
-
-
-   <div class="field">
-
-    <label>Taxable Amount *</label>
-
-    <input
-     id="purchaseTaxable"
-     type="number"
-     step="0.01"
-     min="0"
-    >
-
-   </div>
-
-
-   <div class="field">
-
-    <label>GST Rate %</label>
-
-    <input
-     id="purchaseRate"
-     type="number"
-     step="0.01"
-     min="0"
-     value="18"
-    >
-
-   </div>
-
-
-   <div class="field">
-
-    <label>Paid Amount</label>
-
-    <input
-     id="purchasePaid"
-     type="number"
-     step="0.01"
-     min="0"
-     value="0"
-    >
-
-   </div>
-
-  </div>
-
-
-  <br>
-
-
-  <button
-   class="btn btn-primary"
-   onclick="savePurchase()">
-
-   Post Purchase
-
-  </button>
-  `
-
- );
-
+function renderVouchersTable() {
+ const vouchers = getStore('vouchers');
+ const body = document.getElementById('voucherBody');
+ body.innerHTML = vouchers.map(v => `
+  <tr>
+   <td>${v.no}</td>
+   <td>${v.date}</td>
+   <td>${v.type}</td>
+   <td>${v.debit}</td>
+   <td>${v.credit}</td>
+   <td class="right">₹${v.amount.toFixed(2)}</td>
+  </tr>
+ `).join('');
 }
 
-
-function savePurchase(){
-
- const billNo=
-  document
-   .getElementById("purchaseBill")
-   .value
-   .trim();
-
- const date=
-  document
-   .getElementById("purchaseDate")
-   .value ||
-  today();
-
- const party=
-  db.parties.find(
-   p=>
-    p.id===
-    document
-     .getElementById("purchaseParty")
-     .value
-  );
-
- const taxable=
-  num(
-   document
-    .getElementById("purchaseTaxable")
-    .value
-  );
-
- const rate=
-  num(
-   document
-    .getElementById("purchaseRate")
-    .value
-  );
-
- const paid=
-  num(
-   document
-    .getElementById("purchasePaid")
-    .value
-  );
-
-
- if(
-  !billNo ||
-  !party ||
-  taxable<=0 ||
-  rate<0 ||
-  paid<0
- ){
-
-  alert(
-   "Enter valid purchase details."
-  );
-
-  return;
-
- }
-
-
- if(
-  db.purchases.some(
-   purchase=>
-    purchase.billNo.toLowerCase()===
-    billNo.toLowerCase()
-  )
- ){
-
-  alert(
-   "Bill number already exists."
-  );
-
-  return;
-
- }
-
-
- const gst=
-  taxable*rate/100;
-
- const total=
-  taxable+gst;
-
-
- if(paid>total){
-
-  alert(
-   "Paid amount cannot exceed bill total."
-  );
-
-  return;
-
- }
-
-
- db.purchases.push({
-
-  id:uid("PUR"),
-
-  billNo,
-
-  date,
-
-  partyId:party.id,
-
-  supplier:party.name,
-
-  taxable,
-
-  rate,
-
-  gst,
-
-  total,
-
-  paid,
-
-  outstanding:
-   total-paid
-
- });
-
-
- db.journal.push({
-
-  id:uid("JRN"),
-
-  date,
-
-  source:billNo,
-
-  lines:[
-
-   {
-    account:"Purchases",
-    debit:taxable,
-    credit:0
-   },
-
-   {
-    account:"Input GST",
-    debit:gst,
-    credit:0
-   },
-
-   {
-    account:"Supplier Payable",
-    debit:0,
-    credit:total
-   }
-
-  ]
-
- });
-
-
- if(paid>0){
-
-  db.journal.push({
-
-   id:uid("JRN"),
-
-   date,
-
-   source:
-    billNo+"-PAY",
-
-   lines:[
-
-    {
-     account:
-      "Supplier Payable",
-     debit:paid,
-     credit:0
-    },
-
-    {
-     account:"Cash/Bank",
-     debit:0,
-     credit:paid
-    }
-
-   ]
-
-  });
-
- }
-
-
- saveDB();
-
- closeModal();
-
- refreshAll();
-
- alert(
-  "Purchase "+
-  billNo+
-  " posted successfully."
- );
-
+// ========================================
+// REPORTS & DASHBOARD
+// ========================================
+
+function updateDashboard() {
+ const sales = getStore('sales');
+ const purchases = getStore('purchases');
+ 
+ const totalSales = sales.reduce((sum, s) => sum + s.total, 0);
+ const totalPurchases = purchases.reduce((sum, p) => sum + p.total, 0);
+ const totalOutstanding = (sales.reduce((sum, s) => sum + s.outstanding, 0) +
+                           purchases.reduce((sum, p) => sum + p.outstanding, 0));
+ 
+ document.getElementById('dashSales').textContent = '₹' + totalSales.toFixed(2);
+ document.getElementById('dashPurchases').textContent = '₹' + totalPurchases.toFixed(2);
+ document.getElementById('dashOutstanding').textContent = '₹' + totalOutstanding.toFixed(2);
 }
 
+function updateReports() {
+ const sales = getStore('sales');
+ const purchases = getStore('purchases');
+ 
+ const totalSales = sales.reduce((sum, s) => sum + s.total, 0);
+ const totalPurchases = purchases.reduce((sum, p) => sum + p.total, 0);
+ const totalOutputGST = sales.reduce((sum, s) => sum + s.gst, 0);
+ const totalInputGST = purchases.reduce((sum, p) => sum + p.gst, 0);
+ 
+ document.getElementById('reportSales').textContent = '₹' + totalSales.toFixed(2);
+ document.getElementById('reportPurchases').textContent = '₹' + totalPurchases.toFixed(2);
+ document.getElementById('reportOutputGST').textContent = '₹' + totalOutputGST.toFixed(2);
+ document.getElementById('reportInputGST').textContent = '₹' + totalInputGST.toFixed(2);
+}
 
-/* =========================================================
-   VOUCHERS
-   ========================================================= */
+function updateGST() {
+ const sales = getStore('sales');
+ const purchases = getStore('purchases');
+ 
+ const outputGST = sales.reduce((sum, s) => sum + s.gst, 0);
+ const inputGST = purchases.reduce((sum, p) => sum + p.gst, 0);
+ const netGST = outputGST - inputGST;
+ 
+ document.getElementById('gstOutput').textContent = '₹' + outputGST.toFixed(2);
+ document.getElementById('gstInput').textContent = '₹' + inputGST.toFixed(2);
+ document.getElementById('gstNet').textContent = '₹' + netGST.toFixed(2);
+}
 
-function openVoucherModal(){
-
- const accounts=[
-
-  "Cash",
-  "Bank",
-  "Sales",
-  "Purchases",
-  "Customer Receivable",
-  "Supplier Payable",
-  "Input GST",
-  "Output GST"
-
+function updateOutstanding() {
+ const sales = getStore('sales');
+ const purchases = getStore('purchases');
+ 
+ const customerOut = sales.reduce((sum, s) => sum + s.outstanding, 0);
+ const supplierOut = purchases.reduce((sum, p) => sum + p.outstanding, 0);
+ 
+ document.getElementById('outstandingCustomers').textContent = '₹' + customerOut.toFixed(2);
+ document.getElementById('outstandingSuppliers').textContent = '₹' + supplierOut.toFixed(2);
+ 
+ const outstandingBody = document.getElementById('outstandingBody');
+ const allOutstanding = [
+  ...sales.map(s => ({ party: s.customer, type: 'Customer', outstanding: s.outstanding })),
+  ...purchases.map(p => ({ party: p.supplier, type: 'Supplier', outstanding: p.outstanding }))
  ];
-
-
- const options=
-  accounts
-   .map(
-    account=>
-     `<option>
-      ${esc(account)}
-     </option>`
-   )
-   .join("");
-
-
- openModal(
-
-  "New Voucher",
-
-  `
-  <div class="form-grid">
-
-
-   <div class="field">
-
-    <label>Voucher No.</label>
-
-    <input
-     id="voucherNo"
-     value="${nextNumber(
-      "VCH-",
-      db.vouchers,
-      "number"
-     )}"
-    >
-
-   </div>
-
-
-   <div class="field">
-
-    <label>Date</label>
-
-    <input
-     id="voucherDate"
-     type="date"
-     value="${today()}"
-    >
-
-   </div>
-
-
-   <div class="field">
-
-    <label>Debit</label>
-
-    <select id="voucherDebit">
-
-     ${options}
-
-    </select>
-
-   </div>
-
-
-   <div class="field">
-
-    <label>Credit</label>
-
-    <select id="voucherCredit">
-
-     ${options}
-
-    </select>
-
-   </div>
-
-
-   <div class="field">
-
-    <label>Amount *</label>
-
-    <input
-     id="voucherAmount"
-     type="number"
-     step="0.01"
-     min="0"
-    >
-
-   </div>
-
-
-  </div>
-
-
-  <br>
-
-
-  <button
-   class="btn btn-primary"
-   onclick="saveVoucher()">
-
-   Post Voucher
-
-  </button>
-  `
-
- );
-
+ 
+ outstandingBody.innerHTML = allOutstanding.map(o => `
+  <tr>
+   <td>${o.party}</td>
+   <td>${o.type}</td>
+   <td class="right">₹${o.outstanding.toFixed(2)}</td>
+  </tr>
+ `).join('');
 }
 
+// ========================================
+// SYSTEM CONTROLS
+// ========================================
 
-function saveVoucher(){
+function loadSampleData() {
+ const sampleParties = [
+  { name: 'Acme Corp', type: 'Customer', gstin: '18AABCT1234H1Z0', phone: '9876543210' },
+  { name: 'Global Supply Co', type: 'Supplier', gstin: '18BBBCT1234H1Z0', phone: '9876543211' }
+ ];
+ 
+ const sampleSales = [
+  { invoiceNo: 'INV-1001', date: '2026-01-15', customer: 'Acme Corp', taxable: 10000, gst: 1800, total: 11800, outstanding: 5900 },
+  { invoiceNo: 'INV-1002', date: '2026-01-20', customer: 'Acme Corp', taxable: 20000, gst: 3600, total: 23600, outstanding: 23600 }
+ ];
+ 
+ const samplePurchases = [
+  { billNo: 'PB-5001', date: '2026-01-10', supplier: 'Global Supply Co', taxable: 15000, gst: 2700, total: 17700, outstanding: 17700 }
+ ];
+ 
+ saveStore('parties', sampleParties);
+ saveStore('sales', sampleSales);
+ saveStore('purchases', samplePurchases);
+ saveStore('vouchers', []);
+ 
+ updatePartySelects();
+ updateDashboard();
+ alert('Sample data loaded!');
+}
 
- const number=
-  document
-   .getElementById("voucherNo")
-   .value
-   .trim();
-
- const date=
-  document
-   .getElementById("voucherDate")
-   .value ||
-  today();
-
- const debit=
-  document
-   .getElementById("voucherDebit")
-   .value;
-
- const credit=
-  document
-   .getElementById("voucherCredit")
-   .value;
-
- const amount=
-  num(
-   document
-    .getElementById("voucherAmount")
-    .value
-  );
-
-
- if(
-  !number ||
-  amount<=0
- ){
-
-  alert(
-   "Enter a valid voucher."
-  );
-
-  return;
-
+function clearAllData() {
+ if (confirm('Clear all data? This cannot be undone.')) {
+  saveStore('parties', []);
+  saveStore('sales', []);
+  saveStore('purchases', []);
+  saveStore('vouchers', []);
+  location.reload();
  }
-
-
- if(debit===credit){
-
-  alert(
-   "Debit and Credit accounts must be different."
-  );
-
-  return;
-
- }
-
-
- if(
-  db.vouchers.some(
-   voucher=>
-    voucher.number.toLowerCase()===
-    number.toLowerCase()
-  )
- ){
-
-  alert(
-   "Voucher number already exists."
-  );
-
-  return;
-
- }
-
-
- db.vouchers.push({
-
-  id:uid("VCH"),
-
-  number,
-
-  date,
-
-  type:"Journal",
-
-  debit,
-
-  credit,
-
-  amount
-
- });
-
-
- db.journal.push({
-
-  id:uid("JRN"),
-
-  date,
-
-  source:number,
-
-  lines:[
-
-   {
-    account:debit,
-    debit:amount,
-    credit:0
-   },
-
-   {
-    account:credit,
-    debit:0,
-    credit:amount
-   }
-
-  ]
-
- });
-
-
- saveDB();
-
- closeModal();
-
- refreshAll();
-
- alert(
-  "Voucher "+
-  number+
-  " posted successfully."
- );
-
 }
 
-
-/* =========================================================
-   RENDER SALES
-   ========================================================= */
-
-function renderSales(){
-
- const body=
-  document.getElementById(
-   "salesBody"
-  );
-
-
- if(!db.sales.length){
-
-  body.innerHTML=
-   `
-   <tr>
-    <td colspan="7"
-        class="muted">
-     No sales invoices.
-    </td>
-   </tr>
-   `;
-
-  return;
-
- }
-
-
- body.innerHTML=
-  db.sales
-   .map(
-    sale=>
-     `
-     <tr>
-
-      <td>
-       <b>
-        ${esc(sale.invoiceNo)}
-       </b>
-      </td>
-
-      <td>
-       ${esc(sale.date)}
-      </td>
-
-      <td>
-       ${esc(sale.partyName)}
-      </td>
-
-      <td class="right">
-       ${money(sale.taxable)}
-      </td>
-
-      <td class="right">
-       ${money(sale.gst)}
-      </td>
-
-      <td class="right">
-       <b>
-        ${money(sale.total)}
-       </b>
-      </td>
-
-      <td class="right">
-       ${money(sale.outstanding)}
-      </td>
-
-     </tr>
-     `
-   )
-   .join("");
-
-}
-
-
-/* =========================================================
-   RENDER PURCHASES
-   ========================================================= */
-
-function renderPurchases(){
-
- const body=
-  document.getElementById(
-   "purchaseBody"
-  );
-
-
- if(!db.purchases.length){
-
-  body.innerHTML=
-   `
-   <tr>
-    <td colspan="7"
-        class="muted">
-     No purchases.
-    </td>
-   </tr>
-   `;
-
-  return;
-
- }
-
-
- body.innerHTML=
-  db.purchases
-   .map(
-    purchase=>
-     `
-     <tr>
-
-      <td>
-       <b>
-        ${esc(purchase.billNo)}
-       </b>
-      </td>
-
-      <td>
-       ${esc(purchase.date)}
-      </td>
-
-      <td>
-       ${esc(purchase.supplier)}
-      </td>
-
-      <td class="right">
-       ${money(purchase.taxable)}
-      </td>
-
-      <td class="right">
-       ${money(purchase.gst)}
-      </td>
-
-      <td class="right">
-       <b>
-        ${money(purchase.total)}
-       </b>
-      </td>
-
-      <td class="right">
-       ${money(purchase.outstanding)}
-      </td>
-
-     </tr>
-     `
-   )
-   .join("");
-
-}
-
-
-/* =========================================================
-   RENDER PARTIES
-   ========================================================= */
-
-function renderParties(){
-
- const body=
-  document.getElementById(
-   "partyBody"
-  );
-
-
- if(!db.parties.length){
-
-  body.innerHTML=
-   `
-   <tr>
-    <td colspan="4"
-        class="muted">
-     No parties.
-    </td>
-   </tr>
-   `;
-
-  return;
-
- }
-
-
- body.innerHTML=
-  db.parties
-   .map(
-    party=>
-     `
-     <tr>
-
-      <td>
-       <b>
-        ${esc(party.name)}
-       </b>
-      </td>
-
-      <td>
-       ${esc(party.type)}
-      </td>
-
-      <td>
-       ${esc(party.gstin)}
-      </td>
-
-      <td>
-       ${esc(party.phone)}
-      </td>
-
-     </tr>
-     `
-   )
-   .join("");
-
-}
-
-
-/* =========================================================
-   RENDER VOUCHERS
-   ========================================================= */
-
-function renderVouchers(){
-
- const body=
-  document.getElementById(
-   "voucherBody"
-  );
-
-
- if(!db.vouchers.length){
-
-  body.innerHTML=
-   `
-   <tr>
-    <td colspan="6"
-        class="muted">
-     No vouchers.
-    </td>
-   </tr>
-   `;
-
-  return;
-
- }
-
-
- body.innerHTML=
-  db.vouchers
-   .map(
-    voucher=>
-     `
-     <tr>
-
-      <td>
-       ${esc(voucher.number)}
-      </td>
-
-      <td>
-       ${esc(voucher.date)}
-      </td>
-
-      <td>
-       ${esc(voucher.type)}
-      </td>
-
-      <td>
-       ${esc(voucher.debit)}
-      </td>
-
-      <td>
-       ${esc(voucher.credit)}
-      </td>
-
-      <td class="right">
-       ${money(voucher.amount)}
-      </td>
-
-     </tr>
-     `
-   )
-   .join("");
-
-}
-
-
-/* =========================================================
-   REPORTS / GST / OUTSTANDING
-   ========================================================= */
-
-function refreshReports(){
-
- const sales=
-  db.sales.reduce(
-   (sum,item)=>
-    sum+num(item.total),
-   0
-  );
-
-
- const purchases=
-  db.purchases.reduce(
-   (sum,item)=>
-    sum+num(item.total),
-   0
-  );
-
-
- const outputGST=
-  db.sales.reduce(
-   (sum,item)=>
-    sum+num(item.gst),
-   0
-  );
-
-
- const inputGST=
-  db.purchases.reduce(
-   (sum,item)=>
-    sum+num(item.gst),
-   0
-  );
-
-
- const receivable=
-  db.sales.reduce(
-   (sum,item)=>
-    sum+num(item.outstanding),
-   0
-  );
-
-
- const payable=
-  db.purchases.reduce(
-   (sum,item)=>
-    sum+num(item.outstanding),
-   0
-  );
-
-
- document.getElementById(
-  "dashSales"
- ).textContent=
-  money(sales);
-
-
- document.getElementById(
-  "dashPurchases"
- ).textContent=
-  money(purchases);
-
-
- document.getElementById(
-  "dashOutstanding"
- ).textContent=
-  money(
-   receivable+
-   payable
-  );
-
-
- document.getElementById(
-  "reportSales"
- ).textContent=
-  money(sales);
-
-
- document.getElementById(
-  "reportPurchases"
- ).textContent=
-  money(purchases);
-
-
- document.getElementById(
-  "reportOutputGST"
- ).textContent=
-  money(outputGST);
-
-
- document.getElementById(
-  "reportInputGST"
- ).textContent=
-  money(inputGST);
-
-
- document.getElementById(
-  "gstOutput"
- ).textContent=
-  money(outputGST);
-
-
- document.getElementById(
-  "gstInput"
- ).textContent=
-  money(inputGST);
-
-
- document.getElementById(
-  "gstNet"
- ).textContent=
-  money(
-   outputGST-
-   inputGST
-  );
-
-
- document.getElementById(
-  "receivable"
- ).textContent=
-  money(receivable);
-
-
- document.getElementById(
-  "payable"
- ).textContent=
-  money(payable);
-
-}
-
-
-/* =========================================================
-   DIAGNOSTICS
-   ========================================================= */
-
-function diagnostics(){
-
- const total=
-  db.sales.length+
-  db.purchases.length+
-  db.parties.length+
-  db.vouchers.length;
-
-
- document.getElementById(
-  "diagnostics"
- ).innerHTML=
-
- `
- <b>
-  BusinessDesk System Diagnostics
- </b>
-
- <br><br>
-
- Phase Version:
- 3.1.0
-
- <br>
-
- Database:
- AVAILABLE
-
- <br>
-
- Data Structure:
- VALID
-
- <br>
-
- Navigation:
- ${document.querySelectorAll(".nav-button").length}
- item(s)
-
- <br>
-
- Sales Records:
- ${db.sales.length}
-
- <br>
-
- Purchase Records:
- ${db.purchases.length}
-
- <br>
-
- Party Records:
- ${db.parties.length}
-
- <br>
-
- Voucher Records:
- ${db.vouchers.length}
-
- <br>
-
- Total Records:
- ${total}
-
- <br>
-
- Journal Entries:
- ${db.journal.length}
-
- <br>
-
- JavaScript State:
- READY
-
- <br><br>
-
- <b>Errors:</b>
- None
- `;
-
-}
-
-
-/* =========================================================
-   REFRESH EVERYTHING
-   ========================================================= */
-
-function refreshAll(){
-
- renderSales();
-
- renderPurchases();
-
- renderParties();
-
- renderVouchers();
-
- refreshReports();
-
- diagnostics();
-
- renderCalcHistory();
-
-}
-
-
-/* =========================================================
-   BACKUP
-   ========================================================= */
-
-function backupData(){
-
- const blob=
-  new Blob(
-   [
-    JSON.stringify(
-     db,
-     null,
-     2
-    )
-   ],
-   {
-    type:"application/json"
-   }
-  );
-
-
- const url=
-  URL.createObjectURL(
-   blob
-  );
-
-
- const link=
-  document.createElement("a");
-
-
- link.href=url;
-
-
- link.download=
-  "businessdesk-backup-"+
-  today()+
-  ".json";
-
-
- document.body.appendChild(link);
-
-
- link.click();
-
-
- link.remove();
-
-
- setTimeout(
-  ()=>{
-   URL.revokeObjectURL(url);
-  },
-  1000
- );
-
-}
-
-
-/* =========================================================
-   CLEAR DATA
-   ========================================================= */
-
-function clearAllData(){
-
- const confirmed=
-  confirm(
-   "This will permanently clear all locally stored BusinessDesk data. Continue?"
-  );
-
-
- if(!confirmed)
-  return;
-
-
- db=
-  defaultDB();
-
-
- saveDB();
-
-
- calc.history=[];
-
-
- calcClear();
-
-
- refreshAll();
-
-
- alert(
-  "All local data cleared."
- );
-
-}
-
-
-/* =========================================================
-   INITIALIZATION
-   ========================================================= */
-
-calc.history=
- Array.isArray(
-  db.calculatorHistory
- )
-  ? db.calculatorHistory
-  : [];
-
-
-refreshAll();
-
-
-navigate("dashboard");
+// Initialize
+window.addEventListener('DOMContentLoaded', () => {
+ updatePartySelects();
+ updateDashboard();
+});
 
 </script>
 
