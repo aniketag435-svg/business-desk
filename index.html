@@ -1,1361 +1,1741 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BusinessDesk — Professional Business Management</title>
+
+<title>BusinessDesk Enterprise Suite</title>
 
 <style>
-/* =========================================================
-   BUSINESSDESK — PHASE 1
-   CORE FOUNDATION
-   ========================================================= */
 
-:root {
-    --primary: #2563eb;
-    --primary-dark: #1d4ed8;
-    --bg: #f5f7fb;
-    --surface: #ffffff;
-    --surface-2: #f8fafc;
-    --border: #e2e8f0;
-    --text: #0f172a;
-    --muted: #64748b;
-    --success: #16a34a;
-    --danger: #dc2626;
-    --warning: #d97706;
-    --sidebar: 250px;
-    --header: 64px;
-    --radius: 12px;
-    --shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
-}
+/* =========================================================
+   PHASE 1 — CORE FOUNDATION
+   ========================================================= */
 
 * {
     box-sizing: border-box;
 }
 
+:root {
+
+    --bg: #f3f4f6;
+    --panel: #ffffff;
+    --surface: #f8fafc;
+    --surface-2: #eef2f7;
+
+    --text: #111827;
+    --muted: #6b7280;
+
+    --border: #e5e7eb;
+
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+
+    --success: #16a34a;
+    --danger: #dc2626;
+
+    --shadow:
+        0 8px 24px rgba(15, 23, 42, 0.08);
+
+}
+
 html,
 body {
+
     margin: 0;
     padding: 0;
+
     width: 100%;
     min-height: 100%;
-    font-family: Arial, Helvetica, sans-serif;
+
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
     background: var(--bg);
     color: var(--text);
+
 }
 
 button,
 input,
 select,
 textarea {
+
     font: inherit;
+
 }
 
 button {
+
     cursor: pointer;
+
 }
 
+
 /* =========================================================
-   APP SHELL
+   APPLICATION
    ========================================================= */
 
 .app {
+
+    display: flex;
+
     min-height: 100vh;
+
 }
+
 
 /* =========================================================
    SIDEBAR
    ========================================================= */
 
 .sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: var(--sidebar);
-    background: #0f172a;
-    color: white;
-    z-index: 1000;
+
+    width: 250px;
+
+    flex-shrink: 0;
+
+    background: #111827;
+
+    color: #ffffff;
+
     display: flex;
+
     flex-direction: column;
-    transition: transform 0.25s ease;
+
 }
 
 .brand {
-    height: var(--header);
-    display: flex;
-    align-items: center;
-    gap: 12px;
+
+    height: 76px;
+
     padding: 0 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,0.08);
+
 }
 
 .brand-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 9px;
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 10px;
+
     background: var(--primary);
-    display: grid;
-    place-items: center;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
     font-weight: 800;
+
 }
 
 .brand-name {
-    font-size: 18px;
-    font-weight: 700;
+
+    font-size: 17px;
+
+    font-weight: 800;
+
 }
 
 .brand-version {
+
+    margin-top: 3px;
+
     font-size: 10px;
-    color: #94a3b8;
-    margin-top: 2px;
+
+    color: #9ca3af;
+
 }
 
 .nav {
-    padding: 14px 10px;
-    overflow-y: auto;
+
     flex: 1;
+
+    padding: 16px 10px;
+
+    overflow-y: auto;
+
 }
 
 .nav-group {
-    margin-bottom: 18px;
+
+    margin-bottom: 20px;
+
 }
 
 .nav-title {
-    padding: 8px 12px;
-    color: #64748b;
+
+    padding:
+        0 12px
+        7px;
+
     font-size: 10px;
+
     font-weight: 700;
-    letter-spacing: 1px;
+
+    letter-spacing: 0.08em;
+
     text-transform: uppercase;
+
+    color: #6b7280;
+
 }
 
 .nav-button {
+
     width: 100%;
+
     border: 0;
+
     background: transparent;
-    color: #cbd5e1;
-    text-align: left;
+
+    color: #d1d5db;
+
     padding: 11px 12px;
-    border-radius: 8px;
+
     margin-bottom: 3px;
+
+    border-radius: 8px;
+
     display: flex;
+
     align-items: center;
-    gap: 11px;
-    transition: 0.15s ease;
+
+    gap: 10px;
+
+    text-align: left;
+
 }
 
 .nav-button:hover {
-    background: rgba(255,255,255,0.07);
-    color: white;
+
+    background:
+        rgba(255,255,255,0.06);
+
+    color: #ffffff;
+
 }
 
 .nav-button.active {
+
     background: var(--primary);
-    color: white;
+
+    color: #ffffff;
+
 }
 
 .nav-icon {
-    width: 20px;
+
+    width: 22px;
+
     text-align: center;
+
 }
 
 .sidebar-footer {
-    padding: 14px;
-    border-top: 1px solid rgba(255,255,255,0.08);
+
+    padding: 15px;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,0.08);
+
 }
 
 .system-status {
+
     display: flex;
+
     align-items: center;
+
     gap: 8px;
-    color: #cbd5e1;
+
     font-size: 12px;
+
+    color: #d1d5db;
+
 }
 
 .status-dot {
+
     width: 8px;
     height: 8px;
-    background: #22c55e;
+
     border-radius: 50%;
+
+    background: #22c55e;
+
 }
 
+
 /* =========================================================
-   MAIN AREA
+   MAIN
    ========================================================= */
 
 .main {
-    margin-left: var(--sidebar);
-    min-height: 100vh;
+
+    min-width: 0;
+
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
 }
 
 .header {
-    position: sticky;
-    top: 0;
-    height: var(--header);
-    background: rgba(255,255,255,0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border);
+
+    height: 76px;
+
+    background: var(--panel);
+
+    border-bottom:
+        1px solid
+        var(--border);
+
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
+
     padding: 0 24px;
-    z-index: 900;
+
 }
 
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
+.header-title {
 
-.menu-toggle {
-    display: none;
-    border: 1px solid var(--border);
-    background: white;
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
-}
-
-.page-title {
     font-size: 18px;
-    font-weight: 700;
+
+    font-weight: 800;
+
 }
 
-.page-subtitle {
-    color: var(--muted);
+.header-subtitle {
+
+    margin-top: 3px;
+
     font-size: 12px;
-    margin-top: 2px;
-}
 
-.header-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+    color: var(--muted);
 
-.header-button {
-    border: 1px solid var(--border);
-    background: white;
-    border-radius: 8px;
-    padding: 8px 12px;
-}
-
-.header-button:hover {
-    background: var(--surface-2);
 }
 
 .content {
+
     padding: 24px;
-    max-width: 1600px;
-    margin: auto;
+
+    overflow-y: auto;
+
 }
+
 
 /* =========================================================
    SECTIONS
    ========================================================= */
 
 .section {
+
     display: none;
-    animation: sectionIn 0.18s ease;
+
 }
 
 .section.active {
+
     display: block;
-}
 
-@keyframes sectionIn {
-    from {
-        opacity: 0;
-        transform: translateY(3px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 .section-heading {
+
     margin-bottom: 20px;
+
 }
 
 .section-heading h1 {
-    margin: 0 0 5px;
-    font-size: 24px;
+
+    margin: 0;
+
+    font-size: 25px;
+
 }
 
 .section-heading p {
-    margin: 0;
+
+    margin:
+        6px 0 0;
+
     color: var(--muted);
+
+    font-size: 13px;
+
 }
+
 
 /* =========================================================
    CARDS
    ========================================================= */
 
-.grid {
-    display: grid;
-    gap: 16px;
-}
-
-.grid-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.grid-3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.grid-4 {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
 .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
+
+    background: var(--panel);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 12px;
+
     padding: 20px;
+
+    box-shadow: var(--shadow);
+
 }
 
 .card-title {
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 6px;
+
+    font-size: 15px;
+
+    font-weight: 800;
+
 }
 
-.card-value {
+.grid {
+
+    display: grid;
+
+    gap: 16px;
+
+}
+
+.grid-2 {
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+}
+
+.grid-3 {
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+}
+
+.metric {
+
+    margin-top: 8px;
+
     font-size: 26px;
+
     font-weight: 800;
+
 }
 
-.card-muted {
+.muted {
+
     color: var(--muted);
-    font-size: 12px;
+
 }
 
-.stat-card {
-    position: relative;
-    overflow: hidden;
-}
-
-.stat-label {
-    color: var(--muted);
-    font-size: 12px;
-    margin-bottom: 8px;
-}
-
-.stat-value {
-    font-size: 25px;
-    font-weight: 800;
-}
-
-.stat-description {
-    margin-top: 7px;
-    font-size: 11px;
-    color: var(--muted);
-}
-
-/* =========================================================
-   QUICK ACTIONS
-   ========================================================= */
-
-.quick-actions {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-}
-
-.action-button {
-    border: 1px solid var(--border);
-    background: white;
-    padding: 14px;
-    border-radius: 9px;
-    text-align: left;
-}
-
-.action-button:hover {
-    border-color: var(--primary);
-    background: #eff6ff;
-}
-
-.action-title {
-    font-weight: 700;
-    font-size: 13px;
-}
-
-.action-description {
-    color: var(--muted);
-    font-size: 11px;
-    margin-top: 4px;
-}
-
-/* =========================================================
-   PLACEHOLDER MODULE
-   ========================================================= */
-
-.module-placeholder {
-    min-height: 300px;
-    display: grid;
-    place-items: center;
-    text-align: center;
-}
-
-.placeholder-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 15px;
-    background: #eff6ff;
-    display: grid;
-    place-items: center;
-    margin: 0 auto 14px;
-    font-size: 25px;
-}
-
-.placeholder-title {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 6px;
-}
-
-.placeholder-text {
-    max-width: 500px;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.6;
-}
-
-/* =========================================================
-   BUTTONS
-   ========================================================= */
-
-.btn {
-    border: 0;
-    border-radius: 8px;
-    padding: 9px 14px;
-    font-weight: 600;
-}
-
-.btn-primary {
-    background: var(--primary);
-    color: white;
-}
-
-.btn-primary:hover {
-    background: var(--primary-dark);
-}
-
-.btn-secondary {
-    background: white;
-    color: var(--text);
-    border: 1px solid var(--border);
-}
 
 /* =========================================================
    TABLE
    ========================================================= */
 
 .table-container {
+
     overflow-x: auto;
+
 }
 
 table {
+
     width: 100%;
+
     border-collapse: collapse;
+
 }
 
 th,
 td {
+
     padding: 11px 12px;
-    border-bottom: 1px solid var(--border);
+
+    border-bottom:
+        1px solid
+        var(--border);
+
     text-align: left;
+
     font-size: 13px;
+
 }
 
 th {
-    color: var(--muted);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-    background: var(--surface-2);
+
+    background: var(--surface);
+
+    font-weight: 700;
+
 }
 
+.right {
+
+    text-align: right;
+
+}
+
+
 /* =========================================================
-   FORM
+   FORMS
    ========================================================= */
 
 .form-grid {
+
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+
 }
 
-.form-group {
+.field {
+
     display: flex;
+
     flex-direction: column;
+
     gap: 6px;
+
 }
 
-.form-group.full {
-    grid-column: 1 / -1;
-}
+.field label {
 
-.form-label {
     font-size: 12px;
+
     font-weight: 700;
+
 }
 
-.form-control {
+.field input,
+.field select,
+.field textarea {
+
     width: 100%;
-    border: 1px solid var(--border);
+
+    border:
+        1px solid
+        var(--border);
+
     border-radius: 8px;
+
     padding: 10px 11px;
-    background: white;
+
+    background: #ffffff;
+
+    color: var(--text);
+
     outline: none;
+
 }
 
-.form-control:focus {
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37,99,235,0.12);
+
 }
+
+.btn {
+
+    border: 0;
+
+    border-radius: 8px;
+
+    padding: 10px 15px;
+
+    font-weight: 700;
+
+}
+
+.btn-primary {
+
+    background: var(--primary);
+
+    color: #ffffff;
+
+}
+
+.btn-primary:hover {
+
+    background: var(--primary-dark);
+
+}
+
+
+/* =========================================================
+   PHASE 2 — CALCULATOR
+   ========================================================= */
+
+.calculator-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(320px, 520px)
+        minmax(260px, 1fr);
+
+    gap: 20px;
+
+    align-items: start;
+
+}
+
+.calculator-card {
+
+    background: #0f172a;
+
+    border-radius: 16px;
+
+    padding: 18px;
+
+    box-shadow: var(--shadow);
+
+}
+
+.calculator-display {
+
+    min-height: 125px;
+
+    background: #020617;
+
+    border-radius: 12px;
+
+    padding: 18px;
+
+    margin-bottom: 14px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: flex-end;
+
+    overflow: hidden;
+
+}
+
+.calculator-history {
+
+    min-height: 20px;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+    text-align: right;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+}
+
+.calculator-expression {
+
+    color: #ffffff;
+
+    font-size: 36px;
+
+    font-weight: 700;
+
+    text-align: right;
+
+    overflow-x: auto;
+
+    white-space: nowrap;
+
+}
+
+.calculator-keypad {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 9px;
+
+}
+
+.calc-btn {
+
+    min-height: 62px;
+
+    border: 0;
+
+    border-radius: 10px;
+
+    background: #1e293b;
+
+    color: #ffffff;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    transition:
+        transform 0.08s ease,
+        opacity 0.08s ease;
+
+}
+
+.calc-btn:hover {
+
+    opacity: 0.88;
+
+}
+
+.calc-btn:active {
+
+    transform: scale(0.96);
+
+}
+
+.calc-btn.function {
+
+    background: #334155;
+
+}
+
+.calc-btn.operator {
+
+    background: var(--primary);
+
+}
+
+.calc-btn.equals {
+
+    background: var(--success);
+
+}
+
+.calculator-side {
+
+    display: grid;
+
+    gap: 16px;
+
+}
+
+.calc-history-list {
+
+    max-height: 300px;
+
+    overflow-y: auto;
+
+}
+
+.history-item {
+
+    padding: 10px 0;
+
+    border-bottom:
+        1px solid
+        var(--border);
+
+}
+
+.history-expression {
+
+    font-size: 12px;
+
+    color: var(--muted);
+
+}
+
+.history-result {
+
+    margin-top: 3px;
+
+    font-size: 16px;
+
+    font-weight: 800;
+
+}
+
+.empty-history {
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    padding: 10px 0;
+
+}
+
+.shortcut-list {
+
+    display: grid;
+
+    gap: 9px;
+
+}
+
+.shortcut-list div {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    font-size: 12px;
+
+}
+
+.shortcut-list span {
+
+    color: var(--muted);
+
+}
+
+kbd {
+
+    min-width: 30px;
+
+    padding: 4px 7px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 5px;
+
+    background: var(--surface-2);
+
+    font-size: 11px;
+
+    text-align: center;
+
+}
+
 
 /* =========================================================
    RESPONSIVE
    ========================================================= */
 
-@media (max-width: 1100px) {
+@media (max-width: 900px) {
 
-    .grid-4 {
-        grid-template-columns: repeat(2, 1fr);
+    .sidebar {
+
+        width: 220px;
+
     }
 
-    .quick-actions {
-        grid-template-columns: repeat(2, 1fr);
+    .calculator-layout {
+
+        grid-template-columns: 1fr;
+
     }
+
+    .grid-3 {
+
+        grid-template-columns: 1fr;
+
+    }
+
 }
 
-@media (max-width: 800px) {
+@media (max-width: 700px) {
 
-    :root {
-        --sidebar: 250px;
+    .app {
+
+        flex-direction: column;
+
     }
 
     .sidebar {
-        transform: translateX(-100%);
+
+        width: 100%;
+
+        min-height: auto;
+
     }
 
-    .sidebar.open {
-        transform: translateX(0);
+    .nav {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
     }
 
-    .main {
-        margin-left: 0;
-    }
+    .nav-group {
 
-    .menu-toggle {
-        display: block;
-    }
+        margin-bottom: 10px;
 
-    .grid-2,
-    .grid-3,
-    .grid-4 {
-        grid-template-columns: 1fr;
-    }
-
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .quick-actions {
-        grid-template-columns: 1fr;
-    }
-
-    .content {
-        padding: 16px;
     }
 
     .header {
+
         padding: 0 14px;
-      /* =========================================================
-   PHASE 2 - CALCULATOR CSS
-   ========================================================= */
 
-.calculator-layout {
-    display: grid;
-    grid-template-columns: minmax(320px, 520px) minmax(260px, 1fr);
-    gap: 20px;
-    align-items: start;
-}
+    }
 
-.calculator-card {
-    background: #0f172a;
-    border-radius: 16px;
-    padding: 18px;
-    box-shadow: var(--shadow);
-}
+    .content {
 
-.calculator-display {
-    min-height: 125px;
-    background: #020617;
-    border-radius: 12px;
-    padding: 18px;
-    margin-bottom: 14px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    overflow: hidden;
-}
+        padding: 14px;
 
-.calculator-history {
-    min-height: 20px;
-    color: #64748b;
-    font-size: 13px;
-    text-align: right;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
+    }
 
-.calculator-expression {
-    color: white;
-    font-size: 36px;
-    font-weight: 700;
-    text-align: right;
-    overflow-x: auto;
-    white-space: nowrap;
-    scrollbar-width: none;
-}
+    .grid-2,
+    .form-grid {
 
-.calculator-expression::-webkit-scrollbar {
-    display: none;
-}
-
-.calculator-keypad {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 9px;
-}
-
-.calc-btn {
-    min-height: 62px;
-    border: 0;
-    border-radius: 10px;
-    background: #1e293b;
-    color: white;
-    font-size: 18px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.calc-btn:hover {
-    opacity: 0.88;
-}
-
-.calc-btn:active {
-    transform: scale(0.96);
-}
-
-.calc-btn.function {
-    background: #334155;
-}
-
-.calc-btn.operator {
-    background: var(--primary);
-}
-
-.calc-btn.equals {
-    background: var(--success);
-}
-
-.calculator-side {
-    display: grid;
-    gap: 16px;
-}
-
-.calc-history-list {
-    max-height: 280px;
-    overflow-y: auto;
-}
-
-.history-item {
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
-}
-
-.history-expression {
-    font-size: 12px;
-    color: var(--muted);
-}
-
-.history-result {
-    font-size: 16px;
-    font-weight: 700;
-    margin-top: 3px;
-}
-
-.empty-history {
-    color: var(--muted);
-    font-size: 13px;
-    padding: 12px 0;
-}
-
-.shortcut-list {
-    display: grid;
-    gap: 9px;
-}
-
-.shortcut-list div {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    font-size: 12px;
-}
-
-.shortcut-list span {
-    color: var(--muted);
-}
-
-kbd {
-    min-width: 30px;
-    padding: 4px 7px;
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    background: var(--surface-2);
-    font-size: 11px;
-    text-align: center;
-}
-
-@media (max-width: 900px) {
-
-    .calculator-layout {
         grid-template-columns: 1fr;
+
     }
 
 }
 
-@media (max-width: 500px) {
+@media (max-width: 450px) {
 
     .calculator-card {
+
         padding: 12px;
+
     }
 
     .calc-btn {
+
         min-height: 55px;
+
     }
 
     .calculator-expression {
+
         font-size: 29px;
+
     }
 
 }
-    }
 
-}
-    }
-}
+
+/* =========================================================
+   END OF CSS
+   ========================================================= */
+
 </style>
+
 </head>
+
 
 <body>
 
 <div class="app">
 
-    <!-- =====================================================
-         SIDEBAR
-         ===================================================== -->
 
-    <aside class="sidebar" id="sidebar">
-
-        <div class="brand">
-            <div class="brand-icon">B</div>
-
-            <div>
-                <div class="brand-name">BusinessDesk</div>
-                <div class="brand-version">PHASE 1 • CORE</div>
-            </div>
-        </div>
-
-        <nav class="nav">
-
-            <div class="nav-group">
-
-                <div class="nav-title">Main</div>
-
-                <button class="nav-button active"
-                        data-section="dashboard"
-                        type="button">
-                    <span class="nav-icon">⌂</span>
-                    <span>Dashboard</span>
-                </button>
-
-                <button class="nav-button"
-                        data-section="calculator"
-                        type="button">
-                    <span class="nav-icon">🧮</span>
-                    <span>Calculator</span>
-                </button>
-
-                <button class="nav-button"
-                        data-section="spreadsheet"
-                        type="button">
-                    <span class="nav-icon">▦</span>
-                    <span>Spreadsheet</span>
-                </button>
-
-            </div>
-
-            <div class="nav-group">
-
-                <div class="nav-title">Business</div>
-
-                <button class="nav-button"
-                        data-section="sales"
-                        type="button">
-                    <span class="nav-icon">↗</span>
-                    <span>Sales</span>
-                </button>
-
-                <button class="nav-button"
-                        data-section="purchases"
-                        type="button">
-                    <span class="nav-icon">↙</span>
-                    <span>Purchases</span>
-                </button>
-
-                <button class="nav-button"
-                        data-section="parties"
-                        type="button">
-                    <span class="nav-icon">♙</span>
-                    <span>Parties</span>
-                </button>
-
-                <button class="nav-button"
-                        data-section="vouchers"
-                        type="button">
-                    <span class="nav-icon">▤</span>
-                    <span>Vouchers</span>
-                </button>
-
-            </div>
-
-            <div class="nav-group">
-
-                <div class="nav-title">Reports</div>
-
-                <button class="nav-button"
-                        data-section="reports"
-                        type="button">
-                    <span class="nav-icon">▥</span>
-                    <span>Reports</span>
-                </button>
-
-                <button class="nav-button"
-                        data-section="gst"
-                        type="button">
-                    <span class="nav-icon">%</span>
-                    <span>GST</span>
-                </button>
-
-                <button class="nav-button"
-                        data-section="outstanding"
-                        type="button">
-                    <span class="nav-icon">₹</span>
-                    <span>Outstanding</span>
-                </button>
-
-            </div>
-
-            <div class="nav-group">
-
-                <div class="nav-title">System</div>
-
-                <button class="nav-button"
-                        data-section="controls"
-                        type="button">
-                    <span class="nav-icon">⚙</span>
-                    <span>System Controls</span>
-                </button>
-
-            </div>
-
-        </nav>
-
-        <div class="sidebar-footer">
-
-            <div class="system-status">
-                <span class="status-dot"></span>
-                <span>System Online</span>
-            </div>
-
-        </div>
-
-    </aside>
-
-    <!-- =====================================================
-         MAIN
-         ===================================================== -->
-
-    <main class="main">
-
-        <header class="header">
-
-            <div class="header-left">
-
-                <button class="menu-toggle"
-                        id="menuToggle"
-                        type="button"
-                        aria-label="Open menu">
-                    ☰
-                </button>
-
-                <div>
-                    <div class="page-title" id="pageTitle">
-                        Dashboard
-                    </div>
-
-                    <div class="page-subtitle" id="pageSubtitle">
-                        BusinessDesk professional workspace
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="header-right">
-
-                <button class="header-button"
-                        type="button"
-                        id="saveButton">
-                    Save
-                </button>
-
-                <button class="btn btn-primary"
-                        type="button"
-                        data-section="dashboard">
-                    Home
-                </button>
-
-            </div>
-
-        </header>
-
-        <div class="content">
-
-            <!-- =================================================
-                 DASHBOARD
-                 ================================================= -->
-
-            <section class="section active"
-                     id="section-dashboard">
-
-                <div class="section-heading">
-
-                    <h1>Business Dashboard</h1>
-
-                    <p>
-                        Central workspace for your professional business operations.
-                    </p>
-
-                </div>
-
-                <div class="grid grid-4">
-
-                    <div class="card stat-card">
-                        <div class="stat-label">Sales</div>
-                        <div class="stat-value" id="dashboardSales">₹0</div>
-                        <div class="stat-description">
-                            Current recorded sales
-                        </div>
-                    </div>
-
-                    <div class="card stat-card">
-                        <div class="stat-label">Purchases</div>
-                        <div class="stat-value" id="dashboardPurchases">₹0</div>
-                        <div class="stat-description">
-                            Current recorded purchases
-                        </div>
-                    </div>
-
-                    <div class="card stat-card">
-                        <div class="stat-label">Parties</div>
-                        <div class="stat-value" id="dashboardParties">0</div>
-                        <div class="stat-description">
-                            Customers and suppliers
-                        </div>
-                    </div>
-
-                    <div class="card stat-card">
-                        <div class="stat-label">System Status</div>
-                        <div class="stat-value">READY</div>
-                        <div class="stat-description">
-                            Phase 1 core operational
-                        </div>
-                    </div>
-
-                </div>
-
-                <div style="height:16px"></div>
-
-                <div class="card">
-
-                    <div class="card-title">
-                        Quick Actions
-                    </div>
-
-                    <div style="height:12px"></div>
-
-                    <div class="quick-actions">
-
-                        <button class="action-button"
-                                type="button"
-                                data-section="calculator">
-
-                            <div class="action-title">
-                                Open Calculator
-                            </div>
-
-                            <div class="action-description">
-                                Professional calculation tools
-                            </div>
-
-                        </button>
-
-                        <button class="action-button"
-                                type="button"
-                                data-section="spreadsheet">
-
-                            <div class="action-title">
-                                Open Spreadsheet
-                            </div>
-
-                            <div class="action-description">
-                                Spreadsheet and Excel-style tools
-                            </div>
-
-                        </button>
-
-                        <button class="action-button"
-                                type="button"
-                                data-section="sales">
-
-                            <div class="action-title">
-                                Sales
-                            </div>
-
-                            <div class="action-description">
-                                Sales management module
-                            </div>
-
-                        </button>
-
-                        <button class="action-button"
-                                type="button"
-                                data-section="controls">
-
-                            <div class="action-title">
-                                System Controls
-                            </div>
-
-                            <div class="action-description">
-                                Application control center
-                            </div>
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-                <div style="height:16px"></div>
-
-                <div class="grid grid-2">
-
-                    <div class="card">
-
-                        <div class="card-title">
-                            Application Architecture
-                        </div>
-
-                        <div style="height:12px"></div>
-
-                        <div class="table-container">
-
-                            <table>
-
-                                <thead>
-                                    <tr>
-                                        <th>Component</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-
-                                    <tr>
-                                        <td>Core Application</td>
-                                        <td>Ready</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>Navigation Engine</td>
-                                        <td>Ready</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>State Manager</td>
-                                        <td>Ready</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>Local Storage</td>
-                                        <td id="storageStatus">
-                                            Checking...
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-                    </div>
-
-                    <div class="card">
-
-                        <div class="card-title">
-                            Phase Roadmap
-                        </div>
-
-                        <div style="height:12px"></div>
-
-                        <div class="table-container">
-
-                            <table>
-
-                                <thead>
-                                    <tr>
-                                        <th>Phase</th>
-                                        <th>Module</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Core Foundation</td>
-                                        <td>Active</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Calculator & Excel</td>
-                                        <td>Planned</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Business Operations</td>
-                                        <td>Planned</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Professional Controls</td>
-                                        <td>Planned</td>
-                                    </tr>
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 CALCULATOR
-                 ================================================= -->
-
-            <!-- =====================================================
-     PHASE 2 — PROFESSIONAL CALCULATOR
+<!-- =====================================================
+     SIDEBAR
      ===================================================== -->
 
-<section class="section"
-         id="section-calculator">
+<aside class="sidebar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            B
+        </div>
+
+        <div>
+
+            <div class="brand-name">
+                BusinessDesk
+            </div>
+
+            <div class="brand-version">
+                PHASE 1 + 2
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <nav class="nav">
+
+        <div class="nav-group">
+
+            <div class="nav-title">
+                Main
+            </div>
+
+            <button
+                type="button"
+                class="nav-button active"
+                data-section="dashboard">
+
+                <span class="nav-icon">⌂</span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="nav-button"
+                data-section="calculator">
+
+                <span class="nav-icon">
+                    🧮
+                </span>
+
+                <span>
+                    Calculator
+                </span>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="nav-button"
+                data-section="spreadsheet">
+
+                <span class="nav-icon">
+                    ▦
+                </span>
+
+                <span>
+                    Spreadsheet
+                </span>
+
+            </button>
+
+        </div>
+
+
+        <div class="nav-group">
+
+            <div class="nav-title">
+                Business
+            </div>
+
+            <button
+                type="button"
+                class="nav-button"
+                data-section="sales">
+
+                <span class="nav-icon">
+                    ↗
+                </span>
+
+                <span>
+                    Sales
+                </span>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="nav-button"
+                data-section="purchases">
+
+                <span class="nav-icon">
+                    ↙
+                </span>
+
+                <span>
+                    Purchases
+                </span>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="nav-button"
+                data-section="parties">
+
+                <span class="nav-icon">
+                    ♙
+                </span>
+
+                <span>
+                    Parties
+                </span>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="nav-button"
+                data-section="vouchers">
+
+                <span class="nav-icon">
+                    ▤
+                </span>
+
+                <span>
+                    Vouchers
+                </span>
+
+            </button>
+
+        </div>
+
+
+        <div class="nav-group">
+
+            <div class="nav-title">
+                Reports
+            </div>
+
+            <button
+                type="button"
+                class="nav-button"
+                data-section="reports">
+
+                <span class="nav-icon">
+                    ▥
+                </span>
+
+                <span>
+                    Reports
+                </span>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="nav-button"
+                data-section="gst">
+
+                <span class="nav-icon">
+                    %
+                </span>
+
+                <span>
+                    GST
+                </span>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="nav-button"
+                data-section="outstanding">
+
+                <span class="nav-icon">
+                    ₹
+                </span>
+
+                <span>
+                    Outstanding
+                </span>
+
+            </button>
+
+        </div>
+
+
+        <div class="nav-group">
+
+            <div class="nav-title">
+                System
+            </div>
+
+            <button
+                type="button"
+                class="nav-button"
+                data-section="controls">
+
+                <span class="nav-icon">
+                    ⚙
+                </span>
+
+                <span>
+                    System Controls
+                </span>
+
+            </button>
+
+        </div>
+
+    </nav>
+
+
+    <div class="sidebar-footer">
+
+        <div class="system-status">
+
+            <span class="status-dot"></span>
+
+            <span>
+                System Online
+            </span>
+
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN
+     ===================================================== -->
+
+<main class="main">
+
+
+<header class="header">
+
+    <div>
+
+        <div
+            class="header-title"
+            id="headerTitle">
+
+            Dashboard
+
+        </div>
+
+        <div
+            class="header-subtitle"
+            id="headerSubtitle">
+
+            BusinessDesk Enterprise Suite
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<div class="content">
+
+
+<!-- =====================================================
+     DASHBOARD
+     ===================================================== -->
+
+<section
+    class="section active"
+    id="section-dashboard">
 
     <div class="section-heading">
 
-        <h1>Professional Calculator</h1>
+        <h1>
+            Dashboard
+        </h1>
 
         <p>
-            Business calculations with keyboard and percentage support.
+            BusinessDesk core application dashboard.
         </p>
 
     </div>
 
+
+    <div class="grid grid-3">
+
+        <div class="card">
+
+            <div class="card-title">
+                Sales
+            </div>
+
+            <div class="metric">
+                ₹0.00
+            </div>
+
+            <div class="muted">
+                Current records
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Purchases
+            </div>
+
+            <div class="metric">
+                ₹0.00
+            </div>
+
+            <div class="muted">
+                Current records
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Outstanding
+            </div>
+
+            <div class="metric">
+                ₹0.00
+            </div>
+
+            <div class="muted">
+                Current balance
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div style="height:16px"></div>
+
+
+    <div class="grid grid-2">
+
+        <div class="card">
+
+            <div class="card-title">
+                Application Architecture
+            </div>
+
+            <div style="height:12px"></div>
+
+            <table>
+
+                <tbody>
+
+                    <tr>
+                        <td>Core Application</td>
+                        <td>Ready</td>
+                    </tr>
+
+                    <tr>
+                        <td>Navigation Engine</td>
+                        <td>Ready</td>
+                    </tr>
+
+                    <tr>
+                        <td>Calculator</td>
+                        <td>Ready</td>
+                    </tr>
+
+                    <tr>
+                        <td>Local State</td>
+                        <td>Ready</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Phase Roadmap
+            </div>
+
+            <div style="height:12px"></div>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Phase
+                        </th>
+
+                        <th>
+                            Module
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+
+                        <td>1</td>
+
+                        <td>
+                            Core Foundation
+                        </td>
+
+                        <td>
+                            Active
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>2</td>
+
+                        <td>
+                            Calculator
+                        </td>
+
+                        <td>
+                            Active
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>3</td>
+
+                        <td>
+                            Business Operations
+                        </td>
+
+                        <td>
+                            Planned
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>4</td>
+
+                        <td>
+                            Professional Controls
+                        </td>
+
+                        <td>
+                            Planned
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PHASE 2 — CALCULATOR
+     ===================================================== -->
+
+<section
+    class="section"
+    id="section-calculator">
+
+
+    <div class="section-heading">
+
+        <h1>
+            Professional Calculator
+        </h1>
+
+        <p>
+            Business calculations with
+            correct percentage handling.
+        </p>
+
+    </div>
+
+
     <div class="calculator-layout">
+
 
         <!-- CALCULATOR -->
 
         <div class="calculator-card">
 
+
             <div class="calculator-display">
 
-                <div class="calculator-history"
-                     id="calcHistory">
+                <div
+                    class="calculator-history"
+                    id="calcHistory">
                 </div>
 
-                <div class="calculator-expression"
-                     id="calcExpression">
+                <div
+                    class="calculator-expression"
+                    id="calcExpression">
+
                     0
+
                 </div>
 
             </div>
 
+
             <div class="calculator-keypad">
 
-                <button type="button"
-                        class="calc-btn function"
-                        data-calc-action="clear">
+
+                <button
+                    type="button"
+                    class="calc-btn function"
+                    data-calc-action="clear">
+
                     AC
+
                 </button>
 
-                <button type="button"
-                        class="calc-btn function"
-                        data-calc-action="backspace">
+
+                <button
+                    type="button"
+                    class="calc-btn function"
+                    data-calc-action="backspace">
+
                     ⌫
+
                 </button>
 
-                <button type="button"
-                        class="calc-btn function"
-                        data-calc-action="percent">
+
+                <button
+                    type="button"
+                    class="calc-btn function"
+                    data-calc-action="percent">
+
                     %
+
                 </button>
 
-                <button type="button"
-                        class="calc-btn operator"
-                        data-calc-operator="/">
+
+                <button
+                    type="button"
+                    class="calc-btn operator"
+                    data-calc-operator="/">
+
                     ÷
+
                 </button>
 
 
-                <button type="button"
-                        class="calc-btn"
-                        data-calc-number="7">
+                <button
+                    type="button"
+                    class="calc-btn"
+                    data-calc-number="7">
+
                     7
+
                 </button>
 
-                <button type="button"
-                        class="calc-btn"
-                        data-calc-number="8">
+
+                <button
+                    type="button"
+                    class="calc-btn"
+                    data-calc-number="8">
+
                     8
+
                 </button>
 
-                <button type="button"
-                        class="calc-btn"
-                        data-calc-number="9">
+
+                <button
+                    type="button"
+                    class="calc-btn"
+                    data-calc-number="9">
+
                     9
+
                 </button>
 
-                <button type="button"
-                        class="calc-btn operator"
-                        data-calc-operator="*">
+
+                <button
+                    type="button"
+                    class="calc-btn operator"
+                    data-calc-operator="*">
+
                     ×
+
                 </button>
 
 
-                <button type="button"
-                        class="calc-btn"
-                        data-calc-number="4">
+                <button
+                    type="button"
+                    class="calc-btn"
+                    data-calc-number="4">
+
                     4
+
                 </button>
 
-                <button type="button"
-                        class="calc-btn"
-                        data-calc-number="5">
+
+                <button
+                    type="button"
+                    class="calc-btn"
+                    data-calc-number="5">
+
                     5
+
                 </button>
 
-                <button type="button"
-                        class="calc-btn"
-                        data-calc-number="6">
+
+                <button
+                    type="button"
+                    class="calc-btn"
+                    data-calc-number="6">
+
                     6
+
                 </button>
 
-                <button type="button"
-                        class="calc-btn operator"
-                        data-calc-operator="-">
+
+                <button
+                    type="button"
+                    class="calc-btn operator"
+                    data-calc-operator="-">
+
                     −
+
                 </button>
 
 
-                <button type="button"
-                        class="calc-btn"
-                        data-calc-number="1">
+                <button
+                    type="button"
+                    class="calc-btn"
+                    data-calc-number="1">
+
                     1
+
                 </button>
 
-                <button type="button"
-                        class="calc-btn"
-                        data-calc-number="2">
+
+                <button
+                    type="button"
+                    class="calc-btn"
+                    data-calc-number="2">
+
                     2
+
                 </button>
 
-                <button type="button"
-                        class="calc-btn"
-                        data-calc-number="3">
+
+                <button
+                    type="button"
+                    class="calc-btn"
+                    data-calc-number="3">
+
                     3
+
                 </button>
 
-                <button type="button"
-                        class="calc-btn operator"
-                        data-calc-operator="+">
+
+                <button
+                    type="button"
+                    class="calc-btn operator"
+                    data-calc-operator="+">
+
                     +
+
                 </button>
 
 
-                <button type="button"
-                        class="calc-btn function"
-                        data-calc-action="sign">
+                <button
+                    type="button"
+                    class="calc-btn function"
+                    data-calc-action="sign">
+
                     +/−
+
                 </button>
 
-                <button type="button"
-                        class="calc-btn"
-                        data-calc-number="0">
+
+                <button
+                    type="button"
+                    class="calc-btn"
+                    data-calc-number="0">
+
                     0
+
                 </button>
 
-                <button type="button"
-                        class="calc-btn"
-                        data-calc-action="decimal">
+
+                <button
+                    type="button"
+                    class="calc-btn"
+                    data-calc-action="decimal">
+
                     .
+
                 </button>
 
-                <button type="button"
-                        class="calc-btn equals"
-                        data-calc-action="equals">
+
+                <button
+                    type="button"
+                    class="calc-btn equals"
+                    data-calc-action="equals">
+
                     =
+
                 </button>
+
 
             </div>
 
         </div>
 
 
-        <!-- CALCULATOR INFORMATION -->
+        <!-- SIDE PANEL -->
 
         <div class="calculator-side">
+
 
             <div class="card">
 
@@ -1363,8 +1743,9 @@ kbd {
                     Calculator History
                 </div>
 
-                <div id="calcHistoryList"
-                     class="calc-history-list">
+                <div
+                    id="calcHistoryList"
+                    class="calc-history-list">
 
                     <div class="empty-history">
                         No calculations yet.
@@ -1373,6 +1754,7 @@ kbd {
                 </div>
 
             </div>
+
 
             <div class="card">
 
@@ -1393,7 +1775,7 @@ kbd {
                     </div>
 
                     <div>
-                        <kbd>-</kbd>
+                        <kbd>−</kbd>
                         <span>Subtraction</span>
                     </div>
 
@@ -1433,656 +1815,284 @@ kbd {
 </section>
 
 
-            <!-- =================================================
-                 SPREADSHEET
-                 ================================================= -->
+<!-- =====================================================
+     SPREADSHEET
+     ===================================================== -->
 
-            <section class="section"
-                     id="section-spreadsheet">
+<section
+    class="section"
+    id="section-spreadsheet">
 
-                <div class="section-heading">
+    <div class="section-heading">
 
-                    <h1>Spreadsheet</h1>
+        <h1>
+            Spreadsheet
+        </h1>
 
-                    <p>
-                        Excel-style business workspace.
-                    </p>
+        <p>
+            Spreadsheet engine will be expanded
+            in the next Phase 2 module.
+        </p>
 
-                </div>
+    </div>
 
-                <div class="card module-placeholder">
+    <div class="card">
 
-                    <div>
-
-                        <div class="placeholder-icon">▦</div>
-
-                        <div class="placeholder-title">
-                            Spreadsheet Workspace
-                        </div>
-
-                        <div class="placeholder-text">
-                            Spreadsheet functionality, formulas, tables and
-                            Excel-compatible workflows will be developed in Phase 2.
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 SALES
-                 ================================================= -->
-
-            <section class="section"
-                     id="section-sales">
-
-                <div class="section-heading">
-
-                    <h1>Sales</h1>
-
-                    <p>
-                        Sales transaction management.
-                    </p>
-
-                </div>
-
-                <div class="card module-placeholder">
-
-                    <div>
-
-                        <div class="placeholder-icon">↗</div>
-
-                        <div class="placeholder-title">
-                            Sales Management
-                        </div>
-
-                        <div class="placeholder-text">
-                            Sales invoices, transaction records, totals,
-                            customer mapping and related workflows will be
-                            developed in Phase 3.
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 PURCHASES
-                 ================================================= -->
-
-            <section class="section"
-                     id="section-purchases">
-
-                <div class="section-heading">
-
-                    <h1>Purchases</h1>
-
-                    <p>
-                        Purchase transaction management.
-                    </p>
-
-                </div>
-
-                <div class="card module-placeholder">
-
-                    <div>
-
-                        <div class="placeholder-icon">↙</div>
-
-                        <div class="placeholder-title">
-                            Purchase Management
-                        </div>
-
-                        <div class="placeholder-text">
-                            Purchase records, supplier management and
-                            transaction workflows will be developed in Phase 3.
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 PARTIES
-                 ================================================= -->
-
-            <section class="section"
-                     id="section-parties">
-
-                <div class="section-heading">
-
-                    <h1>Parties</h1>
-
-                    <p>
-                        Customers and suppliers.
-                    </p>
-
-                </div>
-
-                <div class="card module-placeholder">
-
-                    <div>
-
-                        <div class="placeholder-icon">♙</div>
-
-                        <div class="placeholder-title">
-                            Party Management
-                        </div>
-
-                        <div class="placeholder-text">
-                            Customer and supplier master records will be
-                            developed in Phase 3.
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 VOUCHERS
-                 ================================================= -->
-
-            <section class="section"
-                     id="section-vouchers">
-
-                <div class="section-heading">
-
-                    <h1>Vouchers</h1>
-
-                    <p>
-                        Accounting voucher management.
-                    </p>
-
-                </div>
-
-                <div class="card module-placeholder">
-
-                    <div>
-
-                        <div class="placeholder-icon">▤</div>
-
-                        <div class="placeholder-title">
-                            Voucher Management
-                        </div>
-
-                        <div class="placeholder-text">
-                            Payment, receipt, journal and other voucher
-                            workflows will be developed in Phase 3.
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 REPORTS
-                 ================================================= -->
-
-            <section class="section"
-                     id="section-reports">
-
-                <div class="section-heading">
-
-                    <h1>Reports</h1>
-
-                    <p>
-                        Business and accounting reports.
-                    </p>
-
-                </div>
-
-                <div class="card module-placeholder">
-
-                    <div>
-
-                        <div class="placeholder-icon">▥</div>
-
-                        <div class="placeholder-title">
-                            Reporting Center
-                        </div>
-
-                        <div class="placeholder-text">
-                            Professional reports and analytics will be
-                            developed in Phase 3.
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 GST
-                 ================================================= -->
-
-            <section class="section"
-                     id="section-gst">
-
-                <div class="section-heading">
-
-                    <h1>GST</h1>
-
-                    <p>
-                        Tax and GST management.
-                    </p>
-
-                </div>
-
-                <div class="card module-placeholder">
-
-                    <div>
-
-                        <div class="placeholder-icon">%</div>
-
-                        <div class="placeholder-title">
-                            GST Management
-                        </div>
-
-                        <div class="placeholder-text">
-                            GST calculations, transaction classification and
-                            reporting will be developed in later phases.
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 OUTSTANDING
-                 ================================================= -->
-
-            <section class="section"
-                     id="section-outstanding">
-
-                <div class="section-heading">
-
-                    <h1>Outstanding</h1>
-
-                    <p>
-                        Receivables and payables.
-                    </p>
-
-                </div>
-
-                <div class="card module-placeholder">
-
-                    <div>
-
-                        <div class="placeholder-icon">₹</div>
-
-                        <div class="placeholder-title">
-                            Outstanding Management
-                        </div>
-
-                        <div class="placeholder-text">
-                            Receivable, payable and ageing analysis will be
-                            developed in Phase 3.
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 SYSTEM CONTROLS
-                 ================================================= -->
-
-            <section class="section"
-                     id="section-controls">
-
-                <div class="section-heading">
-
-                    <h1>System Controls</h1>
-
-                    <p>
-                        Application health and configuration.
-                    </p>
-
-                </div>
-
-                <div class="grid grid-3">
-
-                    <div class="card">
-
-                        <div class="card-title">
-                            Application
-                        </div>
-
-                        <div style="height:10px"></div>
-
-                        <div class="card-value">
-                            READY
-                        </div>
-
-                        <div class="card-muted">
-                            Core application loaded successfully.
-                        </div>
-
-                    </div>
-
-                    <div class="card">
-
-                        <div class="card-title">
-                            Navigation
-                        </div>
-
-                        <div style="height:10px"></div>
-
-                        <div class="card-value"
-                             id="navigationCount">
-                            0
-                        </div>
-
-                        <div class="card-muted">
-                            Registered application sections.
-                        </div>
-
-                    </div>
-
-                    <div class="card">
-
-                        <div class="card-title">
-                            Storage
-                        </div>
-
-                        <div style="height:10px"></div>
-
-                        <div class="card-value"
-                             id="systemStorage">
-                            READY
-                        </div>
-
-                        <div class="card-muted">
-                            Browser storage availability.
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div style="height:16px"></div>
-
-                <div class="card">
-
-                    <div class="card-title">
-                        Phase 1 Diagnostics
-                    </div>
-
-                    <div style="height:12px"></div>
-
-                    <div id="diagnosticOutput"
-                         style="
-                            background:#0f172a;
-                            color:#e2e8f0;
-                            padding:16px;
-                            border-radius:8px;
-                            font-family:monospace;
-                            font-size:12px;
-                            line-height:1.7;
-                         ">
-                    </div>
-
-                </div>
-
-            </section>
-
+        <div class="card-title">
+            Spreadsheet Workspace
         </div>
 
-    </main>
+        <p class="muted">
+            Spreadsheet foundation is ready.
+            Advanced cells and formulas can be added
+            without changing the navigation engine.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     BUSINESS PLACEHOLDERS
+     ===================================================== -->
+
+<section
+    class="section"
+    id="section-sales">
+
+    <div class="section-heading">
+
+        <h1>Sales</h1>
+
+        <p>
+            Sales module.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        Sales module will be expanded
+        in a later phase.
+
+    </div>
+
+</section>
+
+
+<section
+    class="section"
+    id="section-purchases">
+
+    <div class="section-heading">
+
+        <h1>Purchases</h1>
+
+        <p>
+            Purchase module.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        Purchase module will be expanded
+        in a later phase.
+
+    </div>
+
+</section>
+
+
+<section
+    class="section"
+    id="section-parties">
+
+    <div class="section-heading">
+
+        <h1>Parties</h1>
+
+        <p>
+            Party management.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        Party module will be expanded
+        in a later phase.
+
+    </div>
+
+</section>
+
+
+<section
+    class="section"
+    id="section-vouchers">
+
+    <div class="section-heading">
+
+        <h1>Vouchers</h1>
+
+        <p>
+            Voucher management.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        Voucher module will be expanded
+        in a later phase.
+
+    </div>
+
+</section>
+
+
+<section
+    class="section"
+    id="section-reports">
+
+    <div class="section-heading">
+
+        <h1>Reports</h1>
+
+        <p>
+            Reporting module.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        Reporting module will be expanded
+        in a later phase.
+
+    </div>
+
+</section>
+
+
+<section
+    class="section"
+    id="section-gst">
+
+    <div class="section-heading">
+
+        <h1>GST</h1>
+
+        <p>
+            GST module.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        GST module will be expanded
+        in a later phase.
+
+    </div>
+
+</section>
+
+
+<section
+    class="section"
+    id="section-outstanding">
+
+    <div class="section-heading">
+
+        <h1>Outstanding</h1>
+
+        <p>
+            Outstanding balances.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        Outstanding module will be expanded
+        in a later phase.
+
+    </div>
+
+</section>
+
+
+<section
+    class="section"
+    id="section-controls">
+
+    <div class="section-heading">
+
+        <h1>
+            System Controls
+        </h1>
+
+        <p>
+            Application control center.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-title">
+            System Status
+        </div>
+
+        <p class="muted">
+            BusinessDesk Phase 1 + Phase 2
+            foundation is running.
+        </p>
+
+    </div>
+
+</section>
+
+
+</div>
+
+</main>
 
 </div>
 
 
 <script>
-/* =========================================================
-   BUSINESSDESK — PHASE 1 JAVASCRIPT
-   CORE APPLICATION ENGINE
-   ========================================================= */
-
-"use strict";
 
 /* =========================================================
-   APPLICATION STATE
+   PHASE 1 — APPLICATION STATE
    ========================================================= */
 
 const AppState = {
 
-    currentSection: "dashboard",
+    currentSection:
+        "dashboard",
 
-    initialized: false,
+    calculations: [],
 
-    storageAvailable: false,
-
-    unsavedChanges: false,
-
-    navigationCount: 0,
-
-    version: "1.0.0",
-
-    data: {
-
-        sales: [],
-
-        purchases: [],
-
-        parties: [],
-
-        vouchers: [],
-
-        calculations: []
-
-    }
+    initialized:
+        false
 
 };
 
 
 /* =========================================================
-   SECTION CONFIGURATION
-   ========================================================= */
-
-const SectionConfig = {
-
-    dashboard: {
-        title: "Dashboard",
-        subtitle: "BusinessDesk professional workspace"
-    },
-
-    calculator: {
-        title: "Calculator",
-        subtitle: "Professional calculation tools"
-    },
-
-    spreadsheet: {
-        title: "Spreadsheet",
-        subtitle: "Excel-style business workspace"
-    },
-
-    sales: {
-        title: "Sales",
-        subtitle: "Sales transaction management"
-    },
-
-    purchases: {
-        title: "Purchases",
-        subtitle: "Purchase transaction management"
-    },
-
-    parties: {
-        title: "Parties",
-        subtitle: "Customers and suppliers"
-    },
-
-    vouchers: {
-        title: "Vouchers",
-        subtitle: "Accounting voucher management"
-    },
-
-    reports: {
-        title: "Reports",
-        subtitle: "Business and accounting reports"
-    },
-
-    gst: {
-        title: "GST",
-        subtitle: "Tax and GST management"
-    },
-
-    outstanding: {
-        title: "Outstanding",
-        subtitle: "Receivables and payables"
-    },
-
-    controls: {
-        title: "System Controls",
-        subtitle: "Application health and configuration"
-    }
-
-};
-
-
-/* =========================================================
-   DOM HELPERS
-   ========================================================= */
-
-function getElement(id) {
-
-    return document.getElementById(id);
-
-}
-
-
-function getSections() {
-
-    return document.querySelectorAll(".section");
-
-}
-
-
-function getNavigationButtons() {
-
-    return document.querySelectorAll(".nav-button");
-
-}
-
-
-/* =========================================================
-   NAVIGATION ENGINE
-   ========================================================= */
-
-function showSection(sectionName) {
-
-    if (!SectionConfig[sectionName]) {
-
-        console.error(
-            "BusinessDesk: Unknown section:",
-            sectionName
-        );
-
-        return false;
-
-    }
-
-    const sectionElement =
-        getElement("section-" + sectionName);
-
-    if (!sectionElement) {
-
-        console.error(
-            "BusinessDesk: Section element missing:",
-            sectionName
-        );
-
-        return false;
-
-    }
-
-
-    getSections().forEach(function(section) {
-
-        section.classList.remove("active");
-
-    });
-
-
-    getNavigationButtons().forEach(function(button) {
-
-        button.classList.remove("active");
-
-    });
-
-
-    sectionElement.classList.add("active");
-
-
-    const activeButton =
-        document.querySelector(
-            '.nav-button[data-section="' +
-            sectionName +
-            '"]'
-        );
-
-    if (activeButton) {
-
-        activeButton.classList.add("active");
-
-    }
-
-
-    const config =
-        SectionConfig[sectionName];
-
-    getElement("pageTitle").textContent =
-        config.title;
-
-    getElement("pageSubtitle").textContent =
-        config.subtitle;
-
-
-    AppState.currentSection =
-        sectionName;
-
-
-    closeMobileSidebar();
-
-    return true;
-
-}
-
-
-/* =========================================================
-   NAVIGATION EVENT SETUP
+   PHASE 1 — NAVIGATION
    ========================================================= */
 
 function initializeNavigation() {
 
     const buttons =
         document.querySelectorAll(
-            "[data-section]"
+            ".nav-button[data-section]"
         );
-
 
     buttons.forEach(function(button) {
 
@@ -2091,754 +2101,229 @@ function initializeNavigation() {
             function() {
 
                 const section =
-                    button.getAttribute(
-                        "data-section"
-                    );
+                    button.dataset.section;
 
-                if (section) {
-
-                    showSection(section);
-
-                }
+                navigateToSection(section);
 
             }
         );
 
     });
 
-
-    AppState.navigationCount =
-        Object.keys(SectionConfig).length;
-
-
-    getElement("navigationCount").textContent =
-        AppState.navigationCount;
-
 }
 
 
-/* =========================================================
-   MOBILE SIDEBAR
-   ========================================================= */
-
-function initializeMobileMenu() {
-
-    const menuToggle =
-        getElement("menuToggle");
-
-    const sidebar =
-        getElement("sidebar");
-
-
-    if (!menuToggle || !sidebar) {
-
-        return;
-
-    }
-
-
-    menuToggle.addEventListener(
-        "click",
-        function() {
-
-            sidebar.classList.toggle("open");
-
-        }
-    );
-
-}
-
-
-function closeMobileSidebar() {
-
-    const sidebar =
-        getElement("sidebar");
-
-    if (!sidebar) {
-
-        return;
-
-    }
-
-
-    if (
-        window.innerWidth <= 800
-    ) {
-
-        sidebar.classList.remove("open");
-
-    }
-
-}
-
-
-/* =========================================================
-   STORAGE ENGINE
-   ========================================================= */
-
-const STORAGE_KEY =
-    "businessdesk_phase1_state";
-
-
-function checkStorage() {
-
-    try {
-
-        const testKey =
-            "__businessdesk_storage_test__";
-
-        localStorage.setItem(
-            testKey,
-            "1"
-        );
-
-        localStorage.removeItem(
-            testKey
-        );
-
-        AppState.storageAvailable =
-            true;
-
-    } catch (error) {
-
-        AppState.storageAvailable =
-            false;
-
-        console.error(
-            "BusinessDesk storage unavailable:",
-            error
-        );
-
-    }
-
-
-    updateStorageStatus();
-
-}
-
-
-function updateStorageStatus() {
-
-    const dashboardStatus =
-        getElement("storageStatus");
-
-    const systemStatus =
-        getElement("systemStorage");
-
-
-    if (AppState.storageAvailable) {
-
-        if (dashboardStatus) {
-
-            dashboardStatus.textContent =
-                "Available";
-
-        }
-
-        if (systemStatus) {
-
-            systemStatus.textContent =
-                "READY";
-
-        }
-
-    } else {
-
-        if (dashboardStatus) {
-
-            dashboardStatus.textContent =
-                "Unavailable";
-
-        }
-
-        if (systemStatus) {
-
-            systemStatus.textContent =
-                "ERROR";
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   LOAD DATA
-   ========================================================= */
-
-function loadApplicationData() {
-
-    if (!AppState.storageAvailable) {
-
-        return;
-
-    }
-
-
-    try {
-
-        const saved =
-            localStorage.getItem(
-                STORAGE_KEY
-            );
-
-
-        if (!saved) {
-
-            return;
-
-        }
-
-
-        const parsed =
-            JSON.parse(saved);
-
-
-        if (
-            parsed &&
-            typeof parsed === "object" &&
-            parsed.data
-        ) {
-
-            AppState.data = {
-
-                sales:
-                    Array.isArray(
-                        parsed.data.sales
-                    )
-                        ? parsed.data.sales
-                        : [],
-
-                purchases:
-                    Array.isArray(
-                        parsed.data.purchases
-                    )
-                        ? parsed.data.purchases
-                        : [],
-
-                parties:
-                    Array.isArray(
-                        parsed.data.parties
-                    )
-                        ? parsed.data.parties
-                        : [],
-
-                vouchers:
-                    Array.isArray(
-                        parsed.data.vouchers
-                    )
-                        ? parsed.data.vouchers
-                        : [],
-
-                calculations:
-                    Array.isArray(
-                        parsed.data.calculations
-                    )
-                        ? parsed.data.calculations
-                        : []
-
-            };
-
-        }
-
-
-        AppState.unsavedChanges =
-            false;
-
-
-        updateDashboard();
-
-    } catch (error) {
-
-        console.error(
-            "BusinessDesk: Failed to load saved data.",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   SAVE DATA
-   ========================================================= */
-
-function saveApplicationData() {
-
-    if (!AppState.storageAvailable) {
-
-        return false;
-
-    }
-
-
-    try {
-
-        const payload = {
-
-            version:
-                AppState.version,
-
-            savedAt:
-                new Date().toISOString(),
-
-            data:
-                AppState.data
-
-        };
-
-
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify(payload)
-        );
-
-
-        AppState.unsavedChanges =
-            false;
-
-
-        updateDashboard();
-
-        return true;
-
-    } catch (error) {
-
-        console.error(
-            "BusinessDesk: Save failed.",
-            error
-        );
-
-        return false;
-
-    }
-
-}
-
-
-/* =========================================================
-   SAVE BUTTON
-   ========================================================= */
-
-function initializeSaveButton() {
-
-    const saveButton =
-        getElement("saveButton");
-
-
-    if (!saveButton) {
-
-        return;
-
-    }
-
-
-    saveButton.addEventListener(
-        "click",
-        function() {
-
-            const success =
-                saveApplicationData();
-
-
-            if (success) {
-
-                saveButton.textContent =
-                    "Saved";
-
-                setTimeout(
-                    function() {
-
-                        saveButton.textContent =
-                            "Save";
-
-                    },
-                    1200
-                );
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   DASHBOARD
-   ========================================================= */
-
-function updateDashboard() {
-
-    const sales =
-        getElement("dashboardSales");
-
-    const purchases =
-        getElement("dashboardPurchases");
-
-    const parties =
-        getElement("dashboardParties");
-
-
-    if (sales) {
-
-        sales.textContent =
-            "₹" +
-            calculateTotal(
-                AppState.data.sales
-            ).toLocaleString(
-                "en-IN"
-            );
-
-    }
-
-
-    if (purchases) {
-
-        purchases.textContent =
-            "₹" +
-            calculateTotal(
-                AppState.data.purchases
-            ).toLocaleString(
-                "en-IN"
-            );
-
-    }
-
-
-    if (parties) {
-
-        parties.textContent =
-            AppState.data.parties.length;
-
-    }
-
-}
-
-
-/* =========================================================
-   BASIC TOTAL HELPER
-   ========================================================= */
-
-function calculateTotal(records) {
-
-    if (!Array.isArray(records)) {
-
-        return 0;
-
-    }
-
-
-    return records.reduce(
-        function(total, record) {
-
-            const amount =
-                Number(
-                    record &&
-                    record.amount
-                );
-
-
-            if (
-                Number.isFinite(amount)
-            ) {
-
-                return total + amount;
-
-            }
-
-
-            return total;
-
-        },
-        0
-    );
-
-}
-
-
-/* =========================================================
-   DIAGNOSTICS
-   ========================================================= */
-
-function runPhase1Diagnostics() {
-
-    const output =
-        getElement(
-            "diagnosticOutput"
-        );
-
-
-    if (!output) {
-
-        return;
-
-    }
-
+function navigateToSection(sectionName) {
 
     const sections =
-        getSections().length;
+        document.querySelectorAll(
+            ".section"
+        );
 
-    const navigation =
-        getNavigationButtons().length;
-
-
-    const lines = [
-
-        "BusinessDesk System Diagnostics",
-
-        "================================",
-
-        "Phase 1 Version : " +
-            AppState.version,
-
-        "Database        : " +
-            (
-                AppState.storageAvailable
-                    ? "AVAILABLE"
-                    : "UNAVAILABLE"
-            ),
-
-        "Navigation      : " +
-            navigation +
-            " item(s)",
-
-        "Sections        : " +
-            sections,
-
-        "Current Section : " +
-            AppState.currentSection,
-
-        "Sales Records   : " +
-            AppState.data.sales.length,
-
-        "Purchase Records: " +
-            AppState.data.purchases.length,
-
-        "Party Records   : " +
-            AppState.data.parties.length,
-
-        "Voucher Records : " +
-            AppState.data.vouchers.length,
-
-        "Calculations    : " +
-            AppState.data.calculations.length,
-
-        "Unsaved Changes : " +
-            (
-                AppState.unsavedChanges
-                    ? "YES"
-                    : "NO"
-            ),
-
-        "JavaScript State: " +
-            (
-                AppState.initialized
-                    ? "READY"
-                    : "NOT READY"
-            ),
-
-        "",
-
-        "Errors:",
-
-        "- None detected by Phase 1 diagnostics",
-
-        "",
-
-        "Warnings:",
-
-        "- None detected by Phase 1 diagnostics"
-
-    ];
+    const buttons =
+        document.querySelectorAll(
+            ".nav-button"
+        );
 
 
-    output.textContent =
-        lines.join("\n");
-
-}
+    let targetFound =
+        false;
 
 
-/* =========================================================
-   UNSAVED CHANGE TRACKING
-   ========================================================= */
+    sections.forEach(function(section) {
 
-function markUnsavedChanges() {
+        const isTarget =
+            section.id ===
+            "section-" +
+            sectionName;
 
-    AppState.unsavedChanges =
-        true;
+        section.classList.toggle(
+            "active",
+            isTarget
+        );
 
-    runPhase1Diagnostics();
+        if (isTarget) {
 
-}
-
-
-/* =========================================================
-   BEFORE UNLOAD WARNING
-   ========================================================= */
-
-window.addEventListener(
-    "beforeunload",
-    function(event) {
-
-        if (
-            AppState.unsavedChanges
-        ) {
-
-            event.preventDefault();
-
-            event.returnValue = "";
+            targetFound =
+                true;
 
         }
 
-    }
-);
+    });
 
 
-/* =========================================================
-   GLOBAL ERROR MONITOR
-   ========================================================= */
+    if (!targetFound) {
 
-window.addEventListener(
-    "error",
-    function(event) {
-
-        console.error(
-            "BusinessDesk runtime error:",
-            event.error || event.message
-        );
-
-    }
-);
-
-
-window.addEventListener(
-    "unhandledrejection",
-    function(event) {
-
-        console.error(
-            "BusinessDesk promise error:",
-            event.reason
-        );
-
-    }
-);
-
-
-/* =========================================================
-   APPLICATION INITIALIZATION
-   ========================================================= */
-
-function initializeBusinessDesk() {
-
-    try {
-
-        checkStorage();
-
-        initializeNavigation();
-
-        initializeMobileMenu();
-
-        initializeSaveButton();
-
-        loadApplicationData();
-
-        updateDashboard();
-
-        showSection(
-            "dashboard"
-        );
-
-
-        AppState.initialized =
-            true;
-
-
-        runPhase1Diagnostics();
-
-
-        console.info(
-            "BusinessDesk Phase 1 initialized successfully."
-        );
-
-
-    } catch (error) {
-
-        AppState.initialized =
-            false;
-
-
-        console.error(
-            "BusinessDesk initialization failed:",
-            error
-        );
-
-
-        const output =
-            getElement(
-                "diagnosticOutput"
-            );
-
-
-        if (output) {
-
-            output.textContent =
-                "BusinessDesk Initialization Error\n\n" +
-                error.message;
-
-        }
+        return;
 
     }
 
-}
+
+    buttons.forEach(function(button) {
+
+        button.classList.toggle(
+            "active",
+            button.dataset.section ===
+            sectionName
+        );
+
+    });
 
 
-/* =========================================================
-   START APPLICATION
-   ========================================================= */
+    AppState.currentSection =
+        sectionName;
 
-if (
-    document.readyState === "loading"
-) {
 
-    document.addEventListener(
-        "DOMContentLoaded",
-        initializeBusinessDesk
+    updateHeader(
+        sectionName
     );
 
-} else {
+}
 
-    initializeBusinessDesk();
+
+function updateHeader(sectionName) {
+
+    const title =
+        document.getElementById(
+            "headerTitle"
+        );
+
+    const subtitle =
+        document.getElementById(
+            "headerSubtitle"
+        );
+
+
+    const names = {
+
+        dashboard:
+            [
+                "Dashboard",
+                "BusinessDesk Enterprise Suite"
+            ],
+
+        calculator:
+            [
+                "Calculator",
+                "Professional Calculator"
+            ],
+
+        spreadsheet:
+            [
+                "Spreadsheet",
+                "Spreadsheet Workspace"
+            ],
+
+        sales:
+            [
+                "Sales",
+                "Sales Management"
+            ],
+
+        purchases:
+            [
+                "Purchases",
+                "Purchase Management"
+            ],
+
+        parties:
+            [
+                "Parties",
+                "Party Management"
+            ],
+
+        vouchers:
+            [
+                "Vouchers",
+                "Voucher Management"
+            ],
+
+        reports:
+            [
+                "Reports",
+                "Business Reports"
+            ],
+
+        gst:
+            [
+                "GST",
+                "GST Management"
+            ],
+
+        outstanding:
+            [
+                "Outstanding",
+                "Outstanding Balances"
+            ],
+
+        controls:
+            [
+                "System Controls",
+                "Application Control Center"
+            ]
+
+    };
+
+
+    const value =
+        names[sectionName] ||
+        [
+            "BusinessDesk",
+            "Enterprise Suite"
+        ];
+
+
+    if (title) {
+
+        title.textContent =
+            value[0];
+
+    }
+
+
+    if (subtitle) {
+
+        subtitle.textContent =
+            value[1];
+
+    }
 
 }
+
+
 /* =========================================================
-   PHASE 2 — PROFESSIONAL CALCULATOR ENGINE
+   PHASE 2 — CALCULATOR STATE
    ========================================================= */
 
 const Calculator = {
 
-    current: "0",
+    current:
+        "0",
 
-    previous: null,
+    previous:
+        null,
 
-    operator: null,
+    operator:
+        null,
 
-    waitingForOperand: false,
+    waitingForOperand:
+        false,
 
-    expression: "",
+    expression:
+        "",
 
-    history: [],
+    history:
+        [],
 
-    initialized: false
+    initialized:
+        false
 
 };
 
 
-/* ---------------------------------------------------------
-   DISPLAY
-   --------------------------------------------------------- */
+/* =========================================================
+   CALCULATOR DISPLAY
+   ========================================================= */
 
 function calculatorUpdateDisplay() {
 
@@ -2852,12 +2337,14 @@ function calculatorUpdateDisplay() {
             "calcHistory"
         );
 
-    if (!display) {
-        return;
+
+    if (display) {
+
+        display.textContent =
+            Calculator.current;
+
     }
 
-    display.textContent =
-        Calculator.current;
 
     if (historyDisplay) {
 
@@ -2869,66 +2356,68 @@ function calculatorUpdateDisplay() {
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    NUMBER INPUT
-   --------------------------------------------------------- */
+   ========================================================= */
 
 function calculatorInputNumber(number) {
 
     if (
-        Calculator.current === "Error"
+        Calculator.current ===
+        "Error"
     ) {
 
         calculatorClear();
 
     }
+
 
     if (
         Calculator.waitingForOperand
     ) {
 
         Calculator.current =
-            number;
+            String(number);
 
         Calculator.waitingForOperand =
             false;
 
+    } else if (
+        Calculator.current ===
+        "0"
+    ) {
+
+        Calculator.current =
+            String(number);
+
     } else {
 
-        if (
-            Calculator.current === "0"
-        ) {
-
-            Calculator.current =
-                number;
-
-        } else {
-
-            Calculator.current +=
-                number;
-
-        }
+        Calculator.current +=
+            String(number);
 
     }
+
 
     calculatorUpdateDisplay();
 
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    DECIMAL
-   --------------------------------------------------------- */
+   ========================================================= */
 
 function calculatorInputDecimal() {
 
     if (
-        Calculator.current === "Error"
+        Calculator.current ===
+        "Error"
     ) {
 
         calculatorClear();
 
     }
+
 
     if (
         Calculator.waitingForOperand
@@ -2944,23 +2433,26 @@ function calculatorInputDecimal() {
         !Calculator.current.includes(".")
     ) {
 
-        Calculator.current += ".";
+        Calculator.current +=
+            ".";
 
     }
+
 
     calculatorUpdateDisplay();
 
 }
 
 
-/* ---------------------------------------------------------
-   NUMBER PARSER
-   --------------------------------------------------------- */
+/* =========================================================
+   SAFE NUMBER
+   ========================================================= */
 
-function calculatorNumber(value) {
+function calculatorToNumber(value) {
 
     const number =
         Number(value);
+
 
     return Number.isFinite(number)
         ? number
@@ -2969,9 +2461,9 @@ function calculatorNumber(value) {
 }
 
 
-/* ---------------------------------------------------------
-   SAFE NUMBER FORMAT
-   --------------------------------------------------------- */
+/* =========================================================
+   FORMAT
+   ========================================================= */
 
 function calculatorFormat(value) {
 
@@ -2983,6 +2475,7 @@ function calculatorFormat(value) {
 
     }
 
+
     if (
         Object.is(value, -0)
     ) {
@@ -2991,47 +2484,64 @@ function calculatorFormat(value) {
 
     }
 
+
     const rounded =
         Math.round(
-            (value + Number.EPSILON) *
+            (
+                value +
+                Number.EPSILON
+            ) *
             100000000
-        ) / 100000000;
+        ) /
+        100000000;
+
 
     return String(rounded);
 
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    OPERATOR
-   --------------------------------------------------------- */
+   ========================================================= */
 
 function calculatorSetOperator(operator) {
 
     if (
-        Calculator.current === "Error"
+        Calculator.current ===
+        "Error"
     ) {
 
         return;
 
     }
 
-    const inputValue =
-        calculatorNumber(
+
+    const input =
+        calculatorToNumber(
             Calculator.current
         );
 
+
     if (
-        !Number.isFinite(inputValue)
+        !Number.isFinite(input)
     ) {
+
+        calculatorSetError();
 
         return;
 
     }
 
 
+    /*
+     * If an operator already exists and
+     * the user has entered a second value,
+     * calculate the intermediate result.
+     */
+
     if (
-        Calculator.operator &&
+        Calculator.operator !== null &&
         Calculator.previous !== null &&
         !Calculator.waitingForOperand
     ) {
@@ -3039,7 +2549,7 @@ function calculatorSetOperator(operator) {
         const result =
             calculatorPerformOperation(
                 Calculator.previous,
-                inputValue,
+                input,
                 Calculator.operator
             );
 
@@ -3049,6 +2559,7 @@ function calculatorSetOperator(operator) {
         ) {
 
             calculatorSetError();
+
             return;
 
         }
@@ -3063,7 +2574,7 @@ function calculatorSetOperator(operator) {
     } else {
 
         Calculator.previous =
-            inputValue;
+            input;
 
     }
 
@@ -3089,32 +2600,40 @@ function calculatorSetOperator(operator) {
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    OPERATOR SYMBOL
-   --------------------------------------------------------- */
+   ========================================================= */
 
-function calculatorOperatorSymbol(operator) {
+function calculatorOperatorSymbol(
+    operator
+) {
 
     const symbols = {
 
-        "+": "+",
+        "+":
+            "+",
 
-        "-": "−",
+        "-":
+            "−",
 
-        "*": "×",
+        "*":
+            "×",
 
-        "/": "÷"
+        "/":
+            "÷"
 
     };
 
-    return symbols[operator] || operator;
+
+    return symbols[operator] ||
+           operator;
 
 }
 
 
-/* ---------------------------------------------------------
-   OPERATION ENGINE
-   --------------------------------------------------------- */
+/* =========================================================
+   BASIC OPERATION
+   ========================================================= */
 
 function calculatorPerformOperation(
     first,
@@ -3157,14 +2676,15 @@ function calculatorPerformOperation(
 }
 
 
-/* ---------------------------------------------------------
-   PERCENTAGE
-   --------------------------------------------------------- */
+/* =========================================================
+   CORRECT PERCENTAGE ENGINE
+   ========================================================= */
 
 function calculatorPercent() {
 
     if (
-        Calculator.current === "Error"
+        Calculator.current ===
+        "Error"
     ) {
 
         return;
@@ -3173,7 +2693,7 @@ function calculatorPercent() {
 
 
     const current =
-        calculatorNumber(
+        calculatorToNumber(
             Calculator.current
         );
 
@@ -3183,82 +2703,123 @@ function calculatorPercent() {
     ) {
 
         calculatorSetError();
+
         return;
 
     }
 
 
-    let result;
-
-
     /*
-     * Standard business-calculator behavior:
+     * Standalone:
      *
-     * 100 + 10%  = 110
-     * 100 - 10%  = 90
-     * 100 × 10%  = 10
-     * 100 ÷ 10%  = 1000
+     * 18 % = 0.18
      */
 
     if (
-        Calculator.previous !== null &&
-        Calculator.operator
+        Calculator.operator === null ||
+        Calculator.previous === null
     ) {
 
-        const base =
-            calculatorNumber(
-                Calculator.previous
+        Calculator.current =
+            calculatorFormat(
+                current / 100
             );
 
+        Calculator.waitingForOperand =
+            true;
 
-        if (
-            !Number.isFinite(base)
-        ) {
+        Calculator.expression =
+            calculator.current +
+            "%";
 
-            calculatorSetError();
-            return;
+        calculatorUpdateDisplay();
 
-        }
-
-
-        result =
-            base *
-            current /
-            100;
-
-    } else {
-
-        /*
-         * Standalone:
-         *
-         * 18% = 0.18
-         */
-
-        result =
-            current / 100;
+        return;
 
     }
 
 
-    Calculator.current =
-        calculatorFormat(result);
+    const base =
+        Calculator.previous;
+
+
+    /*
+     * For + and -
+     *
+     * 100 + 10% = 110
+     * 100 - 10% = 90
+     *
+     * Percentage amount = base × percent / 100
+     */
+
+    if (
+        Calculator.operator === "+" ||
+        Calculator.operator === "-"
+    ) {
+
+        const percentageAmount =
+            base *
+            current /
+            100;
+
+
+        Calculator.current =
+            calculatorFormat(
+                percentageAmount
+            );
+
+    }
+
+
+    /*
+     * For × and ÷
+     *
+     * 100 × 10% = 10
+     * 100 ÷ 10% = 1000
+     *
+     * Convert percentage to decimal.
+     */
+
+    else {
+
+        Calculator.current =
+            calculatorFormat(
+                current / 100
+            );
+
+    }
+
 
     Calculator.waitingForOperand =
-        true;
+        false;
+
+
+    Calculator.expression =
+        calculatorFormat(
+            base
+        ) +
+        " " +
+        calculatorOperatorSymbol(
+            Calculator.operator
+        ) +
+        " " +
+        Calculator.current;
+
 
     calculatorUpdateDisplay();
 
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    EQUALS
-   --------------------------------------------------------- */
+   ========================================================= */
 
 function calculatorEquals() {
 
     if (
-        Calculator.current === "Error"
+        Calculator.current ===
+        "Error"
     ) {
 
         return;
@@ -3276,8 +2837,12 @@ function calculatorEquals() {
     }
 
 
+    const first =
+        Calculator.previous;
+
+
     const second =
-        calculatorNumber(
+        calculatorToNumber(
             Calculator.current
         );
 
@@ -3287,24 +2852,27 @@ function calculatorEquals() {
     ) {
 
         calculatorSetError();
+
         return;
 
     }
 
 
-    const first =
-        Calculator.previous;
+    /*
+     * If percentage was pressed,
+     * Calculator.current already contains
+     * the correct percentage amount.
+     */
 
-
-    const operator =
-        Calculator.operator;
+    let calculationSecond =
+        second;
 
 
     const result =
         calculatorPerformOperation(
             first,
-            second,
-            operator
+            calculationSecond,
+            Calculator.operator
         );
 
 
@@ -3313,6 +2881,7 @@ function calculatorEquals() {
     ) {
 
         calculatorSetError();
+
         return;
 
     }
@@ -3322,14 +2891,31 @@ function calculatorEquals() {
         calculatorFormat(first) +
         " " +
         calculatorOperatorSymbol(
-            operator
+            Calculator.operator
         ) +
         " " +
         calculatorFormat(second);
 
 
+    const resultText =
+        calculatorFormat(
+            result
+        );
+
+
     Calculator.current =
-        calculatorFormat(result);
+        resultText;
+
+    Calculator.expression =
+        expression +
+        " =";
+
+
+    calculatorAddHistory(
+        expression,
+        resultText
+    );
+
 
     Calculator.previous =
         null;
@@ -3340,24 +2926,15 @@ function calculatorEquals() {
     Calculator.waitingForOperand =
         true;
 
-    Calculator.expression =
-        expression +
-        " =";
-
-
-    calculatorAddHistory(
-        expression,
-        Calculator.current
-    );
 
     calculatorUpdateDisplay();
 
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    CLEAR
-   --------------------------------------------------------- */
+   ========================================================= */
 
 function calculatorClear() {
 
@@ -3376,22 +2953,25 @@ function calculatorClear() {
     Calculator.expression =
         "";
 
+
     calculatorUpdateDisplay();
 
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    BACKSPACE
-   --------------------------------------------------------- */
+   ========================================================= */
 
 function calculatorBackspace() {
 
     if (
-        Calculator.current === "Error"
+        Calculator.current ===
+        "Error"
     ) {
 
         calculatorClear();
+
         return;
 
     }
@@ -3433,15 +3013,17 @@ function calculatorBackspace() {
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    SIGN
-   --------------------------------------------------------- */
+   ========================================================= */
 
 function calculatorToggleSign() {
 
     if (
-        Calculator.current === "0" ||
-        Calculator.current === "Error"
+        Calculator.current ===
+        "0" ||
+        Calculator.current ===
+        "Error"
     ) {
 
         return;
@@ -3454,7 +3036,9 @@ function calculatorToggleSign() {
     ) {
 
         Calculator.current =
-            Calculator.current.substring(1);
+            Calculator.current.substring(
+                1
+            );
 
     } else {
 
@@ -3470,9 +3054,9 @@ function calculatorToggleSign() {
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    ERROR
-   --------------------------------------------------------- */
+   ========================================================= */
 
 function calculatorSetError() {
 
@@ -3491,14 +3075,15 @@ function calculatorSetError() {
     Calculator.expression =
         "Calculation error";
 
+
     calculatorUpdateDisplay();
 
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    HISTORY
-   --------------------------------------------------------- */
+   ========================================================= */
 
 function calculatorAddHistory(
     expression,
@@ -3513,14 +3098,15 @@ function calculatorAddHistory(
         result:
             result,
 
-        timestamp:
+        time:
             new Date().toISOString()
 
     });
 
 
     if (
-        Calculator.history.length > 20
+        Calculator.history.length >
+        20
     ) {
 
         Calculator.history =
@@ -3532,22 +3118,26 @@ function calculatorAddHistory(
     }
 
 
-    AppState.data.calculations =
-        Calculator.history.slice();
-
-
-    AppState.unsavedChanges =
-        true;
-
-
     calculatorRenderHistory();
 
 }
 
 
-/* ---------------------------------------------------------
-   HISTORY DISPLAY
-   --------------------------------------------------------- */
+/* =========================================================
+   HISTORY RENDER
+   ========================================================= */
+
+function escapeCalculatorHtml(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
 
 function calculatorRenderHistory() {
 
@@ -3565,7 +3155,8 @@ function calculatorRenderHistory() {
 
 
     if (
-        Calculator.history.length === 0
+        Calculator.history.length ===
+        0
     ) {
 
         container.innerHTML =
@@ -3583,6 +3174,7 @@ function calculatorRenderHistory() {
             .map(function(item) {
 
                 return (
+
                     '<div class="history-item">' +
 
                     '<div class="history-expression">' +
@@ -3598,6 +3190,7 @@ function calculatorRenderHistory() {
                     '</div>' +
 
                     '</div>'
+
                 );
 
             })
@@ -3606,25 +3199,9 @@ function calculatorRenderHistory() {
 }
 
 
-/* ---------------------------------------------------------
-   HISTORY HTML SAFETY
-   --------------------------------------------------------- */
-
-function escapeCalculatorHtml(value) {
-
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
-}
-
-
-/* ---------------------------------------------------------
+/* =========================================================
    BUTTON EVENTS
-   --------------------------------------------------------- */
+   ========================================================= */
 
 function initializeCalculator() {
 
@@ -3670,8 +3247,8 @@ function initializeCalculator() {
 
 
             if (
-                button.dataset.calcNumber
-                !== undefined
+                button.dataset.calcNumber !==
+                undefined
             ) {
 
                 calculatorInputNumber(
@@ -3684,8 +3261,8 @@ function initializeCalculator() {
 
 
             if (
-                button.dataset.calcOperator
-                !== undefined
+                button.dataset.calcOperator !==
+                undefined
             ) {
 
                 calculatorSetOperator(
@@ -3697,11 +3274,9 @@ function initializeCalculator() {
             }
 
 
-            const action =
-                button.dataset.calcAction;
-
-
-            switch (action) {
+            switch (
+                button.dataset.calcAction
+            ) {
 
                 case "clear":
 
@@ -3709,11 +3284,13 @@ function initializeCalculator() {
 
                     break;
 
+
                 case "backspace":
 
                     calculatorBackspace();
 
                     break;
+
 
                 case "percent":
 
@@ -3721,17 +3298,20 @@ function initializeCalculator() {
 
                     break;
 
+
                 case "decimal":
 
                     calculatorInputDecimal();
 
                     break;
 
+
                 case "sign":
 
                     calculatorToggleSign();
 
                     break;
+
 
                 case "equals":
 
@@ -3756,9 +3336,9 @@ function initializeCalculator() {
 }
 
 
-/* ---------------------------------------------------------
-   KEYBOARD SUPPORT
-   --------------------------------------------------------- */
+/* =========================================================
+   KEYBOARD
+   ========================================================= */
 
 function initializeCalculatorKeyboard() {
 
@@ -3766,20 +3346,27 @@ function initializeCalculatorKeyboard() {
         "keydown",
         function(event) {
 
-            /*
-             * Don't hijack keyboard input when the user
-             * is typing into a form field.
-             */
-
             const target =
                 event.target;
+
+
+            /*
+             * Don't hijack keyboard input
+             * while typing in a form.
+             */
 
             if (
                 target &&
                 (
-                    target.tagName === "INPUT" ||
-                    target.tagName === "TEXTAREA" ||
-                    target.tagName === "SELECT" ||
+                    target.tagName ===
+                    "INPUT" ||
+
+                    target.tagName ===
+                    "TEXTAREA" ||
+
+                    target.tagName ===
+                    "SELECT" ||
+
                     target.isContentEditable
                 )
             ) {
@@ -3797,7 +3384,9 @@ function initializeCalculatorKeyboard() {
                 /^[0-9]$/.test(key)
             ) {
 
-                calculatorInputNumber(key);
+                calculatorInputNumber(
+                    key
+                );
 
                 return;
 
@@ -3816,10 +3405,13 @@ function initializeCalculatorKeyboard() {
 
 
             if (
-                ["+", "-", "*", "/"].includes(key)
+                ["+", "-", "*", "/"]
+                .includes(key)
             ) {
 
-                calculatorSetOperator(key);
+                calculatorSetOperator(
+                    key
+                );
 
                 return;
 
@@ -3876,16 +3468,14 @@ function initializeCalculatorKeyboard() {
 }
 
 
-/* ---------------------------------------------------------
-   LOAD CALCULATOR HISTORY
-   --------------------------------------------------------- */
+/* =========================================================
+   APPLICATION INITIALIZATION
+   ========================================================= */
 
-function loadCalculatorHistory() {
+function initializeApplication() {
 
     if (
-        !Array.isArray(
-            AppState.data.calculations
-        )
+        AppState.initialized
     ) {
 
         return;
@@ -3893,34 +3483,32 @@ function loadCalculatorHistory() {
     }
 
 
-    Calculator.history =
-        AppState.data.calculations
-            .slice(0, 20);
-
-    calculatorRenderHistory();
-
-}
-
-
-/* ---------------------------------------------------------
-   PHASE 2 CALCULATOR INITIALIZATION
-   --------------------------------------------------------- */
-
-function initializePhase2Calculator() {
+    initializeNavigation();
 
     initializeCalculator();
 
     initializeCalculatorKeyboard();
 
-    loadCalculatorHistory();
+
+    AppState.initialized =
+        true;
+
+
+    navigateToSection(
+        "dashboard"
+    );
 
 }
 
 
-/* Start Phase 2 calculator */
+/* =========================================================
+   START APPLICATION
+   ========================================================= */
 
-initializePhase2Calculator();
+initializeApplication();
+
 </script>
 
 </body>
+
 </html>
