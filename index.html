@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BusinessDesk Enterprise Suite</title>
+<title>BusinessDesk Enterprise Suite — Phase 4.3</title>
 
 <style>
 *{box-sizing:border-box}
@@ -442,7 +442,7 @@ th{
 <aside class="sidebar">
  <div class="brand">
   <b>BusinessDesk</b>
-  <small>Phase 1 + Phase 2 + Phase 3</small>
+  <small>Phase 1 + Phase 2 + Phase 3 + Phase 4.3</small>
  </div>
  <nav class="nav">
   <div class="nav-title">Main</div>
@@ -666,24 +666,26 @@ th{
 <section class="section" id="section-reports">
  <div class="section-heading">
   <h1>Reports</h1>
-  <p>Transaction summaries and key metrics.</p>
+  <p>Sales, purchases, GST and outstanding summaries.</p>
  </div>
- <div class="grid grid-2">
-  <div class="card">
-   <b>Sales Revenue</b>
-   <div class="metric" id="reportSales">₹0.00</div>
-  </div>
-  <div class="card">
-   <b>Purchase Value</b>
-   <div class="metric" id="reportPurchases">₹0.00</div>
-  </div>
-  <div class="card">
-   <b>Output GST</b>
-   <div class="metric" id="reportOutputGST">₹0.00</div>
-  </div>
-  <div class="card">
-   <b>Input GST</b>
-   <div class="metric" id="reportInputGST">₹0.00</div>
+ <div class="grid grid-3">
+  <div class="card"><b>Sales Total</b><div class="metric" id="reportSales">₹0.00</div></div>
+  <div class="card"><b>Purchase Total</b><div class="metric" id="reportPurchases">₹0.00</div></div>
+  <div class="card"><b>Gross Difference</b><div class="metric" id="reportGross">₹0.00</div></div>
+  <div class="card"><b>Output GST</b><div class="metric" id="reportOutputGST">₹0.00</div></div>
+  <div class="card"><b>Input GST</b><div class="metric" id="reportInputGST">₹0.00</div></div>
+  <div class="card"><b>Net GST</b><div class="metric" id="reportNetGST">₹0.00</div></div>
+  <div class="card"><b>Receivables</b><div class="metric" id="reportReceivable">₹0.00</div></div>
+  <div class="card"><b>Payables</b><div class="metric" id="reportPayable">₹0.00</div></div>
+  <div class="card"><b>Documents</b><div class="metric" id="reportDocuments">0</div></div>
+ </div>
+ <div class="card">
+  <b>Document Register</b>
+  <div class="table-wrap" style="margin-top:10px">
+   <table>
+    <thead><tr><th>Number</th><th>Type</th><th>Date</th><th>Party</th><th>Total</th><th>Outstanding</th></tr></thead>
+    <tbody id="reportRegisterBody"></tbody>
+   </table>
   </div>
  </div>
 </section>
@@ -692,25 +694,20 @@ th{
 <section class="section" id="section-gst">
  <div class="section-heading">
   <h1>GST Summary</h1>
-  <p>GST summary from posted transactions.</p>
+  <p>Output GST, input GST and tax component breakdown.</p>
+ </div>
+ <div class="grid grid-3">
+  <div class="card"><b>Output GST</b><div class="metric" id="gstOutput">₹0.00</div></div>
+  <div class="card"><b>Input GST</b><div class="metric" id="gstInput">₹0.00</div></div>
+  <div class="card"><b>Net GST Payable / (Credit)</b><div class="metric" id="gstNet">₹0.00</div></div>
  </div>
  <div class="card">
-  <table>
-   <tbody>
-    <tr>
-     <td><b>Output GST (Sales)</b></td>
-     <td class="right" id="gstOutput">₹0.00</td>
-    </tr>
-    <tr>
-     <td><b>Input GST (Purchases)</b></td>
-     <td class="right" id="gstInput">₹0.00</td>
-    </tr>
-    <tr>
-     <td><b>Net GST Payable</b></td>
-     <td class="right" id="gstNet">₹0.00</td>
-    </tr>
-   </tbody>
-  </table>
+  <div class="table-wrap">
+   <table>
+    <thead><tr><th>Document</th><th>Type</th><th>Taxable</th><th>CGST</th><th>SGST</th><th>IGST</th><th>Total GST</th></tr></thead>
+    <tbody id="gstBody"></tbody>
+   </table>
+  </div>
  </div>
 </section>
 
@@ -718,28 +715,16 @@ th{
 <section class="section" id="section-outstanding">
  <div class="section-heading">
   <h1>Outstanding Balances</h1>
-  <p>Customer and supplier outstanding amounts.</p>
+  <p>Receivables and payables after recorded receipts/payments.</p>
  </div>
  <div class="grid grid-2">
-  <div class="card">
-   <b>Customer Outstanding</b>
-   <div class="metric" id="outstandingCustomers">₹0.00</div>
-  </div>
-  <div class="card">
-   <b>Supplier Outstanding</b>
-   <div class="metric" id="outstandingSuppliers">₹0.00</div>
-  </div>
+  <div class="card"><b>Customer Outstanding</b><div class="metric" id="outstandingCustomers">₹0.00</div></div>
+  <div class="card"><b>Supplier Outstanding</b><div class="metric" id="outstandingSuppliers">₹0.00</div></div>
  </div>
  <div class="card">
   <div class="table-wrap">
    <table>
-    <thead>
-     <tr>
-      <th>Party</th>
-      <th>Type</th>
-      <th>Outstanding</th>
-     </tr>
-    </thead>
+    <thead><tr><th>Party</th><th>Type</th><th>Documents</th><th>Outstanding</th></tr></thead>
     <tbody id="outstandingBody"></tbody>
    </table>
   </div>
@@ -769,17 +754,17 @@ th{
      <tr><th>Feature</th><th>Status</th><th>Notes</th></tr>
     </thead>
     <tbody>
-     <tr><td>Sales</td><td>🟠 Basic only</td><td>Can save a simple sale, but not a proper GST invoice</td></tr>
-     <tr><td>Invoice numbering</td><td>🔴 Missing → Added</td><td>Automatic invoice number generator implemented</td></tr>
-     <tr><td>Purchases</td><td>🟠 Basic only</td><td>Can save a simple purchase</td></tr>
-     <tr><td>Parties</td><td>🟠 Basic only</td><td>Customer/Supplier creation works (basic)</td></tr>
-     <tr><td>Vouchers</td><td>🟠 Basic only</td><td>Journal voucher works, limited accounting</td></tr>
+     <tr><td>Sales</td><td>🟢 Implemented</td><td>GST invoice, automatic number, payment and outstanding</td></tr>
+     <tr><td>Invoice numbering</td><td>🟢 Implemented</td><td>Sequential INV / PB / VCH numbering with duplicate protection</td></tr>
+     <tr><td>Purchases</td><td>🟢 Implemented</td><td>GST bill, payment and outstanding tracking</td></tr>
+     <tr><td>Parties</td><td>🟢 Implemented</td><td>Customer/Supplier, GSTIN, phone and state</td></tr>
+     <tr><td>Vouchers</td><td>🟢 Implemented</td><td>Journal / Deposit / Withdrawal with validation</td></tr>
      <tr><td>Ledgers</td><td>🟠 Basic</td><td>Built primarily from vouchers</td></tr>
      <tr><td>Calculator</td><td>🔴 Bug → Fixed</td><td>Percentage handling corrected</td></tr>
      <tr><td>Spreadsheet</td><td>🟢 Implemented</td><td>Basic spreadsheet functionality exists</td></tr>
-     <tr><td>Reports</td><td>🟠 Basic</td><td>Sales/purchase/profit + trial balance only</td></tr>
-     <tr><td>GST</td><td>🔴 Missing as accounting module</td><td>Basic GST calc/reporting added for sales/purchases (not full module)</td></tr>
-     <tr><td>Outstanding</td><td>🔴 Missing → Basic</td><td>Now computes outstanding per invoice/bill</td></tr>
+     <tr><td>Reports</td><td>🟢 Implemented</td><td>Sales, purchases, GST, gross difference, outstanding and document register</td></tr>
+     <tr><td>GST</td><td>🟢 Implemented</td><td>CGST, SGST, IGST and input/output GST summary</td></tr>
+     <tr><td>Outstanding</td><td>🟢 Implemented</td><td>Paid amount, balance and party-wise receivable/payable</td></tr>
     </tbody>
    </table>
   </div>
@@ -819,11 +804,22 @@ th{
     </div>
     <div class="field">
      <label>Taxable Amount</label>
-     <input type="number" id="saleTaxable" step="0.01" value="0" required>
+     <input type="number" id="saleTaxable" step="0.01" value="0" min="0" required oninput="updateSaleTotal()">
     </div>
     <div class="field">
      <label>GST Rate (%)</label>
-     <input type="number" id="saleGSTRate" value="18" step="0.01">
+     <input type="number" id="saleGSTRate" value="18" min="0" max="100" step="0.01" oninput="updateSaleTotal()">
+    </div>
+    <div class="field">
+     <label>GST Type</label>
+     <select id="saleGSTType">
+      <option value="CGST+SGST">CGST + SGST</option>
+      <option value="IGST">IGST</option>
+     </select>
+    </div>
+    <div class="field">
+     <label>Amount Received</label>
+     <input type="number" id="salePaid" value="0" min="0" step="0.01">
     </div>
     <div class="field">
      <label>Total (Auto)</label>
@@ -860,11 +856,22 @@ th{
     </div>
     <div class="field">
      <label>Taxable Amount</label>
-     <input type="number" id="purchaseTaxable" step="0.01" value="0" required>
+     <input type="number" id="purchaseTaxable" step="0.01" value="0" min="0" required oninput="updatePurchaseTotal()">
     </div>
     <div class="field">
      <label>GST Rate (%)</label>
-     <input type="number" id="purchaseGSTRate" value="18" step="0.01">
+     <input type="number" id="purchaseGSTRate" value="18" min="0" max="100" step="0.01" oninput="updatePurchaseTotal()">
+    </div>
+    <div class="field">
+     <label>GST Type</label>
+     <select id="purchaseGSTType">
+      <option value="CGST+SGST">CGST + SGST</option>
+      <option value="IGST">IGST</option>
+     </select>
+    </div>
+    <div class="field">
+     <label>Amount Paid</label>
+     <input type="number" id="purchasePaid" value="0" min="0" step="0.01">
     </div>
     <div class="field">
      <label>Total (Auto)</label>
@@ -904,6 +911,10 @@ th{
     <div class="field">
      <label>Phone</label>
      <input type="tel" id="partyPhone" placeholder="10-digit phone number">
+    </div>
+    <div class="field">
+     <label>State</label>
+     <input type="text" id="partyState" placeholder="e.g., West Bengal">
     </div>
    </div>
    <button type="submit" class="btn btn-primary">Save Party</button>
@@ -955,6 +966,8 @@ th{
  </div>
 </div>
 
+<div id="toast" style="position:fixed;right:24px;bottom:24px;background:#111827;color:#fff;padding:12px 16px;border-radius:8px;display:none;z-index:5000"></div>
+
 <script>
 /* ====================================================
    Utilities: localStorage helpers
@@ -968,6 +981,20 @@ function getStore(key) {
 }
 function saveStore(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
+}
+
+function todayLocal(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function toast(msg){
+  const el=document.getElementById('toast');
+  if(!el){ alert(msg); return; }
+  el.textContent=msg;
+  el.style.display='block';
+  clearTimeout(window.__bdToastTimer);
+  window.__bdToastTimer=setTimeout(()=>{el.style.display='none';},2200);
 }
 
 /* ====================================================
@@ -1029,24 +1056,6 @@ function updateSectionData(section) {
 }
 
 /* ====================================================
-   Feature: Simple auto-numbering helpers
-   format: INV-0001, PB-0001, VCH-0001
-   ==================================================== */
-function nextNumber(prefix, storeKey) {
-  const items = getStore(storeKey) || [];
-  // determine numeric part from last item if present
-  let last = 0;
-  items.forEach(it => {
-    if (it && it.number) {
-      const m = String(it.number).match(/(\d+)$/);
-      if (m) last = Math.max(last, parseInt(m[1],10));
-    }
-  });
-  const next = last + 1;
-  return prefix + '-' + String(next).padStart(4,'0');
-}
-
-/* ====================================================
    Sales / purchases / parties / vouchers persistence
    include GST computations and outstanding tracking
    ==================================================== */
@@ -1054,7 +1063,6 @@ function nextNumber(prefix, storeKey) {
 /* --- Parties --- */
 function openPartyModal() {
   document.getElementById('partyModal').classList.add('open');
-  document.getElementById('partyModal').classList.add('open'); // ensure visible
 }
 function closePartyModal() {
   document.getElementById('partyModal').classList.remove('open');
@@ -1063,300 +1071,272 @@ function saveParty(e){
   e.preventDefault();
   const name = document.getElementById('partyName').value.trim();
   const type = document.getElementById('partyType').value;
-  const gstin = document.getElementById('partyGSTIN').value.trim();
+  const gstin = document.getElementById('partyGSTIN').value.trim().toUpperCase();
   const phone = document.getElementById('partyPhone').value.trim();
-
+  const state = document.getElementById('partyState').value.trim();
+  if(!name || !type){ alert('Enter party name and type.'); return; }
+  if(gstin && !/^\d{2}[A-Z0-9]{13}$/.test(gstin)){
+    alert('GSTIN format appears invalid.'); return;
+  }
   const parties = getStore('parties');
+  if(parties.some(p => String(p.name).toLowerCase() === name.toLowerCase())){
+    alert('Party already exists.'); return;
+  }
   const id = Date.now();
-  parties.push({ id, name, type, gstin, phone });
+  parties.push({ id, name, type, gstin, phone, state });
   saveStore('parties', parties);
-
   renderPartiesTable();
   closePartyModal();
-  alert('Party added');
+  e.target.reset();
+  toast('Party added successfully.');
 }
-
 function renderPartiesTable(){
   const parties = getStore('parties');
   const tbody = document.getElementById('partyBody');
   tbody.innerHTML = '';
   parties.forEach(p=>{
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${p.name}</td><td>${p.type}</td><td>${p.gstin||''}</td><td>${p.phone||''}</td>
-      <td><button class="btn btn-sm" onclick="deleteParty(${p.id})">Delete</button></td>`;
+    tr.innerHTML = `<td>${escapeHTML(p.name)}</td><td>${escapeHTML(p.type)}</td><td>${escapeHTML(p.gstin||'')}</td><td>${escapeHTML(p.phone||'')}</td><td><button class="btn btn-sm" onclick="deleteParty(${Number(p.id)})">Delete</button></td>`;
     tbody.appendChild(tr);
   });
-
-  // update selects used by sales/purchases
   const saleCustomer = document.getElementById('saleCustomer');
   const purchaseSupplier = document.getElementById('purchaseSupplier');
-  if (saleCustomer) {
-    saleCustomer.innerHTML = '<option value="">-- Select Customer --</option>' + parties.filter(x=>x.type==='Customer').map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
-  }
-  if (purchaseSupplier) {
-    purchaseSupplier.innerHTML = '<option value="">-- Select Supplier --</option>' + parties.filter(x=>x.type==='Supplier').map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
-  }
+  if (saleCustomer) saleCustomer.innerHTML = '<option value="">-- Select Customer --</option>' + parties.filter(x=>x.type==='Customer').map(c=>`<option value="${c.id}">${escapeHTML(c.name)}</option>`).join('');
+  if (purchaseSupplier) purchaseSupplier.innerHTML = '<option value="">-- Select Supplier --</option>' + parties.filter(x=>x.type==='Supplier').map(c=>`<option value="${c.id}">${escapeHTML(c.name)}</option>`).join('');
 }
-
 function deleteParty(id){
-  if (!confirm('Delete this party?')) return;
-  let parties = getStore('parties');
-  parties = parties.filter(p=>p.id !== id);
+  if(!confirm('Delete this party? Existing invoices will remain in the database.')) return;
+  const parties = getStore('parties').filter(p=>p.id !== id);
   saveStore('parties', parties);
   renderPartiesTable();
+  updateOutstanding();
+  toast('Party deleted.');
+}
+
+/* --- Numbering --- */
+function nextNumber(prefix, storeKey) {
+  const items = getStore(storeKey);
+  let max = 0;
+  items.forEach(it=>{
+    const value = String(it?.number || '');
+    const match = value.match(new RegExp('^'+prefix+'-(\\d+)$','i'));
+    if(match) max = Math.max(max, Number(match[1]));
+  });
+  return `${prefix}-${String(max+1).padStart(4,'0')}`;
+}
+function hasNumber(storeKey, number){
+  return getStore(storeKey).some(x=>String(x.number).toUpperCase()===String(number).toUpperCase());
 }
 
 /* --- Sales --- */
 function openSaleModal(){
-  const inv = nextNumber('INV','sales');
-  document.getElementById('saleInvoiceNo').value = inv;
-  document.getElementById('saleDate').valueAsDate = new Date();
+  document.getElementById('saleInvoiceNo').value = nextNumber('INV','sales');
+  document.getElementById('saleDate').value = todayLocal();
+  document.getElementById('saleTaxable').value = '0';
+  document.getElementById('saleGSTRate').value = '18';
+  document.getElementById('salePaid').value = '0';
+  document.getElementById('saleGSTType').value = 'CGST+SGST';
+  renderPartiesTable();
+  updateSaleTotal();
   document.getElementById('saleModal').classList.add('open');
 }
 function closeSaleModal(){ document.getElementById('saleModal').classList.remove('open'); }
-
+function updateSaleTotal(){
+  const taxable = Math.max(0, Number(document.getElementById('saleTaxable').value)||0);
+  const rate = Math.max(0, Number(document.getElementById('saleGSTRate').value)||0);
+  const gst = +(taxable*rate/100).toFixed(2);
+  document.getElementById('saleTotal').value = `₹${(taxable+gst).toFixed(2)}`;
+  return {taxable,gst,total:+(taxable+gst).toFixed(2)};
+}
 function saveSale(e){
   e.preventDefault();
   const sales = getStore('sales');
-  const invoiceNo = document.getElementById('saleInvoiceNo').value;
+  const invoiceNo = document.getElementById('saleInvoiceNo').value.trim();
   const date = document.getElementById('saleDate').value;
   const customer = document.getElementById('saleCustomer').value;
-  const taxable = parseFloat(document.getElementById('saleTaxable').value) || 0;
-  const gstRate = parseFloat(document.getElementById('saleGSTRate').value) || 0;
-  const gstAmount = +(taxable * gstRate/100).toFixed(2);
-  const total = +(taxable + gstAmount).toFixed(2);
-
-  const id = Date.now();
-  const sale = { id, number: invoiceNo, date, customer, taxable, gstRate, gstAmount, total, outstanding: total };
-  sales.push(sale);
-  saveStore('sales', sales);
-
-  renderSalesTable();
-  updateReports();
-  updateGST();
-  updateOutstanding();
-  closeSaleModal();
-  alert('Invoice saved');
+  const taxable = Math.max(0, Number(document.getElementById('saleTaxable').value)||0);
+  const gstRate = Math.max(0, Number(document.getElementById('saleGSTRate').value)||0);
+  const gstType = document.getElementById('saleGSTType').value;
+  const paid = Math.max(0, Number(document.getElementById('salePaid').value)||0);
+  if(!date || !customer || taxable<=0){ alert('Enter date, customer and a taxable amount greater than zero.'); return; }
+  if(gstRate>100){ alert('GST rate cannot exceed 100%.'); return; }
+  const gstAmount = +(taxable*gstRate/100).toFixed(2);
+  const total = +(taxable+gstAmount).toFixed(2);
+  if(paid>total){ alert('Amount received cannot exceed invoice total.'); return; }
+  if(hasNumber('sales',invoiceNo)){ alert('Duplicate invoice number.'); return; }
+  const sale = {
+    id: Date.now(), number: invoiceNo, date, customer,
+    taxable, gstRate, gstType,
+    cgst: gstType==='CGST+SGST' ? +(gstAmount/2).toFixed(2) : 0,
+    sgst: gstType==='CGST+SGST' ? +(gstAmount/2).toFixed(2) : 0,
+    igst: gstType==='IGST' ? gstAmount : 0,
+    gstAmount, total, paid, outstanding:+(total-paid).toFixed(2)
+  };
+  sales.push(sale); saveStore('sales',sales);
+  renderSalesTable(); updateReports(); updateGST(); updateOutstanding(); updateDashboardTotals();
+  closeSaleModal(); toast(`Sales invoice ${invoiceNo} saved.`);
 }
-
 function renderSalesTable(){
-  const sales = getStore('sales');
-  const tbody = document.getElementById('salesBody');
-  tbody.innerHTML = '';
+  const sales=getStore('sales'), parties=getStore('parties'), tbody=document.getElementById('salesBody');
+  tbody.innerHTML='';
   sales.forEach(s=>{
-    const customerName = (getStore('parties').find(p=>p.id==s.customer) || {}).name || '';
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${s.number}</td><td>${s.date}</td><td>${customerName}</td>
-      <td>₹${(s.taxable||0).toFixed(2)}</td><td>₹${(s.gstAmount||0).toFixed(2)}</td><td>₹${(s.total||0).toFixed(2)}</td>
-      <td>₹${(s.outstanding||0).toFixed(2)}</td>
-      <td><button class="btn btn-sm" onclick="deleteSale(${s.id})">Delete</button></td>`;
+    const customer=(parties.find(p=>String(p.id)===String(s.customer))||{}).name || s.customer || 'Unknown';
+    const gst=Number(s.gstAmount ?? s.gst ?? 0);
+    const total=Number(s.total||0), paid=Number(s.paid||0), out=Number(s.outstanding ?? Math.max(0,total-paid));
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${escapeHTML(s.number)}</td><td>${escapeHTML(s.date)}</td><td>${escapeHTML(customer)}</td><td>₹${Number(s.taxable||0).toFixed(2)}</td><td>₹${gst.toFixed(2)}</td><td>₹${total.toFixed(2)}</td><td>₹${out.toFixed(2)}</td><td><button class="btn btn-sm btn-danger" onclick="deleteSale(${Number(s.id)})">Delete</button></td>`;
     tbody.appendChild(tr);
   });
-  updateDashboardTotals();
 }
-
 function deleteSale(id){
   if(!confirm('Delete this invoice?')) return;
-  let sales = getStore('sales');
-  sales = sales.filter(s=>s.id !== id);
-  saveStore('sales', sales);
-  renderSalesTable();
-  updateReports();
-  updateGST();
-  updateOutstanding();
+  saveStore('sales',getStore('sales').filter(s=>s.id!==id));
+  renderSalesTable(); updateReports(); updateGST(); updateOutstanding(); updateDashboardTotals(); toast('Sales invoice deleted.');
 }
 
 /* --- Purchases --- */
 function openPurchaseModal(){
-  const bn = nextNumber('PB','purchases');
-  document.getElementById('purchaseBillNo').value = bn;
-  document.getElementById('purchaseDate').valueAsDate = new Date();
+  document.getElementById('purchaseBillNo').value=nextNumber('PB','purchases');
+  document.getElementById('purchaseDate').value=todayLocal();
+  document.getElementById('purchaseTaxable').value='0';
+  document.getElementById('purchaseGSTRate').value='18';
+  document.getElementById('purchasePaid').value='0';
+  document.getElementById('purchaseGSTType').value='CGST+SGST';
+  renderPartiesTable(); updatePurchaseTotal();
   document.getElementById('purchaseModal').classList.add('open');
 }
 function closePurchaseModal(){ document.getElementById('purchaseModal').classList.remove('open'); }
-
+function updatePurchaseTotal(){
+  const taxable=Math.max(0,Number(document.getElementById('purchaseTaxable').value)||0);
+  const rate=Math.max(0,Number(document.getElementById('purchaseGSTRate').value)||0);
+  const gst=+(taxable*rate/100).toFixed(2);
+  document.getElementById('purchaseTotal').value=`₹${(taxable+gst).toFixed(2)}`;
+  return {taxable,gst,total:+(taxable+gst).toFixed(2)};
+}
 function savePurchase(e){
   e.preventDefault();
-  const purchases = getStore('purchases');
-  const billNo = document.getElementById('purchaseBillNo').value;
-  const date = document.getElementById('purchaseDate').value;
-  const supplier = document.getElementById('purchaseSupplier').value;
-  const taxable = parseFloat(document.getElementById('purchaseTaxable').value) || 0;
-  const gstRate = parseFloat(document.getElementById('purchaseGSTRate').value) || 0;
-  const gstAmount = +(taxable * gstRate/100).toFixed(2);
-  const total = +(taxable + gstAmount).toFixed(2);
-
-  const id = Date.now();
-  const p = { id, number: billNo, date, supplier, taxable, gstRate, gstAmount, total, outstanding: total };
-  purchases.push(p);
-  saveStore('purchases', purchases);
-
-  renderPurchasesTable();
-  updateReports();
-  updateGST();
-  updateOutstanding();
-  closePurchaseModal();
-  alert('Purchase saved');
+  const purchases=getStore('purchases');
+  const billNo=document.getElementById('purchaseBillNo').value.trim();
+  const date=document.getElementById('purchaseDate').value;
+  const supplier=document.getElementById('purchaseSupplier').value;
+  const taxable=Math.max(0,Number(document.getElementById('purchaseTaxable').value)||0);
+  const gstRate=Math.max(0,Number(document.getElementById('purchaseGSTRate').value)||0);
+  const gstType=document.getElementById('purchaseGSTType').value;
+  const paid=Math.max(0,Number(document.getElementById('purchasePaid').value)||0);
+  if(!date||!supplier||taxable<=0){alert('Enter date, supplier and a taxable amount greater than zero.');return;}
+  if(gstRate>100){alert('GST rate cannot exceed 100%.');return;}
+  const gstAmount=+(taxable*gstRate/100).toFixed(2), total=+(taxable+gstAmount).toFixed(2);
+  if(paid>total){alert('Amount paid cannot exceed purchase total.');return;}
+  if(hasNumber('purchases',billNo)){alert('Duplicate purchase bill number.');return;}
+  const p={id:Date.now(),number:billNo,date,supplier,taxable,gstRate,gstType,
+    cgst:gstType==='CGST+SGST'?+(gstAmount/2).toFixed(2):0,
+    sgst:gstType==='CGST+SGST'?+(gstAmount/2).toFixed(2):0,
+    igst:gstType==='IGST'?gstAmount:0,
+    gstAmount,total,paid,outstanding:+(total-paid).toFixed(2)};
+  purchases.push(p); saveStore('purchases',purchases);
+  renderPurchasesTable(); updateReports(); updateGST(); updateOutstanding(); updateDashboardTotals();
+  closePurchaseModal(); toast(`Purchase ${billNo} saved.`);
 }
-
 function renderPurchasesTable(){
-  const purchases = getStore('purchases');
-  const tbody = document.getElementById('purchaseBody');
-  tbody.innerHTML = '';
+  const purchases=getStore('purchases'), parties=getStore('parties'), tbody=document.getElementById('purchaseBody');
+  tbody.innerHTML='';
   purchases.forEach(p=>{
-    const supplierName = (getStore('parties').find(x=>x.id==p.supplier) || {}).name || '';
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${p.number}</td><td>${p.date}</td><td>${supplierName}</td>
-      <td>₹${(p.taxable||0).toFixed(2)}</td><td>₹${(p.gstAmount||0).toFixed(2)}</td><td>₹${(p.total||0).toFixed(2)}</td>
-      <td>₹${(p.outstanding||0).toFixed(2)}</td>
-      <td><button class="btn btn-sm" onclick="deletePurchase(${p.id})">Delete</button></td>`;
+    const supplier=(parties.find(x=>String(x.id)===String(p.supplier))||{}).name || p.supplier || 'Unknown';
+    const gst=Number(p.gstAmount ?? p.gst ?? 0), total=Number(p.total||0), paid=Number(p.paid||0), out=Number(p.outstanding ?? Math.max(0,total-paid));
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${escapeHTML(p.number)}</td><td>${escapeHTML(p.date)}</td><td>${escapeHTML(supplier)}</td><td>₹${Number(p.taxable||0).toFixed(2)}</td><td>₹${gst.toFixed(2)}</td><td>₹${total.toFixed(2)}</td><td>₹${out.toFixed(2)}</td><td><button class="btn btn-sm btn-danger" onclick="deletePurchase(${Number(p.id)})">Delete</button></td>`;
     tbody.appendChild(tr);
   });
-  updateDashboardTotals();
 }
-
 function deletePurchase(id){
-  if(!confirm('Delete this purchase?')) return;
-  let purchases = getStore('purchases');
-  purchases = purchases.filter(p=>p.id !== id);
-  saveStore('purchases', purchases);
-  renderPurchasesTable();
-  updateReports();
-  updateGST();
-  updateOutstanding();
+  if(!confirm('Delete this purchase?'))return;
+  saveStore('purchases',getStore('purchases').filter(p=>p.id!==id));
+  renderPurchasesTable(); updateReports(); updateGST(); updateOutstanding(); updateDashboardTotals(); toast('Purchase deleted.');
 }
 
-/* --- Vouchers (very basic) --- */
+/* --- Vouchers --- */
 function openVoucherModal(){
-  const no = nextNumber('VCH','vouchers');
-  document.getElementById('voucherNo').value = no;
-  document.getElementById('voucherDate').valueAsDate = new Date();
+  document.getElementById('voucherNo').value=nextNumber('VCH','vouchers');
+  document.getElementById('voucherDate').value=todayLocal();
+  document.getElementById('voucherType').value='Journal';
+  document.getElementById('voucherDebit').value=''; document.getElementById('voucherCredit').value=''; document.getElementById('voucherAmount').value='0';
   document.getElementById('voucherModal').classList.add('open');
 }
-function closeVoucherModal(){ document.getElementById('voucherModal').classList.remove('open'); }
-
+function closeVoucherModal(){document.getElementById('voucherModal').classList.remove('open');}
 function saveVoucher(e){
   e.preventDefault();
-  const vouchers = getStore('vouchers');
-  const number = document.getElementById('voucherNo').value;
-  const date = document.getElementById('voucherDate').value;
-  const type = document.getElementById('voucherType').value;
-  const debit = document.getElementById('voucherDebit').value;
-  const credit = document.getElementById('voucherCredit').value;
-  const amount = parseFloat(document.getElementById('voucherAmount').value) || 0;
-  const id = Date.now();
-  vouchers.push({ id, number, date, type, debit, credit, amount });
-  saveStore('vouchers', vouchers);
-  renderVouchersTable();
-  closeVoucherModal();
-  alert('Voucher saved');
+  const vouchers=getStore('vouchers');
+  const number=document.getElementById('voucherNo').value.trim(), date=document.getElementById('voucherDate').value;
+  const type=document.getElementById('voucherType').value, debit=document.getElementById('voucherDebit').value.trim(), credit=document.getElementById('voucherCredit').value.trim();
+  const amount=Number(document.getElementById('voucherAmount').value)||0;
+  if(!date||!type||!debit||!credit||amount<=0){alert('Enter all voucher details and an amount greater than zero.');return;}
+  if(debit.toLowerCase()===credit.toLowerCase()){alert('Debit and Credit accounts cannot be the same.');return;}
+  if(hasNumber('vouchers',number)){alert('Duplicate voucher number.');return;}
+  vouchers.push({id:Date.now(),number,date,type,debit,credit,amount}); saveStore('vouchers',vouchers);
+  renderVouchersTable(); updateReports(); toast(`Voucher ${number} saved.`); closeVoucherModal();
 }
-
 function renderVouchersTable(){
-  const vouchers = getStore('vouchers');
-  const tbody = document.getElementById('voucherBody');
-  tbody.innerHTML = '';
-  vouchers.forEach(v=>{
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${v.number}</td><td>${v.date}</td><td>${v.type}</td><td>${v.debit}</td><td>${v.credit}</td><td>₹${(v.amount||0).toFixed(2)}</td>
-      <td><button class="btn btn-sm" onclick="deleteVoucher(${v.id})">Delete</button></td>`;
-    tbody.appendChild(tr);
-  });
+  const vouchers=getStore('vouchers'), tbody=document.getElementById('voucherBody'); tbody.innerHTML='';
+  vouchers.forEach(v=>{const tr=document.createElement('tr'); tr.innerHTML=`<td>${escapeHTML(v.number)}</td><td>${escapeHTML(v.date)}</td><td>${escapeHTML(v.type)}</td><td>${escapeHTML(v.debit)}</td><td>${escapeHTML(v.credit)}</td><td>₹${Number(v.amount||0).toFixed(2)}</td><td><button class="btn btn-sm btn-danger" onclick="deleteVoucher(${Number(v.id)})">Delete</button></td>`; tbody.appendChild(tr);});
 }
-
-function deleteVoucher(id){
-  if(!confirm('Delete this voucher?')) return;
-  let vouchers = getStore('vouchers');
-  vouchers = vouchers.filter(v=>v.id !== id);
-  saveStore('vouchers', vouchers);
-  renderVouchersTable();
-}
+function deleteVoucher(id){if(!confirm('Delete this voucher?'))return;saveStore('vouchers',getStore('vouchers').filter(v=>v.id!==id));renderVouchersTable();updateReports();toast('Voucher deleted.');}
 
 /* ====================================================
    Reports / GST / Outstanding / Dashboard totals
-   ==================================================== */
+==================================================== */
 function updateReports(){
-  const sales = getStore('sales') || [];
-  const purchases = getStore('purchases') || [];
-
-  const totalSales = sales.reduce((s,a)=>s + (a.total||0),0);
-  const totalPurchases = purchases.reduce((s,a)=>s + (a.total||0),0);
-  const outputGST = sales.reduce((s,a)=>s + (a.gstAmount||0),0);
-  const inputGST = purchases.reduce((s,a)=>s + (a.gstAmount||0),0);
-
-  document.getElementById('reportSales').textContent = '₹' + totalSales.toFixed(2);
-  document.getElementById('reportPurchases').textContent = '₹' + totalPurchases.toFixed(2);
-  document.getElementById('reportOutputGST').textContent = '₹' + outputGST.toFixed(2);
-  document.getElementById('reportInputGST').textContent = '₹' + inputGST.toFixed(2);
+  const sales=getStore('sales'), purchases=getStore('purchases');
+  const totalSales=sales.reduce((s,a)=>s+Number(a.total||0),0);
+  const totalPurchases=purchases.reduce((s,a)=>s+Number(a.total||0),0);
+  const outputGST=sales.reduce((s,a)=>s+Number(a.gstAmount ?? a.gst ?? 0),0);
+  const inputGST=purchases.reduce((s,a)=>s+Number(a.gstAmount ?? a.gst ?? 0),0);
+  const receivable=sales.reduce((s,a)=>s+Number(a.outstanding ?? Math.max(0,Number(a.total||0)-Number(a.paid||0))),0);
+  const payable=purchases.reduce((s,a)=>s+Number(a.outstanding ?? Math.max(0,Number(a.total||0)-Number(a.paid||0))),0);
+  document.getElementById('reportSales').textContent=money(totalSales);
+  document.getElementById('reportPurchases').textContent=money(totalPurchases);
+  document.getElementById('reportGross').textContent=money(totalSales-totalPurchases);
+  document.getElementById('reportOutputGST').textContent=money(outputGST);
+  document.getElementById('reportInputGST').textContent=money(inputGST);
+  document.getElementById('reportNetGST').textContent=money(outputGST-inputGST);
+  document.getElementById('reportReceivable').textContent=money(receivable);
+  document.getElementById('reportPayable').textContent=money(payable);
+  document.getElementById('reportDocuments').textContent=sales.length+purchases.length+getStore('vouchers').length;
+  const parties=getStore('parties'), rows=[];
+  sales.forEach(x=>{const p=parties.find(v=>String(v.id)===String(x.customer));rows.push({number:x.number,type:'Sale',date:x.date,party:p?.name||x.customer,total:x.total,outstanding:x.outstanding});});
+  purchases.forEach(x=>{const p=parties.find(v=>String(v.id)===String(x.supplier));rows.push({number:x.number,type:'Purchase',date:x.date,party:p?.name||x.supplier,total:x.total,outstanding:x.outstanding});});
+  rows.sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+  const body=document.getElementById('reportRegisterBody'); body.innerHTML='';
+  rows.forEach(x=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${escapeHTML(x.number)}</td><td>${x.type}</td><td>${escapeHTML(x.date)}</td><td>${escapeHTML(String(x.party||''))}</td><td>${money(x.total)}</td><td>${money(x.outstanding)}</td>`;body.appendChild(tr);});
 }
-
 function updateGST(){
-  const sales = getStore('sales') || [];
-  const purchases = getStore('purchases') || [];
-
-  const outputGST = sales.reduce((s,a)=>s + (a.gstAmount||0),0);
-  const inputGST = purchases.reduce((s,a)=>s + (a.gstAmount||0),0);
-  const net = outputGST - inputGST;
-
-  document.getElementById('gstOutput').textContent = '₹' + outputGST.toFixed(2);
-  document.getElementById('gstInput').textContent = '₹' + inputGST.toFixed(2);
-  document.getElementById('gstNet').textContent = '₹' + net.toFixed(2);
+  const sales=getStore('sales'), purchases=getStore('purchases');
+  const outputGST=sales.reduce((s,a)=>s+Number(a.gstAmount ?? a.gst ?? 0),0);
+  const inputGST=purchases.reduce((s,a)=>s+Number(a.gstAmount ?? a.gst ?? 0),0);
+  document.getElementById('gstOutput').textContent=money(outputGST);
+  document.getElementById('gstInput').textContent=money(inputGST);
+  document.getElementById('gstNet').textContent=money(outputGST-inputGST);
+  const body=document.getElementById('gstBody'); body.innerHTML='';
+  sales.forEach(x=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${escapeHTML(x.number)}</td><td>Output</td><td>${money(x.taxable)}</td><td>${money(x.cgst)}</td><td>${money(x.sgst)}</td><td>${money(x.igst)}</td><td>${money(x.gstAmount ?? x.gst)}</td>`;body.appendChild(tr);});
+  purchases.forEach(x=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${escapeHTML(x.number)}</td><td>Input</td><td>${money(x.taxable)}</td><td>${money(x.cgst)}</td><td>${money(x.sgst)}</td><td>${money(x.igst)}</td><td>${money(x.gstAmount ?? x.gst)}</td>`;body.appendChild(tr);});
 }
-
 function updateDashboardTotals(){
-  const sales = getStore('sales') || [];
-  const purchases = getStore('purchases') || [];
-  const outstandingCustomers = (getStore('sales') || []).reduce((s,a)=>s + (a.outstanding||0),0);
-  const outstandingSuppliers = (getStore('purchases') || []).reduce((s,a)=>s + (a.outstanding||0),0);
-  const totalSales = sales.reduce((s,a)=>s + (a.total||0),0);
-  const totalPurchases = purchases.reduce((s,a)=>s + (a.total||0),0);
-
-  document.getElementById('dashSales').textContent = '₹' + totalSales.toFixed(2);
-  document.getElementById('dashPurchases').textContent = '₹' + totalPurchases.toFixed(2);
-  document.getElementById('dashOutstanding').textContent = '₹' + (outstandingCustomers + outstandingSuppliers).toFixed(2);
+  const sales=getStore('sales'), purchases=getStore('purchases');
+  const totalSales=sales.reduce((s,a)=>s+Number(a.total||0),0), totalPurchases=purchases.reduce((s,a)=>s+Number(a.total||0),0);
+  const out=sales.reduce((s,a)=>s+Number(a.outstanding ?? Math.max(0,Number(a.total||0)-Number(a.paid||0))),0)+purchases.reduce((s,a)=>s+Number(a.outstanding ?? Math.max(0,Number(a.total||0)-Number(a.paid||0))),0);
+  document.getElementById('dashSales').textContent=money(totalSales);
+  document.getElementById('dashPurchases').textContent=money(totalPurchases);
+  document.getElementById('dashOutstanding').textContent=money(out);
 }
-
-/* Outstanding table */
 function updateOutstanding(){
-  const sales = getStore('sales') || [];
-  const purchases = getStore('purchases') || [];
-  const customers = {};
-  const suppliers = {};
-
-  (getStore('parties') || []).forEach(p=>{
-    if (p.type === 'Customer') customers[p.id] = p.name;
-    if (p.type === 'Supplier') suppliers[p.id] = p.name;
-  });
-
-  const outCustomers = {};
-  sales.forEach(s=>{
-    if (!outCustomers[s.customer]) outCustomers[s.customer] = 0;
-    outCustomers[s.customer] += (s.outstanding||0);
-  });
-
-  const outSuppliers = {};
-  purchases.forEach(p=>{
-    if (!outSuppliers[p.supplier]) outSuppliers[p.supplier] = 0;
-    outSuppliers[p.supplier] += (p.outstanding||0);
-  });
-
-  const tCust = Object.keys(outCustomers).reduce((sum,k)=>sum + outCustomers[k],0);
-  const tSupp = Object.keys(outSuppliers).reduce((sum,k)=>sum + outSuppliers[k],0);
-  document.getElementById('outstandingCustomers').textContent = '₹' + tCust.toFixed(2);
-  document.getElementById('outstandingSuppliers').textContent = '₹' + tSupp.toFixed(2);
-
-  const tb = document.getElementById('outstandingBody');
-  tb.innerHTML = '';
-  Object.keys(outCustomers).forEach(k=>{
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${customers[k]||'Unknown'}</td><td>Customer</td><td>₹${outCustomers[k].toFixed(2)}</td>`;
-    tb.appendChild(tr);
-  });
-  Object.keys(outSuppliers).forEach(k=>{
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${suppliers[k]||'Unknown'}</td><td>Supplier</td><td>₹${outSuppliers[k].toFixed(2)}</td>`;
-    tb.appendChild(tr);
-  });
+  const sales=getStore('sales'), purchases=getStore('purchases'), parties=getStore('parties');
+  const customerMap={}, supplierMap={};
+  sales.forEach(s=>{customerMap[s.customer]=(customerMap[s.customer]||{amount:0,count:0});customerMap[s.customer].amount+=Number(s.outstanding ?? Math.max(0,Number(s.total||0)-Number(s.paid||0)));customerMap[s.customer].count++;});
+  purchases.forEach(p=>{supplierMap[p.supplier]=(supplierMap[p.supplier]||{amount:0,count:0});supplierMap[p.supplier].amount+=Number(p.outstanding ?? Math.max(0,Number(p.total||0)-Number(p.paid||0)));supplierMap[p.supplier].count++;});
+  const tCust=Object.values(customerMap).reduce((s,x)=>s+x.amount,0), tSupp=Object.values(supplierMap).reduce((s,x)=>s+x.amount,0);
+  document.getElementById('outstandingCustomers').textContent=money(tCust);document.getElementById('outstandingSuppliers').textContent=money(tSupp);
+  const body=document.getElementById('outstandingBody');body.innerHTML='';
+  Object.entries(customerMap).forEach(([id,x])=>{const p=parties.find(v=>String(v.id)===String(id));const tr=document.createElement('tr');tr.innerHTML=`<td>${escapeHTML(p?.name||id)}</td><td>Customer</td><td>${x.count}</td><td>${money(x.amount)}</td>`;body.appendChild(tr);});
+  Object.entries(supplierMap).forEach(([id,x])=>{const p=parties.find(v=>String(v.id)===String(id));const tr=document.createElement('tr');tr.innerHTML=`<td>${escapeHTML(p?.name||id)}</td><td>Supplier</td><td>${x.count}</td><td>${money(x.amount)}</td>`;body.appendChild(tr);});
 }
 
 /* ====================================================
@@ -1411,13 +1391,18 @@ function toggleSign() {
 function applyPercent() {
   const cur = parseFloat(calcState.display) || 0;
   if (calcState.operator && calcState.stored !== null) {
-    // percent relative to stored
-    const percentOfStored = (calcState.stored * cur) / 100;
-    calcState.display = String(+percentOfStored.toFixed(10));
+    if (calcState.operator === '+' || calcState.operator === '-') {
+      // For +/-, percentage is a percentage of the stored value.
+      calcState.display = String(+(calcState.stored * cur / 100).toFixed(10));
+    } else {
+      // For ×/÷, the right-hand operand becomes its decimal percentage.
+      calcState.display = String(+(cur / 100).toFixed(10));
+    }
   } else {
-    // unary percent
-    calcState.display = String((cur / 100));
+    // Standalone percentage: 10% = 0.1
+    calcState.display = String(+(cur / 100).toFixed(10));
   }
+  calcState.waiting = false;
   updateCalcDisplay();
 }
 
@@ -1437,10 +1422,12 @@ function handleOperator(op) {
   if (calcState.stored === null) {
     calcState.stored = cur;
   } else if (!calcState.waiting) {
-    const result = perform(calcState.operator, calcState.stored, cur);
+    const previous = calcState.stored;
+    const previousOperator = calcState.operator;
+    const result = perform(previousOperator, previous, cur);
     calcState.stored = result;
     calcState.display = String(+result.toFixed(10));
-    calcState.history.unshift(`${calcState.stored} ${calcState.operator} ${cur} = ${calcState.display}`);
+    calcState.history.unshift(`${previous} ${previousOperator} ${cur} = ${calcState.display}`);
   }
   calcState.operator = op;
   calcState.waiting = true;
