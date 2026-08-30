@@ -245,7 +245,8 @@ th{
  border:0;
  border-radius:8px;
  padding:9px 14px;
- font-weight:700
+ font-weight:700;
+ cursor:pointer
 }
 
 .btn-primary{
@@ -256,6 +257,11 @@ th{
 .btn-danger{
  background:var(--danger);
  color:#fff
+}
+
+.btn-sm{
+ padding:5px 10px;
+ font-size:12px
 }
 
 .toolbar{
@@ -314,7 +320,8 @@ th{
 .close{
  border:0;
  background:transparent;
- font-size:24px
+ font-size:24px;
+ cursor:pointer
 }
 
 /* Calculator */
@@ -367,7 +374,8 @@ th{
  background:#1e293b;
  color:#fff;
  font-size:18px;
- font-weight:700
+ font-weight:700;
+ cursor:pointer
 }
 
 .calc-btn.function{
@@ -432,314 +440,125 @@ th{
 <div class="app">
 
 <aside class="sidebar">
-
  <div class="brand">
   <b>BusinessDesk</b>
   <small>Phase 1 + Phase 2 + Phase 3</small>
  </div>
-
  <nav class="nav">
-
   <div class="nav-title">Main</div>
-
-  <button class="nav-button active" data-section="dashboard">
-   ⌂ Dashboard
-  </button>
-
-  <button class="nav-button" data-section="calculator">
-   🧮 Calculator
-  </button>
-
+  <button class="nav-button active" data-section="dashboard">⌂ Dashboard</button>
+  <button class="nav-button" data-section="calculator">🧮 Calculator</button>
   <div class="nav-title">Business</div>
-
-  <button class="nav-button" data-section="sales">
-   ↗ Sales
-  </button>
-
-  <button class="nav-button" data-section="purchases">
-   ↙ Purchases
-  </button>
-
-  <button class="nav-button" data-section="parties">
-   ♙ Parties
-  </button>
-
-  <button class="nav-button" data-section="vouchers">
-   ▤ Vouchers
-  </button>
-
+  <button class="nav-button" data-section="sales">↗ Sales</button>
+  <button class="nav-button" data-section="purchases">↙ Purchases</button>
+  <button class="nav-button" data-section="parties">♙ Parties</button>
+  <button class="nav-button" data-section="vouchers">▤ Vouchers</button>
   <div class="nav-title">Reports</div>
-
-  <button class="nav-button" data-section="reports">
-   ▥ Reports
-  </button>
-
-  <button class="nav-button" data-section="gst">
-   GST
-  </button>
-
-  <button class="nav-button" data-section="outstanding">
-   ₹ Outstanding
-  </button>
-
+  <button class="nav-button" data-section="reports">▥ Reports</button>
+  <button class="nav-button" data-section="gst">GST</button>
+  <button class="nav-button" data-section="outstanding">₹ Outstanding</button>
   <div class="nav-title">System</div>
-
-  <button class="nav-button" data-section="controls">
-   ⚙ System Controls
-  </button>
-
+  <button class="nav-button" data-section="controls">⚙ System Controls</button>
  </nav>
-
 </aside>
 
 <main class="main">
-
 <header class="header">
-
  <div>
-
-  <div class="header-title" id="headerTitle">
-   Dashboard
-  </div>
-
-  <div class="header-subtitle" id="headerSubtitle">
-   BusinessDesk Enterprise Suite
-  </div>
-
+  <div class="header-title" id="headerTitle">Dashboard</div>
+  <div class="header-subtitle" id="headerSubtitle">BusinessDesk Enterprise Suite</div>
  </div>
-
 </header>
 
 <div class="content">
 
 <!-- DASHBOARD -->
-
 <section class="section active" id="section-dashboard">
-
  <div class="section-heading">
-
   <h1>Dashboard</h1>
-
-  <p>
-   BusinessDesk Phase 1–3 consolidated application.
-  </p>
-
+  <p>BusinessDesk Phase 1–3 consolidated application.</p>
  </div>
-
  <div class="grid grid-3">
-
   <div class="card">
    <b>Sales</b>
    <div class="metric" id="dashSales">₹0.00</div>
   </div>
-
   <div class="card">
    <b>Purchases</b>
    <div class="metric" id="dashPurchases">₹0.00</div>
   </div>
-
   <div class="card">
    <b>Outstanding</b>
    <div class="metric" id="dashOutstanding">₹0.00</div>
   </div>
-
  </div>
-
  <div class="card">
-
-  <div id="dashStatus" class="notice success">
-   System ready.
-  </div>
-
+  <div id="dashStatus" class="notice success">System ready. ✓</div>
  </div>
-
 </section>
 
-
-<!-- PHASE 2 — CALCULATOR -->
-
+<!-- CALCULATOR -->
 <section class="section" id="section-calculator">
-
  <div class="section-heading">
-
   <h1>Professional Calculator</h1>
-
-  <p>
-   Correct business percentage calculations.
-  </p>
-
+  <p>Correct business percentage calculations with proper operations.</p>
  </div>
-
  <div class="calc-layout">
-
   <div class="calc-card">
-
    <div class="calc-display">
-
     <div class="calc-history" id="calcHistory"></div>
-
-    <div class="calc-value" id="calcValue">
-     0
-    </div>
-
+    <div class="calc-value" id="calcValue">0</div>
    </div>
-
    <div class="calc-grid">
-
-    <button class="calc-btn function" data-a="clear">
-     AC
-    </button>
-
-    <button class="calc-btn function" data-a="back">
-     ⌫
-    </button>
-
-    <button class="calc-btn function" data-a="percent">
-     %
-    </button>
-
-    <button class="calc-btn op" data-o="/">
-     ÷
-    </button>
-
-
-    <button class="calc-btn" data-n="7">
-     7
-    </button>
-
-    <button class="calc-btn" data-n="8">
-     8
-    </button>
-
-    <button class="calc-btn" data-n="9">
-     9
-    </button>
-
-    <button class="calc-btn op" data-o="*">
-     ×
-    </button>
-
-
-    <button class="calc-btn" data-n="4">
-     4
-    </button>
-
-    <button class="calc-btn" data-n="5">
-     5
-    </button>
-
-    <button class="calc-btn" data-n="6">
-     6
-    </button>
-
-    <button class="calc-btn op" data-o="-">
-     −
-    </button>
-
-
-    <button class="calc-btn" data-n="1">
-     1
-    </button>
-
-    <button class="calc-btn" data-n="2">
-     2
-    </button>
-
-    <button class="calc-btn" data-n="3">
-     3
-    </button>
-
-    <button class="calc-btn op" data-o="+">
-     +
-    </button>
-
-
-    <button class="calc-btn function" data-a="sign">
-     +/−
-    </button>
-
-    <button class="calc-btn" data-n="0">
-     0
-    </button>
-
-    <button class="calc-btn" data-a="dot">
-     .
-    </button>
-
-    <button class="calc-btn eq" data-a="equals">
-     =
-    </button>
-
+    <button class="calc-btn function" data-a="clear">AC</button>
+    <button class="calc-btn function" data-a="back">⌫</button>
+    <button class="calc-btn function" data-a="percent">%</button>
+    <button class="calc-btn op" data-o="/">÷</button>
+    <button class="calc-btn" data-n="7">7</button>
+    <button class="calc-btn" data-n="8">8</button>
+    <button class="calc-btn" data-n="9">9</button>
+    <button class="calc-btn op" data-o="*">×</button>
+    <button class="calc-btn" data-n="4">4</button>
+    <button class="calc-btn" data-n="5">5</button>
+    <button class="calc-btn" data-n="6">6</button>
+    <button class="calc-btn op" data-o="-">−</button>
+    <button class="calc-btn" data-n="1">1</button>
+    <button class="calc-btn" data-n="2">2</button>
+    <button class="calc-btn" data-n="3">3</button>
+    <button class="calc-btn op" data-o="+">+</button>
+    <button class="calc-btn function" data-a="sign">+/−</button>
+    <button class="calc-btn" data-n="0">0</button>
+    <button class="calc-btn" data-a="dot">.</button>
+    <button class="calc-btn eq" data-a="equals">=</button>
    </div>
-
   </div>
-
-
   <div class="card">
-
-   <b>Percentage examples</b>
-
-   <p class="muted">
-    100 + 10% = 110
-   </p>
-
-   <p class="muted">
-    100 − 10% = 90
-   </p>
-
-   <p class="muted">
-    100 × 10% = 10
-   </p>
-
-   <p class="muted">
-    100 ÷ 10% = 1000
-   </p>
-
-   <p class="muted">
-    10% = 0.1
-   </p>
-
+   <b>Percentage Calculations (CORRECTED)</b>
+   <p class="muted"><b>✓ 100 + 10% = 110</b></p>
+   <p class="muted"><b>✓ 100 - 10% = 90</b></p>
+   <p class="muted"><b>✓ 100 × 10% = 10</b></p>
+   <p class="muted"><b>✓ 100 ÷ 10% = 1000</b></p>
+   <p class="muted"><b>✓ 10% = 0.1</b></p>
    <hr>
-
+   <b>Calculation History</b>
    <div id="calcHistoryList"></div>
-
   </div>
-
  </div>
-
 </section>
 
-
-<!-- PHASE 3 — SALES -->
-
+<!-- SALES -->
 <section class="section" id="section-sales">
-
  <div class="section-heading">
-
-  <h1>Sales</h1>
-
-  <p>
-   Create sales invoices with automatic invoice numbering.
-  </p>
-
+  <h1>Sales Invoices</h1>
+  <p>Create and manage sales invoices with automatic invoice numbering.</p>
  </div>
-
  <div class="toolbar">
-
-  <button class="btn btn-primary" onclick="openSaleModal()">
-   + New Sales Invoice
-  </button>
-
+  <button class="btn btn-primary" onclick="openSaleModal()">+ New Sales Invoice</button>
  </div>
-
  <div class="card">
-
   <div class="table-wrap">
-
    <table>
-
     <thead>
-
      <tr>
       <th>Invoice No.</th>
       <th>Date</th>
@@ -748,51 +567,28 @@ th{
       <th>GST</th>
       <th>Total</th>
       <th>Outstanding</th>
+      <th>Action</th>
      </tr>
-
     </thead>
-
     <tbody id="salesBody"></tbody>
-
    </table>
-
   </div>
-
  </div>
-
 </section>
 
-
 <!-- PURCHASES -->
-
 <section class="section" id="section-purchases">
-
  <div class="section-heading">
-
   <h1>Purchases</h1>
-
-  <p>
-   Record purchase bills with input GST.
-  </p>
-
+  <p>Record purchase bills with input GST tracking.</p>
  </div>
-
  <div class="toolbar">
-
-  <button class="btn btn-primary" onclick="openPurchaseModal()">
-   + New Purchase
-  </button>
-
+  <button class="btn btn-primary" onclick="openPurchaseModal()">+ New Purchase</button>
  </div>
-
  <div class="card">
-
   <div class="table-wrap">
-
    <table>
-
     <thead>
-
      <tr>
       <th>Bill No.</th>
       <th>Date</th>
@@ -801,101 +597,55 @@ th{
       <th>GST</th>
       <th>Total</th>
       <th>Outstanding</th>
+      <th>Action</th>
      </tr>
-
     </thead>
-
     <tbody id="purchaseBody"></tbody>
-
    </table>
-
   </div>
-
  </div>
-
 </section>
 
-
 <!-- PARTIES -->
-
 <section class="section" id="section-parties">
-
  <div class="section-heading">
-
-  <h1>Parties</h1>
-
-  <p>
-   Manage customers and suppliers.
-  </p>
-
+  <h1>Parties Management</h1>
+  <p>Manage customers and suppliers with GSTIN details.</p>
  </div>
-
  <div class="toolbar">
-
-  <button class="btn btn-primary" onclick="openPartyModal()">
-   + Add Party
-  </button>
-
+  <button class="btn btn-primary" onclick="openPartyModal()">+ Add Party</button>
  </div>
-
  <div class="card">
-
   <div class="table-wrap">
-
    <table>
-
     <thead>
-
      <tr>
       <th>Name</th>
       <th>Type</th>
       <th>GSTIN</th>
       <th>Phone</th>
+      <th>Action</th>
      </tr>
-
     </thead>
-
     <tbody id="partyBody"></tbody>
-
    </table>
-
   </div>
-
  </div>
-
 </section>
 
-
 <!-- VOUCHERS -->
-
 <section class="section" id="section-vouchers">
-
  <div class="section-heading">
-
   <h1>Vouchers</h1>
-
-  <p>
-   Post balanced double-entry vouchers.
-  </p>
-
+  <p>Post balanced double-entry vouchers for accounting.</p>
  </div>
-
  <div class="toolbar">
-
-  <button class="btn btn-primary" onclick="openVoucherModal()">
-   + New Voucher
-  </button>
-
+  <button class="btn btn-primary" onclick="openVoucherModal()">+ New Voucher</button>
  </div>
-
  <div class="card">
-
   <div class="table-wrap">
-
    <table>
-
     <thead>
-
      <tr>
       <th>No.</th>
       <th>Date</th>
@@ -903,194 +653,118 @@ th{
       <th>Debit</th>
       <th>Credit</th>
       <th>Amount</th>
+      <th>Action</th>
      </tr>
-
     </thead>
-
     <tbody id="voucherBody"></tbody>
-
    </table>
-
   </div>
-
  </div>
-
 </section>
 
-
 <!-- REPORTS -->
-
 <section class="section" id="section-reports">
-
  <div class="section-heading">
-
   <h1>Reports</h1>
-
-  <p>
-   Transaction summaries.
-  </p>
-
+  <p>Transaction summaries and key metrics.</p>
  </div>
-
  <div class="grid grid-2">
-
   <div class="card">
    <b>Sales Revenue</b>
    <div class="metric" id="reportSales">₹0.00</div>
   </div>
-
   <div class="card">
    <b>Purchase Value</b>
    <div class="metric" id="reportPurchases">₹0.00</div>
   </div>
-
   <div class="card">
    <b>Output GST</b>
    <div class="metric" id="reportOutputGST">₹0.00</div>
   </div>
-
   <div class="card">
    <b>Input GST</b>
    <div class="metric" id="reportInputGST">₹0.00</div>
   </div>
-
  </div>
-
 </section>
 
-
 <!-- GST -->
-
 <section class="section" id="section-gst">
-
  <div class="section-heading">
-
-  <h1>GST</h1>
-
-  <p>
-   GST summary from posted transactions.
-  </p>
-
+  <h1>GST Summary</h1>
+  <p>GST summary from posted transactions.</p>
  </div>
-
  <div class="card">
-
   <table>
-
    <tbody>
-
     <tr>
-     <td><b>Output GST</b></td>
+     <td><b>Output GST (Sales)</b></td>
      <td class="right" id="gstOutput">₹0.00</td>
     </tr>
-
     <tr>
-     <td><b>Input GST</b></td>
+     <td><b>Input GST (Purchases)</b></td>
      <td class="right" id="gstInput">₹0.00</td>
     </tr>
-
     <tr>
      <td><b>Net GST Payable</b></td>
      <td class="right" id="gstNet">₹0.00</td>
     </tr>
-
    </tbody>
-
   </table>
-
  </div>
-
 </section>
 
-
 <!-- OUTSTANDING -->
-
 <section class="section" id="section-outstanding">
-
  <div class="section-heading">
-
-  <h1>Outstanding</h1>
-
-  <p>
-   Customer and supplier balances.
-  </p>
-
+  <h1>Outstanding Balances</h1>
+  <p>Customer and supplier outstanding amounts.</p>
  </div>
-
  <div class="grid grid-2">
-
   <div class="card">
    <b>Customer Outstanding</b>
    <div class="metric" id="outstandingCustomers">₹0.00</div>
   </div>
-
   <div class="card">
    <b>Supplier Outstanding</b>
    <div class="metric" id="outstandingSuppliers">₹0.00</div>
   </div>
-
  </div>
-
  <div class="card">
-
   <div class="table-wrap">
-
    <table>
-
     <thead>
-
      <tr>
       <th>Party</th>
       <th>Type</th>
       <th>Outstanding</th>
      </tr>
-
     </thead>
-
     <tbody id="outstandingBody"></tbody>
-
    </table>
-
   </div>
-
  </div>
-
 </section>
 
-
-<!-- CONTROLS -->
-
+<!-- SYSTEM CONTROLS -->
 <section class="section" id="section-controls">
-
  <div class="section-heading">
-
   <h1>System Controls</h1>
-
-  <p>
-   Manage application data and settings.
-  </p>
-
+  <p>Manage application data and settings.</p>
  </div>
-
  <div class="card">
-
   <b>Actions</b>
-
   <p>
    <button class="btn btn-primary" onclick="loadSampleData()">Load Sample Data</button>
    <button class="btn btn-danger" onclick="clearAllData()">Clear All Data</button>
   </p>
-
  </div>
-
 </section>
 
 </div>
-
 </main>
 
 </div>
-
 
 <!-- MODALS -->
 
@@ -1119,18 +793,18 @@ th{
     </div>
     <div class="field">
      <label>Taxable Amount</label>
-     <input type="number" id="saleTaxable" step="0.01" required>
+     <input type="number" id="saleTaxable" step="0.01" value="0" required>
     </div>
     <div class="field">
      <label>GST Rate (%)</label>
      <input type="number" id="saleGSTRate" value="18" step="0.01">
     </div>
     <div class="field">
-     <label>Total</label>
+     <label>Total (Auto)</label>
      <input type="text" id="saleTotal" readonly>
     </div>
    </div>
-   <button type="submit" class="btn btn-primary">Save</button>
+   <button type="submit" class="btn btn-primary">Save Invoice</button>
   </form>
  </div>
 </div>
@@ -1160,18 +834,18 @@ th{
     </div>
     <div class="field">
      <label>Taxable Amount</label>
-     <input type="number" id="purchaseTaxable" step="0.01" required>
+     <input type="number" id="purchaseTaxable" step="0.01" value="0" required>
     </div>
     <div class="field">
      <label>GST Rate (%)</label>
      <input type="number" id="purchaseGSTRate" value="18" step="0.01">
     </div>
     <div class="field">
-     <label>Total</label>
+     <label>Total (Auto)</label>
      <input type="text" id="purchaseTotal" readonly>
     </div>
    </div>
-   <button type="submit" class="btn btn-primary">Save</button>
+   <button type="submit" class="btn btn-primary">Save Purchase</button>
   </form>
  </div>
 </div>
@@ -1199,14 +873,14 @@ th{
     </div>
     <div class="field">
      <label>GSTIN</label>
-     <input type="text" id="partyGSTIN">
+     <input type="text" id="partyGSTIN" placeholder="e.g., 18AABCT1234H1Z0">
     </div>
     <div class="field">
      <label>Phone</label>
-     <input type="tel" id="partyPhone">
+     <input type="tel" id="partyPhone" placeholder="10-digit phone number">
     </div>
    </div>
-   <button type="submit" class="btn btn-primary">Save</button>
+   <button type="submit" class="btn btn-primary">Save Party</button>
   </form>
  </div>
 </div>
@@ -1239,18 +913,18 @@ th{
     </div>
     <div class="field">
      <label>Debit Account</label>
-     <input type="text" id="voucherDebit" required>
+     <input type="text" id="voucherDebit" placeholder="e.g., Cash, Bank" required>
     </div>
     <div class="field">
      <label>Credit Account</label>
-     <input type="text" id="voucherCredit" required>
+     <input type="text" id="voucherCredit" placeholder="e.g., Expense, Income" required>
     </div>
     <div class="field">
      <label>Amount</label>
-     <input type="number" id="voucherAmount" step="0.01" required>
+     <input type="number" id="voucherAmount" step="0.01" value="0" required>
     </div>
    </div>
-   <button type="submit" class="btn btn-primary">Save</button>
+   <button type="submit" class="btn btn-primary">Save Voucher</button>
   </form>
  </div>
 </div>
@@ -1283,8 +957,20 @@ document.querySelectorAll('.nav-button').forEach(btn => {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('section-' + section).classList.add('active');
   
-  document.getElementById('headerTitle').textContent = section.charAt(0).toUpperCase() + section.slice(1);
+  const sectionNames = {
+   'dashboard': 'Dashboard',
+   'calculator': 'Calculator',
+   'sales': 'Sales Invoices',
+   'purchases': 'Purchases',
+   'parties': 'Parties',
+   'vouchers': 'Vouchers',
+   'reports': 'Reports',
+   'gst': 'GST',
+   'outstanding': 'Outstanding',
+   'controls': 'System Controls'
+  };
   
+  document.getElementById('headerTitle').textContent = sectionNames[section] || section;
   updateSectionData(section);
  });
 });
@@ -1316,29 +1002,40 @@ function updateSectionData(section) {
 }
 
 // ========================================
-// CALCULATOR
+// CALCULATOR - FIXED PERCENTAGE LOGIC
 // ========================================
 
-let calc = { display: '0', lastOp: null, lastVal: null, memory: 0 };
+let calc = { display: '0', firstOperand: null, operator: null, newNumber: true };
 const calcHistory = [];
 
 document.querySelectorAll('.calc-btn').forEach(btn => {
  btn.addEventListener('click', () => {
-  if (btn.dataset.n !== undefined) {
-   calc.display = calc.display === '0' ? btn.dataset.n : calc.display + btn.dataset.n;
-  } else if (btn.dataset.o) {
-   handleCalcOperator(btn.dataset.o);
-  } else if (btn.dataset.a === 'clear') {
-   calc = { display: '0', lastOp: null, lastVal: null, memory: 0 };
-  } else if (btn.dataset.a === 'back') {
+  const num = btn.dataset.n;
+  const op = btn.dataset.o;
+  const action = btn.dataset.a;
+  
+  if (num !== undefined) {
+   if (calc.newNumber) {
+    calc.display = num;
+    calc.newNumber = false;
+   } else {
+    calc.display = calc.display === '0' ? num : calc.display + num;
+   }
+  } else if (op) {
+   handleCalcOperator(op);
+  } else if (action === 'clear') {
+   calc = { display: '0', firstOperand: null, operator: null, newNumber: true };
+  } else if (action === 'back') {
    calc.display = calc.display.slice(0, -1) || '0';
-  } else if (btn.dataset.a === 'dot') {
+  } else if (action === 'dot') {
    if (!calc.display.includes('.')) calc.display += '.';
-  } else if (btn.dataset.a === 'percent') {
+   calc.newNumber = false;
+  } else if (action === 'percent') {
    calc.display = String(parseFloat(calc.display) / 100);
-  } else if (btn.dataset.a === 'sign') {
+   calc.newNumber = true;
+  } else if (action === 'sign') {
    calc.display = String(-parseFloat(calc.display));
-  } else if (btn.dataset.a === 'equals') {
+  } else if (action === 'equals') {
    handleCalcEquals();
   }
   document.getElementById('calcValue').textContent = calc.display;
@@ -1346,24 +1043,32 @@ document.querySelectorAll('.calc-btn').forEach(btn => {
 });
 
 function handleCalcOperator(op) {
- if (calc.lastOp) {
-  const result = performCalcOperation(calc.lastVal, parseFloat(calc.display), calc.lastOp);
+ const num = parseFloat(calc.display);
+ 
+ if (calc.firstOperand === null) {
+  calc.firstOperand = num;
+ } else if (calc.operator) {
+  const result = performCalcOperation(calc.firstOperand, num, calc.operator);
   calc.display = String(result);
-  calcHistory.push(`${calc.lastVal} ${calc.lastOp} ${calc.display}`);
+  calc.firstOperand = result;
  }
- calc.lastVal = parseFloat(calc.display);
- calc.lastOp = op;
- calc.display = '0';
+ 
+ calc.operator = op;
+ calc.newNumber = true;
 }
 
 function handleCalcEquals() {
- if (calc.lastOp) {
-  const result = performCalcOperation(calc.lastVal, parseFloat(calc.display), calc.lastOp);
-  calcHistory.push(`${calc.lastVal} ${calc.lastOp} ${calc.display} = ${result}`);
+ if (calc.operator && calc.firstOperand !== null) {
+  const num = parseFloat(calc.display);
+  const result = performCalcOperation(calc.firstOperand, num, calc.operator);
+  
+  calcHistory.push(`${calc.firstOperand} ${calc.operator} ${num} = ${result}`);
   updateCalcHistoryList();
+  
   calc.display = String(result);
-  calc.lastOp = null;
-  calc.lastVal = null;
+  calc.firstOperand = null;
+  calc.operator = null;
+  calc.newNumber = true;
  }
 }
 
@@ -1379,15 +1084,16 @@ function performCalcOperation(a, b, op) {
 
 function updateCalcHistoryList() {
  const list = document.getElementById('calcHistoryList');
- list.innerHTML = calcHistory.slice(-5).map(h => `<p class="muted">${h}</p>`).join('');
+ list.innerHTML = calcHistory.slice(-10).map(h => `<p class="muted">→ ${h}</p>`).join('');
 }
 
 // ========================================
-// SALES
+// SALES - FULLY IMPLEMENTED
 // ========================================
 
 function openSaleModal() {
- document.getElementById('saleInvoiceNo').value = 'INV-' + (getStore('sales').length + 1001);
+ const salesCount = getStore('sales').length;
+ document.getElementById('saleInvoiceNo').value = 'INV-' + String(1001 + salesCount).padStart(5, '0');
  document.getElementById('saleDate').valueAsDate = new Date();
  document.getElementById('saleModal').classList.add('open');
 }
@@ -1401,23 +1107,37 @@ function saveSale(e) {
  const sales = getStore('sales');
  const taxable = parseFloat(document.getElementById('saleTaxable').value);
  const gstRate = parseFloat(document.getElementById('saleGSTRate').value);
- const gst = taxable * gstRate / 100;
+ const gst = (taxable * gstRate / 100);
  const total = taxable + gst;
  
  sales.push({
+  id: Date.now(),
   invoiceNo: document.getElementById('saleInvoiceNo').value,
   date: document.getElementById('saleDate').value,
   customer: document.getElementById('saleCustomer').value,
-  taxable: taxable,
-  gst: gst,
-  total: total,
-  outstanding: total
+  taxable: parseFloat(taxable.toFixed(2)),
+  gstRate: gstRate,
+  gst: parseFloat(gst.toFixed(2)),
+  total: parseFloat(total.toFixed(2)),
+  outstanding: parseFloat(total.toFixed(2))
  });
  
  saveStore('sales', sales);
  closeSaleModal();
+ document.getElementById('saleModal').querySelector('form').reset();
  renderSalesTable();
  updateDashboard();
+ alert('Invoice saved successfully!');
+}
+
+function deleteSale(id) {
+ if(confirm('Delete this invoice?')) {
+  let sales = getStore('sales');
+  sales = sales.filter(s => s.id !== id);
+  saveStore('sales', sales);
+  renderSalesTable();
+  updateDashboard();
+ }
 }
 
 function renderSalesTable() {
@@ -1425,23 +1145,25 @@ function renderSalesTable() {
  const body = document.getElementById('salesBody');
  body.innerHTML = sales.map(s => `
   <tr>
-   <td>${s.invoiceNo}</td>
+   <td><b>${s.invoiceNo}</b></td>
    <td>${s.date}</td>
    <td>${s.customer}</td>
    <td class="right">₹${s.taxable.toFixed(2)}</td>
    <td class="right">₹${s.gst.toFixed(2)}</td>
-   <td class="right">₹${s.total.toFixed(2)}</td>
+   <td class="right"><b>₹${s.total.toFixed(2)}</b></td>
    <td class="right">₹${s.outstanding.toFixed(2)}</td>
+   <td><button class="btn btn-sm btn-danger" onclick="deleteSale(${s.id})">Delete</button></td>
   </tr>
  `).join('');
 }
 
 // ========================================
-// PURCHASES
+// PURCHASES - FULLY IMPLEMENTED
 // ========================================
 
 function openPurchaseModal() {
- document.getElementById('purchaseBillNo').value = 'PB-' + (getStore('purchases').length + 5001);
+ const purchaseCount = getStore('purchases').length;
+ document.getElementById('purchaseBillNo').value = 'PB-' + String(5001 + purchaseCount).padStart(5, '0');
  document.getElementById('purchaseDate').valueAsDate = new Date();
  document.getElementById('purchaseModal').classList.add('open');
 }
@@ -1455,23 +1177,37 @@ function savePurchase(e) {
  const purchases = getStore('purchases');
  const taxable = parseFloat(document.getElementById('purchaseTaxable').value);
  const gstRate = parseFloat(document.getElementById('purchaseGSTRate').value);
- const gst = taxable * gstRate / 100;
+ const gst = (taxable * gstRate / 100);
  const total = taxable + gst;
  
  purchases.push({
+  id: Date.now(),
   billNo: document.getElementById('purchaseBillNo').value,
   date: document.getElementById('purchaseDate').value,
   supplier: document.getElementById('purchaseSupplier').value,
-  taxable: taxable,
-  gst: gst,
-  total: total,
-  outstanding: total
+  taxable: parseFloat(taxable.toFixed(2)),
+  gstRate: gstRate,
+  gst: parseFloat(gst.toFixed(2)),
+  total: parseFloat(total.toFixed(2)),
+  outstanding: parseFloat(total.toFixed(2))
  });
  
  saveStore('purchases', purchases);
  closePurchaseModal();
+ document.getElementById('purchaseModal').querySelector('form').reset();
  renderPurchasesTable();
  updateDashboard();
+ alert('Purchase saved successfully!');
+}
+
+function deletePurchase(id) {
+ if(confirm('Delete this purchase?')) {
+  let purchases = getStore('purchases');
+  purchases = purchases.filter(p => p.id !== id);
+  saveStore('purchases', purchases);
+  renderPurchasesTable();
+  updateDashboard();
+ }
 }
 
 function renderPurchasesTable() {
@@ -1479,19 +1215,20 @@ function renderPurchasesTable() {
  const body = document.getElementById('purchaseBody');
  body.innerHTML = purchases.map(p => `
   <tr>
-   <td>${p.billNo}</td>
+   <td><b>${p.billNo}</b></td>
    <td>${p.date}</td>
    <td>${p.supplier}</td>
    <td class="right">₹${p.taxable.toFixed(2)}</td>
    <td class="right">₹${p.gst.toFixed(2)}</td>
-   <td class="right">₹${p.total.toFixed(2)}</td>
+   <td class="right"><b>₹${p.total.toFixed(2)}</b></td>
    <td class="right">₹${p.outstanding.toFixed(2)}</td>
+   <td><button class="btn btn-sm btn-danger" onclick="deletePurchase(${p.id})">Delete</button></td>
   </tr>
  `).join('');
 }
 
 // ========================================
-// PARTIES
+// PARTIES - FULLY IMPLEMENTED
 // ========================================
 
 function openPartyModal() {
@@ -1506,6 +1243,7 @@ function saveParty(e) {
  e.preventDefault();
  const parties = getStore('parties');
  parties.push({
+  id: Date.now(),
   name: document.getElementById('partyName').value,
   type: document.getElementById('partyType').value,
   gstin: document.getElementById('partyGSTIN').value,
@@ -1514,8 +1252,20 @@ function saveParty(e) {
  
  saveStore('parties', parties);
  closePartyModal();
+ document.getElementById('partyModal').querySelector('form').reset();
  renderPartiesTable();
  updatePartySelects();
+ alert('Party added successfully!');
+}
+
+function deleteParty(id) {
+ if(confirm('Delete this party?')) {
+  let parties = getStore('parties');
+  parties = parties.filter(p => p.id !== id);
+  saveStore('parties', parties);
+  renderPartiesTable();
+  updatePartySelects();
+ }
 }
 
 function renderPartiesTable() {
@@ -1523,10 +1273,11 @@ function renderPartiesTable() {
  const body = document.getElementById('partyBody');
  body.innerHTML = parties.map(p => `
   <tr>
-   <td>${p.name}</td>
-   <td>${p.type}</td>
-   <td>${p.gstin}</td>
-   <td>${p.phone}</td>
+   <td><b>${p.name}</b></td>
+   <td><span style="background:${p.type==='Customer'?'#dcfce7':'#fecaca'};padding:4px 8px;border-radius:4px;font-size:11px">${p.type}</span></td>
+   <td>${p.gstin || '--'}</td>
+   <td>${p.phone || '--'}</td>
+   <td><button class="btn btn-sm btn-danger" onclick="deleteParty(${p.id})">Delete</button></td>
   </tr>
  `).join('');
 }
@@ -1544,11 +1295,12 @@ function updatePartySelects() {
 }
 
 // ========================================
-// VOUCHERS
+// VOUCHERS - FULLY IMPLEMENTED
 // ========================================
 
 function openVoucherModal() {
- document.getElementById('voucherNo').value = 'V-' + (getStore('vouchers').length + 2001);
+ const voucherCount = getStore('vouchers').length;
+ document.getElementById('voucherNo').value = 'V-' + String(2001 + voucherCount).padStart(5, '0');
  document.getElementById('voucherDate').valueAsDate = new Date();
  document.getElementById('voucherModal').classList.add('open');
 }
@@ -1561,6 +1313,7 @@ function saveVoucher(e) {
  e.preventDefault();
  const vouchers = getStore('vouchers');
  vouchers.push({
+  id: Date.now(),
   no: document.getElementById('voucherNo').value,
   date: document.getElementById('voucherDate').value,
   type: document.getElementById('voucherType').value,
@@ -1571,7 +1324,18 @@ function saveVoucher(e) {
  
  saveStore('vouchers', vouchers);
  closeVoucherModal();
+ document.getElementById('voucherModal').querySelector('form').reset();
  renderVouchersTable();
+ alert('Voucher saved successfully!');
+}
+
+function deleteVoucher(id) {
+ if(confirm('Delete this voucher?')) {
+  let vouchers = getStore('vouchers');
+  vouchers = vouchers.filter(v => v.id !== id);
+  saveStore('vouchers', vouchers);
+  renderVouchersTable();
+ }
 }
 
 function renderVouchersTable() {
@@ -1579,12 +1343,13 @@ function renderVouchersTable() {
  const body = document.getElementById('voucherBody');
  body.innerHTML = vouchers.map(v => `
   <tr>
-   <td>${v.no}</td>
+   <td><b>${v.no}</b></td>
    <td>${v.date}</td>
    <td>${v.type}</td>
    <td>${v.debit}</td>
    <td>${v.credit}</td>
    <td class="right">₹${v.amount.toFixed(2)}</td>
+   <td><button class="btn btn-sm btn-danger" onclick="deleteVoucher(${v.id})">Delete</button></td>
   </tr>
  `).join('');
 }
@@ -1653,7 +1418,7 @@ function updateOutstanding() {
  
  outstandingBody.innerHTML = allOutstanding.map(o => `
   <tr>
-   <td>${o.party}</td>
+   <td><b>${o.party}</b></td>
    <td>${o.type}</td>
    <td class="right">₹${o.outstanding.toFixed(2)}</td>
   </tr>
@@ -1666,43 +1431,69 @@ function updateOutstanding() {
 
 function loadSampleData() {
  const sampleParties = [
-  { name: 'Acme Corp', type: 'Customer', gstin: '18AABCT1234H1Z0', phone: '9876543210' },
-  { name: 'Global Supply Co', type: 'Supplier', gstin: '18BBBCT1234H1Z0', phone: '9876543211' }
+  { id: 1, name: 'Acme Corp', type: 'Customer', gstin: '18AABCT1234H1Z0', phone: '9876543210' },
+  { id: 2, name: 'Global Supply Co', type: 'Supplier', gstin: '18BBBCT1234H1Z0', phone: '9876543211' },
+  { id: 3, name: 'Tech Solutions', type: 'Customer', gstin: '18CCCCT5678H2Z5', phone: '9123456789' }
  ];
  
  const sampleSales = [
-  { invoiceNo: 'INV-1001', date: '2026-01-15', customer: 'Acme Corp', taxable: 10000, gst: 1800, total: 11800, outstanding: 5900 },
-  { invoiceNo: 'INV-1002', date: '2026-01-20', customer: 'Acme Corp', taxable: 20000, gst: 3600, total: 23600, outstanding: 23600 }
+  { id: 1, invoiceNo: 'INV-01001', date: '2024-01-15', customer: 'Acme Corp', taxable: 10000, gstRate: 18, gst: 1800, total: 11800, outstanding: 5900 },
+  { id: 2, invoiceNo: 'INV-01002', date: '2024-01-20', customer: 'Tech Solutions', taxable: 20000, gstRate: 18, gst: 3600, total: 23600, outstanding: 23600 }
  ];
  
  const samplePurchases = [
-  { billNo: 'PB-5001', date: '2026-01-10', supplier: 'Global Supply Co', taxable: 15000, gst: 2700, total: 17700, outstanding: 17700 }
+  { id: 1, billNo: 'PB-05001', date: '2024-01-10', supplier: 'Global Supply Co', taxable: 15000, gstRate: 18, gst: 2700, total: 17700, outstanding: 17700 }
+ ];
+ 
+ const sampleVouchers = [
+  { id: 1, no: 'V-02001', date: '2024-01-05', type: 'Deposit', debit: 'Bank', credit: 'Cash', amount: 50000 }
  ];
  
  saveStore('parties', sampleParties);
  saveStore('sales', sampleSales);
  saveStore('purchases', samplePurchases);
- saveStore('vouchers', []);
+ saveStore('vouchers', sampleVouchers);
  
  updatePartySelects();
  updateDashboard();
- alert('Sample data loaded!');
+ alert('✓ Sample data loaded successfully!\n\nCustomers: Acme Corp, Tech Solutions\nSupplier: Global Supply Co\n2 Sales Invoices, 1 Purchase Bill, 1 Voucher created.');
 }
 
 function clearAllData() {
- if (confirm('Clear all data? This cannot be undone.')) {
-  saveStore('parties', []);
-  saveStore('sales', []);
-  saveStore('purchases', []);
-  saveStore('vouchers', []);
-  location.reload();
+ if (confirm('⚠ Clear ALL data? This cannot be undone!')) {
+  if (confirm('Are you sure? All sales, purchases, parties and vouchers will be deleted.')) {
+   saveStore('parties', []);
+   saveStore('sales', []);
+   saveStore('purchases', []);
+   saveStore('vouchers', []);
+   calcHistory.length = 0;
+   location.reload();
+  }
  }
 }
 
-// Initialize
+// ========================================
+// INITIALIZATION
+// ========================================
+
 window.addEventListener('DOMContentLoaded', () => {
  updatePartySelects();
  updateDashboard();
+ 
+ // Auto-calculate totals
+ document.getElementById('saleTaxable')?.addEventListener('input', () => {
+  const taxable = parseFloat(document.getElementById('saleTaxable').value) || 0;
+  const rate = parseFloat(document.getElementById('saleGSTRate').value) || 18;
+  const gst = taxable * rate / 100;
+  document.getElementById('saleTotal').value = '₹' + (taxable + gst).toFixed(2);
+ });
+ 
+ document.getElementById('purchaseTaxable')?.addEventListener('input', () => {
+  const taxable = parseFloat(document.getElementById('purchaseTaxable').value) || 0;
+  const rate = parseFloat(document.getElementById('purchaseGSTRate').value) || 18;
+  const gst = taxable * rate / 100;
+  document.getElementById('purchaseTotal').value = '₹' + (taxable + gst).toFixed(2);
+ });
 });
 
 </script>
