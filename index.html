@@ -1,1834 +1,717 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>BusinessDesk Pro — Phase 3</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BusinessDesk Enterprise Suite</title>
 
 <style>
+*{box-sizing:border-box}
 
-/* =========================================================
-   PHASE 1 — CORE CSS
-   ========================================================= */
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+:root{
+ --bg:#f3f4f6;
+ --panel:#fff;
+ --surface:#f8fafc;
+ --text:#111827;
+ --muted:#6b7280;
+ --border:#e5e7eb;
+ --primary:#2563eb;
+ --success:#16a34a;
+ --danger:#dc2626;
+ --sidebar:#111827;
+ --shadow:0 8px 24px rgba(15,23,42,.08)
 }
 
-:root {
-    --bg: #f5f7fb;
-    --card: #ffffff;
-    --text: #182230;
-    --muted: #667085;
-    --border: #e4e7ec;
-    --primary: #2563eb;
-    --primary-dark: #1d4ed8;
-    --dark: #101828;
-    --success: #12b76a;
-    --danger: #f04438;
-    --warning: #f79009;
+body{
+ margin:0;
+ font-family:Arial,Helvetica,sans-serif;
+ background:var(--bg);
+ color:var(--text)
 }
 
-html {
-    scroll-behavior: smooth;
+button,input,select{
+ font:inherit
 }
 
-body {
-    font-family:
-        "Segoe UI",
-        Arial,
-        sans-serif;
-    background: var(--bg);
-    color: var(--text);
+button{
+ cursor:pointer
 }
 
-button,
-input,
-select,
-textarea {
-    font: inherit;
+.app{
+ min-height:100vh;
+ display:flex
 }
 
-button {
-    cursor: pointer;
+.sidebar{
+ width:245px;
+ background:var(--sidebar);
+ color:#fff;
+ position:fixed;
+ inset:0 auto 0 0;
+ overflow:auto
 }
 
-.app {
-    display: flex;
-    min-height: 100vh;
+.brand{
+ padding:20px;
+ border-bottom:1px solid #374151
 }
 
-
-/* =========================================================
-   SIDEBAR
-   ========================================================= */
-
-.sidebar {
-    width: 260px;
-    background: var(--dark);
-    color: #ffffff;
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    overflow-y: auto;
-    z-index: 1000;
+.brand b{
+ font-size:19px
 }
 
-.brand {
-    padding: 22px 20px;
-    font-size: 22px;
-    font-weight: 800;
-    border-bottom:
-        1px solid #263244;
+.brand small{
+ display:block;
+ color:#9ca3af;
+ margin-top:4px
 }
 
-.brand span {
-    color: #60a5fa;
+.nav{
+ padding:14px 10px
 }
 
-.nav {
-    padding: 12px;
+.nav-title{
+ font-size:10px;
+ text-transform:uppercase;
+ color:#9ca3af;
+ padding:10px 12px 6px;
+ font-weight:700
 }
 
-.nav-title {
-    font-size: 11px;
-    color: #98a2b3;
-    text-transform: uppercase;
-    letter-spacing: .08em;
-    padding: 16px 10px 7px;
+.nav-button{
+ width:100%;
+ border:0;
+ background:transparent;
+ color:#d1d5db;
+ padding:10px 12px;
+ border-radius:8px;
+ text-align:left;
+ margin:2px 0
 }
 
-.nav-btn {
-    width: 100%;
-    border: 0;
-    background: transparent;
-    color: #d0d5dd;
-    padding: 11px 12px;
-    border-radius: 8px;
-    text-align: left;
-    margin: 2px 0;
-    transition: .15s;
+.nav-button:hover{
+ background:#1f2937;
+ color:#fff
 }
 
-.nav-btn:hover {
-    background: #1d2939;
-    color: #ffffff;
+.nav-button.active{
+ background:var(--primary);
+ color:#fff
 }
 
-.nav-btn.active {
-    background: var(--primary);
-    color: #ffffff;
+.main{
+ margin-left:245px;
+ min-width:0;
+ flex:1
 }
 
-
-/* =========================================================
-   MAIN
-   ========================================================= */
-
-.main {
-    margin-left: 260px;
-    width: calc(100% - 260px);
-    min-height: 100vh;
+.header{
+ height:72px;
+ background:#fff;
+ border-bottom:1px solid var(--border);
+ display:flex;
+ align-items:center;
+ padding:0 24px
 }
 
-.topbar {
-    height: 68px;
-    background: #ffffff;
-    border-bottom:
-        1px solid var(--border);
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 0 24px;
-
-    position: sticky;
-    top: 0;
-    z-index: 100;
+.header-title{
+ font-weight:800;
+ font-size:18px
 }
 
-.top-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.header-subtitle{
+ font-size:12px;
+ color:var(--muted);
+ margin-top:3px
 }
 
-.topbar h2 {
-    font-size: 19px;
+.content{
+ padding:24px
 }
 
-.search {
-    width: 240px;
-    padding: 9px 12px;
-    border:
-        1px solid var(--border);
-    border-radius: 8px;
-    background: #ffffff;
-    outline: none;
+.section{
+ display:none
 }
 
-.search:focus {
-    border-color: var(--primary);
+.section.active{
+ display:block
 }
 
-.content {
-    padding: 24px;
+.section-heading{
+ margin-bottom:18px
 }
 
-.section {
-    display: none;
+.section-heading h1{
+ margin:0;
+ font-size:25px
 }
 
-.section.active {
-    display: block;
+.section-heading p{
+ margin:6px 0;
+ color:var(--muted);
+ font-size:13px
 }
 
-
-/* =========================================================
-   COMMON
-   ========================================================= */
-
-.page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
+.card{
+ background:#fff;
+ border:1px solid var(--border);
+ border-radius:12px;
+ padding:18px;
+ box-shadow:var(--shadow);
+ margin-bottom:16px
 }
 
-.page-header h1 {
-    font-size: 25px;
+.grid{
+ display:grid;
+ gap:16px
 }
 
-.page-header p {
-    color: var(--muted);
-    margin-top: 4px;
+.grid-2{
+ grid-template-columns:repeat(2,minmax(0,1fr))
 }
 
-.grid {
-    display: grid;
-    gap: 16px;
+.grid-3{
+ grid-template-columns:repeat(3,minmax(0,1fr))
 }
 
-.grid-4 {
-    grid-template-columns:
-        repeat(4, 1fr);
+.metric{
+ font-size:25px;
+ font-weight:800;
+ margin-top:7px
 }
 
-.grid-3 {
-    grid-template-columns:
-        repeat(3, 1fr);
+.muted{
+ color:var(--muted)
 }
 
-.grid-2 {
-    grid-template-columns:
-        repeat(2, 1fr);
+.table-wrap{
+ overflow:auto
 }
 
-.card {
-    background: #ffffff;
-    border:
-        1px solid var(--border);
-    border-radius: 12px;
-    padding: 18px;
-    box-shadow:
-        0 1px 2px
-        rgba(16, 24, 40, .03);
+table{
+ width:100%;
+ border-collapse:collapse
 }
 
-.metric-title {
-    color: var(--muted);
-    font-size: 13px;
+th,td{
+ padding:10px 11px;
+ border-bottom:1px solid var(--border);
+ font-size:13px;
+ text-align:left;
+ white-space:nowrap
 }
 
-.metric-value {
-    font-size: 25px;
-    font-weight: 800;
-    margin-top: 7px;
+th{
+ background:var(--surface)
 }
 
-.metric-sub {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 4px;
+.right{
+ text-align:right
 }
 
-
-/* =========================================================
-   BUTTONS
-   ========================================================= */
-
-.btn {
-    border:
-        1px solid var(--border);
-    background: #ffffff;
-    color: var(--text);
-    padding: 9px 14px;
-    border-radius: 8px;
-    font-weight: 600;
+.form-grid{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:14px
 }
 
-.btn:hover {
-    background: #f2f4f7;
+.field{
+ display:flex;
+ flex-direction:column;
+ gap:5px
 }
 
-.btn-primary {
-    background: var(--primary);
-    border-color: var(--primary);
-    color: #ffffff;
-}
-
-.btn-primary:hover {
-    background: var(--primary-dark);
-}
-
-.btn-danger {
-    background: #fff1f0;
-    color: var(--danger);
-    border-color: #ffd5d2;
-}
-
-.btn-success {
-    background: #ecfdf3;
-    color: #027a48;
-    border-color: #abefc6;
-}
-
-.btn-warning {
-    background: #fffaeb;
-    color: #b54708;
-    border-color: #fedf89;
-}
-
-
-/* =========================================================
-   TABLES
-   ========================================================= */
-
-.table-wrap {
-    overflow-x: auto;
-    background: #ffffff;
-    border:
-        1px solid var(--border);
-    border-radius: 10px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 700px;
-}
-
-th,
-td {
-    padding: 10px 12px;
-    border-bottom:
-        1px solid var(--border);
-    font-size: 13px;
-    text-align: left;
-}
-
-th {
-    background: #f9fafb;
-    color: #475467;
-    font-weight: 700;
-}
-
-tr:last-child td {
-    border-bottom: 0;
-}
-
-.num {
-    text-align: right;
-}
-
-
-/* =========================================================
-   FORMS
-   ========================================================= */
-
-.form-grid {
-    display: grid;
-    grid-template-columns:
-        repeat(2, 1fr);
-    gap: 14px;
-}
-
-.form-grid-3 {
-    display: grid;
-    grid-template-columns:
-        repeat(3, 1fr);
-    gap: 14px;
-}
-
-.field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.field label {
-    font-size: 13px;
-    font-weight: 600;
+.field label{
+ font-size:12px;
+ font-weight:700
 }
 
 .field input,
-.field select,
-.field textarea {
-    border:
-        1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px;
-    background: #ffffff;
-    color: var(--text);
-    outline: none;
+.field select{
+ width:100%;
+ padding:9px;
+ border:1px solid var(--border);
+ border-radius:8px;
+ outline:none
 }
 
 .field input:focus,
-.field select:focus,
-.field textarea:focus {
-    border-color: var(--primary);
+.field select:focus{
+ border-color:var(--primary);
+ box-shadow:0 0 0 3px rgba(37,99,235,.12)
 }
 
-.field textarea {
-    min-height: 85px;
-    resize: vertical;
+.btn{
+ border:0;
+ border-radius:8px;
+ padding:9px 14px;
+ font-weight:700
 }
 
-.full {
-    grid-column: 1 / -1;
+.btn-primary{
+ background:var(--primary);
+ color:#fff
 }
 
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 18px;
+.btn-danger{
+ background:var(--danger);
+ color:#fff
 }
 
-
-/* =========================================================
-   NOTICES
-   ========================================================= */
-
-.notice {
-    padding: 13px 15px;
-    border-radius: 9px;
-    margin-bottom: 15px;
-    background: #eff8ff;
-    border:
-        1px solid #b2ddff;
-    color: #175cd3;
+.toolbar{
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+ margin-bottom:15px
 }
 
-.notice.success {
-    background: #ecfdf3;
-    border-color: #abefc6;
-    color: #027a48;
+.notice{
+ padding:11px;
+ border-radius:8px;
+ font-size:13px
 }
 
-.notice.danger {
-    background: #fff1f0;
-    border-color: #fecdca;
-    color: #b42318;
+.notice.success{
+ background:#dcfce7;
+ color:#166534
 }
 
-
-/* =========================================================
-   BADGES
-   ========================================================= */
-
-.badge {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 700;
+.modal-backdrop{
+ display:none;
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,.45);
+ z-index:500;
+ align-items:center;
+ justify-content:center;
+ padding:20px
 }
 
-.badge-green {
-    background: #ecfdf3;
-    color: #027a48;
+.modal-backdrop.open{
+ display:flex
 }
 
-.badge-red {
-    background: #fff1f0;
-    color: #b42318;
+.modal{
+ background:#fff;
+ border-radius:12px;
+ width:min(760px,100%);
+ max-height:90vh;
+ overflow:auto;
+ padding:20px
 }
 
-.badge-blue {
-    background: #eff8ff;
-    color: #175cd3;
+.modal-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:16px
 }
 
-
-/* =========================================================
-   PHASE 2 — CALCULATOR
-   ========================================================= */
-
-.calculator {
-    max-width: 430px;
+.modal-head h2{
+ margin:0
 }
 
-.calc-display {
-    width: 100%;
-    height: 72px;
-    background: #101828;
-    color: #ffffff;
-    border: 0;
-    border-radius: 10px;
-    margin-bottom: 12px;
-    padding: 14px;
-    font-size: 27px;
-    text-align: right;
+.close{
+ border:0;
+ background:transparent;
+ font-size:24px
 }
 
-.calc-grid {
-    display: grid;
-    grid-template-columns:
-        repeat(4, 1fr);
-    gap: 8px;
+/* Calculator */
+
+.calc-layout{
+ display:grid;
+ grid-template-columns:minmax(320px,500px) 1fr;
+ gap:18px
 }
 
-.calc-grid button {
-    height: 55px;
-    border:
-        1px solid var(--border);
-    border-radius: 8px;
-    background: #ffffff;
-    font-size: 18px;
+.calc-card{
+ background:#0f172a;
+ padding:16px;
+ border-radius:15px
 }
 
-.calc-grid button:hover {
-    background: #f2f4f7;
+.calc-display{
+ background:#020617;
+ border-radius:10px;
+ padding:18px;
+ min-height:115px;
+ text-align:right;
+ color:#fff;
+ overflow:auto
 }
 
-.calc-equals {
-    grid-column: span 2;
-    background: var(--primary) !important;
-    color: #ffffff;
-    border-color: var(--primary) !important;
+.calc-history{
+ font-size:12px;
+ color:#94a3b8;
+ min-height:18px
 }
 
-
-/* =========================================================
-   PHASE 2 — EXCEL
-   ========================================================= */
-
-.excel-input {
-    width: 100%;
-    border:
-        1px solid #d0d5dd;
-    padding: 7px;
-    border-radius: 5px;
-    outline: none;
+.calc-value{
+ font-size:35px;
+ font-weight:800;
+ margin-top:12px
 }
 
-.excel-input:focus {
-    border-color: var(--primary);
+.calc-grid{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:8px;
+ margin-top:12px
 }
 
-
-/* =========================================================
-   PHASE 3 — SALES
-   ========================================================= */
-
-.sales-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 15px;
-    flex-wrap: wrap;
+.calc-btn{
+ height:58px;
+ border:0;
+ border-radius:9px;
+ background:#1e293b;
+ color:#fff;
+ font-size:18px;
+ font-weight:700
 }
 
-.sales-items {
-    margin-top: 20px;
+.calc-btn.function{
+ background:#334155
 }
 
-.sales-items-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+.calc-btn.op{
+ background:var(--primary)
 }
 
-.sales-items-table {
-    min-width: 1050px;
+.calc-btn.eq{
+ background:var(--success)
 }
 
-.sales-items-table input {
-    width: 100%;
-    min-width: 70px;
-    padding: 7px;
-    border:
-        1px solid var(--border);
-    border-radius: 6px;
-    outline: none;
+@media(max-width:900px){
+ .sidebar{
+  width:210px
+ }
+
+ .main{
+  margin-left:210px
+ }
+
+ .grid-3,
+ .calc-layout{
+  grid-template-columns:1fr
+ }
 }
 
-.sales-items-table input:focus {
-    border-color: var(--primary);
+@media(max-width:700px){
+ .app{
+  display:block
+ }
+
+ .sidebar{
+  position:static;
+  width:100%
+ }
+
+ .main{
+  margin-left:0
+ }
+
+ .form-grid,
+ .grid-2{
+  grid-template-columns:1fr
+ }
+
+ .header{
+  padding:0 14px
+ }
+
+ .content{
+  padding:14px
+ }
 }
-
-.sales-remove {
-    border: 0;
-    background: #fff1f0;
-    color: var(--danger);
-    padding: 7px 9px;
-    border-radius: 6px;
-    font-weight: 700;
-}
-
-.sales-summary {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
-}
-
-.sales-summary-box {
-    width: 370px;
-    max-width: 100%;
-    border:
-        1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.sales-summary-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    padding: 10px 13px;
-    border-bottom:
-        1px solid var(--border);
-    font-size: 13px;
-}
-
-.sales-summary-row:last-child {
-    border-bottom: 0;
-}
-
-.sales-summary-row.total {
-    background: #f9fafb;
-    font-size: 16px;
-    font-weight: 800;
-}
-
-.sales-message {
-    display: none;
-    margin-bottom: 15px;
-    padding: 11px 13px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.sales-message.success {
-    display: block;
-    background: #ecfdf3;
-    color: #027a48;
-    border:
-        1px solid #abefc6;
-}
-
-.sales-message.error {
-    display: block;
-    background: #fff1f0;
-    color: #b42318;
-    border:
-        1px solid #fecdca;
-}
-
-
-/* =========================================================
-   MODAL
-   ========================================================= */
-
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background:
-        rgba(16, 24, 40, .55);
-    z-index: 3000;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.modal.open {
-    display: flex;
-}
-
-.modal-box {
-    width: min(900px, 100%);
-    max-height: 92vh;
-    overflow: auto;
-    background: #ffffff;
-    border-radius: 14px;
-    padding: 22px;
-}
-
-.modal-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.close {
-    border: 0;
-    background: #f2f4f7;
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
-}
-
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-.menu {
-    display: none;
-    border: 0;
-    background: #f2f4f7;
-    padding: 8px 11px;
-    border-radius: 7px;
-}
-
-@media (max-width: 1000px) {
-
-    .grid-4 {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-    .grid-3 {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-}
-
-@media (max-width: 750px) {
-
-    .sidebar {
-        transform:
-            translateX(-100%);
-        transition: .2s;
-    }
-
-    .sidebar.open {
-        transform:
-            translateX(0);
-    }
-
-    .main {
-        margin-left: 0;
-        width: 100%;
-    }
-
-    .menu {
-        display: block;
-    }
-
-    .search {
-        display: none;
-    }
-
-    .content {
-        padding: 15px;
-    }
-
-    .grid-4,
-    .grid-3,
-    .grid-2,
-    .form-grid,
-    .form-grid-3 {
-        grid-template-columns: 1fr;
-    }
-
-    .page-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .full {
-        grid-column: auto;
-    }
-
-}
-
 </style>
-
 </head>
-
 
 <body>
 
-
 <div class="app">
 
-
 <!-- =========================================================
-     SIDEBAR
+     PHASE 1 — APPLICATION CORE / NAVIGATION
      ========================================================= -->
 
-<aside
-    class="sidebar"
-    id="sidebar">
+<aside class="sidebar">
 
-    <div class="brand">
-        Business<span>Desk</span>
-    </div>
+ <div class="brand">
+  <b>BusinessDesk</b>
+  <small>Phase 1 + Phase 2 + Phase 3</small>
+ </div>
 
+ <nav class="nav">
 
-    <div class="nav">
+  <div class="nav-title">Main</div>
 
+  <button class="nav-button active" data-section="dashboard">
+   ⌂ Dashboard
+  </button>
 
-        <div class="nav-title">
-            Main
-        </div>
+  <button class="nav-button" data-section="calculator">
+   🧮 Calculator
+  </button>
 
-        <button
-            class="nav-btn active"
-            data-section="dashboard">
+  <div class="nav-title">Business</div>
 
-            🏠 Dashboard
+  <button class="nav-button" data-section="sales">
+   ↗ Sales
+  </button>
 
-        </button>
+  <button class="nav-button" data-section="purchases">
+   ↙ Purchases
+  </button>
 
+  <button class="nav-button" data-section="parties">
+   ♙ Parties
+  </button>
 
-        <button
-            class="nav-btn"
-            data-section="calculator">
+  <button class="nav-button" data-section="vouchers">
+   ▤ Vouchers
+  </button>
 
-            🧮 Calculator
+  <div class="nav-title">Reports</div>
 
-        </button>
+  <button class="nav-button" data-section="reports">
+   ▥ Reports
+  </button>
 
+  <button class="nav-button" data-section="gst">
+   GST
+  </button>
 
-        <button
-            class="nav-btn"
-            data-section="spreadsheet">
+  <button class="nav-button" data-section="outstanding">
+   ₹ Outstanding
+  </button>
 
-            📊 Excel Working
+  <div class="nav-title">System</div>
 
-        </button>
+  <button class="nav-button" data-section="controls">
+   ⚙ System Controls
+  </button>
 
-
-        <div class="nav-title">
-            Accounting
-        </div>
-
-
-        <button
-            class="nav-btn"
-            data-section="groups">
-
-            📂 Account Groups
-
-        </button>
-
-
-        <button
-            class="nav-btn"
-            data-section="ledgers">
-
-            📖 Ledgers
-
-        </button>
-
-
-        <button
-            class="nav-btn"
-            data-section="parties">
-
-            👥 Customers / Suppliers
-
-        </button>
-
-
-        <button
-            class="nav-btn"
-            data-section="sales">
-
-            🧾 Sales
-
-        </button>
-
-
-        <button
-            class="nav-btn"
-            data-section="purchase">
-
-            🛒 Purchase
-
-        </button>
-
-
-        <button
-            class="nav-btn"
-            data-section="vouchers">
-
-            📒 Vouchers
-
-        </button>
-
-
-        <div class="nav-title">
-            Reports
-        </div>
-
-
-        <button
-            class="nav-btn"
-            data-section="daybook">
-
-            📅 Day Book
-
-        </button>
-
-
-        <button
-            class="nav-btn"
-            data-section="ledgerreport">
-
-            📖 Ledger Statement
-
-        </button>
-
-
-        <button
-            class="nav-btn"
-            data-section="trialbalance">
-
-            ⚖️ Trial Balance
-
-        </button>
-
-
-        <button
-            class="nav-btn"
-            data-section="profitloss">
-
-            📈 Profit & Loss
-
-        </button>
-
-
-        <button
-            class="nav-btn"
-            data-section="balancesheet">
-
-            🏦 Balance Sheet
-
-        </button>
-
-
-        <button
-            class="nav-btn"
-            data-section="gst">
-
-            🧮 GST Summary
-
-        </button>
-
-
-        <button
-            class="nav-btn"
-            data-section="outstanding">
-
-            💳 Outstanding
-
-        </button>
-
-
-        <div class="nav-title">
-            Administration
-        </div>
-
-
-        <button
-            class="nav-btn"
-            data-section="company">
-
-            🏢 Company Setup
-
-        </button>
-
-
-        <button
-            class="nav-btn"
-            data-section="backup">
-
-            💾 Backup / Restore
-
-        </button>
-
-
-    </div>
+ </nav>
 
 </aside>
 
-
-<!-- =========================================================
-     MAIN
-     ========================================================= -->
-
 <main class="main">
 
+<header class="header">
 
-<header class="topbar">
+ <div>
 
-    <div class="top-actions">
+  <div class="header-title" id="headerTitle">
+   Dashboard
+  </div>
 
-        <button
-            class="menu"
-            id="menuBtn">
+  <div class="header-subtitle" id="headerSubtitle">
+   BusinessDesk Enterprise Suite
+  </div>
 
-            ☰
-
-        </button>
-
-
-        <h2 id="pageTitle">
-            Dashboard
-        </h2>
-
-    </div>
-
-
-    <div class="top-actions">
-
-        <input
-            class="search"
-            id="globalSearch"
-            placeholder="Search current data">
-
-
-        <button
-            class="btn btn-primary"
-            onclick="openSales()">
-
-            + Sales
-
-        </button>
-
-    </div>
+ </div>
 
 </header>
 
-
 <div class="content">
 
+<!-- DASHBOARD -->
 
-<!-- =========================================================
-     DASHBOARD
-     ========================================================= -->
+<section class="section active" id="section-dashboard">
 
-<section
-    class="section active"
-    id="section-dashboard">
+ <div class="section-heading">
 
+  <h1>Dashboard</h1>
 
-    <div class="page-header">
+  <p>
+   BusinessDesk Phase 1–3 consolidated application.
+  </p>
 
-        <div>
+ </div>
 
-            <h1>
-                Dashboard
-            </h1>
+ <div class="grid grid-3">
 
-            <p>
-                BusinessDesk Phase 1–3 accounting workspace.
-            </p>
+  <div class="card">
+   <b>Sales</b>
+   <div class="metric" id="dashSales">₹0.00</div>
+  </div>
 
-        </div>
+  <div class="card">
+   <b>Purchases</b>
+   <div class="metric" id="dashPurchases">₹0.00</div>
+  </div>
 
-    </div>
+  <div class="card">
+   <b>Outstanding</b>
+   <div class="metric" id="dashOutstanding">₹0.00</div>
+  </div>
 
+ </div>
 
-    <div class="grid grid-4">
+ <div class="card">
 
+  <div id="dashStatus" class="notice success">
+   System ready.
+  </div>
 
-        <div class="card">
-
-            <div class="metric-title">
-                Ledgers
-            </div>
-
-            <div
-                class="metric-value"
-                id="dashLedgers">
-
-                0
-
-            </div>
-
-            <div class="metric-sub">
-                Chart of accounts
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="metric-title">
-                Customers
-            </div>
-
-            <div
-                class="metric-value"
-                id="dashCustomers">
-
-                0
-
-            </div>
-
-            <div class="metric-sub">
-                Active parties
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="metric-title">
-                Sales
-            </div>
-
-            <div
-                class="metric-value"
-                id="dashSales">
-
-                ₹0.00
-
-            </div>
-
-            <div class="metric-sub">
-                Sales including GST
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="metric-title">
-                Purchase
-            </div>
-
-            <div
-                class="metric-value"
-                id="dashPurchase">
-
-                ₹0.00
-
-            </div>
-
-            <div class="metric-sub">
-                Purchases including GST
-            </div>
-
-        </div>
-
-
-    </div>
-
-
-    <br>
-
-
-    <div class="grid grid-2">
-
-
-        <div class="card">
-
-            <h3>
-                Quick Actions
-            </h3>
-
-            <br>
-
-            <div
-                style="
-                display:flex;
-                gap:10px;
-                flex-wrap:wrap;
-                ">
-
-                <button
-                    class="btn btn-primary"
-                    onclick="openSales()">
-
-                    Sales Invoice
-
-                </button>
-
-
-                <button
-                    class="btn"
-                    onclick="openPurchase()">
-
-                    Purchase
-
-                </button>
-
-
-                <button
-                    class="btn"
-                    onclick="openVoucher()">
-
-                    Voucher
-
-                </button>
-
-
-                <button
-                    class="btn"
-                    onclick="openParty()">
-
-                    Party
-
-                </button>
-
-
-                <button
-                    class="btn"
-                    onclick="openLedger()">
-
-                    Ledger
-
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <h3>
-                System Status
-            </h3>
-
-            <br>
-
-            <div
-                class="notice success">
-
-                Phase 1, Phase 2 and Phase 3
-                foundation is running.
-
-            </div>
-
-            <p
-                style="
-                font-size:13px;
-                color:#667085;
-                ">
-
-                Data is stored locally in this browser.
-
-            </p>
-
-        </div>
-
-
-    </div>
-
+ </div>
 
 </section>
 
 
 <!-- =========================================================
-     CALCULATOR
+     PHASE 2 — CALCULATOR
      ========================================================= -->
 
-<section
-    class="section"
-    id="section-calculator">
+<section class="section" id="section-calculator">
 
+ <div class="section-heading">
 
-    <div class="page-header">
+  <h1>Professional Calculator</h1>
 
-        <div>
+  <p>
+   Correct business percentage calculations.
+  </p>
 
-            <h1>
-                Professional Calculator
-            </h1>
+ </div>
 
-            <p>
-                Arithmetic calculator with percentage support.
-            </p>
+ <div class="calc-layout">
 
-        </div>
+  <div class="calc-card">
 
+   <div class="calc-display">
+
+    <div class="calc-history" id="calcHistory"></div>
+
+    <div class="calc-value" id="calcValue">
+     0
     </div>
 
+   </div>
 
-    <div class="card calculator">
+   <div class="calc-grid">
 
+    <button class="calc-btn function" data-a="clear">
+     AC
+    </button>
 
-        <input
-            id="calcDisplay"
-            class="calc-display"
-            value="0"
-            readonly>
+    <button class="calc-btn function" data-a="back">
+     ⌫
+    </button>
 
+    <button class="calc-btn function" data-a="percent">
+     %
+    </button>
 
-        <div class="calc-grid">
+    <button class="calc-btn op" data-o="/">
+     ÷
+    </button>
 
 
-            <button
-                type="button"
-                onclick="calcClear()">
+    <button class="calc-btn" data-n="7">
+     7
+    </button>
 
-                C
+    <button class="calc-btn" data-n="8">
+     8
+    </button>
 
-            </button>
+    <button class="calc-btn" data-n="9">
+     9
+    </button>
 
+    <button class="calc-btn op" data-o="*">
+     ×
+    </button>
 
-            <button
-                type="button"
-                onclick="calcBack()">
 
-                ⌫
+    <button class="calc-btn" data-n="4">
+     4
+    </button>
 
-            </button>
+    <button class="calc-btn" data-n="5">
+     5
+    </button>
 
+    <button class="calc-btn" data-n="6">
+     6
+    </button>
 
-            <button
-                type="button"
-                onclick="calcPercent()">
+    <button class="calc-btn op" data-o="-">
+     −
+    </button>
 
-                %
 
-            </button>
+    <button class="calc-btn" data-n="1">
+     1
+    </button>
 
+    <button class="calc-btn" data-n="2">
+     2
+    </button>
 
-            <button
-                type="button"
-                onclick="calcInput('/')">
+    <button class="calc-btn" data-n="3">
+     3
+    </button>
 
-                ÷
+    <button class="calc-btn op" data-o="+">
+     +
+    </button>
 
-            </button>
 
+    <button class="calc-btn function" data-a="sign">
+     +/−
+    </button>
 
-            <button
-                type="button"
-                onclick="calcInput('7')">
+    <button class="calc-btn" data-n="0">
+     0
+    </button>
 
-                7
+    <button class="calc-btn" data-a="dot">
+     .
+    </button>
 
-            </button>
+    <button class="calc-btn eq" data-a="equals">
+     =
+    </button>
 
+   </div>
 
-            <button
-                type="button"
-                onclick="calcInput('8')">
+  </div>
 
-                8
 
-            </button>
+  <div class="card">
 
+   <b>Percentage examples</b>
 
-            <button
-                type="button"
-                onclick="calcInput('9')">
+   <p class="muted">
+    100 + 10% = 110
+   </p>
 
-                9
+   <p class="muted">
+    100 − 10% = 90
+   </p>
 
-            </button>
+   <p class="muted">
+    100 × 10% = 10
+   </p>
 
+   <p class="muted">
+    100 ÷ 10% = 1000
+   </p>
 
-            <button
-                type="button"
-                onclick="calcInput('*')">
+   <p class="muted">
+    10% = 0.1
+   </p>
 
-                ×
+   <hr>
 
-            </button>
+   <div id="calcHistoryList"></div>
 
+  </div>
 
-            <button
-                type="button"
-                onclick="calcInput('4')">
-
-                4
-
-            </button>
-
-
-            <button
-                type="button"
-                onclick="calcInput('5')">
-
-                5
-
-            </button>
-
-
-            <button
-                type="button"
-                onclick="calcInput('6')">
-
-                6
-
-            </button>
-
-
-            <button
-                type="button"
-                onclick="calcInput('-')">
-
-                −
-
-            </button>
-
-
-            <button
-                type="button"
-                onclick="calcInput('1')">
-
-                1
-
-            </button>
-
-
-            <button
-                type="button"
-                onclick="calcInput('2')">
-
-                2
-
-            </button>
-
-
-            <button
-                type="button"
-                onclick="calcInput('3')">
-
-                3
-
-            </button>
-
-
-            <button
-                type="button"
-                onclick="calcInput('+')">
-
-                +
-
-            </button>
-
-
-            <button
-                type="button"
-                onclick="calcInput('0')">
-
-                0
-
-            </button>
-
-
-            <button
-                type="button"
-                onclick="calcInput('.')">
-
-                .
-
-            </button>
-
-
-            <button
-                type="button"
-                class="calc-equals"
-                onclick="calcEvaluate()">
-
-                =
-
-            </button>
-
-
-        </div>
-
-
-        <br>
-
-
-        <p
-            style="
-            font-size:12px;
-            color:#667085;
-            ">
-
-            Keyboard:
-            0–9, +, −, *, /, %, Enter and Escape.
-
-        </p>
-
-
-    </div>
-
-
-</section>
-
-
-<!-- =========================================================
-     SPREADSHEET
-     ========================================================= -->
-
-<section
-    class="section"
-    id="section-spreadsheet">
-
-
-    <div class="page-header">
-
-        <div>
-
-            <h1>
-                Excel Working
-            </h1>
-
-            <p>
-                Accounting working-paper grid.
-            </p>
-
-        </div>
-
-
-        <div>
-
-            <button
-                class="btn btn-primary"
-                onclick="addExcelRow()">
-
-                + Add Row
-
-            </button>
-
-
-            <button
-                class="btn"
-                onclick="exportCSV()">
-
-                Export CSV
-
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>#</th>
-                        <th>Description</th>
-                        <th>Qty</th>
-                        <th>Rate</th>
-                        <th>Tax %</th>
-                        <th>Taxable</th>
-                        <th>GST</th>
-                        <th>Total</th>
-                        <th>Action</th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody
-                    id="excelBody">
-                </tbody>
-
-
-                <tfoot>
-
-                    <tr>
-
-                        <th colspan="5">
-                            TOTAL
-                        </th>
-
-                        <th
-                            class="num"
-                            id="excelTaxableTotal">
-
-                            ₹0.00
-
-                        </th>
-
-                        <th
-                            class="num"
-                            id="excelGSTTotal">
-
-                            ₹0.00
-
-                        </th>
-
-                        <th
-                            class="num"
-                            id="excelGrandTotal">
-
-                            ₹0.00
-
-                        </th>
-
-                        <th></th>
-
-                    </tr>
-
-                </tfoot>
-
-            </table>
-
-        </div>
-
-    </div>
-
-
-</section>
-
-
-<!-- =========================================================
-     ACCOUNT GROUPS
-     ========================================================= -->
-
-<section
-    class="section"
-    id="section-groups">
-
-
-    <div class="page-header">
-
-        <div>
-
-            <h1>
-                Account Groups
-            </h1>
-
-            <p>
-                Accounting hierarchy.
-            </p>
-
-        </div>
-
-
-        <button
-            class="btn btn-primary"
-            onclick="openGroup()">
-
-            + Add Group
-
-        </button>
-
-    </div>
-
-
-    <div class="card">
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-
-                    <tr>
-                        <th>Group</th>
-                        <th>Nature</th>
-                    </tr>
-
-                </thead>
-
-                <tbody
-                    id="groupsBody">
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-
-</section>
-
-
-<!-- =========================================================
-     LEDGERS
-     ========================================================= -->
-
-<section
-    class="section"
-    id="section-ledgers">
-
-
-    <div class="page-header">
-
-        <div>
-
-            <h1>
-                Ledgers
-            </h1>
-
-            <p>
-                Chart of accounts.
-            </p>
-
-        </div>
-
-
-        <button
-            class="btn btn-primary"
-            onclick="openLedger()">
-
-            + Add Ledger
-
-        </button>
-
-    </div>
-
-
-    <div class="card">
-
-
-        <input
-            class="search"
-            id="ledgerSearch"
-            placeholder="Search ledger..."
-            oninput="renderLedgers()">
-
-
-        <br><br>
-
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-
-                    <tr>
-                        <th>Ledger</th>
-                        <th>Group</th>
-                        <th>Opening</th>
-                        <th>Type</th>
-                        <th>Balance</th>
-                    </tr>
-
-                </thead>
-
-                <tbody
-                    id="ledgersBody">
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-
-</section>
-
-
-<!-- =========================================================
-     PARTIES
-     ========================================================= -->
-
-<section
-    class="section"
-    id="section-parties">
-
-
-    <div class="page-header">
-
-        <div>
-
-            <h1>
-                Customers / Suppliers
-            </h1>
-
-            <p>
-                Party master.
-            </p>
-
-        </div>
-
-
-        <button
-            class="btn btn-primary"
-            onclick="openParty()">
-
-            + Add Party
-
-        </button>
-
-    </div>
-
-
-    <div class="card">
-
-
-        <input
-            class="search"
-            id="partySearch"
-            placeholder="Search party..."
-            oninput="renderParties()">
-
-
-        <br><br>
-
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-
-                    <tr>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>GSTIN</th>
-                        <th>State</th>
-                        <th>Phone</th>
-                    </tr>
-
-                </thead>
-
-                <tbody
-                    id="partiesBody">
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
+ </div>
 
 </section>
 
@@ -1837,2119 +720,730 @@ tr:last-child td {
      PHASE 3 — SALES
      ========================================================= -->
 
-<section
-    class="section"
-    id="section-sales">
+<section class="section" id="section-sales">
 
+ <div class="section-heading">
 
-    <div class="page-header">
+  <h1>Sales</h1>
 
-        <div>
+  <p>
+   Create sales invoices with automatic invoice numbering.
+  </p>
 
-            <h1>
-                Sales
-            </h1>
+ </div>
 
-            <p>
-                Sales invoices and output GST.
-            </p>
+ <div class="toolbar">
 
-        </div>
+  <button class="btn btn-primary"
+          onclick="openSaleModal()">
 
+   + New Sales Invoice
 
-        <button
-            class="btn btn-primary"
-            onclick="openSales()">
+  </button>
 
-            + New Sales
+ </div>
 
-        </button>
+ <div class="card">
 
-    </div>
+  <div class="table-wrap">
 
+   <table>
 
-    <div
-        id="salesMessage"
-        class="sales-message">
-    </div>
+    <thead>
 
+     <tr>
+      <th>Invoice No.</th>
+      <th>Date</th>
+      <th>Customer</th>
+      <th>Taxable</th>
+      <th>GST</th>
+      <th>Total</th>
+      <th>Outstanding</th>
+     </tr>
 
-    <div class="card">
+    </thead>
 
+    <tbody id="salesBody"></tbody>
 
-        <div class="sales-header">
+   </table>
 
-            <h3>
-                New Sales Invoice
-            </h3>
+  </div>
 
-
-            <div>
-
-                <button
-                    class="btn"
-                    onclick="clearSalesForm()">
-
-                    Clear
-
-                </button>
-
-
-                <button
-                    class="btn btn-primary"
-                    onclick="saveSales()">
-
-                    Save Invoice
-
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <div class="form-grid">
-
-
-            <div class="field">
-
-                <label>
-                    Invoice Number
-                </label>
-
-                <input
-                    id="saleInvoice"
-                    readonly>
-
-            </div>
-
-
-            <div class="field">
-
-                <label>
-                    Date
-                </label>
-
-                <input
-                    type="date"
-                    id="saleDate">
-
-            </div>
-
-
-            <div class="field">
-
-                <label>
-                    Customer / Party
-                </label>
-
-                <input
-                    id="saleParty"
-                    placeholder="Customer name">
-
-            </div>
-
-
-            <div class="field">
-
-                <label>
-                    Place of Supply
-                </label>
-
-                <input
-                    id="salePlace"
-                    placeholder="State">
-
-            </div>
-
-
-            <div class="field full">
-
-                <label>
-                    Narration
-                </label>
-
-                <textarea
-                    id="saleNarration"
-                    placeholder="Optional narration">
-                </textarea>
-
-            </div>
-
-
-        </div>
-
-
-        <div class="sales-items">
-
-
-            <div class="sales-items-header">
-
-                <h3>
-                    Invoice Items
-                </h3>
-
-
-                <button
-                    class="btn btn-primary"
-                    onclick="addSaleItem()">
-
-                    + Add Item
-
-                </button>
-
-            </div>
-
-
-            <div class="table-wrap">
-
-                <table
-                    class="sales-items-table">
-
-                    <thead>
-
-                        <tr>
-
-                            <th>Description</th>
-                            <th>Qty</th>
-                            <th>Rate</th>
-                            <th>Discount %</th>
-                            <th>GST %</th>
-                            <th>Taxable</th>
-                            <th>GST</th>
-                            <th>Total</th>
-                            <th>Action</th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody
-                        id="saleItemsBody">
-                    </tbody>
-
-                </table>
-
-            </div>
-
-
-        </div>
-
-
-        <div class="sales-summary">
-
-            <div class="sales-summary-box">
-
-
-                <div class="sales-summary-row">
-
-                    <span>
-                        Subtotal
-                    </span>
-
-                    <strong
-                        id="saleSubtotal">
-
-                        ₹0.00
-
-                    </strong>
-
-                </div>
-
-
-                <div class="sales-summary-row">
-
-                    <span>
-                        Discount
-                    </span>
-
-                    <strong
-                        id="saleDiscount">
-
-                        ₹0.00
-
-                    </strong>
-
-                </div>
-
-
-                <div class="sales-summary-row">
-
-                    <span>
-                        Taxable Amount
-                    </span>
-
-                    <strong
-                        id="saleTaxable">
-
-                        ₹0.00
-
-                    </strong>
-
-                </div>
-
-
-                <div class="sales-summary-row">
-
-                    <span>
-                        GST
-                    </span>
-
-                    <strong
-                        id="saleGST">
-
-                        ₹0.00
-
-                    </strong>
-
-                </div>
-
-
-                <div
-                    class="sales-summary-row total">
-
-                    <span>
-                        Grand Total
-                    </span>
-
-                    <strong
-                        id="saleGrandTotal">
-
-                        ₹0.00
-
-                    </strong>
-
-                </div>
-
-
-            </div>
-
-        </div>
-
-
-    </div>
-
-
-    <br>
-
-
-    <div class="card">
-
-        <div class="sales-header">
-
-            <h3>
-                Sales Register
-            </h3>
-
-            <span
-                id="salesCount"
-                style="
-                color:#667085;
-                font-size:13px;
-                ">
-
-                0 records
-
-            </span>
-
-        </div>
-
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>Invoice</th>
-                        <th>Date</th>
-                        <th>Party</th>
-                        <th>Taxable</th>
-                        <th>GST</th>
-                        <th>Total</th>
-                        <th>Action</th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody
-                    id="salesBody">
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
+ </div>
 
 </section>
 
 
-<!-- =========================================================
-     PURCHASE
-     ========================================================= -->
+<!-- PURCHASES -->
 
-<section
-    class="section"
-    id="section-purchase">
+<section class="section" id="section-purchases">
 
+ <div class="section-heading">
 
-    <div class="page-header">
+  <h1>Purchases</h1>
 
-        <div>
+  <p>
+   Record purchase bills with input GST.
+  </p>
 
-            <h1>
-                Purchase
-            </h1>
+ </div>
 
-            <p>
-                Purchase invoices and input GST.
-            </p>
+ <div class="toolbar">
 
-        </div>
+  <button class="btn btn-primary"
+          onclick="openPurchaseModal()">
 
+   + New Purchase
 
-        <button
-            class="btn btn-primary"
-            onclick="openPurchase()">
+  </button>
 
-            + New Purchase
+ </div>
 
-        </button>
+ <div class="card">
 
-    </div>
+  <div class="table-wrap">
 
+   <table>
 
-    <div class="card">
+    <thead>
 
-        <div
-            class="notice">
+     <tr>
+      <th>Bill No.</th>
+      <th>Date</th>
+      <th>Supplier</th>
+      <th>Taxable</th>
+      <th>GST</th>
+      <th>Total</th>
+      <th>Outstanding</th>
+     </tr>
 
-            Purchase transaction module will be
-            expanded after Sales testing.
+    </thead>
 
-        </div>
+    <tbody id="purchaseBody"></tbody>
 
+   </table>
 
-        <div class="table-wrap">
+  </div>
 
-            <table>
-
-                <thead>
-
-                    <tr>
-                        <th>Invoice</th>
-                        <th>Date</th>
-                        <th>Supplier</th>
-                        <th>Taxable</th>
-                        <th>GST</th>
-                        <th>Total</th>
-                    </tr>
-
-                </thead>
-
-                <tbody
-                    id="purchaseBody">
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
+ </div>
 
 </section>
 
 
-<!-- =========================================================
-     VOUCHERS
-     ========================================================= -->
+<!-- PARTIES -->
 
-<section
-    class="section"
-    id="section-vouchers">
+<section class="section" id="section-parties">
 
+ <div class="section-heading">
 
-    <div class="page-header">
+  <h1>Parties</h1>
 
-        <div>
+  <p>
+   Manage customers and suppliers.
+  </p>
 
-            <h1>
-                Vouchers
-            </h1>
+ </div>
 
-            <p>
-                Accounting voucher foundation.
-            </p>
+ <div class="toolbar">
 
-        </div>
+  <button class="btn btn-primary"
+          onclick="openPartyModal()">
 
+   + Add Party
 
-        <button
-            class="btn btn-primary"
-            onclick="openVoucher()">
+  </button>
 
-            + New Voucher
+ </div>
 
-        </button>
+ <div class="card">
 
-    </div>
+  <div class="table-wrap">
 
+   <table>
 
-    <div class="card">
+    <thead>
 
-        <div class="table-wrap">
+     <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>GSTIN</th>
+      <th>Phone</th>
+     </tr>
 
-            <table>
+    </thead>
 
-                <thead>
+    <tbody id="partyBody"></tbody>
 
-                    <tr>
+   </table>
 
-                        <th>Date</th>
-                        <th>Type</th>
-                        <th>Reference</th>
-                        <th>Debit</th>
-                        <th>Credit</th>
-                        <th>Amount</th>
+  </div>
 
-                    </tr>
-
-                </thead>
-
-                <tbody
-                    id="vouchersBody">
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
+ </div>
 
 </section>
 
 
-<!-- =========================================================
-     REPORT PLACEHOLDERS
-     ========================================================= -->
+<!-- VOUCHERS -->
 
-<section
-    class="section"
-    id="section-daybook">
+<section class="section" id="section-vouchers">
 
-    <div class="page-header">
+ <div class="section-heading">
 
-        <div>
-            <h1>Day Book</h1>
-            <p>Accounting entries.</p>
-        </div>
+  <h1>Vouchers</h1>
 
-    </div>
+  <p>
+   Post balanced double-entry vouchers.
+  </p>
 
-    <div class="card">
+ </div>
 
-        <div class="notice">
-            Day Book reporting will use saved
-            Phase 3 transactions.
-        </div>
+ <div class="toolbar">
 
-        <div class="table-wrap">
+  <button class="btn btn-primary"
+          onclick="openVoucherModal()">
 
-            <table>
+   + New Voucher
 
-                <thead>
+  </button>
 
-                    <tr>
-                        <th>Date</th>
-                        <th>Type</th>
-                        <th>Reference</th>
-                        <th>Amount</th>
-                    </tr>
+ </div>
 
-                </thead>
+ <div class="card">
 
-                <tbody
-                    id="daybookBody">
-                </tbody>
+  <div class="table-wrap">
 
-            </table>
+   <table>
 
-        </div>
+    <thead>
 
-    </div>
+     <tr>
+      <th>No.</th>
+      <th>Date</th>
+      <th>Type</th>
+      <th>Debit</th>
+      <th>Credit</th>
+      <th>Amount</th>
+     </tr>
 
-</section>
+    </thead>
 
+    <tbody id="voucherBody"></tbody>
 
-<section
-    class="section"
-    id="section-ledgerreport">
+   </table>
 
-    <div class="page-header">
+  </div>
 
-        <div>
-            <h1>Ledger Statement</h1>
-            <p>Ledger reporting.</p>
-        </div>
-
-    </div>
-
-    <div class="card">
-
-        <div class="notice">
-            Ledger reporting foundation is ready.
-        </div>
-
-        <div
-            id="ledgerSummary">
-        </div>
-
-    </div>
+ </div>
 
 </section>
 
 
-<section
-    class="section"
-    id="section-trialbalance">
+<!-- REPORTS -->
 
-    <div class="page-header">
+<section class="section" id="section-reports">
 
-        <div>
-            <h1>Trial Balance</h1>
-            <p>Debit and credit summary.</p>
-        </div>
+ <div class="section-heading">
 
-    </div>
+  <h1>Reports</h1>
 
-    <div class="grid grid-3">
+  <p>
+   Transaction summaries.
+  </p>
 
-        <div class="card">
+ </div>
 
-            <div class="metric-title">
-                Debit
-            </div>
+ <div class="grid grid-2">
 
-            <div
-                class="metric-value"
-                id="tbDebit">
+  <div class="card">
+   <b>Sales Revenue</b>
+   <div class="metric" id="reportSales">₹0.00</div>
+  </div>
 
-                ₹0.00
+  <div class="card">
+   <b>Purchase Value</b>
+   <div class="metric" id="reportPurchases">₹0.00</div>
+  </div>
 
-            </div>
+  <div class="card">
+   <b>Output GST</b>
+   <div class="metric" id="reportOutputGST">₹0.00</div>
+  </div>
 
-        </div>
+  <div class="card">
+   <b>Input GST</b>
+   <div class="metric" id="reportInputGST">₹0.00</div>
+  </div>
 
-
-        <div class="card">
-
-            <div class="metric-title">
-                Credit
-            </div>
-
-            <div
-                class="metric-value"
-                id="tbCredit">
-
-                ₹0.00
-
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="metric-title">
-                Difference
-            </div>
-
-            <div
-                class="metric-value"
-                id="tbDifference">
-
-                ₹0.00
-
-            </div>
-
-        </div>
-
-    </div>
+ </div>
 
 </section>
 
 
-<section
-    class="section"
-    id="section-profitloss">
+<!-- GST -->
 
-    <div class="page-header">
+<section class="section" id="section-gst">
 
-        <div>
-            <h1>Profit & Loss</h1>
-            <p>Income and expense summary.</p>
-        </div>
+ <div class="section-heading">
 
-    </div>
+  <h1>GST</h1>
 
-    <div class="grid grid-3">
+  <p>
+   GST summary from posted transactions.
+  </p>
 
-        <div class="card">
+ </div>
 
-            <div class="metric-title">
-                Revenue
-            </div>
+ <div class="card">
 
-            <div
-                class="metric-value"
-                id="plRevenue">
+  <table>
 
-                ₹0.00
+   <tbody>
 
-            </div>
+    <tr>
+     <th>Output GST on Sales</th>
+     <td class="right" id="gstOutput">
+      ₹0.00
+     </td>
+    </tr>
 
-        </div>
+    <tr>
+     <th>Input GST on Purchases</th>
+     <td class="right" id="gstInput">
+      ₹0.00
+     </td>
+    </tr>
 
+    <tr>
+     <th>Net GST</th>
+     <td class="right" id="gstNet">
+      ₹0.00
+     </td>
+    </tr>
 
-        <div class="card">
+   </tbody>
 
-            <div class="metric-title">
-                Expenses
-            </div>
+  </table>
 
-            <div
-                class="metric-value"
-                id="plExpenses">
-
-                ₹0.00
-
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="metric-title">
-                Net Profit / Loss
-            </div>
-
-            <div
-                class="metric-value"
-                id="plNet">
-
-                ₹0.00
-
-            </div>
-
-        </div>
-
-    </div>
+ </div>
 
 </section>
 
 
-<section
-    class="section"
-    id="section-balancesheet">
+<!-- OUTSTANDING -->
 
-    <div class="page-header">
+<section class="section" id="section-outstanding">
 
-        <div>
-            <h1>Balance Sheet</h1>
-            <p>Assets, liabilities and capital.</p>
-        </div>
+ <div class="section-heading">
 
-    </div>
+  <h1>Outstanding</h1>
 
-    <div class="grid grid-3">
+  <p>
+   Receivables and payables.
+  </p>
 
-        <div class="card">
+ </div>
 
-            <div class="metric-title">
-                Assets
-            </div>
+ <div class="grid grid-2">
 
-            <div
-                class="metric-value"
-                id="bsAssets">
+  <div class="card">
 
-                ₹0.00
+   <b>Customer Receivable</b>
 
-            </div>
+   <div class="metric" id="receivable">
+    ₹0.00
+   </div>
 
-        </div>
+  </div>
 
+  <div class="card">
 
-        <div class="card">
+   <b>Supplier Payable</b>
 
-            <div class="metric-title">
-                Liabilities
-            </div>
+   <div class="metric" id="payable">
+    ₹0.00
+   </div>
 
-            <div
-                class="metric-value"
-                id="bsLiabilities">
+  </div>
 
-                ₹0.00
-
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="metric-title">
-                Capital
-            </div>
-
-            <div
-                class="metric-value"
-                id="bsCapital">
-
-                ₹0.00
-
-            </div>
-
-        </div>
-
-    </div>
+ </div>
 
 </section>
 
 
-<section
-    class="section"
-    id="section-gst">
+<!-- SYSTEM CONTROLS -->
 
-    <div class="page-header">
+<section class="section" id="section-controls">
 
-        <div>
-            <h1>GST Summary</h1>
-            <p>Input and output GST.</p>
-        </div>
+ <div class="section-heading">
 
-    </div>
+  <h1>System Controls</h1>
 
-    <div class="grid grid-3">
+  <p>
+   Diagnostics and local data controls.
+  </p>
 
-        <div class="card">
+ </div>
 
-            <div class="metric-title">
-                Output GST
-            </div>
+ <div class="card">
 
-            <div
-                class="metric-value"
-                id="gstOutput">
+  <div id="diagnostics"
+       class="notice success">
+  </div>
 
-                ₹0.00
+ </div>
 
-            </div>
+ <div class="toolbar">
 
-        </div>
+  <button class="btn"
+          onclick="backupData()">
+   Export Backup
+  </button>
 
+  <button class="btn btn-danger"
+          onclick="clearAllData()">
+   Clear All Data
+  </button>
 
-        <div class="card">
-
-            <div class="metric-title">
-                Input GST
-            </div>
-
-            <div
-                class="metric-value"
-                id="gstInput">
-
-                ₹0.00
-
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="metric-title">
-                Net GST
-            </div>
-
-            <div
-                class="metric-value"
-                id="gstNet">
-
-                ₹0.00
-
-            </div>
-
-        </div>
-
-    </div>
+ </div>
 
 </section>
-
-
-<section
-    class="section"
-    id="section-outstanding">
-
-    <div class="page-header">
-
-        <div>
-            <h1>Outstanding</h1>
-            <p>Receivables and payables.</p>
-        </div>
-
-    </div>
-
-    <div class="grid grid-2">
-
-        <div class="card">
-
-            <div class="metric-title">
-                Receivables
-            </div>
-
-            <div
-                class="metric-value"
-                id="outReceivable">
-
-                ₹0.00
-
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="metric-title">
-                Payables
-            </div>
-
-            <div
-                class="metric-value"
-                id="outPayable">
-
-                ₹0.00
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =========================================================
-     COMPANY
-     ========================================================= -->
-
-<section
-    class="section"
-    id="section-company">
-
-    <div class="page-header">
-
-        <div>
-
-            <h1>
-                Company Setup
-            </h1>
-
-            <p>
-                Business identity.
-            </p>
-
-        </div>
-
-
-        <button
-            class="btn btn-primary"
-            onclick="saveCompany()">
-
-            Save Company
-
-        </button>
-
-    </div>
-
-
-    <div class="card">
-
-        <div class="form-grid">
-
-            <div class="field">
-
-                <label>
-                    Company Name
-                </label>
-
-                <input
-                    id="companyName"
-                    placeholder="Company name">
-
-            </div>
-
-
-            <div class="field">
-
-                <label>
-                    GSTIN
-                </label>
-
-                <input
-                    id="companyGSTIN"
-                    placeholder="GSTIN">
-
-            </div>
-
-
-            <div class="field">
-
-                <label>
-                    Phone
-                </label>
-
-                <input
-                    id="companyPhone"
-                    placeholder="Phone">
-
-            </div>
-
-
-            <div class="field">
-
-                <label>
-                    Email
-                </label>
-
-                <input
-                    id="companyEmail"
-                    placeholder="Email">
-
-            </div>
-
-
-            <div class="field full">
-
-                <label>
-                    Address
-                </label>
-
-                <textarea
-                    id="companyAddress"
-                    placeholder="Business address">
-                </textarea>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =========================================================
-     BACKUP
-     ========================================================= -->
-
-<section
-    class="section"
-    id="section-backup">
-
-    <div class="page-header">
-
-        <div>
-
-            <h1>
-                Backup / Restore
-            </h1>
-
-            <p>
-                Local application data.
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <button
-            class="btn btn-primary"
-            onclick="downloadBackup()">
-
-            Download Backup
-
-        </button>
-
-
-        <label
-            class="btn"
-            style="
-            display:inline-block;
-            margin-left:8px;
-            ">
-
-            Restore Backup
-
-            <input
-                type="file"
-                id="restoreFile"
-                accept=".json"
-                hidden>
-
-        </label>
-
-
-        <br><br>
-
-
-        <div
-            id="backupMessage"
-            class="notice">
-
-            Backup contains locally stored
-            BusinessDesk data.
-
-        </div>
-
-    </div>
-
-</section>
-
 
 </div>
-
 </main>
-
 </div>
 
 
 <!-- =========================================================
-     MODALS
+     MODAL
      ========================================================= -->
 
+<div class="modal-backdrop" id="modalBackdrop">
 
-<div
-    class="modal"
-    id="groupModal">
+ <div class="modal">
 
-    <div class="modal-box">
+  <div class="modal-head">
 
-        <div class="modal-head">
+   <h2 id="modalTitle"></h2>
 
-            <h3>
-                Add Account Group
-            </h3>
+   <button class="close"
+           onclick="closeModal()">
+    ×
+   </button>
 
-            <button
-                class="close"
-                onclick="closeModal('groupModal')">
+  </div>
 
-                ×
+  <div id="modalBody"></div>
 
-            </button>
-
-        </div>
-
-
-        <div class="form-grid">
-
-            <div class="field">
-
-                <label>
-                    Group Name
-                </label>
-
-                <input
-                    id="groupName">
-
-            </div>
-
-
-            <div class="field">
-
-                <label>
-                    Nature
-                </label>
-
-                <select id="groupNature">
-
-                    <option>
-                        Asset
-                    </option>
-
-                    <option>
-                        Liability
-                    </option>
-
-                    <option>
-                        Income
-                    </option>
-
-                    <option>
-                        Expense
-                    </option>
-
-                </select>
-
-            </div>
-
-        </div>
-
-
-        <div class="form-actions">
-
-            <button
-                class="btn"
-                onclick="closeModal('groupModal')">
-
-                Cancel
-
-            </button>
-
-
-            <button
-                class="btn btn-primary"
-                onclick="saveGroup()">
-
-                Save
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<div
-    class="modal"
-    id="ledgerModal">
-
-    <div class="modal-box">
-
-        <div class="modal-head">
-
-            <h3>
-                Add Ledger
-            </h3>
-
-            <button
-                class="close"
-                onclick="closeModal('ledgerModal')">
-
-                ×
-
-            </button>
-
-        </div>
-
-
-        <div class="form-grid">
-
-            <div class="field">
-
-                <label>
-                    Ledger Name
-                </label>
-
-                <input
-                    id="ledgerName">
-
-            </div>
-
-
-            <div class="field">
-
-                <label>
-                    Group
-                </label>
-
-                <input
-                    id="ledgerGroup"
-                    placeholder="e.g. Current Assets">
-
-            </div>
-
-
-            <div class="field">
-
-                <label>
-                    Opening Balance
-                </label>
-
-                <input
-                    type="number"
-                    id="ledgerOpening"
-                    value="0"
-                    step="0.01">
-
-            </div>
-
-
-            <div class="field">
-
-                <label>
-                    Opening Type
-                </label>
-
-                <select
-                    id="ledgerOpeningType">
-
-                    <option value="Dr">
-                        Debit
-                    </option>
-
-                    <option value="Cr">
-                        Credit
-                    </option>
-
-                </select>
-
-            </div>
-
-        </div>
-
-
-        <div class="form-actions">
-
-            <button
-                class="btn"
-                onclick="closeModal('ledgerModal')">
-
-                Cancel
-
-            </button>
-
-
-            <button
-                class="btn btn-primary"
-                onclick="saveLedger()">
-
-                Save
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<div
-    class="modal"
-    id="partyModal">
-
-    <div class="modal-box">
-
-        <div class="modal-head">
-
-            <h3>
-                Add Party
-            </h3>
-
-            <button
-                class="close"
-                onclick="closeModal('partyModal')">
-
-                ×
-
-            </button>
-
-        </div>
-
-
-        <div class="form-grid">
-
-            <div class="field">
-
-                <label>
-                    Name
-                </label>
-
-                <input
-                    id="partyName">
-
-            </div>
-
-
-            <div class="field">
-
-                <label>
-                    Type
-                </label>
-
-                <select id="partyType">
-
-                    <option value="Customer">
-                        Customer
-                    </option>
-
-                    <option value="Supplier">
-                        Supplier
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div class="field">
-
-                <label>
-                    GSTIN
-                </label>
-
-                <input
-                    id="partyGSTIN">
-
-            </div>
-
-
-            <div class="field">
-
-                <label>
-                    State
-                </label>
-
-                <input
-                    id="partyState">
-
-            </div>
-
-
-            <div class="field">
-
-                <label>
-                    Phone
-                </label>
-
-                <input
-                    id="partyPhone">
-
-            </div>
-
-        </div>
-
-
-        <div class="form-actions">
-
-            <button
-                class="btn"
-                onclick="closeModal('partyModal')">
-
-                Cancel
-
-            </button>
-
-
-            <button
-                class="btn btn-primary"
-                onclick="saveParty()">
-
-                Save
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<div
-    class="modal"
-    id="salesModal">
-
-    <div class="modal-box">
-
-        <div class="modal-head">
-
-            <h3>
-                New Sales Invoice
-            </h3>
-
-            <button
-                class="close"
-                onclick="closeModal('salesModal')">
-
-                ×
-
-            </button>
-
-        </div>
-
-
-        <p
-            style="
-            color:#667085;
-            font-size:13px;
-            ">
-
-            The Sales section is ready for invoice entry.
-
-        </p>
-
-        <br>
-
-        <button
-            class="btn btn-primary"
-            onclick="
-            closeModal('salesModal');
-            navigateToSection('sales');
-            ">
-
-            Open Sales
-
-        </button>
-
-    </div>
-
-</div>
-
-
-<div
-    class="modal"
-    id="purchaseModal">
-
-    <div class="modal-box">
-
-        <div class="modal-head">
-
-            <h3>
-                Purchase
-            </h3>
-
-            <button
-                class="close"
-                onclick="closeModal('purchaseModal')">
-
-                ×
-
-            </button>
-
-        </div>
-
-
-        <div class="notice">
-            Purchase entry will be implemented in the next
-            accounting module.
-        </div>
-
-    </div>
-
-</div>
-
-
-<div
-    class="modal"
-    id="voucherModal">
-
-    <div class="modal-box">
-
-        <div class="modal-head">
-
-            <h3>
-                Voucher
-            </h3>
-
-            <button
-                class="close"
-                onclick="closeModal('voucherModal')">
-
-                ×
-
-            </button>
-
-        </div>
-
-
-        <div class="notice">
-            Voucher entry foundation is ready.
-        </div>
-
-    </div>
+ </div>
 
 </div>
 
 
 <script>
 
+"use strict";
+
+
 /* =========================================================
-   PHASE 1 — APPLICATION STATE
+   PHASE 1 — CORE DATABASE
    ========================================================= */
 
-const AppState = {
+const STORAGE_KEY =
+ "businessdesk_phase123_v2";
 
-    currentSection:
-        "dashboard",
 
-    initialized:
-        false
+function defaultDB(){
+
+ return {
+  sales:[],
+  purchases:[],
+  parties:[],
+  vouchers:[],
+  journal:[],
+  calculatorHistory:[]
+ };
+
+}
+
+
+function loadDB(){
+
+ try{
+
+  const raw =
+   localStorage.getItem(STORAGE_KEY);
+
+  if(!raw)
+   return defaultDB();
+
+  const saved =
+   JSON.parse(raw);
+
+  const fresh =
+   defaultDB();
+
+  Object.keys(fresh).forEach(k=>{
+
+   if(Array.isArray(saved[k]))
+    fresh[k]=saved[k];
+
+  });
+
+  return fresh;
+
+ }catch(error){
+
+  return defaultDB();
+
+ }
+
+}
+
+
+let db=loadDB();
+
+
+function saveDB(){
+
+ localStorage.setItem(
+  STORAGE_KEY,
+  JSON.stringify(db)
+ );
+
+}
+
+
+function money(value){
+
+ return "₹"+Number(value||0)
+  .toLocaleString(
+   "en-IN",
+   {
+    minimumFractionDigits:2,
+    maximumFractionDigits:2
+   }
+  );
+
+}
+
+
+function num(value){
+
+ const n=Number(value);
+
+ return Number.isFinite(n)
+  ? n
+  : 0;
+
+}
+
+
+function esc(value){
+
+ return String(value??"")
+  .replace(
+   /[&<>"']/g,
+   function(match){
+
+    return {
+     "&":"&amp;",
+     "<":"&lt;",
+     ">":"&gt;",
+     '"':"&quot;",
+     "'":"&#039;"
+    }[match];
+
+   }
+  );
+
+}
+
+
+function uid(prefix){
+
+ return prefix+
+  "_"+
+  Date.now().toString(36)+
+  "_"+
+  Math.random()
+   .toString(36)
+   .slice(2,8);
+
+}
+
+
+function today(){
+
+ return new Date()
+  .toISOString()
+  .slice(0,10);
+
+}
+
+
+function nextNumber(
+ prefix,
+ records,
+ field
+){
+
+ let max=0;
+
+ records.forEach(record=>{
+
+  const match =
+   String(record[field]||"")
+   .match(
+    new RegExp(
+     "^"+
+     prefix.replace(
+      /[.*+?^${}()|[\]\\]/g,
+      "\\$&"
+     )+
+     "(\\d+)$",
+     "i"
+    )
+   );
+
+  if(match){
+
+   max=
+    Math.max(
+     max,
+     Number(match[1])
+    );
+
+  }
+
+ });
+
+ return prefix+
+  String(max+1)
+   .padStart(4,"0");
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+const titles={
+
+ dashboard:[
+  "Dashboard",
+  "BusinessDesk Enterprise Suite"
+ ],
+
+ calculator:[
+  "Calculator",
+  "Professional Calculator"
+ ],
+
+ sales:[
+  "Sales",
+  "Sales Management"
+ ],
+
+ purchases:[
+  "Purchases",
+  "Purchase Management"
+ ],
+
+ parties:[
+  "Parties",
+  "Party Management"
+ ],
+
+ vouchers:[
+  "Vouchers",
+  "Voucher Management"
+ ],
+
+ reports:[
+  "Reports",
+  "Business Reports"
+ ],
+
+ gst:[
+  "GST",
+  "GST Management"
+ ],
+
+ outstanding:[
+  "Outstanding",
+  "Outstanding Balances"
+ ],
+
+ controls:[
+  "System Controls",
+  "Application Control Center"
+ ]
 
 };
 
 
-/* =========================================================
-   STORAGE KEYS
-   ========================================================= */
+document
+ .querySelectorAll(".nav-button")
+ .forEach(button=>{
 
-const STORAGE = {
-
-    sales:
-        "businessdesk_phase3_sales",
-
-    parties:
-        "businessdesk_phase3_parties",
-
-    ledgers:
-        "businessdesk_phase3_ledgers",
-
-    groups:
-        "businessdesk_phase3_groups",
-
-    purchases:
-        "businessdesk_phase3_purchases",
-
-    vouchers:
-        "businessdesk_phase3_vouchers",
-
-    company:
-        "businessdesk_phase3_company",
-
-    excel:
-        "businessdesk_phase2_excel"
-
-};
-
-
-/* =========================================================
-   PHASE 3 STATE
-   ========================================================= */
-
-const DataState = {
-
-    sales: [],
-
-    parties: [],
-
-    ledgers: [],
-
-    groups: [],
-
-    purchases: [],
-
-    vouchers: [],
-
-    excel: [],
-
-    company: {}
-
-};
-
-
-/* =========================================================
-   GENERIC STORAGE
-   ========================================================= */
-
-function loadStorage(
-    key,
-    fallback
-) {
-
-    try {
-
-        const value =
-            localStorage.getItem(key);
-
-
-        if (!value) {
-
-            return fallback;
-
-        }
-
-
-        const parsed =
-            JSON.parse(value);
-
-
-        return parsed;
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Storage load error:",
-            error
-        );
-
-        return fallback;
-
-    }
-
-}
-
-
-function saveStorage(
-    key,
-    value
-) {
-
-    try {
-
-        localStorage.setItem(
-            key,
-            JSON.stringify(value)
-        );
-
-        return true;
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Storage save error:",
-            error
-        );
-
-        return false;
-
-    }
-
-}
-
-
-/* =========================================================
-   UTILITY
-   ========================================================= */
-
-function numberValue(value) {
-
-    const number =
-        Number(value);
-
-
-    return Number.isFinite(number)
-        ? number
-        : 0;
-
-}
-
-
-function money(value) {
-
-    return (
-        "₹" +
-        numberValue(value)
-            .toLocaleString(
-                "en-IN",
-                {
-                    minimumFractionDigits:
-                        2,
-
-                    maximumFractionDigits:
-                        2
-                }
-            )
+  button.addEventListener(
+   "click",
+   ()=>{
+    navigate(
+     button.dataset.section
     );
-
-}
-
-
-function today() {
-
-    const d =
-        new Date();
-
-
-    const year =
-        d.getFullYear();
-
-
-    const month =
-        String(
-            d.getMonth() + 1
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const day =
-        String(
-            d.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    return (
-        year +
-        "-" +
-        month +
-        "-" +
-        day
-    );
-
-}
-
-
-function escapeHTML(value) {
-
-    return String(value)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
-/* =========================================================
-   PHASE 1 — NAVIGATION
-   ========================================================= */
-
-function initializeNavigation() {
-
-    const buttons =
-        document.querySelectorAll(
-            ".nav-btn[data-section]"
-        );
-
-
-    buttons.forEach(
-        function(button) {
-
-            button.addEventListener(
-                "click",
-                function() {
-
-                    navigateToSection(
-                        button.dataset.section
-                    );
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-function navigateToSection(
-    sectionName
-) {
-
-    const target =
-        document.getElementById(
-            "section-" +
-            sectionName
-        );
-
-
-    if (!target) {
-
-        console.warn(
-            "Section not found:",
-            sectionName
-        );
-
-        return;
-
-    }
-
-
-    const sections =
-        document.querySelectorAll(
-            ".section"
-        );
-
-
-    sections.forEach(
-        function(section) {
-
-            section.classList.toggle(
-                "active",
-                section === target
-            );
-
-        }
-    );
-
-
-    const buttons =
-        document.querySelectorAll(
-            ".nav-btn"
-        );
-
-
-    buttons.forEach(
-        function(button) {
-
-            button.classList.toggle(
-                "active",
-                button.dataset.section ===
-                sectionName
-            );
-
-        }
-    );
-
-
-    AppState.currentSection =
-        sectionName;
-
-
-    updatePageTitle(
-        sectionName
-    );
-
-
-    const sidebar =
-        document.getElementById(
-            "sidebar"
-        );
-
-
-    if (sidebar) {
-
-        sidebar.classList.remove(
-            "open"
-        );
-
-    }
-
-
-    refreshCurrentSection(
-        sectionName
-    );
-
-}
-
-
-function updatePageTitle(
-    sectionName
-) {
-
-    const title =
-        document.getElementById(
-            "pageTitle"
-        );
-
-
-    const titles = {
-
-        dashboard:
-            "Dashboard",
-
-        calculator:
-            "Calculator",
-
-        spreadsheet:
-            "Excel Working",
-
-        groups:
-            "Account Groups",
-
-        ledgers:
-            "Ledgers",
-
-        parties:
-            "Customers / Suppliers",
-
-        sales:
-            "Sales",
-
-        purchase:
-            "Purchase",
-
-        vouchers:
-            "Vouchers",
-
-        daybook:
-            "Day Book",
-
-        ledgerreport:
-            "Ledger Statement",
-
-        trialbalance:
-            "Trial Balance",
-
-        profitloss:
-            "Profit & Loss",
-
-        balancesheet:
-            "Balance Sheet",
-
-        gst:
-            "GST Summary",
-
-        outstanding:
-            "Outstanding",
-
-        company:
-            "Company Setup",
-
-        backup:
-            "Backup / Restore"
-
-    };
-
-
-    if (title) {
-
-        title.textContent =
-            titles[sectionName] ||
-            "BusinessDesk";
-
-    }
-
-}
-
-
-function refreshCurrentSection(
-    section
-) {
-
-    if (
-        section ===
-        "dashboard"
-    ) {
-
-        updateDashboard();
-
-    }
-
-
-    if (
-        section ===
-        "sales"
-    ) {
-
-        renderSales();
-
-    }
-
-
-    if (
-        section ===
-        "parties"
-    ) {
-
-        renderParties();
-
-    }
-
-
-    if (
-        section ===
-        "ledgers"
-    ) {
-
-        renderLedgers();
-
-    }
-
-
-    if (
-        section ===
-        "groups"
-    ) {
-
-        renderGroups();
-
-    }
-
-
-    if (
-        section ===
-        "spreadsheet"
-    ) {
-
-        renderExcel();
-
-    }
-
-}
-
-
-/* =========================================================
-   MOBILE MENU
-   ========================================================= */
-
-function initializeMenu() {
-
-    const button =
-        document.getElementById(
-            "menuBtn"
-        );
-
-
-    const sidebar =
-        document.getElementById(
-            "sidebar"
-        );
-
-
-    if (
-        !button ||
-        !sidebar
-    ) {
-
-        return;
-
-    }
-
-
-    button.addEventListener(
-        "click",
-        function() {
-
-            sidebar.classList.toggle(
-                "open"
-            );
-
-        }
-    );
+   }
+  );
+
+ });
+
+
+function navigate(name){
+
+ const target =
+  document.getElementById(
+   "section-"+name
+  );
+
+ if(!target)
+  return;
+
+ document
+  .querySelectorAll(".section")
+  .forEach(section=>{
+   section.classList.remove(
+    "active"
+   );
+  });
+
+ document
+  .querySelectorAll(".nav-button")
+  .forEach(button=>{
+   button.classList.toggle(
+    "active",
+    button.dataset.section===name
+   );
+  });
+
+ target.classList.add("active");
+
+ const title =
+  titles[name] ||
+  [
+   "BusinessDesk",
+   "Enterprise Suite"
+  ];
+
+ document.getElementById(
+  "headerTitle"
+ ).textContent=title[0];
+
+ document.getElementById(
+  "headerSubtitle"
+ ).textContent=title[1];
+
+ refreshAll();
 
 }
 
@@ -3958,3689 +1452,2425 @@ function initializeMenu() {
    PHASE 2 — CALCULATOR
    ========================================================= */
 
-const CalcState = {
+const calc={
 
-    expression:
-        "",
+ current:"0",
 
-    justEvaluated:
-        false
+ previous:null,
+
+ operator:null,
+
+ waiting:false,
+
+ expression:"",
+
+ history:[]
 
 };
 
 
-function calcDisplay() {
+function fmt(value){
 
-    const element =
-        document.getElementById(
-            "calcDisplay"
-        );
+ if(!Number.isFinite(value))
+  return "Error";
+
+ if(Object.is(value,-0))
+  value=0;
+
+ return String(
+  Math.round(
+   (value+Number.EPSILON)*
+   10000000000
+  )/
+  10000000000
+ );
+
+}
 
 
-    if (element) {
+function calcDisplay(){
 
-        element.value =
-            CalcState.expression ||
-            "0";
+ document.getElementById(
+  "calcValue"
+ ).textContent=
+  calc.current;
 
-    }
+ document.getElementById(
+  "calcHistory"
+ ).textContent=
+  calc.expression||"";
+
+}
+
+
+function calcClear(){
+
+ calc.current="0";
+
+ calc.previous=null;
+
+ calc.operator=null;
+
+ calc.waiting=false;
+
+ calc.expression="";
+
+ calcDisplay();
+
+}
+
+
+function calcInput(value){
+
+ if(calc.current==="Error")
+  calcClear();
+
+ if(calc.waiting){
+
+  calc.current=
+   String(value);
+
+  calc.waiting=false;
+
+ }else if(calc.current==="0"){
+
+  calc.current=
+   String(value);
+
+ }else{
+
+  calc.current+=
+   String(value);
+
+ }
+
+ calcDisplay();
+
+}
+
+
+function calcDot(){
+
+ if(calc.current==="Error")
+  calcClear();
+
+ if(calc.waiting){
+
+  calc.current="0.";
+
+  calc.waiting=false;
+
+ }else if(
+  !calc.current.includes(".")
+ ){
+
+  calc.current+=".";
+
+ }
+
+ calcDisplay();
+
+}
+
+
+function operate(a,b,op){
+
+ if(op==="+")
+  return a+b;
+
+ if(op==="-")
+  return a-b;
+
+ if(op==="*")
+  return a*b;
+
+ if(op==="/")
+  return b===0
+   ? null
+   : a/b;
+
+ return null;
+
+}
+
+
+function symbol(op){
+
+ return {
+
+  "+":"+",
+  "-":"−",
+  "*":"×",
+  "/":"÷"
+
+ }[op]||op;
+
+}
+
+
+function calcSetOp(op){
+
+ if(calc.current==="Error")
+  return;
+
+ const value=
+  num(calc.current);
+
+ if(
+  calc.operator!==null &&
+  calc.previous!==null &&
+  !calc.waiting
+ ){
+
+  const result=
+   operate(
+    calc.previous,
+    value,
+    calc.operator
+   );
+
+  if(result===null){
+
+   calcError();
+
+   return;
+
+  }
+
+  calc.previous=result;
+
+  calc.current=
+   fmt(result);
+
+ }else{
+
+  calc.previous=value;
+
+ }
+
+ calc.operator=op;
+
+ calc.waiting=true;
+
+ calc.expression=
+  fmt(calc.previous)+
+  " "+
+  symbol(op);
+
+ calcDisplay();
 
 }
 
 
 /*
-    Percentage behaviour:
+==========================================================
+FIXED PERCENTAGE LOGIC
+==========================================================
 
-    100 + 10% = 110
-    100 - 10% = 90
-    100 * 10% = 10
-    100 / 10% = 1000
-
-    Standalone:
-    25% = 0.25
+100 + 10% = 110
+100 - 10% = 90
+100 × 10% = 10
+100 ÷ 10% = 1000
+10%       = 0.1
 */
 
-function calcConvertPercent(
-    expression
-) {
+function calcPercent(){
 
-    return expression.replace(
-        /(\d+(?:\.\d+)?)%/g,
-        function(
-            match,
-            number
-        ) {
+ if(calc.current==="Error")
+  return;
 
-            return (
-                "(" +
-                number +
-                "/100)"
-            );
+ const rate=
+  num(calc.current);
 
-        }
+
+ /* Standalone percentage */
+
+ if(
+  calc.operator===null ||
+  calc.previous===null
+ ){
+
+  calc.current=
+   fmt(rate/100);
+
+  calc.waiting=true;
+
+  calc.expression=
+   fmt(rate)+"%";
+
+  calcDisplay();
+
+  return;
+
+ }
+
+
+ const base=
+  calc.previous;
+
+
+ /*
+  Addition/subtraction:
+  percentage means percentage
+  OF the base.
+ */
+
+ if(
+  calc.operator==="+" ||
+  calc.operator==="-"
+ ){
+
+  calc.current=
+   fmt(
+    base*rate/100
+   );
+
+ }else{
+
+  /*
+   Multiplication/division:
+   convert percentage to decimal.
+  */
+
+  calc.current=
+   fmt(rate/100);
+
+ }
+
+ calc.waiting=false;
+
+ calc.expression=
+  fmt(base)+
+  " "+
+  symbol(calc.operator)+
+  " "+
+  fmt(rate)+
+  "%";
+
+ calcDisplay();
+
+}
+
+
+function calcEquals(){
+
+ if(
+  calc.operator===null ||
+  calc.previous===null ||
+  calc.current==="Error"
+ )
+  return;
+
+ const a=
+  calc.previous;
+
+ const b=
+  num(calc.current);
+
+ const op=
+  calc.operator;
+
+ const result=
+  operate(a,b,op);
+
+ if(result===null){
+
+  calcError();
+
+  return;
+
+ }
+
+ const expression=
+  (
+   calc.expression ||
+   fmt(a)+" "+symbol(op)
+  )+
+  " "+
+  fmt(b)+
+  " =";
+
+ calc.current=
+  fmt(result);
+
+ calc.history.unshift({
+
+  expression,
+
+  result:calc.current
+
+ });
+
+ calc.history=
+  calc.history.slice(0,20);
+
+ db.calculatorHistory=
+  calc.history;
+
+ saveDB();
+
+ calc.previous=null;
+
+ calc.operator=null;
+
+ calc.waiting=true;
+
+ calc.expression=
+  expression;
+
+ calcDisplay();
+
+ renderCalcHistory();
+
+}
+
+
+function calcBack(){
+
+ if(
+  calc.waiting ||
+  calc.current==="Error"
+ )
+  return;
+
+ if(
+  calc.current.length<=1 ||
+  calc.current==="-"
+ ){
+
+  calc.current="0";
+
+ }else{
+
+  calc.current=
+   calc.current.slice(0,-1);
+
+ }
+
+ calcDisplay();
+
+}
+
+
+function calcSign(){
+
+ if(
+  calc.current==="0" ||
+  calc.current==="Error"
+ )
+  return;
+
+ calc.current=
+  calc.current.startsWith("-")
+   ? calc.current.slice(1)
+   : "-"+calc.current;
+
+ calcDisplay();
+
+}
+
+
+function calcError(){
+
+ calc.current="Error";
+
+ calc.previous=null;
+
+ calc.operator=null;
+
+ calc.waiting=true;
+
+ calc.expression=
+  "Calculation error";
+
+ calcDisplay();
+
+}
+
+
+document
+ .querySelector(".calc-grid")
+ .addEventListener(
+  "click",
+  event=>{
+
+   const button=
+    event.target.closest(
+     "button"
     );
 
-}
+   if(!button)
+    return;
 
 
-function calcEvaluateExpression(
-    expression
-) {
+   if(
+    button.dataset.n!==undefined
+   ){
 
-    let prepared =
-        calcConvertPercent(
-            expression
-        );
-
-
-    if (
-        !/^[0-9+\-*/().\s]+$/.test(
-            prepared
-        )
-    ) {
-
-        throw new Error(
-            "Invalid expression"
-        );
-
-    }
-
-
-    if (
-        /[+\-*/.]$/.test(
-            prepared.trim()
-        )
-    ) {
-
-        throw new Error(
-            "Incomplete expression"
-        );
-
-    }
-
-
-    const result =
-        Function(
-            '"use strict";return (' +
-            prepared +
-            ')'
-        )();
-
-
-    if (
-        !Number.isFinite(
-            result
-        )
-    ) {
-
-        throw new Error(
-            "Invalid result"
-        );
-
-    }
-
-
-    return result;
-
-}
-
-
-function calcInput(
-    value
-) {
-
-    if (
-        CalcState.justEvaluated &&
-        /[0-9.]/.test(value)
-    ) {
-
-        CalcState.expression =
-            "";
-
-        CalcState.justEvaluated =
-            false;
-
-    }
-
-
-    if (
-        CalcState.justEvaluated &&
-        /[+\-*/]/.test(value)
-    ) {
-
-        CalcState.justEvaluated =
-            false;
-
-    }
-
-
-    const last =
-        CalcState.expression.slice(
-            -1
-        );
-
-
-    if (
-        /[+\-*/]/.test(value) &&
-        /[+\-*/]/.test(last)
-    ) {
-
-        CalcState.expression =
-            CalcState.expression.slice(
-                0,
-                -1
-            );
-
-    }
-
-
-    if (
-        value === "."
-    ) {
-
-        const parts =
-            CalcState.expression.split(
-                /[+\-*/]/
-            );
-
-
-        const current =
-            parts[parts.length - 1];
-
-
-        if (
-            current.includes(".")
-        ) {
-
-            return;
-
-        }
-
-    }
-
-
-    CalcState.expression +=
-        value;
-
-
-    calcDisplay();
-
-}
-
-
-function calcPercent() {
-
-    if (
-        !CalcState.expression
-    ) {
-
-        return;
-
-    }
-
-
-    const match =
-        CalcState.expression.match(
-            /(\d+(?:\.\d+)?)$/
-        );
-
-
-    if (!match) {
-
-        return;
-
-    }
-
-
-    const number =
-        Number(
-            match[1]
-        );
-
-
-    if (
-        !Number.isFinite(number)
-    ) {
-
-        return;
-
-    }
-
-
-    const replacement =
-        String(
-            number / 100
-        );
-
-
-    CalcState.expression =
-        CalcState.expression.slice(
-            0,
-            match.index
-        ) +
-        replacement;
-
-
-    CalcState.justEvaluated =
-        false;
-
-
-    calcDisplay();
-
-}
-
-
-function calcEvaluate() {
-
-    if (
-        !CalcState.expression
-    ) {
-
-        return;
-
-    }
-
-
-    try {
-
-        const result =
-            calcEvaluateExpression(
-                CalcState.expression
-            );
-
-
-        CalcState.expression =
-            String(
-                Number(
-                    result.toFixed(12)
-                )
-            );
-
-
-        CalcState.justEvaluated =
-            true;
-
-
-        calcDisplay();
-
-    }
-
-    catch (error) {
-
-        CalcState.expression =
-            "Error";
-
-
-        calcDisplay();
-
-
-        window.setTimeout(
-            function() {
-
-                CalcState.expression =
-                    "";
-
-                CalcState.justEvaluated =
-                    false;
-
-                calcDisplay();
-
-            },
-            900
-        );
-
-    }
-
-}
-
-
-function calcClear() {
-
-    CalcState.expression =
-        "";
-
-    CalcState.justEvaluated =
-        false;
-
-    calcDisplay();
-
-}
-
-
-function calcBack() {
-
-    if (
-        CalcState.justEvaluated
-    ) {
-
-        calcClear();
-
-        return;
-
-    }
-
-
-    CalcState.expression =
-        CalcState.expression.slice(
-            0,
-            -1
-        );
-
-
-    calcDisplay();
-
-}
-
-
-function initializeCalculator() {
-
-    document.addEventListener(
-        "keydown",
-        function(event) {
-
-            const activeTag =
-                document.activeElement
-                    ?.tagName;
-
-
-            if (
-                activeTag ===
-                "INPUT" ||
-                activeTag ===
-                "TEXTAREA" ||
-                activeTag ===
-                "SELECT"
-            ) {
-
-                return;
-
-            }
-
-
-            const key =
-                event.key;
-
-
-            if (
-                /^[0-9.]$/.test(key)
-            ) {
-
-                calcInput(key);
-
-                event.preventDefault();
-
-                return;
-
-            }
-
-
-            if (
-                ["+", "-", "*", "/"]
-                    .includes(key)
-            ) {
-
-                calcInput(key);
-
-                event.preventDefault();
-
-                return;
-
-            }
-
-
-            if (key === "%") {
-
-                calcPercent();
-
-                event.preventDefault();
-
-                return;
-
-            }
-
-
-            if (
-                key === "Enter" ||
-                key === "="
-            ) {
-
-                calcEvaluate();
-
-                event.preventDefault();
-
-                return;
-
-            }
-
-
-            if (
-                key === "Escape"
-            ) {
-
-                calcClear();
-
-                event.preventDefault();
-
-                return;
-
-            }
-
-
-            if (
-                key === "Backspace"
-            ) {
-
-                calcBack();
-
-                event.preventDefault();
-
-            }
-
-        }
+    calcInput(
+     button.dataset.n
     );
+
+    return;
+
+   }
+
+
+   if(
+    button.dataset.o!==undefined
+   ){
+
+    calcSetOp(
+     button.dataset.o
+    );
+
+    return;
+
+   }
+
+
+   const action=
+    button.dataset.a;
+
+
+   if(action==="clear")
+    calcClear();
+
+   else if(action==="back")
+    calcBack();
+
+   else if(action==="percent")
+    calcPercent();
+
+   else if(action==="dot")
+    calcDot();
+
+   else if(action==="sign")
+    calcSign();
+
+   else if(action==="equals")
+    calcEquals();
+
+  }
+ );
+
+
+document.addEventListener(
+ "keydown",
+ event=>{
+
+  const target=
+   event.target;
+
+  if(
+   target &&
+   (
+    target.tagName==="INPUT" ||
+    target.tagName==="TEXTAREA" ||
+    target.tagName==="SELECT" ||
+    target.isContentEditable
+   )
+  )
+   return;
+
+
+  if(/^[0-9]$/.test(event.key))
+   calcInput(event.key);
+
+  else if(event.key==="."){
+   calcDot();
+  }
+
+  else if(
+   ["+","-","*","/"]
+    .includes(event.key)
+  ){
+
+   calcSetOp(event.key);
+
+  }
+
+  else if(event.key==="%"){
+
+   calcPercent();
+
+  }
+
+  else if(
+   event.key==="Enter" ||
+   event.key==="="
+  ){
+
+   event.preventDefault();
+
+   calcEquals();
+
+  }
+
+  else if(event.key==="Backspace"){
+
+   calcBack();
+
+  }
+
+  else if(event.key==="Escape"){
+
+   calcClear();
+
+  }
+
+ });
+
+
+function renderCalcHistory(){
+
+ const element=
+  document.getElementById(
+   "calcHistoryList"
+  );
+
+ if(
+  !calc.history.length
+ ){
+
+  element.innerHTML=
+   '<p class="muted">No calculations yet.</p>';
+
+  return;
+
+ }
+
+ element.innerHTML=
+  calc.history
+   .map(item=>`
+
+    <div style="
+     padding:8px 0;
+     border-bottom:1px solid var(--border)
+    ">
+
+     <div class="muted">
+      ${esc(item.expression)}
+     </div>
+
+     <b>
+      ${esc(item.result)}
+     </b>
+
+    </div>
+
+   `)
+   .join("");
 
 }
 
 
 /* =========================================================
-   PHASE 2 — EXCEL WORKING
+   PHASE 3 — MODAL
    ========================================================= */
 
-function createExcelRow() {
+function openModal(
+ title,
+ body
+){
 
-    return {
+ document.getElementById(
+  "modalTitle"
+ ).textContent=title;
 
-        description:
-            "",
+ document.getElementById(
+  "modalBody"
+ ).innerHTML=body;
 
-        qty:
-            1,
-
-        rate:
-            0,
-
-        tax:
-            0
-
-    };
-
-}
-
-
-function addExcelRow() {
-
-    DataState.excel.push(
-        createExcelRow()
-    );
-
-
-    saveStorage(
-        STORAGE.excel,
-        DataState.excel
-    );
-
-
-    renderExcel();
+ document.getElementById(
+  "modalBackdrop"
+ ).classList.add("open");
 
 }
 
 
-function removeExcelRow(
-    index
-) {
+function closeModal(){
 
-    if (
-        index < 0 ||
-        index >= DataState.excel.length
-    ) {
-
-        return;
-
-    }
-
-
-    DataState.excel.splice(
-        index,
-        1
-    );
-
-
-    saveStorage(
-        STORAGE.excel,
-        DataState.excel
-    );
-
-
-    renderExcel();
+ document.getElementById(
+  "modalBackdrop"
+ ).classList.remove("open");
 
 }
 
 
-function calculateExcelRow(
-    row
-) {
-
-    const qty =
-        Math.max(
-            0,
-            numberValue(row.qty)
-        );
-
-
-    const rate =
-        Math.max(
-            0,
-            numberValue(row.rate)
-        );
-
-
-    const tax =
-        Math.max(
-            0,
-            numberValue(row.tax)
-        );
-
-
-    const taxable =
-        qty * rate;
-
-
-    const gst =
-        taxable * tax / 100;
-
-
-    return {
-
-        taxable:
-            taxable,
-
-        gst:
-            gst,
-
-        total:
-            taxable + gst
-
-    };
-
-}
-
-
-function renderExcel() {
-
-    const body =
-        document.getElementById(
-            "excelBody"
-        );
-
-
-    if (!body) {
-
-        return;
-
-    }
-
-
-    body.innerHTML =
-        "";
-
-
-    if (
-        DataState.excel.length === 0
-    ) {
-
-        addExcelRow();
-
-        return;
-
-    }
-
-
-    let taxableTotal =
-        0;
-
-
-    let gstTotal =
-        0;
-
-
-    let grandTotal =
-        0;
-
-
-    DataState.excel.forEach(
-        function(row, index) {
-
-            const calc =
-                calculateExcelRow(
-                    row
-                );
-
-
-            taxableTotal +=
-                calc.taxable;
-
-
-            gstTotal +=
-                calc.gst;
-
-
-            grandTotal +=
-                calc.total;
-
-
-            const tr =
-                document.createElement(
-                    "tr"
-                );
-
-
-            tr.innerHTML = `
-
-                <td>
-                    ${index + 1}
-                </td>
-
-                <td>
-                    <input
-                        class="excel-input"
-                        value="${escapeHTML(row.description)}"
-                        data-excel-field="description"
-                        data-excel-index="${index}">
-                </td>
-
-                <td>
-                    <input
-                        class="excel-input"
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value="${row.qty}"
-                        data-excel-field="qty"
-                        data-excel-index="${index}">
-                </td>
-
-                <td>
-                    <input
-                        class="excel-input"
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value="${row.rate}"
-                        data-excel-field="rate"
-                        data-excel-index="${index}">
-                </td>
-
-                <td>
-                    <input
-                        class="excel-input"
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value="${row.tax}"
-                        data-excel-field="tax"
-                        data-excel-index="${index}">
-                </td>
-
-                <td class="num">
-                    ${money(calc.taxable)}
-                </td>
-
-                <td class="num">
-                    ${money(calc.gst)}
-                </td>
-
-                <td class="num">
-                    <strong>
-                        ${money(calc.total)}
-                    </strong>
-                </td>
-
-                <td>
-                    <button
-                        class="btn btn-danger"
-                        type="button"
-                        onclick="removeExcelRow(${index})">
-
-                        Delete
-
-                    </button>
-                </td>
-
-            `;
-
-
-            body.appendChild(
-                tr
-            );
-
-        }
-    );
-
-
-    document.getElementById(
-        "excelTaxableTotal"
-    ).textContent =
-        money(taxableTotal);
-
-
-    document.getElementById(
-        "excelGSTTotal"
-    ).textContent =
-        money(gstTotal);
-
-
-    document.getElementById(
-        "excelGrandTotal"
-    ).textContent =
-        money(grandTotal);
-
-
-    body.querySelectorAll(
-        "[data-excel-field]"
-    ).forEach(
-        function(input) {
-
-            input.addEventListener(
-                "input",
-                function() {
-
-                    const index =
-                        Number(
-                            input.dataset
-                                .excelIndex
-                        );
-
-
-                    const field =
-                        input.dataset
-                            .excelField;
-
-
-                    if (
-                        !DataState.excel[index]
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    if (
-                        field ===
-                        "description"
-                    ) {
-
-                        DataState.excel[index]
-                            .description =
-                            input.value;
-
-                    }
-
-                    else {
-
-                        DataState.excel[index][field] =
-                            numberValue(
-                                input.value
-                            );
-
-                    }
-
-
-                    saveStorage(
-                        STORAGE.excel,
-                        DataState.excel
-                    );
-
-
-                    renderExcel();
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-function exportCSV() {
-
-    if (
-        DataState.excel.length ===
-        0
-    ) {
-
-        alert(
-            "There is no spreadsheet data to export."
-        );
-
-        return;
-
-    }
-
-
-    const rows = [
-
-        [
-            "Description",
-            "Qty",
-            "Rate",
-            "Tax %",
-            "Taxable",
-            "GST",
-            "Total"
-        ]
-
-    ];
-
-
-    DataState.excel.forEach(
-        function(row) {
-
-            const calc =
-                calculateExcelRow(
-                    row
-                );
-
-
-            rows.push([
-
-                row.description,
-
-                row.qty,
-
-                row.rate,
-
-                row.tax,
-
-                calc.taxable,
-
-                calc.gst,
-
-                calc.total
-
-            ]);
-
-        }
-    );
-
-
-    const csv =
-        rows.map(
-            function(row) {
-
-                return row.map(
-                    function(value) {
-
-                        return '"' +
-                            String(value)
-                                .replace(
-                                    /"/g,
-                                    '""'
-                                ) +
-                            '"';
-
-                    }
-                ).join(",");
-
-            }
-        ).join("\n");
-
-
-    const blob =
-        new Blob(
-            [csv],
-            {
-                type:
-                    "text/csv;charset=utf-8;"
-            }
-        );
-
-
-    const url =
-        URL.createObjectURL(
-            blob
-        );
-
-
-    const link =
-        document.createElement(
-            "a"
-        );
-
-
-    link.href =
-        url;
-
-
-    link.download =
-        "businessdesk-working.csv";
-
-
-    document.body.appendChild(
-        link
-    );
-
-
-    link.click();
-
-
-    link.remove();
-
-
-    URL.revokeObjectURL(
-        url
-    );
-
-}
-
-
-/* =========================================================
-   GROUPS
-   ========================================================= */
-
-function openGroup() {
-
-    openModal(
-        "groupModal"
-    );
-
-}
-
-
-function saveGroup() {
-
-    const name =
-        document.getElementById(
-            "groupName"
-        ).value.trim();
-
-
-    const nature =
-        document.getElementById(
-            "groupNature"
-        ).value;
-
-
-    if (!name) {
-
-        alert(
-            "Please enter group name."
-        );
-
-        return;
-
-    }
-
-
-    DataState.groups.push({
-
-        id:
-            createID("grp"),
-
-        name:
-            name,
-
-        nature:
-            nature
-
-    });
-
-
-    saveStorage(
-        STORAGE.groups,
-        DataState.groups
-    );
-
-
-    document.getElementById(
-        "groupName"
-    ).value =
-        "";
-
-
-    closeModal(
-        "groupModal"
-    );
-
-
-    renderGroups();
-
-    updateDashboard();
-
-}
-
-
-function renderGroups() {
-
-    const body =
-        document.getElementById(
-            "groupsBody"
-        );
-
-
-    if (!body) {
-
-        return;
-
-    }
-
-
-    body.innerHTML =
-        "";
-
-
-    if (
-        DataState.groups.length ===
-        0
-    ) {
-
-        body.innerHTML = `
-
-            <tr>
-                <td colspan="2">
-                    No account groups added.
-                </td>
-            </tr>
-
-        `;
-
-        return;
-
-    }
-
-
-    DataState.groups.forEach(
-        function(group) {
-
-            body.innerHTML += `
-
-                <tr>
-
-                    <td>
-                        ${escapeHTML(
-                            group.name
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            group.nature
-                        )}
-                    </td>
-
-                </tr>
-
-            `;
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   LEDGERS
-   ========================================================= */
-
-function openLedger() {
-
-    openModal(
-        "ledgerModal"
-    );
-
-}
-
-
-function saveLedger() {
-
-    const name =
-        document.getElementById(
-            "ledgerName"
-        ).value.trim();
-
-
-    const group =
-        document.getElementById(
-            "ledgerGroup"
-        ).value.trim();
-
-
-    const opening =
-        numberValue(
-            document.getElementById(
-                "ledgerOpening"
-            ).value
-        );
-
-
-    const openingType =
-        document.getElementById(
-            "ledgerOpeningType"
-        ).value;
-
-
-    if (!name) {
-
-        alert(
-            "Please enter ledger name."
-        );
-
-        return;
-
-    }
-
-
-    DataState.ledgers.push({
-
-        id:
-            createID("ledger"),
-
-        name:
-            name,
-
-        group:
-            group || "Unclassified",
-
-        opening:
-            opening,
-
-        openingType:
-            openingType
-
-    });
-
-
-    saveStorage(
-        STORAGE.ledgers,
-        DataState.ledgers
-    );
-
-
-    document.getElementById(
-        "ledgerName"
-    ).value =
-        "";
-
-
-    document.getElementById(
-        "ledgerGroup"
-    ).value =
-        "";
-
-
-    document.getElementById(
-        "ledgerOpening"
-    ).value =
-        "0";
-
-
-    closeModal(
-        "ledgerModal"
-    );
-
-
-    renderLedgers();
-
-    updateDashboard();
-
-}
-
-
-function renderLedgers() {
-
-    const body =
-        document.getElementById(
-            "ledgersBody"
-        );
-
-
-    if (!body) {
-
-        return;
-
-    }
-
-
-    const search =
-        (
-            document.getElementById(
-                "ledgerSearch"
-            )?.value ||
-            ""
-        )
-        .toLowerCase();
-
-
-    const rows =
-        DataState.ledgers.filter(
-            function(ledger) {
-
-                return (
-                    ledger.name
-                        .toLowerCase()
-                        .includes(search) ||
-
-                    ledger.group
-                        .toLowerCase()
-                        .includes(search)
-                );
-
-            }
-        );
-
-
-    body.innerHTML =
-        "";
-
-
-    if (
-        rows.length ===
-        0
-    ) {
-
-        body.innerHTML = `
-
-            <tr>
-                <td colspan="5">
-                    No ledgers found.
-                </td>
-            </tr>
-
-        `;
-
-        return;
-
-    }
-
-
-    rows.forEach(
-        function(ledger) {
-
-            body.innerHTML += `
-
-                <tr>
-
-                    <td>
-                        ${escapeHTML(
-                            ledger.name
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            ledger.group
-                        )}
-                    </td>
-
-                    <td class="num">
-                        ${money(
-                            ledger.opening
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            ledger.openingType
-                        )}
-                    </td>
-
-                    <td class="num">
-                        ${money(
-                            ledger.opening
-                        )}
-                    </td>
-
-                </tr>
-
-            `;
-
-        }
-    );
-
-}
+document
+ .getElementById("modalBackdrop")
+ .addEventListener(
+  "click",
+  event=>{
+
+   if(
+    event.target.id===
+    "modalBackdrop"
+   ){
+
+    closeModal();
+
+   }
+
+  }
+ );
 
 
 /* =========================================================
    PARTIES
    ========================================================= */
 
-function openParty() {
+function openPartyModal(){
 
-    openModal(
-        "partyModal"
-    );
+ openModal(
+  "Add Party",
 
-}
+  `
+  <div class="form-grid">
 
+   <div class="field">
 
-function saveParty() {
+    <label>Name *</label>
 
-    const name =
-        document.getElementById(
-            "partyName"
-        ).value.trim();
+    <input id="partyName">
 
-
-    const type =
-        document.getElementById(
-            "partyType"
-        ).value;
+   </div>
 
 
-    const gstin =
-        document.getElementById(
-            "partyGSTIN"
-        ).value.trim();
+   <div class="field">
+
+    <label>Type</label>
+
+    <select id="partyType">
+
+     <option>
+      Customer
+     </option>
+
+     <option>
+      Supplier
+     </option>
+
+    </select>
+
+   </div>
 
 
-    const state =
-        document.getElementById(
-            "partyState"
-        ).value.trim();
+   <div class="field">
+
+    <label>GSTIN</label>
+
+    <input id="partyGSTIN">
+
+   </div>
 
 
-    const phone =
-        document.getElementById(
-            "partyPhone"
-        ).value.trim();
+   <div class="field">
 
+    <label>Phone</label>
 
-    if (!name) {
+    <input id="partyPhone">
 
-        alert(
-            "Please enter party name."
-        );
+   </div>
 
-        return;
+  </div>
 
-    }
+  <br>
 
+  <button
+   class="btn btn-primary"
+   onclick="saveParty()">
 
-    DataState.parties.push({
+   Save Party
 
-        id:
-            createID("party"),
-
-        name:
-            name,
-
-        type:
-            type,
-
-        gstin:
-            gstin,
-
-        state:
-            state,
-
-        phone:
-            phone
-
-    });
-
-
-    saveStorage(
-        STORAGE.parties,
-        DataState.parties
-    );
-
-
-    document.getElementById(
-        "partyName"
-    ).value =
-        "";
-
-
-    document.getElementById(
-        "partyGSTIN"
-    ).value =
-        "";
-
-
-    document.getElementById(
-        "partyState"
-    ).value =
-        "";
-
-
-    document.getElementById(
-        "partyPhone"
-    ).value =
-        "";
-
-
-    closeModal(
-        "partyModal"
-    );
-
-
-    renderParties();
-
-    updateDashboard();
+  </button>
+  `
+ );
 
 }
 
 
-function renderParties() {
+function saveParty(){
 
-    const body =
-        document.getElementById(
-            "partiesBody"
-        );
+ const name=
+  document
+   .getElementById("partyName")
+   .value
+   .trim();
 
+ const type=
+  document
+   .getElementById("partyType")
+   .value;
 
-    if (!body) {
+ const gstin=
+  document
+   .getElementById("partyGSTIN")
+   .value
+   .trim();
 
-        return;
-
-    }
-
-
-    const search =
-        (
-            document.getElementById(
-                "partySearch"
-            )?.value ||
-            ""
-        )
-        .toLowerCase();
-
-
-    const rows =
-        DataState.parties.filter(
-            function(party) {
-
-                return (
-                    party.name
-                        .toLowerCase()
-                        .includes(search) ||
-
-                    party.type
-                        .toLowerCase()
-                        .includes(search) ||
-
-                    party.gstin
-                        .toLowerCase()
-                        .includes(search)
-                );
-
-            }
-        );
+ const phone=
+  document
+   .getElementById("partyPhone")
+   .value
+   .trim();
 
 
-    body.innerHTML =
-        "";
+ if(!name){
+
+  alert(
+   "Party name is required."
+  );
+
+  return;
+
+ }
 
 
-    if (
-        rows.length ===
-        0
-    ) {
+ if(
+  db.parties.some(
+   party=>
+    party.name.toLowerCase()===
+    name.toLowerCase() &&
+    party.type===type
+  )
+ ){
 
-        body.innerHTML = `
+  alert(
+   "This party already exists."
+  );
 
-            <tr>
-                <td colspan="5">
-                    No parties found.
-                </td>
-            </tr>
+  return;
 
-        `;
-
-        return;
-
-    }
+ }
 
 
-    rows.forEach(
-        function(party) {
+ db.parties.push({
 
-            body.innerHTML += `
+  id:uid("PTY"),
 
-                <tr>
+  name,
 
-                    <td>
-                        ${escapeHTML(
-                            party.name
-                        )}
-                    </td>
+  type,
 
-                    <td>
-                        ${escapeHTML(
-                            party.type
-                        )}
-                    </td>
+  gstin,
 
-                    <td>
-                        ${escapeHTML(
-                            party.gstin
-                        )}
-                    </td>
+  phone
 
-                    <td>
-                        ${escapeHTML(
-                            party.state
-                        )}
-                    </td>
+ });
 
-                    <td>
-                        ${escapeHTML(
-                            party.phone
-                        )}
-                    </td>
 
-                </tr>
+ saveDB();
 
-            `;
+ closeModal();
 
-        }
-    );
+ refreshAll();
 
 }
 
 
 /* =========================================================
-   PHASE 3 — SALES STATE
+   PARTY OPTIONS
    ========================================================= */
 
-const SalesState = {
-
-    items: []
-
-};
-
-
-function createSaleItem() {
-
-    return {
-
-        description:
-            "",
-
-        quantity:
-            1,
-
-        rate:
-            0,
-
-        discount:
-            0,
-
-        gst:
-            0
-
-    };
-
-}
-
-
-function initializeSales() {
-
-    if (
-        SalesState.items.length ===
-        0
-    ) {
-
-        SalesState.items.push(
-            createSaleItem()
-        );
-
-    }
-
-
-    clearSalesForm();
-
-}
-
-
-function openSales() {
-
-    navigateToSection(
-        "sales"
-    );
-
-    setTimeout(
-        function() {
-
-            const party =
-                document.getElementById(
-                    "saleParty"
-                );
-
-
-            if (party) {
-
-                party.focus();
-
-            }
-
-        },
-        50
-    );
-
-}
-
-
-function getNextInvoiceNumber() {
-
-    let highest =
-        0;
-
-
-    DataState.sales.forEach(
-        function(sale) {
-
-            const match =
-                String(
-                    sale.invoice || ""
-                ).match(
-                    /(\d+)$/
-                );
-
-
-            if (match) {
-
-                highest =
-                    Math.max(
-                        highest,
-                        Number(
-                            match[1]
-                        )
-                    );
-
-            }
-
-        }
-    );
-
-
-    return (
-        "INV-" +
-        String(
-            highest + 1
-        ).padStart(
-            4,
-            "0"
-        )
-    );
-
-}
-
-
-function calculateSaleItem(
-    item
-) {
-
-    const quantity =
-        Math.max(
-            0,
-            numberValue(
-                item.quantity
-            )
-        );
-
-
-    const rate =
-        Math.max(
-            0,
-            numberValue(
-                item.rate
-            )
-        );
-
-
-    const discountRate =
-        Math.min(
-            100,
-            Math.max(
-                0,
-                numberValue(
-                    item.discount
-                )
-            )
-        );
-
-
-    const gstRate =
-        Math.max(
-            0,
-            numberValue(
-                item.gst
-            )
-        );
-
-
-    const subtotal =
-        quantity *
-        rate;
-
-
-    const discount =
-        subtotal *
-        discountRate /
-        100;
-
-
-    const taxable =
-        subtotal -
-        discount;
-
-
-    const gst =
-        taxable *
-        gstRate /
-        100;
-
-
-    const total =
-        taxable +
-        gst;
-
-
-    return {
-
-        subtotal:
-            subtotal,
-
-        discount:
-            discount,
-
-        taxable:
-            taxable,
-
-        gst:
-            gst,
-
-        total:
-            total
-
-    };
-
-}
-
-
-function calculateSalesTotals() {
-
-    const totals = {
-
-        subtotal:
-            0,
-
-        discount:
-            0,
-
-        taxable:
-            0,
-
-        gst:
-            0,
-
-        total:
-            0
-
-    };
-
-
-    SalesState.items.forEach(
-        function(item) {
-
-            const value =
-                calculateSaleItem(
-                    item
-                );
-
-
-            totals.subtotal +=
-                value.subtotal;
-
-
-            totals.discount +=
-                value.discount;
-
-
-            totals.taxable +=
-                value.taxable;
-
-
-            totals.gst +=
-                value.gst;
-
-
-            totals.total +=
-                value.total;
-
-        }
-    );
-
-
-    return totals;
-
-}
-
-
-function renderSaleItems() {
-
-    const body =
-        document.getElementById(
-            "saleItemsBody"
-        );
-
-
-    if (!body) {
-
-        return;
-
-    }
-
-
-    body.innerHTML =
-        "";
-
-
-    SalesState.items.forEach(
-        function(item, index) {
-
-            const calc =
-                calculateSaleItem(
-                    item
-                );
-
-
-            const row =
-                document.createElement(
-                    "tr"
-                );
-
-
-            row.innerHTML = `
-
-                <td>
-
-                    <input
-                        type="text"
-                        value="${escapeHTML(
-                            item.description
-                        )}"
-                        data-sale-field="description"
-                        data-sale-index="${index}"
-                        placeholder="Item">
-
-                </td>
-
-
-                <td>
-
-                    <input
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value="${item.quantity}"
-                        data-sale-field="quantity"
-                        data-sale-index="${index}">
-
-                </td>
-
-
-                <td>
-
-                    <input
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value="${item.rate}"
-                        data-sale-field="rate"
-                        data-sale-index="${index}">
-
-                </td>
-
-
-                <td>
-
-                    <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        step="0.01"
-                        value="${item.discount}"
-                        data-sale-field="discount"
-                        data-sale-index="${index}">
-
-                </td>
-
-
-                <td>
-
-                    <input
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value="${item.gst}"
-                        data-sale-field="gst"
-                        data-sale-index="${index}">
-
-                </td>
-
-
-                <td class="num">
-
-                    ${money(
-                        calc.taxable
-                    )}
-
-                </td>
-
-
-                <td class="num">
-
-                    ${money(
-                        calc.gst
-                    )}
-
-                </td>
-
-
-                <td class="num">
-
-                    <strong>
-                        ${money(
-                            calc.total
-                        )}
-                    </strong>
-
-                </td>
-
-
-                <td>
-
-                    <button
-                        type="button"
-                        class="sales-remove"
-                        onclick="removeSaleItem(${index})">
-
-                        Remove
-
-                    </button>
-
-                </td>
-
-            `;
-
-
-            body.appendChild(
-                row
-            );
-
-        }
-    );
-
-
-    body.querySelectorAll(
-        "[data-sale-field]"
-    ).forEach(
-        function(input) {
-
-            input.addEventListener(
-                "input",
-                function() {
-
-                    const index =
-                        Number(
-                            input.dataset
-                                .saleIndex
-                        );
-
-
-                    const field =
-                        input.dataset
-                            .saleField;
-
-
-                    if (
-                        !SalesState.items[index]
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    if (
-                        field ===
-                        "description"
-                    ) {
-
-                        SalesState.items[index]
-                            .description =
-                            input.value;
-
-                    }
-
-                    else {
-
-                        SalesState.items[index][field] =
-                            numberValue(
-                                input.value
-                            );
-
-                    }
-
-
-                    updateSalesSummary();
-
-                }
-            );
-
-        }
-    );
-
-
-    updateSalesSummary();
-
-}
-
-
-function addSaleItem() {
-
-    SalesState.items.push(
-        createSaleItem()
-    );
-
-
-    renderSaleItems();
-
-}
-
-
-function removeSaleItem(
-    index
-) {
-
-    if (
-        SalesState.items.length ===
-        1
-    ) {
-
-        SalesState.items[0] =
-            createSaleItem();
-
-    }
-
-    else {
-
-        SalesState.items.splice(
-            index,
-            1
-        );
-
-    }
-
-
-    renderSaleItems();
-
-}
-
-
-function updateSalesSummary() {
-
-    const totals =
-        calculateSalesTotals();
-
-
-    const subtotal =
-        document.getElementById(
-            "saleSubtotal"
-        );
-
-
-    const discount =
-        document.getElementById(
-            "saleDiscount"
-        );
-
-
-    const taxable =
-        document.getElementById(
-            "saleTaxable"
-        );
-
-
-    const gst =
-        document.getElementById(
-            "saleGST"
-        );
-
-
-    const grand =
-        document.getElementById(
-            "saleGrandTotal"
-        );
-
-
-    if (subtotal) {
-
-        subtotal.textContent =
-            money(
-                totals.subtotal
-            );
-
-    }
-
-
-    if (discount) {
-
-        discount.textContent =
-            money(
-                totals.discount
-            );
-
-    }
-
-
-    if (taxable) {
-
-        taxable.textContent =
-            money(
-                totals.taxable
-            );
-
-    }
-
-
-    if (gst) {
-
-        gst.textContent =
-            money(
-                totals.gst
-            );
-
-    }
-
-
-    if (grand) {
-
-        grand.textContent =
-            money(
-                totals.total
-            );
-
-    }
-
-}
-
-
-function showSalesMessage(
-    message,
-    type
-) {
-
-    const element =
-        document.getElementById(
-            "salesMessage"
-        );
-
-
-    if (!element) {
-
-        return;
-
-    }
-
-
-    element.textContent =
-        message;
-
-
-    element.className =
-        "sales-message " +
-        type;
-
-
-    window.clearTimeout(
-        showSalesMessage.timer
-    );
-
-
-    showSalesMessage.timer =
-        window.setTimeout(
-            function() {
-
-                element.textContent =
-                    "";
-
-                element.className =
-                    "sales-message";
-
-            },
-            3500
-        );
-
-}
-
-
-function clearSalesForm() {
-
-    const invoice =
-        document.getElementById(
-            "saleInvoice"
-        );
-
-
-    const date =
-        document.getElementById(
-            "saleDate"
-        );
-
-
-    const party =
-        document.getElementById(
-            "saleParty"
-        );
-
-
-    const place =
-        document.getElementById(
-            "salePlace"
-        );
-
-
-    const narration =
-        document.getElementById(
-            "saleNarration"
-        );
-
-
-    if (invoice) {
-
-        invoice.value =
-            getNextInvoiceNumber();
-
-    }
-
-
-    if (date) {
-
-        date.value =
-            today();
-
-    }
-
-
-    if (party) {
-
-        party.value =
-            "";
-
-    }
-
-
-    if (place) {
-
-        place.value =
-            "";
-
-    }
-
-
-    if (narration) {
-
-        narration.value =
-            "";
-
-    }
-
-
-    SalesState.items = [
-
-        createSaleItem()
-
-    ];
-
-
-    renderSaleItems();
-
-}
-
-
-function saveSales() {
-
-    const invoice =
-        document.getElementById(
-            "saleInvoice"
-        ).value.trim();
-
-
-    const date =
-        document.getElementById(
-            "saleDate"
-        ).value;
-
-
-    const party =
-        document.getElementById(
-            "saleParty"
-        ).value.trim();
-
-
-    const place =
-        document.getElementById(
-            "salePlace"
-        ).value.trim();
-
-
-    const narration =
-        document.getElementById(
-            "saleNarration"
-        ).value.trim();
-
-
-    if (!date) {
-
-        showSalesMessage(
-            "Please select invoice date.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    if (!party) {
-
-        showSalesMessage(
-            "Please enter customer / party.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const validItem =
-        SalesState.items.some(
-            function(item) {
-
-                return (
-                    item.description.trim() !==
-                    "" &&
-                    numberValue(
-                        item.quantity
-                    ) > 0
-                );
-
-            }
-        );
-
-
-    if (!validItem) {
-
-        showSalesMessage(
-            "Please enter at least one valid item.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const totals =
-        calculateSalesTotals();
-
-
-    const record = {
-
-        id:
-            createID("sale"),
-
-        invoice:
-            invoice,
-
-        date:
-            date,
-
-        party:
-            party,
-
-        place:
-            place,
-
-        narration:
-            narration,
-
-        items:
-            SalesState.items.map(
-                function(item) {
-
-                    return {
-
-                        description:
-                            item.description,
-
-                        quantity:
-                            numberValue(
-                                item.quantity
-                            ),
-
-                        rate:
-                            numberValue(
-                                item.rate
-                            ),
-
-                        discount:
-                            numberValue(
-                                item.discount
-                            ),
-
-                        gst:
-                            numberValue(
-                                item.gst
-                            )
-
-                    };
-
-                }
-            ),
-
-        subtotal:
-            totals.subtotal,
-
-        discount:
-            totals.discount,
-
-        taxable:
-            totals.taxable,
-
-        gst:
-            totals.gst,
-
-        total:
-            totals.total,
-
-        createdAt:
-            new Date()
-                .toISOString()
-
-    };
-
-
-    DataState.sales.unshift(
-        record
-    );
-
-
-    const saved =
-        saveStorage(
-            STORAGE.sales,
-            DataState.sales
-        );
-
-
-    if (!saved) {
-
-        DataState.sales.shift();
-
-        showSalesMessage(
-            "Unable to save invoice.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    renderSales();
-
-    updateDashboard();
-
-    clearSalesForm();
-
-
-    showSalesMessage(
-        "Sales invoice saved successfully.",
-        "success"
-    );
-
-}
-
-
-function renderSales() {
-
-    const body =
-        document.getElementById(
-            "salesBody"
-        );
-
-
-    if (!body) {
-
-        return;
-
-    }
-
-
-    const count =
-        document.getElementById(
-            "salesCount"
-        );
-
-
-    if (count) {
-
-        count.textContent =
-            DataState.sales.length +
-            (
-                DataState.sales.length ===
-                1
-                    ? " record"
-                    : " records"
-            );
-
-    }
-
-
-    body.innerHTML =
-        "";
-
-
-    if (
-        DataState.sales.length ===
-        0
-    ) {
-
-        body.innerHTML = `
-
-            <tr>
-
-                <td
-                    colspan="7"
-                    style="
-                    text-align:center;
-                    color:#667085;
-                    ">
-
-                    No sales invoices saved yet.
-
-                </td>
-
-            </tr>
-
-        `;
-
-        return;
-
-    }
-
-
-    DataState.sales.forEach(
-        function(sale) {
-
-            body.innerHTML += `
-
-                <tr>
-
-                    <td>
-                        ${escapeHTML(
-                            sale.invoice
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            sale.date
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            sale.party
-                        )}
-                    </td>
-
-                    <td class="num">
-                        ${money(
-                            sale.taxable
-                        )}
-                    </td>
-
-                    <td class="num">
-                        ${money(
-                            sale.gst
-                        )}
-                    </td>
-
-                    <td class="num">
-
-                        <strong>
-                            ${money(
-                                sale.total
-                            )}
-                        </strong>
-
-                    </td>
-
-                    <td>
-
-                        <button
-                            class="btn btn-danger"
-                            onclick="
-                            deleteSale('${sale.id}')
-                            ">
-
-                            Delete
-
-                        </button>
-
-                    </td>
-
-                </tr>
-
-            `;
-
-        }
-    );
-
-}
-
-
-function deleteSale(
-    id
-) {
-
-    const index =
-        DataState.sales.findIndex(
-            function(sale) {
-
-                return sale.id === id;
-
-            }
-        );
-
-
-    if (
-        index === -1
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        !window.confirm(
-            "Delete this sales invoice?"
-        )
-    ) {
-
-        return;
-
-    }
-
-
-    DataState.sales.splice(
-        index,
-        1
-    );
-
-
-    saveStorage(
-        STORAGE.sales,
-        DataState.sales
-    );
-
-
-    renderSales();
-
-    updateDashboard();
+function partyOptions(type){
+
+ return db.parties
+
+  .filter(
+   party=>
+    party.type===type
+  )
+
+  .map(
+   party=>
+    `
+    <option value="${esc(party.id)}">
+     ${esc(party.name)}
+    </option>
+    `
+  )
+
+  .join("");
 
 }
 
 
 /* =========================================================
-   PURCHASE / VOUCHER
+   SALES
    ========================================================= */
 
-function openPurchase() {
+function openSaleModal(){
 
-    navigateToSection(
-        "purchase"
-    );
+ if(
+  !db.parties.some(
+   party=>
+    party.type==="Customer"
+  )
+ ){
+
+  alert(
+   "Add a Customer party first."
+  );
+
+  return;
+
+ }
+
+
+ const invoice=
+  nextNumber(
+   "SI-",
+   db.sales,
+   "invoiceNo"
+  );
+
+
+ openModal(
+
+  "New Sales Invoice",
+
+  `
+  <div class="form-grid">
+
+
+   <div class="field">
+
+    <label>Invoice No.</label>
+
+    <input
+     id="saleInvoice"
+     value="${invoice}"
+    >
+
+   </div>
+
+
+   <div class="field">
+
+    <label>Date</label>
+
+    <input
+     id="saleDate"
+     type="date"
+     value="${today()}"
+    >
+
+   </div>
+
+
+   <div class="field">
+
+    <label>Customer *</label>
+
+    <select id="saleParty">
+
+     ${partyOptions("Customer")}
+
+    </select>
+
+   </div>
+
+
+   <div class="field">
+
+    <label>Taxable Amount *</label>
+
+    <input
+     id="saleTaxable"
+     type="number"
+     step="0.01"
+     min="0"
+    >
+
+   </div>
+
+
+   <div class="field">
+
+    <label>GST Rate %</label>
+
+    <input
+     id="saleRate"
+     type="number"
+     step="0.01"
+     min="0"
+     value="18"
+    >
+
+   </div>
+
+
+   <div class="field">
+
+    <label>Paid Amount</label>
+
+    <input
+     id="salePaid"
+     type="number"
+     step="0.01"
+     min="0"
+     value="0"
+    >
+
+   </div>
+
+  </div>
+
+
+  <br>
+
+
+  <button
+   class="btn btn-primary"
+   onclick="saveSale()">
+
+   Post Sales Invoice
+
+  </button>
+  `
+
+ );
 
 }
 
 
-function openVoucher() {
+function saveSale(){
 
-    navigateToSection(
-        "vouchers"
-    );
+ const invoiceNo=
+  document
+   .getElementById("saleInvoice")
+   .value
+   .trim();
+
+ const date=
+  document
+   .getElementById("saleDate")
+   .value ||
+  today();
+
+ const party=
+  db.parties.find(
+   p=>
+    p.id===
+    document
+     .getElementById("saleParty")
+     .value
+  );
+
+ const taxable=
+  num(
+   document
+    .getElementById("saleTaxable")
+    .value
+  );
+
+ const rate=
+  num(
+   document
+    .getElementById("saleRate")
+    .value
+  );
+
+ const paid=
+  num(
+   document
+    .getElementById("salePaid")
+    .value
+  );
+
+
+ if(
+  !invoiceNo ||
+  !party ||
+  taxable<=0 ||
+  rate<0 ||
+  paid<0
+ ){
+
+  alert(
+   "Enter valid sales details."
+  );
+
+  return;
+
+ }
+
+
+ if(
+  db.sales.some(
+   sale=>
+    sale.invoiceNo.toLowerCase()===
+    invoiceNo.toLowerCase()
+  )
+ ){
+
+  alert(
+   "Invoice number already exists."
+  );
+
+  return;
+
+ }
+
+
+ const gst=
+  taxable*rate/100;
+
+ const total=
+  taxable+gst;
+
+
+ if(paid>total){
+
+  alert(
+   "Paid amount cannot exceed invoice total."
+  );
+
+  return;
+
+ }
+
+
+ db.sales.push({
+
+  id:uid("SAL"),
+
+  invoiceNo,
+
+  date,
+
+  partyId:party.id,
+
+  partyName:party.name,
+
+  taxable,
+
+  rate,
+
+  gst,
+
+  total,
+
+  paid,
+
+  outstanding:
+   total-paid
+
+ });
+
+
+ db.journal.push({
+
+  id:uid("JRN"),
+
+  date,
+
+  source:invoiceNo,
+
+  lines:[
+
+   {
+    account:
+     "Customer Receivable",
+    debit:total,
+    credit:0
+   },
+
+   {
+    account:"Sales",
+    debit:0,
+    credit:taxable
+   },
+
+   {
+    account:"Output GST",
+    debit:0,
+    credit:gst
+   }
+
+  ]
+
+ });
+
+
+ if(paid>0){
+
+  db.journal.push({
+
+   id:uid("JRN"),
+
+   date,
+
+   source:
+    invoiceNo+"-PAY",
+
+   lines:[
+
+    {
+     account:"Cash/Bank",
+     debit:paid,
+     credit:0
+    },
+
+    {
+     account:
+      "Customer Receivable",
+     debit:0,
+     credit:paid
+    }
+
+   ]
+
+  });
+
+ }
+
+
+ saveDB();
+
+ closeModal();
+
+ refreshAll();
+
+ alert(
+  "Sales invoice "+
+  invoiceNo+
+  " posted successfully."
+ );
 
 }
 
 
 /* =========================================================
-   DASHBOARD
+   PURCHASES
    ========================================================= */
 
-function updateDashboard() {
+function openPurchaseModal(){
 
-    const ledgers =
-        document.getElementById(
-            "dashLedgers"
-        );
+ if(
+  !db.parties.some(
+   party=>
+    party.type==="Supplier"
+  )
+ ){
 
+  alert(
+   "Add a Supplier party first."
+  );
 
-    const customers =
-        document.getElementById(
-            "dashCustomers"
-        );
+  return;
 
-
-    const sales =
-        document.getElementById(
-            "dashSales"
-        );
+ }
 
 
-    const purchase =
-        document.getElementById(
-            "dashPurchase"
-        );
+ const billNo=
+  nextNumber(
+   "PI-",
+   db.purchases,
+   "billNo"
+  );
 
 
-    if (ledgers) {
+ openModal(
 
-        ledgers.textContent =
-            DataState.ledgers.length;
+  "New Purchase",
 
+  `
+  <div class="form-grid">
+
+
+   <div class="field">
+
+    <label>Bill No.</label>
+
+    <input
+     id="purchaseBill"
+     value="${billNo}"
+    >
+
+   </div>
+
+
+   <div class="field">
+
+    <label>Date</label>
+
+    <input
+     id="purchaseDate"
+     type="date"
+     value="${today()}"
+    >
+
+   </div>
+
+
+   <div class="field">
+
+    <label>Supplier *</label>
+
+    <select id="purchaseParty">
+
+     ${partyOptions("Supplier")}
+
+    </select>
+
+   </div>
+
+
+   <div class="field">
+
+    <label>Taxable Amount *</label>
+
+    <input
+     id="purchaseTaxable"
+     type="number"
+     step="0.01"
+     min="0"
+    >
+
+   </div>
+
+
+   <div class="field">
+
+    <label>GST Rate %</label>
+
+    <input
+     id="purchaseRate"
+     type="number"
+     step="0.01"
+     min="0"
+     value="18"
+    >
+
+   </div>
+
+
+   <div class="field">
+
+    <label>Paid Amount</label>
+
+    <input
+     id="purchasePaid"
+     type="number"
+     step="0.01"
+     min="0"
+     value="0"
+    >
+
+   </div>
+
+  </div>
+
+
+  <br>
+
+
+  <button
+   class="btn btn-primary"
+   onclick="savePurchase()">
+
+   Post Purchase
+
+  </button>
+  `
+
+ );
+
+}
+
+
+function savePurchase(){
+
+ const billNo=
+  document
+   .getElementById("purchaseBill")
+   .value
+   .trim();
+
+ const date=
+  document
+   .getElementById("purchaseDate")
+   .value ||
+  today();
+
+ const party=
+  db.parties.find(
+   p=>
+    p.id===
+    document
+     .getElementById("purchaseParty")
+     .value
+  );
+
+ const taxable=
+  num(
+   document
+    .getElementById("purchaseTaxable")
+    .value
+  );
+
+ const rate=
+  num(
+   document
+    .getElementById("purchaseRate")
+    .value
+  );
+
+ const paid=
+  num(
+   document
+    .getElementById("purchasePaid")
+    .value
+  );
+
+
+ if(
+  !billNo ||
+  !party ||
+  taxable<=0 ||
+  rate<0 ||
+  paid<0
+ ){
+
+  alert(
+   "Enter valid purchase details."
+  );
+
+  return;
+
+ }
+
+
+ if(
+  db.purchases.some(
+   purchase=>
+    purchase.billNo.toLowerCase()===
+    billNo.toLowerCase()
+  )
+ ){
+
+  alert(
+   "Bill number already exists."
+  );
+
+  return;
+
+ }
+
+
+ const gst=
+  taxable*rate/100;
+
+ const total=
+  taxable+gst;
+
+
+ if(paid>total){
+
+  alert(
+   "Paid amount cannot exceed bill total."
+  );
+
+  return;
+
+ }
+
+
+ db.purchases.push({
+
+  id:uid("PUR"),
+
+  billNo,
+
+  date,
+
+  partyId:party.id,
+
+  supplier:party.name,
+
+  taxable,
+
+  rate,
+
+  gst,
+
+  total,
+
+  paid,
+
+  outstanding:
+   total-paid
+
+ });
+
+
+ db.journal.push({
+
+  id:uid("JRN"),
+
+  date,
+
+  source:billNo,
+
+  lines:[
+
+   {
+    account:"Purchases",
+    debit:taxable,
+    credit:0
+   },
+
+   {
+    account:"Input GST",
+    debit:gst,
+    credit:0
+   },
+
+   {
+    account:"Supplier Payable",
+    debit:0,
+    credit:total
+   }
+
+  ]
+
+ });
+
+
+ if(paid>0){
+
+  db.journal.push({
+
+   id:uid("JRN"),
+
+   date,
+
+   source:
+    billNo+"-PAY",
+
+   lines:[
+
+    {
+     account:
+      "Supplier Payable",
+     debit:paid,
+     credit:0
+    },
+
+    {
+     account:"Cash/Bank",
+     debit:0,
+     credit:paid
     }
 
+   ]
 
-    if (customers) {
+  });
 
-        customers.textContent =
-            DataState.parties.filter(
-                function(party) {
-
-                    return (
-                        party.type ===
-                        "Customer"
-                    );
-
-                }
-            ).length;
-
-    }
+ }
 
 
-    if (sales) {
+ saveDB();
 
-        const total =
-            DataState.sales.reduce(
-                function(sum, sale) {
+ closeModal();
 
-                    return (
-                        sum +
-                        numberValue(
-                            sale.total
-                        )
-                    );
+ refreshAll();
 
-                },
-                0
-            );
-
-
-        sales.textContent =
-            money(total);
-
-    }
-
-
-    if (purchase) {
-
-        const total =
-            DataState.purchases.reduce(
-                function(sum, item) {
-
-                    return (
-                        sum +
-                        numberValue(
-                            item.total
-                        )
-                    );
-
-                },
-                0
-            );
-
-
-        purchase.textContent =
-            money(total);
-
-    }
-
-
-    updateReports();
+ alert(
+  "Purchase "+
+  billNo+
+  " posted successfully."
+ );
 
 }
 
 
 /* =========================================================
-   REPORT CALCULATIONS
+   VOUCHERS
    ========================================================= */
 
-function updateReports() {
+function openVoucherModal(){
 
-    const outputGST =
-        DataState.sales.reduce(
-            function(sum, sale) {
+ const accounts=[
 
-                return (
-                    sum +
-                    numberValue(
-                        sale.gst
-                    )
-                );
+  "Cash",
+  "Bank",
+  "Sales",
+  "Purchases",
+  "Customer Receivable",
+  "Supplier Payable",
+  "Input GST",
+  "Output GST"
 
-            },
-            0
-        );
+ ];
 
 
-    const inputGST =
-        DataState.purchases.reduce(
-            function(sum, purchase) {
+ const options=
+  accounts
+   .map(
+    account=>
+     `<option>
+      ${esc(account)}
+     </option>`
+   )
+   .join("");
 
-                return (
-                    sum +
-                    numberValue(
-                        purchase.gst
-                    )
-                );
 
-            },
-            0
-        );
+ openModal(
 
+  "New Voucher",
 
-    const gstOutput =
-        document.getElementById(
-            "gstOutput"
-        );
+  `
+  <div class="form-grid">
 
 
-    const gstInput =
-        document.getElementById(
-            "gstInput"
-        );
+   <div class="field">
 
+    <label>Voucher No.</label>
 
-    const gstNet =
-        document.getElementById(
-            "gstNet"
-        );
+    <input
+     id="voucherNo"
+     value="${nextNumber(
+      "VCH-",
+      db.vouchers,
+      "number"
+     )}"
+    >
 
+   </div>
 
-    if (gstOutput) {
 
-        gstOutput.textContent =
-            money(outputGST);
+   <div class="field">
 
-    }
+    <label>Date</label>
 
+    <input
+     id="voucherDate"
+     type="date"
+     value="${today()}"
+    >
 
-    if (gstInput) {
+   </div>
 
-        gstInput.textContent =
-            money(inputGST);
 
-    }
+   <div class="field">
 
+    <label>Debit</label>
 
-    if (gstNet) {
+    <select id="voucherDebit">
 
-        gstNet.textContent =
-            money(
-                outputGST -
-                inputGST
-            );
+     ${options}
 
-    }
+    </select>
 
+   </div>
 
-    const revenue =
-        DataState.sales.reduce(
-            function(sum, sale) {
 
-                return (
-                    sum +
-                    numberValue(
-                        sale.taxable
-                    )
-                );
+   <div class="field">
 
-            },
-            0
-        );
+    <label>Credit</label>
 
+    <select id="voucherCredit">
 
-    const expenses =
-        DataState.purchases.reduce(
-            function(sum, purchase) {
+     ${options}
 
-                return (
-                    sum +
-                    numberValue(
-                        purchase.taxable
-                    )
-                );
+    </select>
 
-            },
-            0
-        );
+   </div>
 
 
-    const net =
-        revenue -
-        expenses;
+   <div class="field">
 
+    <label>Amount *</label>
 
-    const plRevenue =
-        document.getElementById(
-            "plRevenue"
-        );
+    <input
+     id="voucherAmount"
+     type="number"
+     step="0.01"
+     min="0"
+    >
 
+   </div>
 
-    const plExpenses =
-        document.getElementById(
-            "plExpenses"
-        );
 
+  </div>
 
-    const plNet =
-        document.getElementById(
-            "plNet"
-        );
 
+  <br>
 
-    if (plRevenue) {
 
-        plRevenue.textContent =
-            money(revenue);
+  <button
+   class="btn btn-primary"
+   onclick="saveVoucher()">
 
-    }
+   Post Voucher
 
+  </button>
+  `
 
-    if (plExpenses) {
+ );
 
-        plExpenses.textContent =
-            money(expenses);
+}
 
-    }
 
+function saveVoucher(){
 
-    if (plNet) {
+ const number=
+  document
+   .getElementById("voucherNo")
+   .value
+   .trim();
 
-        plNet.textContent =
-            money(net);
+ const date=
+  document
+   .getElementById("voucherDate")
+   .value ||
+  today();
 
-    }
+ const debit=
+  document
+   .getElementById("voucherDebit")
+   .value;
 
+ const credit=
+  document
+   .getElementById("voucherCredit")
+   .value;
 
-    const receivable =
-        DataState.sales.reduce(
-            function(sum, sale) {
+ const amount=
+  num(
+   document
+    .getElementById("voucherAmount")
+    .value
+  );
 
-                return (
-                    sum +
-                    numberValue(
-                        sale.total
-                    )
-                );
 
-            },
-            0
-        );
+ if(
+  !number ||
+  amount<=0
+ ){
 
+  alert(
+   "Enter a valid voucher."
+  );
 
-    const payable =
-        DataState.purchases.reduce(
-            function(sum, purchase) {
+  return;
 
-                return (
-                    sum +
-                    numberValue(
-                        purchase.total
-                    )
-                );
+ }
 
-            },
-            0
-        );
 
+ if(debit===credit){
 
-    const outReceivable =
-        document.getElementById(
-            "outReceivable"
-        );
+  alert(
+   "Debit and Credit accounts must be different."
+  );
 
+  return;
 
-    const outPayable =
-        document.getElementById(
-            "outPayable"
-        );
+ }
 
 
-    if (outReceivable) {
+ if(
+  db.vouchers.some(
+   voucher=>
+    voucher.number.toLowerCase()===
+    number.toLowerCase()
+  )
+ ){
 
-        outReceivable.textContent =
-            money(receivable);
+  alert(
+   "Voucher number already exists."
+  );
 
-    }
+  return;
 
+ }
 
-    if (outPayable) {
 
-        outPayable.textContent =
-            money(payable);
+ db.vouchers.push({
 
-    }
+  id:uid("VCH"),
+
+  number,
+
+  date,
+
+  type:"Journal",
+
+  debit,
+
+  credit,
+
+  amount
+
+ });
+
+
+ db.journal.push({
+
+  id:uid("JRN"),
+
+  date,
+
+  source:number,
+
+  lines:[
+
+   {
+    account:debit,
+    debit:amount,
+    credit:0
+   },
+
+   {
+    account:credit,
+    debit:0,
+    credit:amount
+   }
+
+  ]
+
+ });
+
+
+ saveDB();
+
+ closeModal();
+
+ refreshAll();
+
+ alert(
+  "Voucher "+
+  number+
+  " posted successfully."
+ );
 
 }
 
 
 /* =========================================================
-   COMPANY
+   RENDER SALES
    ========================================================= */
 
-function loadCompany() {
+function renderSales(){
 
-    const company =
-        DataState.company || {};
-
-
-    const fields = {
-
-        companyName:
-            company.name || "",
-
-        companyGSTIN:
-            company.gstin || "",
-
-        companyPhone:
-            company.phone || "",
-
-        companyEmail:
-            company.email || "",
-
-        companyAddress:
-            company.address || ""
-
-    };
+ const body=
+  document.getElementById(
+   "salesBody"
+  );
 
 
-    Object.keys(fields)
-        .forEach(
-            function(id) {
+ if(!db.sales.length){
 
-                const element =
-                    document.getElementById(
-                        id
-                    );
+  body.innerHTML=
+   `
+   <tr>
+    <td colspan="7"
+        class="muted">
+     No sales invoices.
+    </td>
+   </tr>
+   `;
 
+  return;
 
-                if (element) {
-
-                    element.value =
-                        fields[id];
-
-                }
-
-            }
-        );
-
-}
+ }
 
 
-function saveCompany() {
+ body.innerHTML=
+  db.sales
+   .map(
+    sale=>
+     `
+     <tr>
 
-    DataState.company = {
+      <td>
+       <b>
+        ${esc(sale.invoiceNo)}
+       </b>
+      </td>
 
-        name:
-            document.getElementById(
-                "companyName"
-            ).value.trim(),
+      <td>
+       ${esc(sale.date)}
+      </td>
 
-        gstin:
-            document.getElementById(
-                "companyGSTIN"
-            ).value.trim(),
+      <td>
+       ${esc(sale.partyName)}
+      </td>
 
-        phone:
-            document.getElementById(
-                "companyPhone"
-            ).value.trim(),
+      <td class="right">
+       ${money(sale.taxable)}
+      </td>
 
-        email:
-            document.getElementById(
-                "companyEmail"
-            ).value.trim(),
+      <td class="right">
+       ${money(sale.gst)}
+      </td>
 
-        address:
-            document.getElementById(
-                "companyAddress"
-            ).value.trim()
+      <td class="right">
+       <b>
+        ${money(sale.total)}
+       </b>
+      </td>
 
-    };
+      <td class="right">
+       ${money(sale.outstanding)}
+      </td>
 
-
-    saveStorage(
-        STORAGE.company,
-        DataState.company
-    );
-
-
-    alert(
-        "Company details saved."
-    );
+     </tr>
+     `
+   )
+   .join("");
 
 }
 
 
 /* =========================================================
-   BACKUP / RESTORE
+   RENDER PURCHASES
    ========================================================= */
 
-function downloadBackup() {
-
-    const backup = {
-
-        version:
-            "3.0.0",
-
-        createdAt:
-            new Date()
-                .toISOString(),
-
-        data: {
-
-            sales:
-                DataState.sales,
-
-            parties:
-                DataState.parties,
-
-            ledgers:
-                DataState.ledgers,
-
-            groups:
-                DataState.groups,
-
-            purchases:
-                DataState.purchases,
-
-            vouchers:
-                DataState.vouchers,
-
-            excel:
-                DataState.excel,
-
-            company:
-                DataState.company
-
-        }
-
-    };
-
-
-    const blob =
-        new Blob(
-            [
-                JSON.stringify(
-                    backup,
-                    null,
-                    2
-                )
-            ],
-            {
-                type:
-                    "application/json"
-            }
-        );
-
-
-    const url =
-        URL.createObjectURL(
-            blob
-        );
-
-
-    const link =
-        document.createElement(
-            "a"
-        );
-
-
-    link.href =
-        url;
-
-
-    link.download =
-        "businessdesk-backup.json";
-
-
-    document.body.appendChild(
-        link
-    );
-
-
-    link.click();
-
-
-    link.remove();
-
-
-    URL.revokeObjectURL(
-        url
-    );
-
-}
-
-
-function initializeRestore() {
-
-    const input =
-        document.getElementById(
-            "restoreFile"
-        );
-
-
-    if (!input) {
-
-        return;
-
-    }
-
-
-    input.addEventListener(
-        "change",
-        function() {
-
-            const file =
-                input.files[0];
-
-
-            if (!file) {
-
-                return;
-
-            }
-
-
-            const reader =
-                new FileReader();
-
-
-            reader.onload =
-                function(event) {
-
-                    try {
-
-                        const backup =
-                            JSON.parse(
-                                event.target.result
-                            );
-
-
-                        if (
-                            !backup.data
-                        ) {
-
-                            throw new Error(
-                                "Invalid backup"
-                            );
-
-                        }
-
-
-                        DataState.sales =
-                            Array.isArray(
-                                backup.data.sales
-                            )
-                                ? backup.data.sales
-                                : [];
-
-
-                        DataState.parties =
-                            Array.isArray(
-                                backup.data.parties
-                            )
-                                ? backup.data.parties
-                                : [];
-
-
-                        DataState.ledgers =
-                            Array.isArray(
-                                backup.data.ledgers
-                            )
-                                ? backup.data.ledgers
-                                : [];
-
-
-                        DataState.groups =
-                            Array.isArray(
-                                backup.data.groups
-                            )
-                                ? backup.data.groups
-                                : [];
-
-
-                        DataState.purchases =
-                            Array.isArray(
-                                backup.data.purchases
-                            )
-                                ? backup.data.purchases
-                                : [];
-
-
-                        DataState.vouchers =
-                            Array.isArray(
-                                backup.data.vouchers
-                            )
-                                ? backup.data.vouchers
-                                : [];
-
-
-                        DataState.excel =
-                            Array.isArray(
-                                backup.data.excel
-                            )
-                                ? backup.data.excel
-                                : [];
-
-
-                        DataState.company =
-                            backup.data.company ||
-                            {};
-
-
-                        saveStorage(
-                            STORAGE.sales,
-                            DataState.sales
-                        );
-
-
-                        saveStorage(
-                            STORAGE.parties,
-                            DataState.parties
-                        );
-
-
-                        saveStorage(
-                            STORAGE.ledgers,
-                            DataState.ledgers
-                        );
-
-
-                        saveStorage(
-                            STORAGE.groups,
-                            DataState.groups
-                        );
-
-
-                        saveStorage(
-                            STORAGE.purchases,
-                            DataState.purchases
-                        );
-
-
-                        saveStorage(
-                            STORAGE.vouchers,
-                            DataState.vouchers
-                        );
-
-
-                        saveStorage(
-                            STORAGE.excel,
-                            DataState.excel
-                        );
-
-
-                        saveStorage(
-                            STORAGE.company,
-                            DataState.company
-                        );
-
-
-                        renderAll();
-
-                        loadCompany();
-
-
-                        const message =
-                            document.getElementById(
-                                "backupMessage"
-                            );
-
-
-                        if (message) {
-
-                            message.className =
-                                "notice success";
-
-                            message.textContent =
-                                "Backup restored successfully.";
-
-                        }
-
-
-                    }
-
-                    catch (error) {
-
-                        const message =
-                            document.getElementById(
-                                "backupMessage"
-                            );
-
-
-                        if (message) {
-
-                            message.className =
-                                "notice danger";
-
-                            message.textContent =
-                                "Invalid backup file.";
-
-                        }
-
-                    }
-
-                };
-
-
-            reader.readAsText(
-                file
-            );
-
-        }
-    );
+function renderPurchases(){
+
+ const body=
+  document.getElementById(
+   "purchaseBody"
+  );
+
+
+ if(!db.purchases.length){
+
+  body.innerHTML=
+   `
+   <tr>
+    <td colspan="7"
+        class="muted">
+     No purchases.
+    </td>
+   </tr>
+   `;
+
+  return;
+
+ }
+
+
+ body.innerHTML=
+  db.purchases
+   .map(
+    purchase=>
+     `
+     <tr>
+
+      <td>
+       <b>
+        ${esc(purchase.billNo)}
+       </b>
+      </td>
+
+      <td>
+       ${esc(purchase.date)}
+      </td>
+
+      <td>
+       ${esc(purchase.supplier)}
+      </td>
+
+      <td class="right">
+       ${money(purchase.taxable)}
+      </td>
+
+      <td class="right">
+       ${money(purchase.gst)}
+      </td>
+
+      <td class="right">
+       <b>
+        ${money(purchase.total)}
+       </b>
+      </td>
+
+      <td class="right">
+       ${money(purchase.outstanding)}
+      </td>
+
+     </tr>
+     `
+   )
+   .join("");
 
 }
 
 
 /* =========================================================
-   MODALS
+   RENDER PARTIES
    ========================================================= */
 
-function openModal(
-    id
-) {
+function renderParties(){
 
-    const modal =
-        document.getElementById(
-            id
-        );
+ const body=
+  document.getElementById(
+   "partyBody"
+  );
 
 
-    if (modal) {
+ if(!db.parties.length){
 
-        modal.classList.add(
-            "open"
-        );
+  body.innerHTML=
+   `
+   <tr>
+    <td colspan="4"
+        class="muted">
+     No parties.
+    </td>
+   </tr>
+   `;
 
-    }
+  return;
 
-}
-
-
-function closeModal(
-    id
-) {
-
-    const modal =
-        document.getElementById(
-            id
-        );
+ }
 
 
-    if (modal) {
+ body.innerHTML=
+  db.parties
+   .map(
+    party=>
+     `
+     <tr>
 
-        modal.classList.remove(
-            "open"
-        );
+      <td>
+       <b>
+        ${esc(party.name)}
+       </b>
+      </td>
 
-    }
+      <td>
+       ${esc(party.type)}
+      </td>
 
-}
+      <td>
+       ${esc(party.gstin)}
+      </td>
 
+      <td>
+       ${esc(party.phone)}
+      </td>
 
-document.addEventListener(
-    "click",
-    function(event) {
-
-        if (
-            event.target.classList.contains(
-                "modal"
-            )
-        ) {
-
-            event.target.classList.remove(
-                "open"
-            );
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   ID
-   ========================================================= */
-
-function createID(
-    prefix
-) {
-
-    return (
-        prefix +
-        "-" +
-        Date.now() +
-        "-" +
-        Math.random()
-            .toString(36)
-            .slice(2, 8)
-    );
+     </tr>
+     `
+   )
+   .join("");
 
 }
 
 
 /* =========================================================
-   LOAD ALL DATA
+   RENDER VOUCHERS
    ========================================================= */
 
-function loadAllData() {
+function renderVouchers(){
 
-    DataState.sales =
-        loadStorage(
-            STORAGE.sales,
-            []
-        );
-
-
-    DataState.parties =
-        loadStorage(
-            STORAGE.parties,
-            []
-        );
+ const body=
+  document.getElementById(
+   "voucherBody"
+  );
 
 
-    DataState.ledgers =
-        loadStorage(
-            STORAGE.ledgers,
-            []
-        );
+ if(!db.vouchers.length){
+
+  body.innerHTML=
+   `
+   <tr>
+    <td colspan="6"
+        class="muted">
+     No vouchers.
+    </td>
+   </tr>
+   `;
+
+  return;
+
+ }
 
 
-    DataState.groups =
-        loadStorage(
-            STORAGE.groups,
-            []
-        );
+ body.innerHTML=
+  db.vouchers
+   .map(
+    voucher=>
+     `
+     <tr>
 
+      <td>
+       ${esc(voucher.number)}
+      </td>
 
-    DataState.purchases =
-        loadStorage(
-            STORAGE.purchases,
-            []
-        );
+      <td>
+       ${esc(voucher.date)}
+      </td>
 
+      <td>
+       ${esc(voucher.type)}
+      </td>
 
-    DataState.vouchers =
-        loadStorage(
-            STORAGE.vouchers,
-            []
-        );
+      <td>
+       ${esc(voucher.debit)}
+      </td>
 
+      <td>
+       ${esc(voucher.credit)}
+      </td>
 
-    DataState.excel =
-        loadStorage(
-            STORAGE.excel,
-            []
-        );
+      <td class="right">
+       ${money(voucher.amount)}
+      </td>
 
-
-    DataState.company =
-        loadStorage(
-            STORAGE.company,
-            {}
-        );
+     </tr>
+     `
+   )
+   .join("");
 
 }
 
 
 /* =========================================================
-   RENDER EVERYTHING
+   REPORTS / GST / OUTSTANDING
    ========================================================= */
 
-function renderAll() {
+function refreshReports(){
 
-    renderGroups();
+ const sales=
+  db.sales.reduce(
+   (sum,item)=>
+    sum+num(item.total),
+   0
+  );
 
-    renderLedgers();
 
-    renderParties();
+ const purchases=
+  db.purchases.reduce(
+   (sum,item)=>
+    sum+num(item.total),
+   0
+  );
 
-    renderSales();
 
-    renderExcel();
+ const outputGST=
+  db.sales.reduce(
+   (sum,item)=>
+    sum+num(item.gst),
+   0
+  );
 
-    updateDashboard();
+
+ const inputGST=
+  db.purchases.reduce(
+   (sum,item)=>
+    sum+num(item.gst),
+   0
+  );
+
+
+ const receivable=
+  db.sales.reduce(
+   (sum,item)=>
+    sum+num(item.outstanding),
+   0
+  );
+
+
+ const payable=
+  db.purchases.reduce(
+   (sum,item)=>
+    sum+num(item.outstanding),
+   0
+  );
+
+
+ document.getElementById(
+  "dashSales"
+ ).textContent=
+  money(sales);
+
+
+ document.getElementById(
+  "dashPurchases"
+ ).textContent=
+  money(purchases);
+
+
+ document.getElementById(
+  "dashOutstanding"
+ ).textContent=
+  money(
+   receivable+
+   payable
+  );
+
+
+ document.getElementById(
+  "reportSales"
+ ).textContent=
+  money(sales);
+
+
+ document.getElementById(
+  "reportPurchases"
+ ).textContent=
+  money(purchases);
+
+
+ document.getElementById(
+  "reportOutputGST"
+ ).textContent=
+  money(outputGST);
+
+
+ document.getElementById(
+  "reportInputGST"
+ ).textContent=
+  money(inputGST);
+
+
+ document.getElementById(
+  "gstOutput"
+ ).textContent=
+  money(outputGST);
+
+
+ document.getElementById(
+  "gstInput"
+ ).textContent=
+  money(inputGST);
+
+
+ document.getElementById(
+  "gstNet"
+ ).textContent=
+  money(
+   outputGST-
+   inputGST
+  );
+
+
+ document.getElementById(
+  "receivable"
+ ).textContent=
+  money(receivable);
+
+
+ document.getElementById(
+  "payable"
+ ).textContent=
+  money(payable);
+
+}
+
+
+/* =========================================================
+   DIAGNOSTICS
+   ========================================================= */
+
+function diagnostics(){
+
+ const total=
+  db.sales.length+
+  db.purchases.length+
+  db.parties.length+
+  db.vouchers.length;
+
+
+ document.getElementById(
+  "diagnostics"
+ ).innerHTML=
+
+ `
+ <b>
+  BusinessDesk System Diagnostics
+ </b>
+
+ <br><br>
+
+ Phase Version:
+ 3.1.0
+
+ <br>
+
+ Database:
+ AVAILABLE
+
+ <br>
+
+ Data Structure:
+ VALID
+
+ <br>
+
+ Navigation:
+ ${document.querySelectorAll(".nav-button").length}
+ item(s)
+
+ <br>
+
+ Sales Records:
+ ${db.sales.length}
+
+ <br>
+
+ Purchase Records:
+ ${db.purchases.length}
+
+ <br>
+
+ Party Records:
+ ${db.parties.length}
+
+ <br>
+
+ Voucher Records:
+ ${db.vouchers.length}
+
+ <br>
+
+ Total Records:
+ ${total}
+
+ <br>
+
+ Journal Entries:
+ ${db.journal.length}
+
+ <br>
+
+ JavaScript State:
+ READY
+
+ <br><br>
+
+ <b>Errors:</b>
+ None
+ `;
+
+}
+
+
+/* =========================================================
+   REFRESH EVERYTHING
+   ========================================================= */
+
+function refreshAll(){
+
+ renderSales();
+
+ renderPurchases();
+
+ renderParties();
+
+ renderVouchers();
+
+ refreshReports();
+
+ diagnostics();
+
+ renderCalcHistory();
+
+}
+
+
+/* =========================================================
+   BACKUP
+   ========================================================= */
+
+function backupData(){
+
+ const blob=
+  new Blob(
+   [
+    JSON.stringify(
+     db,
+     null,
+     2
+    )
+   ],
+   {
+    type:"application/json"
+   }
+  );
+
+
+ const url=
+  URL.createObjectURL(
+   blob
+  );
+
+
+ const link=
+  document.createElement("a");
+
+
+ link.href=url;
+
+
+ link.download=
+  "businessdesk-backup-"+
+  today()+
+  ".json";
+
+
+ document.body.appendChild(link);
+
+
+ link.click();
+
+
+ link.remove();
+
+
+ setTimeout(
+  ()=>{
+   URL.revokeObjectURL(url);
+  },
+  1000
+ );
+
+}
+
+
+/* =========================================================
+   CLEAR DATA
+   ========================================================= */
+
+function clearAllData(){
+
+ const confirmed=
+  confirm(
+   "This will permanently clear all locally stored BusinessDesk data. Continue?"
+  );
+
+
+ if(!confirmed)
+  return;
+
+
+ db=
+  defaultDB();
+
+
+ saveDB();
+
+
+ calc.history=[];
+
+
+ calcClear();
+
+
+ refreshAll();
+
+
+ alert(
+  "All local data cleared."
+ );
 
 }
 
@@ -7649,55 +3879,18 @@ function renderAll() {
    INITIALIZATION
    ========================================================= */
 
-function initializeApplication() {
-
-    if (
-        AppState.initialized
-    ) {
-
-        return;
-
-    }
+calc.history=
+ Array.isArray(
+  db.calculatorHistory
+ )
+  ? db.calculatorHistory
+  : [];
 
 
-    loadAllData();
+refreshAll();
 
 
-    initializeNavigation();
-
-    initializeMenu();
-
-    initializeCalculator();
-
-    initializeRestore();
-
-    initializeSales();
-
-
-    loadCompany();
-
-    renderAll();
-
-
-    navigateToSection(
-        "dashboard"
-    );
-
-
-    AppState.initialized =
-        true;
-
-}
-
-
-/* =========================================================
-   START
-   ========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    initializeApplication
-);
+navigate("dashboard");
 
 </script>
 
