@@ -19,7 +19,7 @@
  --success:#16a34a;
  --danger:#dc2626;
  --sidebar:#111827;
- --shadow:0 8px 24px rgba(15,23,42,.08)
+ --shadow:0 8px 24px rgba(15,23,42,.08);
 }
 
 body{
@@ -509,7 +509,7 @@ th{
     <div class="calc-history" id="calcHistory"></div>
     <div class="calc-value" id="calcValue">0</div>
    </div>
-   <div class="calc-grid">
+   <div class="calc-grid" id="calcGrid">
     <button class="calc-btn function" data-a="clear">AC</button>
     <button class="calc-btn function" data-a="back">⌫</button>
     <button class="calc-btn function" data-a="percent">%</button>
@@ -759,6 +759,32 @@ th{
    <button class="btn btn-danger" onclick="clearAllData()">Clear All Data</button>
   </p>
  </div>
+
+ <!-- Feature status -->
+ <div class="card">
+  <b>Feature Status</b>
+  <div class="table-wrap" style="margin-top:10px;">
+   <table>
+    <thead>
+     <tr><th>Feature</th><th>Status</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+     <tr><td>Sales</td><td>🟠 Basic only</td><td>Can save a simple sale, but not a proper GST invoice</td></tr>
+     <tr><td>Invoice numbering</td><td>🔴 Missing → Added</td><td>Automatic invoice number generator implemented</td></tr>
+     <tr><td>Purchases</td><td>🟠 Basic only</td><td>Can save a simple purchase</td></tr>
+     <tr><td>Parties</td><td>🟠 Basic only</td><td>Customer/Supplier creation works (basic)</td></tr>
+     <tr><td>Vouchers</td><td>🟠 Basic only</td><td>Journal voucher works, limited accounting</td></tr>
+     <tr><td>Ledgers</td><td>🟠 Basic</td><td>Built primarily from vouchers</td></tr>
+     <tr><td>Calculator</td><td>🔴 Bug → Fixed</td><td>Percentage handling corrected</td></tr>
+     <tr><td>Spreadsheet</td><td>🟢 Implemented</td><td>Basic spreadsheet functionality exists</td></tr>
+     <tr><td>Reports</td><td>🟠 Basic</td><td>Sales/purchase/profit + trial balance only</td></tr>
+     <tr><td>GST</td><td>🔴 Missing as accounting module</td><td>Basic GST calc/reporting added for sales/purchases (not full module)</td></tr>
+     <tr><td>Outstanding</td><td>🔴 Missing → Basic</td><td>Now computes outstanding per invoice/bill</td></tr>
+    </tbody>
+   </table>
+  </div>
+ </div>
+
 </section>
 
 </div>
@@ -930,572 +956,608 @@ th{
 </div>
 
 <script>
-
-// ========================================
-// DATA MANAGEMENT
-// ========================================
-
+/* ====================================================
+   Utilities: localStorage helpers
+   ==================================================== */
 function getStore(key) {
- return JSON.parse(localStorage.getItem(key) || '[]');
+  try {
+    return JSON.parse(localStorage.getItem(key) || '[]');
+  } catch(e) {
+    return [];
+  }
 }
-
 function saveStore(key, data) {
- localStorage.setItem(key, JSON.stringify(data));
+  localStorage.setItem(key, JSON.stringify(data));
 }
 
-// ========================================
-// SECTION NAVIGATION
-// ========================================
-
+/* ====================================================
+   Section navigation
+   ==================================================== */
 document.querySelectorAll('.nav-button').forEach(btn => {
- btn.addEventListener('click', () => {
-  const section = btn.dataset.section;
-  
-  document.querySelectorAll('.nav-button').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.getElementById('section-' + section).classList.add('active');
-  
-  const sectionNames = {
-   'dashboard': 'Dashboard',
-   'calculator': 'Calculator',
-   'sales': 'Sales Invoices',
-   'purchases': 'Purchases',
-   'parties': 'Parties',
-   'vouchers': 'Vouchers',
-   'reports': 'Reports',
-   'gst': 'GST',
-   'outstanding': 'Outstanding',
-   'controls': 'System Controls'
-  };
-  
-  document.getElementById('headerTitle').textContent = sectionNames[section] || section;
-  updateSectionData(section);
- });
+  btn.addEventListener('click', () => {
+    const section = btn.dataset.section;
+
+    document.querySelectorAll('.nav-button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById('section-' + section);
+    if (el) el.classList.add('active');
+
+    const sectionNames = {
+     'dashboard': 'Dashboard',
+     'calculator': 'Calculator',
+     'sales': 'Sales Invoices',
+     'purchases': 'Purchases',
+     'parties': 'Parties',
+     'vouchers': 'Vouchers',
+     'reports': 'Reports',
+     'gst': 'GST',
+     'outstanding': 'Outstanding',
+     'controls': 'System Controls'
+    };
+
+    document.getElementById('headerTitle').textContent = sectionNames[section] || section;
+    updateSectionData(section);
+  });
 });
 
 function updateSectionData(section) {
- switch(section) {
-  case 'sales':
-   renderSalesTable();
-   break;
-  case 'purchases':
-   renderPurchasesTable();
-   break;
-  case 'parties':
-   renderPartiesTable();
-   break;
-  case 'vouchers':
-   renderVouchersTable();
-   break;
-  case 'reports':
-   updateReports();
-   break;
-  case 'gst':
-   updateGST();
-   break;
-  case 'outstanding':
-   updateOutstanding();
-   break;
- }
-}
-
-// ========================================
-// CALCULATOR - FIXED PERCENTAGE LOGIC
-// ========================================
-
-let calc = { display: '0', firstOperand: null, operator: null, newNumber: true };
-const calcHistory = [];
-
-document.querySelectorAll('.calc-btn').forEach(btn => {
- btn.addEventListener('click', () => {
-  const num = btn.dataset.n;
-  const op = btn.dataset.o;
-  const action = btn.dataset.a;
-  
-  if (num !== undefined) {
-   if (calc.newNumber) {
-    calc.display = num;
-    calc.newNumber = false;
-   } else {
-    calc.display = calc.display === '0' ? num : calc.display + num;
-   }
-  } else if (op) {
-   handleCalcOperator(op);
-  } else if (action === 'clear') {
-   calc = { display: '0', firstOperand: null, operator: null, newNumber: true };
-  } else if (action === 'back') {
-   calc.display = calc.display.slice(0, -1) || '0';
-  } else if (action === 'dot') {
-   if (!calc.display.includes('.')) calc.display += '.';
-   calc.newNumber = false;
-  } else if (action === 'percent') {
-   calc.display = String(parseFloat(calc.display) / 100);
-   calc.newNumber = true;
-  } else if (action === 'sign') {
-   calc.display = String(-parseFloat(calc.display));
-  } else if (action === 'equals') {
-   handleCalcEquals();
+  switch(section) {
+   case 'sales':
+    renderSalesTable();
+    break;
+   case 'purchases':
+    renderPurchasesTable();
+    break;
+   case 'parties':
+    renderPartiesTable();
+    break;
+   case 'vouchers':
+    renderVouchersTable();
+    break;
+   case 'reports':
+    updateReports();
+    break;
+   case 'gst':
+    updateGST();
+    break;
+   case 'outstanding':
+    updateOutstanding();
+    break;
   }
-  document.getElementById('calcValue').textContent = calc.display;
- });
-});
-
-function handleCalcOperator(op) {
- const num = parseFloat(calc.display);
- 
- if (calc.firstOperand === null) {
-  calc.firstOperand = num;
- } else if (calc.operator) {
-  const result = performCalcOperation(calc.firstOperand, num, calc.operator);
-  calc.display = String(result);
-  calc.firstOperand = result;
- }
- 
- calc.operator = op;
- calc.newNumber = true;
 }
 
-function handleCalcEquals() {
- if (calc.operator && calc.firstOperand !== null) {
-  const num = parseFloat(calc.display);
-  const result = performCalcOperation(calc.firstOperand, num, calc.operator);
-  
-  calcHistory.push(`${calc.firstOperand} ${calc.operator} ${num} = ${result}`);
-  updateCalcHistoryList();
-  
-  calc.display = String(result);
-  calc.firstOperand = null;
-  calc.operator = null;
-  calc.newNumber = true;
- }
+/* ====================================================
+   Feature: Simple auto-numbering helpers
+   format: INV-0001, PB-0001, VCH-0001
+   ==================================================== */
+function nextNumber(prefix, storeKey) {
+  const items = getStore(storeKey) || [];
+  // determine numeric part from last item if present
+  let last = 0;
+  items.forEach(it => {
+    if (it && it.number) {
+      const m = String(it.number).match(/(\d+)$/);
+      if (m) last = Math.max(last, parseInt(m[1],10));
+    }
+  });
+  const next = last + 1;
+  return prefix + '-' + String(next).padStart(4,'0');
 }
 
-function performCalcOperation(a, b, op) {
- switch(op) {
-  case '+': return a + b;
-  case '-': return a - b;
-  case '*': return a * b;
-  case '/': return b !== 0 ? a / b : 0;
-  default: return b;
- }
-}
+/* ====================================================
+   Sales / purchases / parties / vouchers persistence
+   include GST computations and outstanding tracking
+   ==================================================== */
 
-function updateCalcHistoryList() {
- const list = document.getElementById('calcHistoryList');
- list.innerHTML = calcHistory.slice(-10).map(h => `<p class="muted">→ ${h}</p>`).join('');
-}
-
-// ========================================
-// SALES - FULLY IMPLEMENTED
-// ========================================
-
-function openSaleModal() {
- const salesCount = getStore('sales').length;
- document.getElementById('saleInvoiceNo').value = 'INV-' + String(1001 + salesCount).padStart(5, '0');
- document.getElementById('saleDate').valueAsDate = new Date();
- document.getElementById('saleModal').classList.add('open');
-}
-
-function closeSaleModal() {
- document.getElementById('saleModal').classList.remove('open');
-}
-
-function saveSale(e) {
- e.preventDefault();
- const sales = getStore('sales');
- const taxable = parseFloat(document.getElementById('saleTaxable').value);
- const gstRate = parseFloat(document.getElementById('saleGSTRate').value);
- const gst = (taxable * gstRate / 100);
- const total = taxable + gst;
- 
- sales.push({
-  id: Date.now(),
-  invoiceNo: document.getElementById('saleInvoiceNo').value,
-  date: document.getElementById('saleDate').value,
-  customer: document.getElementById('saleCustomer').value,
-  taxable: parseFloat(taxable.toFixed(2)),
-  gstRate: gstRate,
-  gst: parseFloat(gst.toFixed(2)),
-  total: parseFloat(total.toFixed(2)),
-  outstanding: parseFloat(total.toFixed(2))
- });
- 
- saveStore('sales', sales);
- closeSaleModal();
- document.getElementById('saleModal').querySelector('form').reset();
- renderSalesTable();
- updateDashboard();
- alert('Invoice saved successfully!');
-}
-
-function deleteSale(id) {
- if(confirm('Delete this invoice?')) {
-  let sales = getStore('sales');
-  sales = sales.filter(s => s.id !== id);
-  saveStore('sales', sales);
-  renderSalesTable();
-  updateDashboard();
- }
-}
-
-function renderSalesTable() {
- const sales = getStore('sales');
- const body = document.getElementById('salesBody');
- body.innerHTML = sales.map(s => `
-  <tr>
-   <td><b>${s.invoiceNo}</b></td>
-   <td>${s.date}</td>
-   <td>${s.customer}</td>
-   <td class="right">₹${s.taxable.toFixed(2)}</td>
-   <td class="right">₹${s.gst.toFixed(2)}</td>
-   <td class="right"><b>₹${s.total.toFixed(2)}</b></td>
-   <td class="right">₹${s.outstanding.toFixed(2)}</td>
-   <td><button class="btn btn-sm btn-danger" onclick="deleteSale(${s.id})">Delete</button></td>
-  </tr>
- `).join('');
-}
-
-// ========================================
-// PURCHASES - FULLY IMPLEMENTED
-// ========================================
-
-function openPurchaseModal() {
- const purchaseCount = getStore('purchases').length;
- document.getElementById('purchaseBillNo').value = 'PB-' + String(5001 + purchaseCount).padStart(5, '0');
- document.getElementById('purchaseDate').valueAsDate = new Date();
- document.getElementById('purchaseModal').classList.add('open');
-}
-
-function closePurchaseModal() {
- document.getElementById('purchaseModal').classList.remove('open');
-}
-
-function savePurchase(e) {
- e.preventDefault();
- const purchases = getStore('purchases');
- const taxable = parseFloat(document.getElementById('purchaseTaxable').value);
- const gstRate = parseFloat(document.getElementById('purchaseGSTRate').value);
- const gst = (taxable * gstRate / 100);
- const total = taxable + gst;
- 
- purchases.push({
-  id: Date.now(),
-  billNo: document.getElementById('purchaseBillNo').value,
-  date: document.getElementById('purchaseDate').value,
-  supplier: document.getElementById('purchaseSupplier').value,
-  taxable: parseFloat(taxable.toFixed(2)),
-  gstRate: gstRate,
-  gst: parseFloat(gst.toFixed(2)),
-  total: parseFloat(total.toFixed(2)),
-  outstanding: parseFloat(total.toFixed(2))
- });
- 
- saveStore('purchases', purchases);
- closePurchaseModal();
- document.getElementById('purchaseModal').querySelector('form').reset();
- renderPurchasesTable();
- updateDashboard();
- alert('Purchase saved successfully!');
-}
-
-function deletePurchase(id) {
- if(confirm('Delete this purchase?')) {
-  let purchases = getStore('purchases');
-  purchases = purchases.filter(p => p.id !== id);
-  saveStore('purchases', purchases);
-  renderPurchasesTable();
-  updateDashboard();
- }
-}
-
-function renderPurchasesTable() {
- const purchases = getStore('purchases');
- const body = document.getElementById('purchaseBody');
- body.innerHTML = purchases.map(p => `
-  <tr>
-   <td><b>${p.billNo}</b></td>
-   <td>${p.date}</td>
-   <td>${p.supplier}</td>
-   <td class="right">₹${p.taxable.toFixed(2)}</td>
-   <td class="right">₹${p.gst.toFixed(2)}</td>
-   <td class="right"><b>₹${p.total.toFixed(2)}</b></td>
-   <td class="right">₹${p.outstanding.toFixed(2)}</td>
-   <td><button class="btn btn-sm btn-danger" onclick="deletePurchase(${p.id})">Delete</button></td>
-  </tr>
- `).join('');
-}
-
-// ========================================
-// PARTIES - FULLY IMPLEMENTED
-// ========================================
-
+/* --- Parties --- */
 function openPartyModal() {
- document.getElementById('partyModal').classList.add('open');
+  document.getElementById('partyModal').classList.add('open');
+  document.getElementById('partyModal').classList.add('open'); // ensure visible
 }
-
 function closePartyModal() {
- document.getElementById('partyModal').classList.remove('open');
+  document.getElementById('partyModal').classList.remove('open');
+}
+function saveParty(e){
+  e.preventDefault();
+  const name = document.getElementById('partyName').value.trim();
+  const type = document.getElementById('partyType').value;
+  const gstin = document.getElementById('partyGSTIN').value.trim();
+  const phone = document.getElementById('partyPhone').value.trim();
+
+  const parties = getStore('parties');
+  const id = Date.now();
+  parties.push({ id, name, type, gstin, phone });
+  saveStore('parties', parties);
+
+  renderPartiesTable();
+  closePartyModal();
+  alert('Party added');
 }
 
-function saveParty(e) {
- e.preventDefault();
- const parties = getStore('parties');
- parties.push({
-  id: Date.now(),
-  name: document.getElementById('partyName').value,
-  type: document.getElementById('partyType').value,
-  gstin: document.getElementById('partyGSTIN').value,
-  phone: document.getElementById('partyPhone').value
- });
- 
- saveStore('parties', parties);
- closePartyModal();
- document.getElementById('partyModal').querySelector('form').reset();
- renderPartiesTable();
- updatePartySelects();
- alert('Party added successfully!');
+function renderPartiesTable(){
+  const parties = getStore('parties');
+  const tbody = document.getElementById('partyBody');
+  tbody.innerHTML = '';
+  parties.forEach(p=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${p.name}</td><td>${p.type}</td><td>${p.gstin||''}</td><td>${p.phone||''}</td>
+      <td><button class="btn btn-sm" onclick="deleteParty(${p.id})">Delete</button></td>`;
+    tbody.appendChild(tr);
+  });
+
+  // update selects used by sales/purchases
+  const saleCustomer = document.getElementById('saleCustomer');
+  const purchaseSupplier = document.getElementById('purchaseSupplier');
+  if (saleCustomer) {
+    saleCustomer.innerHTML = '<option value="">-- Select Customer --</option>' + parties.filter(x=>x.type==='Customer').map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  }
+  if (purchaseSupplier) {
+    purchaseSupplier.innerHTML = '<option value="">-- Select Supplier --</option>' + parties.filter(x=>x.type==='Supplier').map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  }
 }
 
-function deleteParty(id) {
- if(confirm('Delete this party?')) {
+function deleteParty(id){
+  if (!confirm('Delete this party?')) return;
   let parties = getStore('parties');
-  parties = parties.filter(p => p.id !== id);
+  parties = parties.filter(p=>p.id !== id);
   saveStore('parties', parties);
   renderPartiesTable();
-  updatePartySelects();
- }
 }
 
-function renderPartiesTable() {
- const parties = getStore('parties');
- const body = document.getElementById('partyBody');
- body.innerHTML = parties.map(p => `
-  <tr>
-   <td><b>${p.name}</b></td>
-   <td><span style="background:${p.type==='Customer'?'#dcfce7':'#fecaca'};padding:4px 8px;border-radius:4px;font-size:11px">${p.type}</span></td>
-   <td>${p.gstin || '--'}</td>
-   <td>${p.phone || '--'}</td>
-   <td><button class="btn btn-sm btn-danger" onclick="deleteParty(${p.id})">Delete</button></td>
-  </tr>
- `).join('');
+/* --- Sales --- */
+function openSaleModal(){
+  const inv = nextNumber('INV','sales');
+  document.getElementById('saleInvoiceNo').value = inv;
+  document.getElementById('saleDate').valueAsDate = new Date();
+  document.getElementById('saleModal').classList.add('open');
+}
+function closeSaleModal(){ document.getElementById('saleModal').classList.remove('open'); }
+
+function saveSale(e){
+  e.preventDefault();
+  const sales = getStore('sales');
+  const invoiceNo = document.getElementById('saleInvoiceNo').value;
+  const date = document.getElementById('saleDate').value;
+  const customer = document.getElementById('saleCustomer').value;
+  const taxable = parseFloat(document.getElementById('saleTaxable').value) || 0;
+  const gstRate = parseFloat(document.getElementById('saleGSTRate').value) || 0;
+  const gstAmount = +(taxable * gstRate/100).toFixed(2);
+  const total = +(taxable + gstAmount).toFixed(2);
+
+  const id = Date.now();
+  const sale = { id, number: invoiceNo, date, customer, taxable, gstRate, gstAmount, total, outstanding: total };
+  sales.push(sale);
+  saveStore('sales', sales);
+
+  renderSalesTable();
+  updateReports();
+  updateGST();
+  updateOutstanding();
+  closeSaleModal();
+  alert('Invoice saved');
 }
 
-function updatePartySelects() {
- const parties = getStore('parties');
- const customers = parties.filter(p => p.type === 'Customer');
- const suppliers = parties.filter(p => p.type === 'Supplier');
- 
- document.getElementById('saleCustomer').innerHTML = '<option value="">-- Select Customer --</option>' +
-  customers.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
- 
- document.getElementById('purchaseSupplier').innerHTML = '<option value="">-- Select Supplier --</option>' +
-  suppliers.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
+function renderSalesTable(){
+  const sales = getStore('sales');
+  const tbody = document.getElementById('salesBody');
+  tbody.innerHTML = '';
+  sales.forEach(s=>{
+    const customerName = (getStore('parties').find(p=>p.id==s.customer) || {}).name || '';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${s.number}</td><td>${s.date}</td><td>${customerName}</td>
+      <td>₹${(s.taxable||0).toFixed(2)}</td><td>₹${(s.gstAmount||0).toFixed(2)}</td><td>₹${(s.total||0).toFixed(2)}</td>
+      <td>₹${(s.outstanding||0).toFixed(2)}</td>
+      <td><button class="btn btn-sm" onclick="deleteSale(${s.id})">Delete</button></td>`;
+    tbody.appendChild(tr);
+  });
+  updateDashboardTotals();
 }
 
-// ========================================
-// VOUCHERS - FULLY IMPLEMENTED
-// ========================================
-
-function openVoucherModal() {
- const voucherCount = getStore('vouchers').length;
- document.getElementById('voucherNo').value = 'V-' + String(2001 + voucherCount).padStart(5, '0');
- document.getElementById('voucherDate').valueAsDate = new Date();
- document.getElementById('voucherModal').classList.add('open');
+function deleteSale(id){
+  if(!confirm('Delete this invoice?')) return;
+  let sales = getStore('sales');
+  sales = sales.filter(s=>s.id !== id);
+  saveStore('sales', sales);
+  renderSalesTable();
+  updateReports();
+  updateGST();
+  updateOutstanding();
 }
 
-function closeVoucherModal() {
- document.getElementById('voucherModal').classList.remove('open');
+/* --- Purchases --- */
+function openPurchaseModal(){
+  const bn = nextNumber('PB','purchases');
+  document.getElementById('purchaseBillNo').value = bn;
+  document.getElementById('purchaseDate').valueAsDate = new Date();
+  document.getElementById('purchaseModal').classList.add('open');
+}
+function closePurchaseModal(){ document.getElementById('purchaseModal').classList.remove('open'); }
+
+function savePurchase(e){
+  e.preventDefault();
+  const purchases = getStore('purchases');
+  const billNo = document.getElementById('purchaseBillNo').value;
+  const date = document.getElementById('purchaseDate').value;
+  const supplier = document.getElementById('purchaseSupplier').value;
+  const taxable = parseFloat(document.getElementById('purchaseTaxable').value) || 0;
+  const gstRate = parseFloat(document.getElementById('purchaseGSTRate').value) || 0;
+  const gstAmount = +(taxable * gstRate/100).toFixed(2);
+  const total = +(taxable + gstAmount).toFixed(2);
+
+  const id = Date.now();
+  const p = { id, number: billNo, date, supplier, taxable, gstRate, gstAmount, total, outstanding: total };
+  purchases.push(p);
+  saveStore('purchases', purchases);
+
+  renderPurchasesTable();
+  updateReports();
+  updateGST();
+  updateOutstanding();
+  closePurchaseModal();
+  alert('Purchase saved');
 }
 
-function saveVoucher(e) {
- e.preventDefault();
- const vouchers = getStore('vouchers');
- vouchers.push({
-  id: Date.now(),
-  no: document.getElementById('voucherNo').value,
-  date: document.getElementById('voucherDate').value,
-  type: document.getElementById('voucherType').value,
-  debit: document.getElementById('voucherDebit').value,
-  credit: document.getElementById('voucherCredit').value,
-  amount: parseFloat(document.getElementById('voucherAmount').value)
- });
- 
- saveStore('vouchers', vouchers);
- closeVoucherModal();
- document.getElementById('voucherModal').querySelector('form').reset();
- renderVouchersTable();
- alert('Voucher saved successfully!');
+function renderPurchasesTable(){
+  const purchases = getStore('purchases');
+  const tbody = document.getElementById('purchaseBody');
+  tbody.innerHTML = '';
+  purchases.forEach(p=>{
+    const supplierName = (getStore('parties').find(x=>x.id==p.supplier) || {}).name || '';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${p.number}</td><td>${p.date}</td><td>${supplierName}</td>
+      <td>₹${(p.taxable||0).toFixed(2)}</td><td>₹${(p.gstAmount||0).toFixed(2)}</td><td>₹${(p.total||0).toFixed(2)}</td>
+      <td>₹${(p.outstanding||0).toFixed(2)}</td>
+      <td><button class="btn btn-sm" onclick="deletePurchase(${p.id})">Delete</button></td>`;
+    tbody.appendChild(tr);
+  });
+  updateDashboardTotals();
 }
 
-function deleteVoucher(id) {
- if(confirm('Delete this voucher?')) {
-  let vouchers = getStore('vouchers');
-  vouchers = vouchers.filter(v => v.id !== id);
+function deletePurchase(id){
+  if(!confirm('Delete this purchase?')) return;
+  let purchases = getStore('purchases');
+  purchases = purchases.filter(p=>p.id !== id);
+  saveStore('purchases', purchases);
+  renderPurchasesTable();
+  updateReports();
+  updateGST();
+  updateOutstanding();
+}
+
+/* --- Vouchers (very basic) --- */
+function openVoucherModal(){
+  const no = nextNumber('VCH','vouchers');
+  document.getElementById('voucherNo').value = no;
+  document.getElementById('voucherDate').valueAsDate = new Date();
+  document.getElementById('voucherModal').classList.add('open');
+}
+function closeVoucherModal(){ document.getElementById('voucherModal').classList.remove('open'); }
+
+function saveVoucher(e){
+  e.preventDefault();
+  const vouchers = getStore('vouchers');
+  const number = document.getElementById('voucherNo').value;
+  const date = document.getElementById('voucherDate').value;
+  const type = document.getElementById('voucherType').value;
+  const debit = document.getElementById('voucherDebit').value;
+  const credit = document.getElementById('voucherCredit').value;
+  const amount = parseFloat(document.getElementById('voucherAmount').value) || 0;
+  const id = Date.now();
+  vouchers.push({ id, number, date, type, debit, credit, amount });
   saveStore('vouchers', vouchers);
   renderVouchersTable();
- }
+  closeVoucherModal();
+  alert('Voucher saved');
 }
 
-function renderVouchersTable() {
- const vouchers = getStore('vouchers');
- const body = document.getElementById('voucherBody');
- body.innerHTML = vouchers.map(v => `
-  <tr>
-   <td><b>${v.no}</b></td>
-   <td>${v.date}</td>
-   <td>${v.type}</td>
-   <td>${v.debit}</td>
-   <td>${v.credit}</td>
-   <td class="right">₹${v.amount.toFixed(2)}</td>
-   <td><button class="btn btn-sm btn-danger" onclick="deleteVoucher(${v.id})">Delete</button></td>
-  </tr>
- `).join('');
+function renderVouchersTable(){
+  const vouchers = getStore('vouchers');
+  const tbody = document.getElementById('voucherBody');
+  tbody.innerHTML = '';
+  vouchers.forEach(v=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${v.number}</td><td>${v.date}</td><td>${v.type}</td><td>${v.debit}</td><td>${v.credit}</td><td>₹${(v.amount||0).toFixed(2)}</td>
+      <td><button class="btn btn-sm" onclick="deleteVoucher(${v.id})">Delete</button></td>`;
+    tbody.appendChild(tr);
+  });
 }
 
-// ========================================
-// REPORTS & DASHBOARD
-// ========================================
-
-function updateDashboard() {
- const sales = getStore('sales');
- const purchases = getStore('purchases');
- 
- const totalSales = sales.reduce((sum, s) => sum + s.total, 0);
- const totalPurchases = purchases.reduce((sum, p) => sum + p.total, 0);
- const totalOutstanding = (sales.reduce((sum, s) => sum + s.outstanding, 0) +
-                           purchases.reduce((sum, p) => sum + p.outstanding, 0));
- 
- document.getElementById('dashSales').textContent = '₹' + totalSales.toFixed(2);
- document.getElementById('dashPurchases').textContent = '₹' + totalPurchases.toFixed(2);
- document.getElementById('dashOutstanding').textContent = '₹' + totalOutstanding.toFixed(2);
+function deleteVoucher(id){
+  if(!confirm('Delete this voucher?')) return;
+  let vouchers = getStore('vouchers');
+  vouchers = vouchers.filter(v=>v.id !== id);
+  saveStore('vouchers', vouchers);
+  renderVouchersTable();
 }
 
-function updateReports() {
- const sales = getStore('sales');
- const purchases = getStore('purchases');
- 
- const totalSales = sales.reduce((sum, s) => sum + s.total, 0);
- const totalPurchases = purchases.reduce((sum, p) => sum + p.total, 0);
- const totalOutputGST = sales.reduce((sum, s) => sum + s.gst, 0);
- const totalInputGST = purchases.reduce((sum, p) => sum + p.gst, 0);
- 
- document.getElementById('reportSales').textContent = '₹' + totalSales.toFixed(2);
- document.getElementById('reportPurchases').textContent = '₹' + totalPurchases.toFixed(2);
- document.getElementById('reportOutputGST').textContent = '₹' + totalOutputGST.toFixed(2);
- document.getElementById('reportInputGST').textContent = '₹' + totalInputGST.toFixed(2);
+/* ====================================================
+   Reports / GST / Outstanding / Dashboard totals
+   ==================================================== */
+function updateReports(){
+  const sales = getStore('sales') || [];
+  const purchases = getStore('purchases') || [];
+
+  const totalSales = sales.reduce((s,a)=>s + (a.total||0),0);
+  const totalPurchases = purchases.reduce((s,a)=>s + (a.total||0),0);
+  const outputGST = sales.reduce((s,a)=>s + (a.gstAmount||0),0);
+  const inputGST = purchases.reduce((s,a)=>s + (a.gstAmount||0),0);
+
+  document.getElementById('reportSales').textContent = '₹' + totalSales.toFixed(2);
+  document.getElementById('reportPurchases').textContent = '₹' + totalPurchases.toFixed(2);
+  document.getElementById('reportOutputGST').textContent = '₹' + outputGST.toFixed(2);
+  document.getElementById('reportInputGST').textContent = '₹' + inputGST.toFixed(2);
 }
 
-function updateGST() {
- const sales = getStore('sales');
- const purchases = getStore('purchases');
- 
- const outputGST = sales.reduce((sum, s) => sum + s.gst, 0);
- const inputGST = purchases.reduce((sum, p) => sum + p.gst, 0);
- const netGST = outputGST - inputGST;
- 
- document.getElementById('gstOutput').textContent = '₹' + outputGST.toFixed(2);
- document.getElementById('gstInput').textContent = '₹' + inputGST.toFixed(2);
- document.getElementById('gstNet').textContent = '₹' + netGST.toFixed(2);
+function updateGST(){
+  const sales = getStore('sales') || [];
+  const purchases = getStore('purchases') || [];
+
+  const outputGST = sales.reduce((s,a)=>s + (a.gstAmount||0),0);
+  const inputGST = purchases.reduce((s,a)=>s + (a.gstAmount||0),0);
+  const net = outputGST - inputGST;
+
+  document.getElementById('gstOutput').textContent = '₹' + outputGST.toFixed(2);
+  document.getElementById('gstInput').textContent = '₹' + inputGST.toFixed(2);
+  document.getElementById('gstNet').textContent = '₹' + net.toFixed(2);
 }
 
-function updateOutstanding() {
- const sales = getStore('sales');
- const purchases = getStore('purchases');
- 
- const customerOut = sales.reduce((sum, s) => sum + s.outstanding, 0);
- const supplierOut = purchases.reduce((sum, p) => sum + p.outstanding, 0);
- 
- document.getElementById('outstandingCustomers').textContent = '₹' + customerOut.toFixed(2);
- document.getElementById('outstandingSuppliers').textContent = '₹' + supplierOut.toFixed(2);
- 
- const outstandingBody = document.getElementById('outstandingBody');
- const allOutstanding = [
-  ...sales.map(s => ({ party: s.customer, type: 'Customer', outstanding: s.outstanding })),
-  ...purchases.map(p => ({ party: p.supplier, type: 'Supplier', outstanding: p.outstanding }))
- ];
- 
- outstandingBody.innerHTML = allOutstanding.map(o => `
-  <tr>
-   <td><b>${o.party}</b></td>
-   <td>${o.type}</td>
-   <td class="right">₹${o.outstanding.toFixed(2)}</td>
-  </tr>
- `).join('');
+function updateDashboardTotals(){
+  const sales = getStore('sales') || [];
+  const purchases = getStore('purchases') || [];
+  const outstandingCustomers = (getStore('sales') || []).reduce((s,a)=>s + (a.outstanding||0),0);
+  const outstandingSuppliers = (getStore('purchases') || []).reduce((s,a)=>s + (a.outstanding||0),0);
+  const totalSales = sales.reduce((s,a)=>s + (a.total||0),0);
+  const totalPurchases = purchases.reduce((s,a)=>s + (a.total||0),0);
+
+  document.getElementById('dashSales').textContent = '₹' + totalSales.toFixed(2);
+  document.getElementById('dashPurchases').textContent = '₹' + totalPurchases.toFixed(2);
+  document.getElementById('dashOutstanding').textContent = '₹' + (outstandingCustomers + outstandingSuppliers).toFixed(2);
 }
 
-// ========================================
-// SYSTEM CONTROLS
-// ========================================
+/* Outstanding table */
+function updateOutstanding(){
+  const sales = getStore('sales') || [];
+  const purchases = getStore('purchases') || [];
+  const customers = {};
+  const suppliers = {};
 
-function loadSampleData() {
- const sampleParties = [
-  { id: 1, name: 'Acme Corp', type: 'Customer', gstin: '18AABCT1234H1Z0', phone: '9876543210' },
-  { id: 2, name: 'Global Supply Co', type: 'Supplier', gstin: '18BBBCT1234H1Z0', phone: '9876543211' },
-  { id: 3, name: 'Tech Solutions', type: 'Customer', gstin: '18CCCCT5678H2Z5', phone: '9123456789' }
- ];
- 
- const sampleSales = [
-  { id: 1, invoiceNo: 'INV-01001', date: '2024-01-15', customer: 'Acme Corp', taxable: 10000, gstRate: 18, gst: 1800, total: 11800, outstanding: 5900 },
-  { id: 2, invoiceNo: 'INV-01002', date: '2024-01-20', customer: 'Tech Solutions', taxable: 20000, gstRate: 18, gst: 3600, total: 23600, outstanding: 23600 }
- ];
- 
- const samplePurchases = [
-  { id: 1, billNo: 'PB-05001', date: '2024-01-10', supplier: 'Global Supply Co', taxable: 15000, gstRate: 18, gst: 2700, total: 17700, outstanding: 17700 }
- ];
- 
- const sampleVouchers = [
-  { id: 1, no: 'V-02001', date: '2024-01-05', type: 'Deposit', debit: 'Bank', credit: 'Cash', amount: 50000 }
- ];
- 
- saveStore('parties', sampleParties);
- saveStore('sales', sampleSales);
- saveStore('purchases', samplePurchases);
- saveStore('vouchers', sampleVouchers);
- 
- updatePartySelects();
- updateDashboard();
- alert('✓ Sample data loaded successfully!\n\nCustomers: Acme Corp, Tech Solutions\nSupplier: Global Supply Co\n2 Sales Invoices, 1 Purchase Bill, 1 Voucher created.');
+  (getStore('parties') || []).forEach(p=>{
+    if (p.type === 'Customer') customers[p.id] = p.name;
+    if (p.type === 'Supplier') suppliers[p.id] = p.name;
+  });
+
+  const outCustomers = {};
+  sales.forEach(s=>{
+    if (!outCustomers[s.customer]) outCustomers[s.customer] = 0;
+    outCustomers[s.customer] += (s.outstanding||0);
+  });
+
+  const outSuppliers = {};
+  purchases.forEach(p=>{
+    if (!outSuppliers[p.supplier]) outSuppliers[p.supplier] = 0;
+    outSuppliers[p.supplier] += (p.outstanding||0);
+  });
+
+  const tCust = Object.keys(outCustomers).reduce((sum,k)=>sum + outCustomers[k],0);
+  const tSupp = Object.keys(outSuppliers).reduce((sum,k)=>sum + outSuppliers[k],0);
+  document.getElementById('outstandingCustomers').textContent = '₹' + tCust.toFixed(2);
+  document.getElementById('outstandingSuppliers').textContent = '₹' + tSupp.toFixed(2);
+
+  const tb = document.getElementById('outstandingBody');
+  tb.innerHTML = '';
+  Object.keys(outCustomers).forEach(k=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${customers[k]||'Unknown'}</td><td>Customer</td><td>₹${outCustomers[k].toFixed(2)}</td>`;
+    tb.appendChild(tr);
+  });
+  Object.keys(outSuppliers).forEach(k=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${suppliers[k]||'Unknown'}</td><td>Supplier</td><td>₹${outSuppliers[k].toFixed(2)}</td>`;
+    tb.appendChild(tr);
+  });
 }
 
-function clearAllData() {
- if (confirm('⚠ Clear ALL data? This cannot be undone!')) {
-  if (confirm('Are you sure? All sales, purchases, parties and vouchers will be deleted.')) {
-   saveStore('parties', []);
-   saveStore('sales', []);
-   saveStore('purchases', []);
-   saveStore('vouchers', []);
-   calcHistory.length = 0;
-   location.reload();
+/* ====================================================
+   Calculator: robust percent handling
+   - If operator & storedValue present, percent of storedValue (100 + 10% => 110)
+   - Otherwise unary percent (10% => 0.1)
+   ==================================================== */
+const calcState = { display: '0', stored: null, operator: null, waiting: false, history: [] };
+
+function updateCalcDisplay() {
+  document.getElementById('calcValue').textContent = calcState.display;
+  const list = document.getElementById('calcHistoryList');
+  list.innerHTML = calcState.history.map(h=>`<div class="muted" style="margin-bottom:6px">${h}</div>`).join('');
+}
+
+function resetCalc() {
+  calcState.display = '0';
+  calcState.stored = null;
+  calcState.operator = null;
+  calcState.waiting = false;
+  updateCalcDisplay();
+}
+
+function inputDigit(d) {
+  if (calcState.waiting) {
+    calcState.display = String(d);
+    calcState.waiting = false;
+  } else {
+    if (calcState.display === '0') calcState.display = String(d);
+    else calcState.display = calcState.display + d;
   }
- }
+  updateCalcDisplay();
 }
 
-// ========================================
-// INITIALIZATION
-// ========================================
+function inputDot() {
+  if (calcState.waiting) {
+    calcState.display = '0.';
+    calcState.waiting = false;
+  } else if (!calcState.display.includes('.')) {
+    calcState.display += '.';
+  }
+  updateCalcDisplay();
+}
 
-window.addEventListener('DOMContentLoaded', () => {
- updatePartySelects();
- updateDashboard();
- 
- // Auto-calculate totals
- document.getElementById('saleTaxable')?.addEventListener('input', () => {
-  const taxable = parseFloat(document.getElementById('saleTaxable').value) || 0;
-  const rate = parseFloat(document.getElementById('saleGSTRate').value) || 18;
-  const gst = taxable * rate / 100;
-  document.getElementById('saleTotal').value = '₹' + (taxable + gst).toFixed(2);
- });
- 
- document.getElementById('purchaseTaxable')?.addEventListener('input', () => {
-  const taxable = parseFloat(document.getElementById('purchaseTaxable').value) || 0;
-  const rate = parseFloat(document.getElementById('purchaseGSTRate').value) || 18;
-  const gst = taxable * rate / 100;
-  document.getElementById('purchaseTotal').value = '₹' + (taxable + gst).toFixed(2);
- });
+function toggleSign() {
+  if (calcState.display === '0') return;
+  if (calcState.display.startsWith('-')) calcState.display = calcState.display.slice(1);
+  else calcState.display = '-' + calcState.display;
+  updateCalcDisplay();
+}
+
+function applyPercent() {
+  const cur = parseFloat(calcState.display) || 0;
+  if (calcState.operator && calcState.stored !== null) {
+    // percent relative to stored
+    const percentOfStored = (calcState.stored * cur) / 100;
+    calcState.display = String(+percentOfStored.toFixed(10));
+  } else {
+    // unary percent
+    calcState.display = String((cur / 100));
+  }
+  updateCalcDisplay();
+}
+
+function perform(op, a, b) {
+  a = +a; b = +b;
+  switch(op) {
+    case '+': return a + b;
+    case '-': return a - b;
+    case '*': return a * b;
+    case '/': return b === 0 ? Infinity : a / b;
+    default: return b;
+  }
+}
+
+function handleOperator(op) {
+  const cur = parseFloat(calcState.display) || 0;
+  if (calcState.stored === null) {
+    calcState.stored = cur;
+  } else if (!calcState.waiting) {
+    const result = perform(calcState.operator, calcState.stored, cur);
+    calcState.stored = result;
+    calcState.display = String(+result.toFixed(10));
+    calcState.history.unshift(`${calcState.stored} ${calcState.operator} ${cur} = ${calcState.display}`);
+  }
+  calcState.operator = op;
+  calcState.waiting = true;
+  updateCalcDisplay();
+}
+
+function handleEquals() {
+  const cur = parseFloat(calcState.display) || 0;
+  if (calcState.operator && calcState.stored !== null) {
+    const result = perform(calcState.operator, calcState.stored, cur);
+    const entry = `${calcState.stored} ${calcState.operator} ${cur} = ${(+result.toFixed(10))}`;
+    calcState.history.unshift(entry);
+    calcState.display = String(+result.toFixed(10));
+    calcState.stored = null;
+    calcState.operator = null;
+    calcState.waiting = true;
+    updateCalcDisplay();
+  }
+}
+
+/* Attach calculator UI events */
+document.getElementById('calcGrid').addEventListener('click', (e)=>{
+  const b = e.target.closest('button');
+  if (!b) return;
+  if (b.dataset.n) inputDigit(b.dataset.n);
+  else if (b.dataset.a) {
+    const a = b.dataset.a;
+    if (a === 'clear') resetCalc();
+    else if (a === 'back') {
+      if (calcState.waiting) return;
+      calcState.display = calcState.display.slice(0,-1) || '0';
+      updateCalcDisplay();
+    } else if (a === 'percent') applyPercent();
+    else if (a === 'sign') toggleSign();
+    else if (a === 'dot') inputDot();
+    else if (a === 'equals') handleEquals();
+  } else if (b.dataset.o) {
+    handleOperator(b.dataset.o);
+  }
 });
 
+/* init */
+resetCalc();
+
+/* ====================================================
+   Initialization: render stored data into tables
+   ==================================================== */
+function renderAll() {
+  renderPartiesTable();
+  renderSalesTable();
+  renderPurchasesTable();
+  renderVouchersTable();
+  renderAllReports();
+  updateDashboardTotals();
+  updateOutstanding();
+}
+function renderAllReports(){ updateReports(); updateGST(); }
+
+/* ====================================================
+   Sample data, clear, helpers
+   ==================================================== */
+function loadSampleData(){
+  // sample parties
+  const parties = [
+    { id: 1, name: 'Acme Corp', type: 'Customer', gstin: '18AABCT1234H1Z0', phone: '9876543210' },
+    { id: 2, name: 'Global Supply Co', type: 'Supplier', gstin: '18BBCCDD1234X1Z1', phone: '9876543211' },
+    { id: 3, name: 'Tech Solutions', type: 'Customer', gstin: '18CCCCDD1234Z1Y1', phone: '9123456789' }
+  ];
+  saveStore('parties', parties);
+
+  // sample sales
+  const sales = [
+    { id:1, number:'INV-0001', date:'2024-01-15', customer:1, taxable:10000, gstRate:18, gstAmount:1800, total:11800, outstanding:11800 },
+    { id:2, number:'INV-0002', date:'2024-01-20', customer:3, taxable:20000, gstRate:18, gstAmount:3600, total:23600, outstanding:23600 }
+  ];
+  saveStore('sales', sales);
+
+  // sample purchases
+  const purchases = [
+    { id:1, number:'PB-0001', date:'2024-01-10', supplier:2, taxable:15000, gstRate:18, gstAmount:2700, total:17700, outstanding:17700 }
+  ];
+  saveStore('purchases', purchases);
+
+  // vouchers
+  const vouchers = [
+    { id:1, number:'VCH-0001', date:'2024-01-05', type:'Deposit', debit:'Bank', credit:'Capital', amount:50000 }
+  ];
+  saveStore('vouchers', vouchers);
+
+  renderAll();
+  alert('Sample data loaded');
+}
+
+function clearAllData(){
+  if(!confirm('Clear ALL local data? This cannot be undone.')) return;
+  saveStore('parties', []);
+  saveStore('sales', []);
+  saveStore('purchases', []);
+  saveStore('vouchers', []);
+  renderAll();
+  alert('All data cleared');
+}
+
+/* ====================================================
+   Boot
+   ==================================================== */
+window.addEventListener('DOMContentLoaded', ()=>{
+  // set up nav initial
+  document.querySelectorAll('.nav-button').forEach(b=>{
+    if (b.classList.contains('active')) {
+      const s = b.dataset.section;
+      document.getElementById('section-' + s)?.classList.add('active');
+    }
+  });
+
+  renderAll();
+});
 </script>
 
 </body>
