@@ -1,92 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>BusinessDesk Enterprise Suite</title>
+<title>BusinessDesk Pro — Phase 3</title>
 
 <style>
 
 /* =========================================================
-   PHASE 1 — CORE FOUNDATION
+   PHASE 1 — CORE CSS
    ========================================================= */
 
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 :root {
-
-    --bg: #f3f4f6;
-    --panel: #ffffff;
-    --surface: #f8fafc;
-    --surface-2: #eef2f7;
-
-    --text: #111827;
-    --muted: #6b7280;
-
-    --border: #e5e7eb;
-
+    --bg: #f5f7fb;
+    --card: #ffffff;
+    --text: #182230;
+    --muted: #667085;
+    --border: #e4e7ec;
     --primary: #2563eb;
     --primary-dark: #1d4ed8;
-
-    --success: #16a34a;
-    --danger: #dc2626;
-
-    --shadow:
-        0 8px 24px rgba(15, 23, 42, 0.08);
-
+    --dark: #101828;
+    --success: #12b76a;
+    --danger: #f04438;
+    --warning: #f79009;
 }
 
-html,
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-
-    margin: 0;
-    padding: 0;
-
-    width: 100%;
-    min-height: 100%;
-
     font-family:
-        Inter,
+        "Segoe UI",
         Arial,
-        Helvetica,
         sans-serif;
-
     background: var(--bg);
     color: var(--text);
-
 }
 
 button,
 input,
 select,
 textarea {
-
     font: inherit;
-
 }
 
 button {
-
     cursor: pointer;
-
 }
 
-
-/* =========================================================
-   APPLICATION
-   ========================================================= */
-
 .app {
-
     display: flex;
-
     min-height: 100vh;
-
 }
 
 
@@ -95,194 +68,61 @@ button {
    ========================================================= */
 
 .sidebar {
-
-    width: 250px;
-
-    flex-shrink: 0;
-
-    background: #111827;
-
+    width: 260px;
+    background: var(--dark);
     color: #ffffff;
-
-    display: flex;
-
-    flex-direction: column;
-
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    overflow-y: auto;
+    z-index: 1000;
 }
 
 .brand {
-
-    height: 76px;
-
-    padding: 0 20px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-
+    padding: 22px 20px;
+    font-size: 22px;
+    font-weight: 800;
     border-bottom:
-        1px solid
-        rgba(255,255,255,0.08);
-
+        1px solid #263244;
 }
 
-.brand-icon {
-
-    width: 38px;
-    height: 38px;
-
-    border-radius: 10px;
-
-    background: var(--primary);
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    font-size: 20px;
-    font-weight: 800;
-
-}
-
-.brand-name {
-
-    font-size: 17px;
-
-    font-weight: 800;
-
-}
-
-.brand-version {
-
-    margin-top: 3px;
-
-    font-size: 10px;
-
-    color: #9ca3af;
-
+.brand span {
+    color: #60a5fa;
 }
 
 .nav {
-
-    flex: 1;
-
-    padding: 16px 10px;
-
-    overflow-y: auto;
-
-}
-
-.nav-group {
-
-    margin-bottom: 20px;
-
+    padding: 12px;
 }
 
 .nav-title {
-
-    padding:
-        0 12px
-        7px;
-
-    font-size: 10px;
-
-    font-weight: 700;
-
-    letter-spacing: 0.08em;
-
+    font-size: 11px;
+    color: #98a2b3;
     text-transform: uppercase;
-
-    color: #6b7280;
-
+    letter-spacing: .08em;
+    padding: 16px 10px 7px;
 }
 
-.nav-button {
-
+.nav-btn {
     width: 100%;
-
     border: 0;
-
     background: transparent;
-
-    color: #d1d5db;
-
+    color: #d0d5dd;
     padding: 11px 12px;
-
-    margin-bottom: 3px;
-
     border-radius: 8px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
     text-align: left;
-
+    margin: 2px 0;
+    transition: .15s;
 }
 
-.nav-button:hover {
-
-    background:
-        rgba(255,255,255,0.06);
-
+.nav-btn:hover {
+    background: #1d2939;
     color: #ffffff;
-
 }
 
-.nav-button.active {
-
+.nav-btn.active {
     background: var(--primary);
-
     color: #ffffff;
-
-}
-
-.nav-icon {
-
-    width: 22px;
-
-    text-align: center;
-
-}
-
-.sidebar-footer {
-
-    padding: 15px;
-
-    border-top:
-        1px solid
-        rgba(255,255,255,0.08);
-
-}
-
-.system-status {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-
-    font-size: 12px;
-
-    color: #d1d5db;
-
-}
-
-.status-dot {
-
-    width: 8px;
-    height: 8px;
-
-    border-radius: 50%;
-
-    background: #22c55e;
-
 }
 
 
@@ -291,218 +131,221 @@ button {
    ========================================================= */
 
 .main {
-
-    min-width: 0;
-
-    flex: 1;
-
-    display: flex;
-
-    flex-direction: column;
-
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    min-height: 100vh;
 }
 
-.header {
-
-    height: 76px;
-
-    background: var(--panel);
-
+.topbar {
+    height: 68px;
+    background: #ffffff;
     border-bottom:
-        1px solid
-        var(--border);
+        1px solid var(--border);
 
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
 
     padding: 0 24px;
 
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
-.header-title {
-
-    font-size: 18px;
-
-    font-weight: 800;
-
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.header-subtitle {
+.topbar h2 {
+    font-size: 19px;
+}
 
-    margin-top: 3px;
+.search {
+    width: 240px;
+    padding: 9px 12px;
+    border:
+        1px solid var(--border);
+    border-radius: 8px;
+    background: #ffffff;
+    outline: none;
+}
 
-    font-size: 12px;
-
-    color: var(--muted);
-
+.search:focus {
+    border-color: var(--primary);
 }
 
 .content {
-
     padding: 24px;
-
-    overflow-y: auto;
-
 }
 
-
-/* =========================================================
-   SECTIONS
-   ========================================================= */
-
 .section {
-
     display: none;
-
 }
 
 .section.active {
-
     display: block;
-
-}
-
-.section-heading {
-
-    margin-bottom: 20px;
-
-}
-
-.section-heading h1 {
-
-    margin: 0;
-
-    font-size: 25px;
-
-}
-
-.section-heading p {
-
-    margin:
-        6px 0 0;
-
-    color: var(--muted);
-
-    font-size: 13px;
-
 }
 
 
 /* =========================================================
-   CARDS
+   COMMON
    ========================================================= */
 
-.card {
-
-    background: var(--panel);
-
-    border:
-        1px solid
-        var(--border);
-
-    border-radius: 12px;
-
-    padding: 20px;
-
-    box-shadow: var(--shadow);
-
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
-.card-title {
+.page-header h1 {
+    font-size: 25px;
+}
 
-    font-size: 15px;
-
-    font-weight: 800;
-
+.page-header p {
+    color: var(--muted);
+    margin-top: 4px;
 }
 
 .grid {
-
     display: grid;
-
     gap: 16px;
-
 }
 
-.grid-2 {
-
+.grid-4 {
     grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
+        repeat(4, 1fr);
 }
 
 .grid-3 {
-
     grid-template-columns:
-        repeat(3, minmax(0, 1fr));
-
+        repeat(3, 1fr);
 }
 
-.metric {
-
-    margin-top: 8px;
-
-    font-size: 26px;
-
-    font-weight: 800;
-
+.grid-2 {
+    grid-template-columns:
+        repeat(2, 1fr);
 }
 
-.muted {
+.card {
+    background: #ffffff;
+    border:
+        1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow:
+        0 1px 2px
+        rgba(16, 24, 40, .03);
+}
 
+.metric-title {
     color: var(--muted);
+    font-size: 13px;
+}
 
+.metric-value {
+    font-size: 25px;
+    font-weight: 800;
+    margin-top: 7px;
+}
+
+.metric-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
 }
 
 
 /* =========================================================
-   TABLE
+   BUTTONS
    ========================================================= */
 
-.table-container {
+.btn {
+    border:
+        1px solid var(--border);
+    background: #ffffff;
+    color: var(--text);
+    padding: 9px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+}
 
+.btn:hover {
+    background: #f2f4f7;
+}
+
+.btn-primary {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+.btn-danger {
+    background: #fff1f0;
+    color: var(--danger);
+    border-color: #ffd5d2;
+}
+
+.btn-success {
+    background: #ecfdf3;
+    color: #027a48;
+    border-color: #abefc6;
+}
+
+.btn-warning {
+    background: #fffaeb;
+    color: #b54708;
+    border-color: #fedf89;
+}
+
+
+/* =========================================================
+   TABLES
+   ========================================================= */
+
+.table-wrap {
     overflow-x: auto;
-
+    background: #ffffff;
+    border:
+        1px solid var(--border);
+    border-radius: 10px;
 }
 
 table {
-
     width: 100%;
-
     border-collapse: collapse;
-
+    min-width: 700px;
 }
 
 th,
 td {
-
-    padding: 11px 12px;
-
+    padding: 10px 12px;
     border-bottom:
-        1px solid
-        var(--border);
-
-    text-align: left;
-
+        1px solid var(--border);
     font-size: 13px;
-
+    text-align: left;
 }
 
 th {
-
-    background: var(--surface);
-
+    background: #f9fafb;
+    color: #475467;
     font-weight: 700;
-
 }
 
-.right {
+tr:last-child td {
+    border-bottom: 0;
+}
 
+.num {
     text-align: right;
-
 }
 
 
@@ -511,92 +354,117 @@ th {
    ========================================================= */
 
 .form-grid {
-
     display: grid;
-
     grid-template-columns:
-        repeat(2, minmax(0, 1fr));
+        repeat(2, 1fr);
+    gap: 14px;
+}
 
-    gap: 16px;
-
+.form-grid-3 {
+    display: grid;
+    grid-template-columns:
+        repeat(3, 1fr);
+    gap: 14px;
 }
 
 .field {
-
     display: flex;
-
     flex-direction: column;
-
     gap: 6px;
-
 }
 
 .field label {
-
-    font-size: 12px;
-
-    font-weight: 700;
-
+    font-size: 13px;
+    font-weight: 600;
 }
 
 .field input,
 .field select,
 .field textarea {
-
-    width: 100%;
-
     border:
-        1px solid
-        var(--border);
-
+        1px solid var(--border);
     border-radius: 8px;
-
-    padding: 10px 11px;
-
+    padding: 10px;
     background: #ffffff;
-
     color: var(--text);
-
     outline: none;
-
 }
 
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
-
     border-color: var(--primary);
-
-    box-shadow:
-        0 0 0 3px
-        rgba(37,99,235,0.12);
-
 }
 
-.btn {
+.field textarea {
+    min-height: 85px;
+    resize: vertical;
+}
 
-    border: 0;
+.full {
+    grid-column: 1 / -1;
+}
 
-    border-radius: 8px;
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 18px;
+}
 
-    padding: 10px 15px;
 
+/* =========================================================
+   NOTICES
+   ========================================================= */
+
+.notice {
+    padding: 13px 15px;
+    border-radius: 9px;
+    margin-bottom: 15px;
+    background: #eff8ff;
+    border:
+        1px solid #b2ddff;
+    color: #175cd3;
+}
+
+.notice.success {
+    background: #ecfdf3;
+    border-color: #abefc6;
+    color: #027a48;
+}
+
+.notice.danger {
+    background: #fff1f0;
+    border-color: #fecdca;
+    color: #b42318;
+}
+
+
+/* =========================================================
+   BADGES
+   ========================================================= */
+
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 11px;
     font-weight: 700;
-
 }
 
-.btn-primary {
-
-    background: var(--primary);
-
-    color: #ffffff;
-
+.badge-green {
+    background: #ecfdf3;
+    color: #027a48;
 }
 
-.btn-primary:hover {
+.badge-red {
+    background: #fff1f0;
+    color: #b42318;
+}
 
-    background: var(--primary-dark);
-
+.badge-blue {
+    background: #eff8ff;
+    color: #175cd3;
 }
 
 
@@ -604,358 +472,300 @@ th {
    PHASE 2 — CALCULATOR
    ========================================================= */
 
-.calculator-layout {
-
-    display: grid;
-
-    grid-template-columns:
-        minmax(320px, 520px)
-        minmax(260px, 1fr);
-
-    gap: 20px;
-
-    align-items: start;
-
+.calculator {
+    max-width: 430px;
 }
 
-.calculator-card {
-
-    background: #0f172a;
-
-    border-radius: 16px;
-
-    padding: 18px;
-
-    box-shadow: var(--shadow);
-
-}
-
-.calculator-display {
-
-    min-height: 125px;
-
-    background: #020617;
-
-    border-radius: 12px;
-
-    padding: 18px;
-
-    margin-bottom: 14px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: flex-end;
-
-    overflow: hidden;
-
-}
-
-.calculator-history {
-
-    min-height: 20px;
-
-    color: #64748b;
-
-    font-size: 13px;
-
-    text-align: right;
-
-    overflow: hidden;
-
-    white-space: nowrap;
-
-    text-overflow: ellipsis;
-
-}
-
-.calculator-expression {
-
+.calc-display {
+    width: 100%;
+    height: 72px;
+    background: #101828;
     color: #ffffff;
-
-    font-size: 36px;
-
-    font-weight: 700;
-
+    border: 0;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    padding: 14px;
+    font-size: 27px;
     text-align: right;
-
-    overflow-x: auto;
-
-    white-space: nowrap;
-
 }
 
-.calculator-keypad {
-
+.calc-grid {
     display: grid;
-
     grid-template-columns:
         repeat(4, 1fr);
-
-    gap: 9px;
-
+    gap: 8px;
 }
 
-.calc-btn {
-
-    min-height: 62px;
-
-    border: 0;
-
-    border-radius: 10px;
-
-    background: #1e293b;
-
-    color: #ffffff;
-
-    font-size: 18px;
-
-    font-weight: 700;
-
-    transition:
-        transform 0.08s ease,
-        opacity 0.08s ease;
-
-}
-
-.calc-btn:hover {
-
-    opacity: 0.88;
-
-}
-
-.calc-btn:active {
-
-    transform: scale(0.96);
-
-}
-
-.calc-btn.function {
-
-    background: #334155;
-
-}
-
-.calc-btn.operator {
-
-    background: var(--primary);
-
-}
-
-.calc-btn.equals {
-
-    background: var(--success);
-
-}
-
-.calculator-side {
-
-    display: grid;
-
-    gap: 16px;
-
-}
-
-.calc-history-list {
-
-    max-height: 300px;
-
-    overflow-y: auto;
-
-}
-
-.history-item {
-
-    padding: 10px 0;
-
-    border-bottom:
-        1px solid
-        var(--border);
-
-}
-
-.history-expression {
-
-    font-size: 12px;
-
-    color: var(--muted);
-
-}
-
-.history-result {
-
-    margin-top: 3px;
-
-    font-size: 16px;
-
-    font-weight: 800;
-
-}
-
-.empty-history {
-
-    color: var(--muted);
-
-    font-size: 13px;
-
-    padding: 10px 0;
-
-}
-
-.shortcut-list {
-
-    display: grid;
-
-    gap: 9px;
-
-}
-
-.shortcut-list div {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 10px;
-
-    font-size: 12px;
-
-}
-
-.shortcut-list span {
-
-    color: var(--muted);
-
-}
-
-kbd {
-
-    min-width: 30px;
-
-    padding: 4px 7px;
-
+.calc-grid button {
+    height: 55px;
     border:
-        1px solid
-        var(--border);
+        1px solid var(--border);
+    border-radius: 8px;
+    background: #ffffff;
+    font-size: 18px;
+}
 
-    border-radius: 5px;
+.calc-grid button:hover {
+    background: #f2f4f7;
+}
 
-    background: var(--surface-2);
-
-    font-size: 11px;
-
-    text-align: center;
-
+.calc-equals {
+    grid-column: span 2;
+    background: var(--primary) !important;
+    color: #ffffff;
+    border-color: var(--primary) !important;
 }
 
 
 /* =========================================================
-   RESPONSIVE
+   PHASE 2 — EXCEL
    ========================================================= */
 
-@media (max-width: 900px) {
+.excel-input {
+    width: 100%;
+    border:
+        1px solid #d0d5dd;
+    padding: 7px;
+    border-radius: 5px;
+    outline: none;
+}
 
-    .sidebar {
+.excel-input:focus {
+    border-color: var(--primary);
+}
 
-        width: 220px;
 
-    }
+/* =========================================================
+   PHASE 3 — SALES
+   ========================================================= */
 
-    .calculator-layout {
+.sales-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
 
-        grid-template-columns: 1fr;
+.sales-items {
+    margin-top: 20px;
+}
 
+.sales-items-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.sales-items-table {
+    min-width: 1050px;
+}
+
+.sales-items-table input {
+    width: 100%;
+    min-width: 70px;
+    padding: 7px;
+    border:
+        1px solid var(--border);
+    border-radius: 6px;
+    outline: none;
+}
+
+.sales-items-table input:focus {
+    border-color: var(--primary);
+}
+
+.sales-remove {
+    border: 0;
+    background: #fff1f0;
+    color: var(--danger);
+    padding: 7px 9px;
+    border-radius: 6px;
+    font-weight: 700;
+}
+
+.sales-summary {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.sales-summary-box {
+    width: 370px;
+    max-width: 100%;
+    border:
+        1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.sales-summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 10px 13px;
+    border-bottom:
+        1px solid var(--border);
+    font-size: 13px;
+}
+
+.sales-summary-row:last-child {
+    border-bottom: 0;
+}
+
+.sales-summary-row.total {
+    background: #f9fafb;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.sales-message {
+    display: none;
+    margin-bottom: 15px;
+    padding: 11px 13px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.sales-message.success {
+    display: block;
+    background: #ecfdf3;
+    color: #027a48;
+    border:
+        1px solid #abefc6;
+}
+
+.sales-message.error {
+    display: block;
+    background: #fff1f0;
+    color: #b42318;
+    border:
+        1px solid #fecdca;
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background:
+        rgba(16, 24, 40, .55);
+    z-index: 3000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal.open {
+    display: flex;
+}
+
+.modal-box {
+    width: min(900px, 100%);
+    max-height: 92vh;
+    overflow: auto;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 22px;
+}
+
+.modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.close {
+    border: 0;
+    background: #f2f4f7;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+.menu {
+    display: none;
+    border: 0;
+    background: #f2f4f7;
+    padding: 8px 11px;
+    border-radius: 7px;
+}
+
+@media (max-width: 1000px) {
+
+    .grid-4 {
+        grid-template-columns:
+            repeat(2, 1fr);
     }
 
     .grid-3 {
-
-        grid-template-columns: 1fr;
-
+        grid-template-columns:
+            repeat(2, 1fr);
     }
 
 }
 
-@media (max-width: 700px) {
-
-    .app {
-
-        flex-direction: column;
-
-    }
+@media (max-width: 750px) {
 
     .sidebar {
+        transform:
+            translateX(-100%);
+        transition: .2s;
+    }
 
+    .sidebar.open {
+        transform:
+            translateX(0);
+    }
+
+    .main {
+        margin-left: 0;
         width: 100%;
-
-        min-height: auto;
-
     }
 
-    .nav {
-
-        display: grid;
-
-        grid-template-columns:
-            repeat(2, 1fr);
-
+    .menu {
+        display: block;
     }
 
-    .nav-group {
-
-        margin-bottom: 10px;
-
-    }
-
-    .header {
-
-        padding: 0 14px;
-
+    .search {
+        display: none;
     }
 
     .content {
-
-        padding: 14px;
-
+        padding: 15px;
     }
 
+    .grid-4,
+    .grid-3,
     .grid-2,
-    .form-grid {
-
+    .form-grid,
+    .form-grid-3 {
         grid-template-columns: 1fr;
+    }
 
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .full {
+        grid-column: auto;
     }
 
 }
-
-@media (max-width: 450px) {
-
-    .calculator-card {
-
-        padding: 12px;
-
-    }
-
-    .calc-btn {
-
-        min-height: 55px;
-
-    }
-
-    .calculator-expression {
-
-        font-size: 29px;
-
-    }
-
-}
-
-
-/* =========================================================
-   END OF CSS
-   ========================================================= */
 
 </style>
 
@@ -964,289 +774,254 @@ kbd {
 
 <body>
 
+
 <div class="app">
 
 
-<!-- =====================================================
+<!-- =========================================================
      SIDEBAR
-     ===================================================== -->
+     ========================================================= -->
 
-<aside class="sidebar">
+<aside
+    class="sidebar"
+    id="sidebar">
 
     <div class="brand">
-
-        <div class="brand-icon">
-            B
-        </div>
-
-        <div>
-
-            <div class="brand-name">
-                BusinessDesk
-            </div>
-
-            <div class="brand-version">
-                PHASE 1 + 2
-            </div>
-
-        </div>
-
+        Business<span>Desk</span>
     </div>
 
 
-    <nav class="nav">
-
-        <div class="nav-group">
-
-            <div class="nav-title">
-                Main
-            </div>
-
-            <button
-                type="button"
-                class="nav-button active"
-                data-section="dashboard">
-
-                <span class="nav-icon">⌂</span>
-
-                <span>
-                    Dashboard
-                </span>
-
-            </button>
+    <div class="nav">
 
 
-            <button
-                type="button"
-                class="nav-button"
-                data-section="calculator">
+        <div class="nav-title">
+            Main
+        </div>
 
-                <span class="nav-icon">
-                    🧮
-                </span>
+        <button
+            class="nav-btn active"
+            data-section="dashboard">
 
-                <span>
-                    Calculator
-                </span>
+            🏠 Dashboard
 
-            </button>
+        </button>
 
 
-            <button
-                type="button"
-                class="nav-button"
-                data-section="spreadsheet">
+        <button
+            class="nav-btn"
+            data-section="calculator">
 
-                <span class="nav-icon">
-                    ▦
-                </span>
+            🧮 Calculator
 
-                <span>
-                    Spreadsheet
-                </span>
+        </button>
 
-            </button>
 
+        <button
+            class="nav-btn"
+            data-section="spreadsheet">
+
+            📊 Excel Working
+
+        </button>
+
+
+        <div class="nav-title">
+            Accounting
         </div>
 
 
-        <div class="nav-group">
+        <button
+            class="nav-btn"
+            data-section="groups">
 
-            <div class="nav-title">
-                Business
-            </div>
+            📂 Account Groups
 
-            <button
-                type="button"
-                class="nav-button"
-                data-section="sales">
-
-                <span class="nav-icon">
-                    ↗
-                </span>
-
-                <span>
-                    Sales
-                </span>
-
-            </button>
+        </button>
 
 
-            <button
-                type="button"
-                class="nav-button"
-                data-section="purchases">
+        <button
+            class="nav-btn"
+            data-section="ledgers">
 
-                <span class="nav-icon">
-                    ↙
-                </span>
+            📖 Ledgers
 
-                <span>
-                    Purchases
-                </span>
-
-            </button>
+        </button>
 
 
-            <button
-                type="button"
-                class="nav-button"
-                data-section="parties">
+        <button
+            class="nav-btn"
+            data-section="parties">
 
-                <span class="nav-icon">
-                    ♙
-                </span>
+            👥 Customers / Suppliers
 
-                <span>
-                    Parties
-                </span>
-
-            </button>
+        </button>
 
 
-            <button
-                type="button"
-                class="nav-button"
-                data-section="vouchers">
+        <button
+            class="nav-btn"
+            data-section="sales">
 
-                <span class="nav-icon">
-                    ▤
-                </span>
+            🧾 Sales
 
-                <span>
-                    Vouchers
-                </span>
+        </button>
 
-            </button>
 
+        <button
+            class="nav-btn"
+            data-section="purchase">
+
+            🛒 Purchase
+
+        </button>
+
+
+        <button
+            class="nav-btn"
+            data-section="vouchers">
+
+            📒 Vouchers
+
+        </button>
+
+
+        <div class="nav-title">
+            Reports
         </div>
 
 
-        <div class="nav-group">
+        <button
+            class="nav-btn"
+            data-section="daybook">
 
-            <div class="nav-title">
-                Reports
-            </div>
+            📅 Day Book
 
-            <button
-                type="button"
-                class="nav-button"
-                data-section="reports">
-
-                <span class="nav-icon">
-                    ▥
-                </span>
-
-                <span>
-                    Reports
-                </span>
-
-            </button>
+        </button>
 
 
-            <button
-                type="button"
-                class="nav-button"
-                data-section="gst">
+        <button
+            class="nav-btn"
+            data-section="ledgerreport">
 
-                <span class="nav-icon">
-                    %
-                </span>
+            📖 Ledger Statement
 
-                <span>
-                    GST
-                </span>
-
-            </button>
+        </button>
 
 
-            <button
-                type="button"
-                class="nav-button"
-                data-section="outstanding">
+        <button
+            class="nav-btn"
+            data-section="trialbalance">
 
-                <span class="nav-icon">
-                    ₹
-                </span>
+            ⚖️ Trial Balance
 
-                <span>
-                    Outstanding
-                </span>
+        </button>
 
-            </button>
 
+        <button
+            class="nav-btn"
+            data-section="profitloss">
+
+            📈 Profit & Loss
+
+        </button>
+
+
+        <button
+            class="nav-btn"
+            data-section="balancesheet">
+
+            🏦 Balance Sheet
+
+        </button>
+
+
+        <button
+            class="nav-btn"
+            data-section="gst">
+
+            🧮 GST Summary
+
+        </button>
+
+
+        <button
+            class="nav-btn"
+            data-section="outstanding">
+
+            💳 Outstanding
+
+        </button>
+
+
+        <div class="nav-title">
+            Administration
         </div>
 
 
-        <div class="nav-group">
+        <button
+            class="nav-btn"
+            data-section="company">
 
-            <div class="nav-title">
-                System
-            </div>
+            🏢 Company Setup
 
-            <button
-                type="button"
-                class="nav-button"
-                data-section="controls">
-
-                <span class="nav-icon">
-                    ⚙
-                </span>
-
-                <span>
-                    System Controls
-                </span>
-
-            </button>
-
-        </div>
-
-    </nav>
+        </button>
 
 
-    <div class="sidebar-footer">
+        <button
+            class="nav-btn"
+            data-section="backup">
 
-        <div class="system-status">
+            💾 Backup / Restore
 
-            <span class="status-dot"></span>
+        </button>
 
-            <span>
-                System Online
-            </span>
-
-        </div>
 
     </div>
 
 </aside>
 
 
-<!-- =====================================================
+<!-- =========================================================
      MAIN
-     ===================================================== -->
+     ========================================================= -->
 
 <main class="main">
 
 
-<header class="header">
+<header class="topbar">
 
-    <div>
+    <div class="top-actions">
 
-        <div
-            class="header-title"
-            id="headerTitle">
+        <button
+            class="menu"
+            id="menuBtn">
 
+            ☰
+
+        </button>
+
+
+        <h2 id="pageTitle">
             Dashboard
+        </h2>
 
-        </div>
+    </div>
 
-        <div
-            class="header-subtitle"
-            id="headerSubtitle">
 
-            BusinessDesk Enterprise Suite
+    <div class="top-actions">
 
-        </div>
+        <input
+            class="search"
+            id="globalSearch"
+            placeholder="Search current data">
+
+
+        <button
+            class="btn btn-primary"
+            onclick="openSales()">
+
+            + Sales
+
+        </button>
 
     </div>
 
@@ -1256,41 +1031,93 @@ kbd {
 <div class="content">
 
 
-<!-- =====================================================
+<!-- =========================================================
      DASHBOARD
-     ===================================================== -->
+     ========================================================= -->
 
 <section
     class="section active"
     id="section-dashboard">
 
-    <div class="section-heading">
 
-        <h1>
-            Dashboard
-        </h1>
+    <div class="page-header">
 
-        <p>
-            BusinessDesk core application dashboard.
-        </p>
+        <div>
+
+            <h1>
+                Dashboard
+            </h1>
+
+            <p>
+                BusinessDesk Phase 1–3 accounting workspace.
+            </p>
+
+        </div>
 
     </div>
 
 
-    <div class="grid grid-3">
+    <div class="grid grid-4">
+
 
         <div class="card">
 
-            <div class="card-title">
+            <div class="metric-title">
+                Ledgers
+            </div>
+
+            <div
+                class="metric-value"
+                id="dashLedgers">
+
+                0
+
+            </div>
+
+            <div class="metric-sub">
+                Chart of accounts
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="metric-title">
+                Customers
+            </div>
+
+            <div
+                class="metric-value"
+                id="dashCustomers">
+
+                0
+
+            </div>
+
+            <div class="metric-sub">
+                Active parties
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="metric-title">
                 Sales
             </div>
 
-            <div class="metric">
+            <div
+                class="metric-value"
+                id="dashSales">
+
                 ₹0.00
+
             </div>
 
-            <div class="muted">
-                Current records
+            <div class="metric-sub">
+                Sales including GST
             </div>
 
         </div>
@@ -1298,91 +1125,419 @@ kbd {
 
         <div class="card">
 
-            <div class="card-title">
-                Purchases
+            <div class="metric-title">
+                Purchase
             </div>
 
-            <div class="metric">
+            <div
+                class="metric-value"
+                id="dashPurchase">
+
                 ₹0.00
+
             </div>
 
-            <div class="muted">
-                Current records
+            <div class="metric-sub">
+                Purchases including GST
             </div>
 
         </div>
 
-
-        <div class="card">
-
-            <div class="card-title">
-                Outstanding
-            </div>
-
-            <div class="metric">
-                ₹0.00
-            </div>
-
-            <div class="muted">
-                Current balance
-            </div>
-
-        </div>
 
     </div>
 
 
-    <div style="height:16px"></div>
+    <br>
 
 
     <div class="grid grid-2">
 
+
         <div class="card">
 
-            <div class="card-title">
-                Application Architecture
+            <h3>
+                Quick Actions
+            </h3>
+
+            <br>
+
+            <div
+                style="
+                display:flex;
+                gap:10px;
+                flex-wrap:wrap;
+                ">
+
+                <button
+                    class="btn btn-primary"
+                    onclick="openSales()">
+
+                    Sales Invoice
+
+                </button>
+
+
+                <button
+                    class="btn"
+                    onclick="openPurchase()">
+
+                    Purchase
+
+                </button>
+
+
+                <button
+                    class="btn"
+                    onclick="openVoucher()">
+
+                    Voucher
+
+                </button>
+
+
+                <button
+                    class="btn"
+                    onclick="openParty()">
+
+                    Party
+
+                </button>
+
+
+                <button
+                    class="btn"
+                    onclick="openLedger()">
+
+                    Ledger
+
+                </button>
+
             </div>
-
-            <div style="height:12px"></div>
-
-            <table>
-
-                <tbody>
-
-                    <tr>
-                        <td>Core Application</td>
-                        <td>Ready</td>
-                    </tr>
-
-                    <tr>
-                        <td>Navigation Engine</td>
-                        <td>Ready</td>
-                    </tr>
-
-                    <tr>
-                        <td>Calculator</td>
-                        <td>Ready</td>
-                    </tr>
-
-                    <tr>
-                        <td>Local State</td>
-                        <td>Ready</td>
-                    </tr>
-
-                </tbody>
-
-            </table>
 
         </div>
 
 
         <div class="card">
 
-            <div class="card-title">
-                Phase Roadmap
+            <h3>
+                System Status
+            </h3>
+
+            <br>
+
+            <div
+                class="notice success">
+
+                Phase 1, Phase 2 and Phase 3
+                foundation is running.
+
             </div>
 
-            <div style="height:12px"></div>
+            <p
+                style="
+                font-size:13px;
+                color:#667085;
+                ">
+
+                Data is stored locally in this browser.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+<!-- =========================================================
+     CALCULATOR
+     ========================================================= -->
+
+<section
+    class="section"
+    id="section-calculator">
+
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>
+                Professional Calculator
+            </h1>
+
+            <p>
+                Arithmetic calculator with percentage support.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="card calculator">
+
+
+        <input
+            id="calcDisplay"
+            class="calc-display"
+            value="0"
+            readonly>
+
+
+        <div class="calc-grid">
+
+
+            <button
+                type="button"
+                onclick="calcClear()">
+
+                C
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="calcBack()">
+
+                ⌫
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="calcPercent()">
+
+                %
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="calcInput('/')">
+
+                ÷
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="calcInput('7')">
+
+                7
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="calcInput('8')">
+
+                8
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="calcInput('9')">
+
+                9
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="calcInput('*')">
+
+                ×
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="calcInput('4')">
+
+                4
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="calcInput('5')">
+
+                5
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="calcInput('6')">
+
+                6
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="calcInput('-')">
+
+                −
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="calcInput('1')">
+
+                1
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="calcInput('2')">
+
+                2
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="calcInput('3')">
+
+                3
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="calcInput('+')">
+
+                +
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="calcInput('0')">
+
+                0
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="calcInput('.')">
+
+                .
+
+            </button>
+
+
+            <button
+                type="button"
+                class="calc-equals"
+                onclick="calcEvaluate()">
+
+                =
+
+            </button>
+
+
+        </div>
+
+
+        <br>
+
+
+        <p
+            style="
+            font-size:12px;
+            color:#667085;
+            ">
+
+            Keyboard:
+            0–9, +, −, *, /, %, Enter and Escape.
+
+        </p>
+
+
+    </div>
+
+
+</section>
+
+
+<!-- =========================================================
+     SPREADSHEET
+     ========================================================= -->
+
+<section
+    class="section"
+    id="section-spreadsheet">
+
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>
+                Excel Working
+            </h1>
+
+            <p>
+                Accounting working-paper grid.
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <button
+                class="btn btn-primary"
+                onclick="addExcelRow()">
+
+                + Add Row
+
+            </button>
+
+
+            <button
+                class="btn"
+                onclick="exportCSV()">
+
+                Export CSV
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="table-wrap">
 
             <table>
 
@@ -1390,80 +1545,840 @@ kbd {
 
                     <tr>
 
-                        <th>
-                            Phase
-                        </th>
-
-                        <th>
-                            Module
-                        </th>
-
-                        <th>
-                            Status
-                        </th>
+                        <th>#</th>
+                        <th>Description</th>
+                        <th>Qty</th>
+                        <th>Rate</th>
+                        <th>Tax %</th>
+                        <th>Taxable</th>
+                        <th>GST</th>
+                        <th>Total</th>
+                        <th>Action</th>
 
                     </tr>
 
                 </thead>
 
-                <tbody>
+
+                <tbody
+                    id="excelBody">
+                </tbody>
+
+
+                <tfoot>
 
                     <tr>
 
-                        <td>1</td>
+                        <th colspan="5">
+                            TOTAL
+                        </th>
 
-                        <td>
-                            Core Foundation
-                        </td>
+                        <th
+                            class="num"
+                            id="excelTaxableTotal">
 
-                        <td>
-                            Active
-                        </td>
+                            ₹0.00
+
+                        </th>
+
+                        <th
+                            class="num"
+                            id="excelGSTTotal">
+
+                            ₹0.00
+
+                        </th>
+
+                        <th
+                            class="num"
+                            id="excelGrandTotal">
+
+                            ₹0.00
+
+                        </th>
+
+                        <th></th>
 
                     </tr>
+
+                </tfoot>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<!-- =========================================================
+     ACCOUNT GROUPS
+     ========================================================= -->
+
+<section
+    class="section"
+    id="section-groups">
+
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>
+                Account Groups
+            </h1>
+
+            <p>
+                Accounting hierarchy.
+            </p>
+
+        </div>
+
+
+        <button
+            class="btn btn-primary"
+            onclick="openGroup()">
+
+            + Add Group
+
+        </button>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Group</th>
+                        <th>Nature</th>
+                    </tr>
+
+                </thead>
+
+                <tbody
+                    id="groupsBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<!-- =========================================================
+     LEDGERS
+     ========================================================= -->
+
+<section
+    class="section"
+    id="section-ledgers">
+
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>
+                Ledgers
+            </h1>
+
+            <p>
+                Chart of accounts.
+            </p>
+
+        </div>
+
+
+        <button
+            class="btn btn-primary"
+            onclick="openLedger()">
+
+            + Add Ledger
+
+        </button>
+
+    </div>
+
+
+    <div class="card">
+
+
+        <input
+            class="search"
+            id="ledgerSearch"
+            placeholder="Search ledger..."
+            oninput="renderLedgers()">
+
+
+        <br><br>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Ledger</th>
+                        <th>Group</th>
+                        <th>Opening</th>
+                        <th>Type</th>
+                        <th>Balance</th>
+                    </tr>
+
+                </thead>
+
+                <tbody
+                    id="ledgersBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<!-- =========================================================
+     PARTIES
+     ========================================================= -->
+
+<section
+    class="section"
+    id="section-parties">
+
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>
+                Customers / Suppliers
+            </h1>
+
+            <p>
+                Party master.
+            </p>
+
+        </div>
+
+
+        <button
+            class="btn btn-primary"
+            onclick="openParty()">
+
+            + Add Party
+
+        </button>
+
+    </div>
+
+
+    <div class="card">
+
+
+        <input
+            class="search"
+            id="partySearch"
+            placeholder="Search party..."
+            oninput="renderParties()">
+
+
+        <br><br>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>GSTIN</th>
+                        <th>State</th>
+                        <th>Phone</th>
+                    </tr>
+
+                </thead>
+
+                <tbody
+                    id="partiesBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<!-- =========================================================
+     PHASE 3 — SALES
+     ========================================================= -->
+
+<section
+    class="section"
+    id="section-sales">
+
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>
+                Sales
+            </h1>
+
+            <p>
+                Sales invoices and output GST.
+            </p>
+
+        </div>
+
+
+        <button
+            class="btn btn-primary"
+            onclick="openSales()">
+
+            + New Sales
+
+        </button>
+
+    </div>
+
+
+    <div
+        id="salesMessage"
+        class="sales-message">
+    </div>
+
+
+    <div class="card">
+
+
+        <div class="sales-header">
+
+            <h3>
+                New Sales Invoice
+            </h3>
+
+
+            <div>
+
+                <button
+                    class="btn"
+                    onclick="clearSalesForm()">
+
+                    Clear
+
+                </button>
+
+
+                <button
+                    class="btn btn-primary"
+                    onclick="saveSales()">
+
+                    Save Invoice
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+
+            <div class="field">
+
+                <label>
+                    Invoice Number
+                </label>
+
+                <input
+                    id="saleInvoice"
+                    readonly>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Date
+                </label>
+
+                <input
+                    type="date"
+                    id="saleDate">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Customer / Party
+                </label>
+
+                <input
+                    id="saleParty"
+                    placeholder="Customer name">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Place of Supply
+                </label>
+
+                <input
+                    id="salePlace"
+                    placeholder="State">
+
+            </div>
+
+
+            <div class="field full">
+
+                <label>
+                    Narration
+                </label>
+
+                <textarea
+                    id="saleNarration"
+                    placeholder="Optional narration">
+                </textarea>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="sales-items">
+
+
+            <div class="sales-items-header">
+
+                <h3>
+                    Invoice Items
+                </h3>
+
+
+                <button
+                    class="btn btn-primary"
+                    onclick="addSaleItem()">
+
+                    + Add Item
+
+                </button>
+
+            </div>
+
+
+            <div class="table-wrap">
+
+                <table
+                    class="sales-items-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Description</th>
+                            <th>Qty</th>
+                            <th>Rate</th>
+                            <th>Discount %</th>
+                            <th>GST %</th>
+                            <th>Taxable</th>
+                            <th>GST</th>
+                            <th>Total</th>
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="saleItemsBody">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="sales-summary">
+
+            <div class="sales-summary-box">
+
+
+                <div class="sales-summary-row">
+
+                    <span>
+                        Subtotal
+                    </span>
+
+                    <strong
+                        id="saleSubtotal">
+
+                        ₹0.00
+
+                    </strong>
+
+                </div>
+
+
+                <div class="sales-summary-row">
+
+                    <span>
+                        Discount
+                    </span>
+
+                    <strong
+                        id="saleDiscount">
+
+                        ₹0.00
+
+                    </strong>
+
+                </div>
+
+
+                <div class="sales-summary-row">
+
+                    <span>
+                        Taxable Amount
+                    </span>
+
+                    <strong
+                        id="saleTaxable">
+
+                        ₹0.00
+
+                    </strong>
+
+                </div>
+
+
+                <div class="sales-summary-row">
+
+                    <span>
+                        GST
+                    </span>
+
+                    <strong
+                        id="saleGST">
+
+                        ₹0.00
+
+                    </strong>
+
+                </div>
+
+
+                <div
+                    class="sales-summary-row total">
+
+                    <span>
+                        Grand Total
+                    </span>
+
+                    <strong
+                        id="saleGrandTotal">
+
+                        ₹0.00
+
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <br>
+
+
+    <div class="card">
+
+        <div class="sales-header">
+
+            <h3>
+                Sales Register
+            </h3>
+
+            <span
+                id="salesCount"
+                style="
+                color:#667085;
+                font-size:13px;
+                ">
+
+                0 records
+
+            </span>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
 
                     <tr>
 
-                        <td>2</td>
-
-                        <td>
-                            Calculator
-                        </td>
-
-                        <td>
-                            Active
-                        </td>
+                        <th>Invoice</th>
+                        <th>Date</th>
+                        <th>Party</th>
+                        <th>Taxable</th>
+                        <th>GST</th>
+                        <th>Total</th>
+                        <th>Action</th>
 
                     </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="salesBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<!-- =========================================================
+     PURCHASE
+     ========================================================= -->
+
+<section
+    class="section"
+    id="section-purchase">
+
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>
+                Purchase
+            </h1>
+
+            <p>
+                Purchase invoices and input GST.
+            </p>
+
+        </div>
+
+
+        <button
+            class="btn btn-primary"
+            onclick="openPurchase()">
+
+            + New Purchase
+
+        </button>
+
+    </div>
+
+
+    <div class="card">
+
+        <div
+            class="notice">
+
+            Purchase transaction module will be
+            expanded after Sales testing.
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Invoice</th>
+                        <th>Date</th>
+                        <th>Supplier</th>
+                        <th>Taxable</th>
+                        <th>GST</th>
+                        <th>Total</th>
+                    </tr>
+
+                </thead>
+
+                <tbody
+                    id="purchaseBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<!-- =========================================================
+     VOUCHERS
+     ========================================================= -->
+
+<section
+    class="section"
+    id="section-vouchers">
+
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>
+                Vouchers
+            </h1>
+
+            <p>
+                Accounting voucher foundation.
+            </p>
+
+        </div>
+
+
+        <button
+            class="btn btn-primary"
+            onclick="openVoucher()">
+
+            + New Voucher
+
+        </button>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
 
                     <tr>
 
-                        <td>3</td>
-
-                        <td>
-                            Business Operations
-                        </td>
-
-                        <td>
-                            Planned
-                        </td>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Reference</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                        <th>Amount</th>
 
                     </tr>
+
+                </thead>
+
+                <tbody
+                    id="vouchersBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<!-- =========================================================
+     REPORT PLACEHOLDERS
+     ========================================================= -->
+
+<section
+    class="section"
+    id="section-daybook">
+
+    <div class="page-header">
+
+        <div>
+            <h1>Day Book</h1>
+            <p>Accounting entries.</p>
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="notice">
+            Day Book reporting will use saved
+            Phase 3 transactions.
+        </div>
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
 
                     <tr>
-
-                        <td>4</td>
-
-                        <td>
-                            Professional Controls
-                        </td>
-
-                        <td>
-                            Planned
-                        </td>
-
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Reference</th>
+                        <th>Amount</th>
                     </tr>
 
+                </thead>
+
+                <tbody
+                    id="daybookBody">
                 </tbody>
 
             </table>
@@ -1475,336 +2390,94 @@ kbd {
 </section>
 
 
-<!-- =====================================================
-     PHASE 2 — CALCULATOR
-     ===================================================== -->
-
 <section
     class="section"
-    id="section-calculator">
+    id="section-ledgerreport">
 
+    <div class="page-header">
 
-    <div class="section-heading">
-
-        <h1>
-            Professional Calculator
-        </h1>
-
-        <p>
-            Business calculations with
-            correct percentage handling.
-        </p>
+        <div>
+            <h1>Ledger Statement</h1>
+            <p>Ledger reporting.</p>
+        </div>
 
     </div>
 
+    <div class="card">
 
-    <div class="calculator-layout">
+        <div class="notice">
+            Ledger reporting foundation is ready.
+        </div>
+
+        <div
+            id="ledgerSummary">
+        </div>
+
+    </div>
+
+</section>
 
 
-        <!-- CALCULATOR -->
+<section
+    class="section"
+    id="section-trialbalance">
 
-        <div class="calculator-card">
+    <div class="page-header">
 
+        <div>
+            <h1>Trial Balance</h1>
+            <p>Debit and credit summary.</p>
+        </div>
 
-            <div class="calculator-display">
+    </div>
 
-                <div
-                    class="calculator-history"
-                    id="calcHistory">
-                </div>
+    <div class="grid grid-3">
 
-                <div
-                    class="calculator-expression"
-                    id="calcExpression">
+        <div class="card">
 
-                    0
-
-                </div>
-
+            <div class="metric-title">
+                Debit
             </div>
 
-
-            <div class="calculator-keypad">
-
-
-                <button
-                    type="button"
-                    class="calc-btn function"
-                    data-calc-action="clear">
-
-                    AC
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="calc-btn function"
-                    data-calc-action="backspace">
-
-                    ⌫
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="calc-btn function"
-                    data-calc-action="percent">
-
-                    %
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="calc-btn operator"
-                    data-calc-operator="/">
-
-                    ÷
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="calc-btn"
-                    data-calc-number="7">
-
-                    7
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="calc-btn"
-                    data-calc-number="8">
-
-                    8
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="calc-btn"
-                    data-calc-number="9">
-
-                    9
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="calc-btn operator"
-                    data-calc-operator="*">
-
-                    ×
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="calc-btn"
-                    data-calc-number="4">
-
-                    4
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="calc-btn"
-                    data-calc-number="5">
-
-                    5
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="calc-btn"
-                    data-calc-number="6">
-
-                    6
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="calc-btn operator"
-                    data-calc-operator="-">
-
-                    −
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="calc-btn"
-                    data-calc-number="1">
-
-                    1
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="calc-btn"
-                    data-calc-number="2">
-
-                    2
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="calc-btn"
-                    data-calc-number="3">
-
-                    3
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="calc-btn operator"
-                    data-calc-operator="+">
-
-                    +
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="calc-btn function"
-                    data-calc-action="sign">
-
-                    +/−
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="calc-btn"
-                    data-calc-number="0">
-
-                    0
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="calc-btn"
-                    data-calc-action="decimal">
-
-                    .
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="calc-btn equals"
-                    data-calc-action="equals">
-
-                    =
-
-                </button>
-
+            <div
+                class="metric-value"
+                id="tbDebit">
+
+                ₹0.00
 
             </div>
 
         </div>
 
 
-        <!-- SIDE PANEL -->
+        <div class="card">
 
-        <div class="calculator-side">
+            <div class="metric-title">
+                Credit
+            </div>
 
+            <div
+                class="metric-value"
+                id="tbCredit">
 
-            <div class="card">
-
-                <div class="card-title">
-                    Calculator History
-                </div>
-
-                <div
-                    id="calcHistoryList"
-                    class="calc-history-list">
-
-                    <div class="empty-history">
-                        No calculations yet.
-                    </div>
-
-                </div>
+                ₹0.00
 
             </div>
 
+        </div>
 
-            <div class="card">
 
-                <div class="card-title">
-                    Keyboard Shortcuts
-                </div>
+        <div class="card">
 
-                <div class="shortcut-list">
+            <div class="metric-title">
+                Difference
+            </div>
 
-                    <div>
-                        <kbd>0–9</kbd>
-                        <span>Numbers</span>
-                    </div>
+            <div
+                class="metric-value"
+                id="tbDifference">
 
-                    <div>
-                        <kbd>+</kbd>
-                        <span>Addition</span>
-                    </div>
-
-                    <div>
-                        <kbd>−</kbd>
-                        <span>Subtraction</span>
-                    </div>
-
-                    <div>
-                        <kbd>*</kbd>
-                        <span>Multiplication</span>
-                    </div>
-
-                    <div>
-                        <kbd>/</kbd>
-                        <span>Division</span>
-                    </div>
-
-                    <div>
-                        <kbd>%</kbd>
-                        <span>Percentage</span>
-                    </div>
-
-                    <div>
-                        <kbd>Enter</kbd>
-                        <span>Calculate</span>
-                    </div>
-
-                    <div>
-                        <kbd>Esc</kbd>
-                        <span>Clear</span>
-                    </div>
-
-                </div>
+                ₹0.00
 
             </div>
 
@@ -1815,114 +2488,70 @@ kbd {
 </section>
 
 
-<!-- =====================================================
-     SPREADSHEET
-     ===================================================== -->
-
 <section
     class="section"
-    id="section-spreadsheet">
+    id="section-profitloss">
 
-    <div class="section-heading">
+    <div class="page-header">
 
-        <h1>
-            Spreadsheet
-        </h1>
-
-        <p>
-            Spreadsheet engine will be expanded
-            in the next Phase 2 module.
-        </p>
-
-    </div>
-
-    <div class="card">
-
-        <div class="card-title">
-            Spreadsheet Workspace
+        <div>
+            <h1>Profit & Loss</h1>
+            <p>Income and expense summary.</p>
         </div>
 
-        <p class="muted">
-            Spreadsheet foundation is ready.
-            Advanced cells and formulas can be added
-            without changing the navigation engine.
-        </p>
-
     </div>
 
-</section>
+    <div class="grid grid-3">
+
+        <div class="card">
+
+            <div class="metric-title">
+                Revenue
+            </div>
+
+            <div
+                class="metric-value"
+                id="plRevenue">
+
+                ₹0.00
+
+            </div>
+
+        </div>
 
 
-<!-- =====================================================
-     BUSINESS PLACEHOLDERS
-     ===================================================== -->
+        <div class="card">
 
-<section
-    class="section"
-    id="section-sales">
+            <div class="metric-title">
+                Expenses
+            </div>
 
-    <div class="section-heading">
+            <div
+                class="metric-value"
+                id="plExpenses">
 
-        <h1>Sales</h1>
+                ₹0.00
 
-        <p>
-            Sales module.
-        </p>
+            </div>
 
-    </div>
-
-    <div class="card">
-
-        Sales module will be expanded
-        in a later phase.
-
-    </div>
-
-</section>
+        </div>
 
 
-<section
-    class="section"
-    id="section-purchases">
+        <div class="card">
 
-    <div class="section-heading">
+            <div class="metric-title">
+                Net Profit / Loss
+            </div>
 
-        <h1>Purchases</h1>
+            <div
+                class="metric-value"
+                id="plNet">
 
-        <p>
-            Purchase module.
-        </p>
+                ₹0.00
 
-    </div>
+            </div>
 
-    <div class="card">
-
-        Purchase module will be expanded
-        in a later phase.
-
-    </div>
-
-</section>
-
-
-<section
-    class="section"
-    id="section-parties">
-
-    <div class="section-heading">
-
-        <h1>Parties</h1>
-
-        <p>
-            Party management.
-        </p>
-
-    </div>
-
-    <div class="card">
-
-        Party module will be expanded
-        in a later phase.
+        </div>
 
     </div>
 
@@ -1931,46 +2560,68 @@ kbd {
 
 <section
     class="section"
-    id="section-vouchers">
+    id="section-balancesheet">
 
-    <div class="section-heading">
+    <div class="page-header">
 
-        <h1>Vouchers</h1>
-
-        <p>
-            Voucher management.
-        </p>
-
-    </div>
-
-    <div class="card">
-
-        Voucher module will be expanded
-        in a later phase.
+        <div>
+            <h1>Balance Sheet</h1>
+            <p>Assets, liabilities and capital.</p>
+        </div>
 
     </div>
 
-</section>
+    <div class="grid grid-3">
+
+        <div class="card">
+
+            <div class="metric-title">
+                Assets
+            </div>
+
+            <div
+                class="metric-value"
+                id="bsAssets">
+
+                ₹0.00
+
+            </div>
+
+        </div>
 
 
-<section
-    class="section"
-    id="section-reports">
+        <div class="card">
 
-    <div class="section-heading">
+            <div class="metric-title">
+                Liabilities
+            </div>
 
-        <h1>Reports</h1>
+            <div
+                class="metric-value"
+                id="bsLiabilities">
 
-        <p>
-            Reporting module.
-        </p>
+                ₹0.00
 
-    </div>
+            </div>
 
-    <div class="card">
+        </div>
 
-        Reporting module will be expanded
-        in a later phase.
+
+        <div class="card">
+
+            <div class="metric-title">
+                Capital
+            </div>
+
+            <div
+                class="metric-value"
+                id="bsCapital">
+
+                ₹0.00
+
+            </div>
+
+        </div>
 
     </div>
 
@@ -1981,20 +2632,66 @@ kbd {
     class="section"
     id="section-gst">
 
-    <div class="section-heading">
+    <div class="page-header">
 
-        <h1>GST</h1>
-
-        <p>
-            GST module.
-        </p>
+        <div>
+            <h1>GST Summary</h1>
+            <p>Input and output GST.</p>
+        </div>
 
     </div>
 
-    <div class="card">
+    <div class="grid grid-3">
 
-        GST module will be expanded
-        in a later phase.
+        <div class="card">
+
+            <div class="metric-title">
+                Output GST
+            </div>
+
+            <div
+                class="metric-value"
+                id="gstOutput">
+
+                ₹0.00
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="metric-title">
+                Input GST
+            </div>
+
+            <div
+                class="metric-value"
+                id="gstInput">
+
+                ₹0.00
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="metric-title">
+                Net GST
+            </div>
+
+            <div
+                class="metric-value"
+                id="gstNet">
+
+                ₹0.00
+
+            </div>
+
+        </div>
 
     </div>
 
@@ -2005,52 +2702,230 @@ kbd {
     class="section"
     id="section-outstanding">
 
-    <div class="section-heading">
+    <div class="page-header">
 
-        <h1>Outstanding</h1>
-
-        <p>
-            Outstanding balances.
-        </p>
+        <div>
+            <h1>Outstanding</h1>
+            <p>Receivables and payables.</p>
+        </div>
 
     </div>
 
-    <div class="card">
+    <div class="grid grid-2">
 
-        Outstanding module will be expanded
-        in a later phase.
+        <div class="card">
+
+            <div class="metric-title">
+                Receivables
+            </div>
+
+            <div
+                class="metric-value"
+                id="outReceivable">
+
+                ₹0.00
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="metric-title">
+                Payables
+            </div>
+
+            <div
+                class="metric-value"
+                id="outPayable">
+
+                ₹0.00
+
+            </div>
+
+        </div>
 
     </div>
 
 </section>
 
 
+<!-- =========================================================
+     COMPANY
+     ========================================================= -->
+
 <section
     class="section"
-    id="section-controls">
+    id="section-company">
 
-    <div class="section-heading">
+    <div class="page-header">
 
-        <h1>
-            System Controls
-        </h1>
+        <div>
 
-        <p>
-            Application control center.
-        </p>
+            <h1>
+                Company Setup
+            </h1>
+
+            <p>
+                Business identity.
+            </p>
+
+        </div>
+
+
+        <button
+            class="btn btn-primary"
+            onclick="saveCompany()">
+
+            Save Company
+
+        </button>
 
     </div>
 
+
     <div class="card">
 
-        <div class="card-title">
-            System Status
+        <div class="form-grid">
+
+            <div class="field">
+
+                <label>
+                    Company Name
+                </label>
+
+                <input
+                    id="companyName"
+                    placeholder="Company name">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    GSTIN
+                </label>
+
+                <input
+                    id="companyGSTIN"
+                    placeholder="GSTIN">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Phone
+                </label>
+
+                <input
+                    id="companyPhone"
+                    placeholder="Phone">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Email
+                </label>
+
+                <input
+                    id="companyEmail"
+                    placeholder="Email">
+
+            </div>
+
+
+            <div class="field full">
+
+                <label>
+                    Address
+                </label>
+
+                <textarea
+                    id="companyAddress"
+                    placeholder="Business address">
+                </textarea>
+
+            </div>
+
         </div>
 
-        <p class="muted">
-            BusinessDesk Phase 1 + Phase 2
-            foundation is running.
-        </p>
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     BACKUP
+     ========================================================= -->
+
+<section
+    class="section"
+    id="section-backup">
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>
+                Backup / Restore
+            </h1>
+
+            <p>
+                Local application data.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <button
+            class="btn btn-primary"
+            onclick="downloadBackup()">
+
+            Download Backup
+
+        </button>
+
+
+        <label
+            class="btn"
+            style="
+            display:inline-block;
+            margin-left:8px;
+            ">
+
+            Restore Backup
+
+            <input
+                type="file"
+                id="restoreFile"
+                accept=".json"
+                hidden>
+
+        </label>
+
+
+        <br><br>
+
+
+        <div
+            id="backupMessage"
+            class="notice">
+
+            Backup contains locally stored
+            BusinessDesk data.
+
+        </div>
 
     </div>
 
@@ -2060,6 +2935,458 @@ kbd {
 </div>
 
 </main>
+
+</div>
+
+
+<!-- =========================================================
+     MODALS
+     ========================================================= -->
+
+
+<div
+    class="modal"
+    id="groupModal">
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <h3>
+                Add Account Group
+            </h3>
+
+            <button
+                class="close"
+                onclick="closeModal('groupModal')">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <div class="form-grid">
+
+            <div class="field">
+
+                <label>
+                    Group Name
+                </label>
+
+                <input
+                    id="groupName">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Nature
+                </label>
+
+                <select id="groupNature">
+
+                    <option>
+                        Asset
+                    </option>
+
+                    <option>
+                        Liability
+                    </option>
+
+                    <option>
+                        Income
+                    </option>
+
+                    <option>
+                        Expense
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-actions">
+
+            <button
+                class="btn"
+                onclick="closeModal('groupModal')">
+
+                Cancel
+
+            </button>
+
+
+            <button
+                class="btn btn-primary"
+                onclick="saveGroup()">
+
+                Save
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    class="modal"
+    id="ledgerModal">
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <h3>
+                Add Ledger
+            </h3>
+
+            <button
+                class="close"
+                onclick="closeModal('ledgerModal')">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <div class="form-grid">
+
+            <div class="field">
+
+                <label>
+                    Ledger Name
+                </label>
+
+                <input
+                    id="ledgerName">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Group
+                </label>
+
+                <input
+                    id="ledgerGroup"
+                    placeholder="e.g. Current Assets">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Opening Balance
+                </label>
+
+                <input
+                    type="number"
+                    id="ledgerOpening"
+                    value="0"
+                    step="0.01">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Opening Type
+                </label>
+
+                <select
+                    id="ledgerOpeningType">
+
+                    <option value="Dr">
+                        Debit
+                    </option>
+
+                    <option value="Cr">
+                        Credit
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-actions">
+
+            <button
+                class="btn"
+                onclick="closeModal('ledgerModal')">
+
+                Cancel
+
+            </button>
+
+
+            <button
+                class="btn btn-primary"
+                onclick="saveLedger()">
+
+                Save
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    class="modal"
+    id="partyModal">
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <h3>
+                Add Party
+            </h3>
+
+            <button
+                class="close"
+                onclick="closeModal('partyModal')">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <div class="form-grid">
+
+            <div class="field">
+
+                <label>
+                    Name
+                </label>
+
+                <input
+                    id="partyName">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Type
+                </label>
+
+                <select id="partyType">
+
+                    <option value="Customer">
+                        Customer
+                    </option>
+
+                    <option value="Supplier">
+                        Supplier
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    GSTIN
+                </label>
+
+                <input
+                    id="partyGSTIN">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    State
+                </label>
+
+                <input
+                    id="partyState">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Phone
+                </label>
+
+                <input
+                    id="partyPhone">
+
+            </div>
+
+        </div>
+
+
+        <div class="form-actions">
+
+            <button
+                class="btn"
+                onclick="closeModal('partyModal')">
+
+                Cancel
+
+            </button>
+
+
+            <button
+                class="btn btn-primary"
+                onclick="saveParty()">
+
+                Save
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    class="modal"
+    id="salesModal">
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <h3>
+                New Sales Invoice
+            </h3>
+
+            <button
+                class="close"
+                onclick="closeModal('salesModal')">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <p
+            style="
+            color:#667085;
+            font-size:13px;
+            ">
+
+            The Sales section is ready for invoice entry.
+
+        </p>
+
+        <br>
+
+        <button
+            class="btn btn-primary"
+            onclick="
+            closeModal('salesModal');
+            navigateToSection('sales');
+            ">
+
+            Open Sales
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<div
+    class="modal"
+    id="purchaseModal">
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <h3>
+                Purchase
+            </h3>
+
+            <button
+                class="close"
+                onclick="closeModal('purchaseModal')">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <div class="notice">
+            Purchase entry will be implemented in the next
+            accounting module.
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    class="modal"
+    id="voucherModal">
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <h3>
+                Voucher
+            </h3>
+
+            <button
+                class="close"
+                onclick="closeModal('voucherModal')">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <div class="notice">
+            Voucher entry foundation is ready.
+        </div>
+
+    </div>
 
 </div>
 
@@ -2075,12 +3402,245 @@ const AppState = {
     currentSection:
         "dashboard",
 
-    calculations: [],
-
     initialized:
         false
 
 };
+
+
+/* =========================================================
+   STORAGE KEYS
+   ========================================================= */
+
+const STORAGE = {
+
+    sales:
+        "businessdesk_phase3_sales",
+
+    parties:
+        "businessdesk_phase3_parties",
+
+    ledgers:
+        "businessdesk_phase3_ledgers",
+
+    groups:
+        "businessdesk_phase3_groups",
+
+    purchases:
+        "businessdesk_phase3_purchases",
+
+    vouchers:
+        "businessdesk_phase3_vouchers",
+
+    company:
+        "businessdesk_phase3_company",
+
+    excel:
+        "businessdesk_phase2_excel"
+
+};
+
+
+/* =========================================================
+   PHASE 3 STATE
+   ========================================================= */
+
+const DataState = {
+
+    sales: [],
+
+    parties: [],
+
+    ledgers: [],
+
+    groups: [],
+
+    purchases: [],
+
+    vouchers: [],
+
+    excel: [],
+
+    company: {}
+
+};
+
+
+/* =========================================================
+   GENERIC STORAGE
+   ========================================================= */
+
+function loadStorage(
+    key,
+    fallback
+) {
+
+    try {
+
+        const value =
+            localStorage.getItem(key);
+
+
+        if (!value) {
+
+            return fallback;
+
+        }
+
+
+        const parsed =
+            JSON.parse(value);
+
+
+        return parsed;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Storage load error:",
+            error
+        );
+
+        return fallback;
+
+    }
+
+}
+
+
+function saveStorage(
+    key,
+    value
+) {
+
+    try {
+
+        localStorage.setItem(
+            key,
+            JSON.stringify(value)
+        );
+
+        return true;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Storage save error:",
+            error
+        );
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   UTILITY
+   ========================================================= */
+
+function numberValue(value) {
+
+    const number =
+        Number(value);
+
+
+    return Number.isFinite(number)
+        ? number
+        : 0;
+
+}
+
+
+function money(value) {
+
+    return (
+        "₹" +
+        numberValue(value)
+            .toLocaleString(
+                "en-IN",
+                {
+                    minimumFractionDigits:
+                        2,
+
+                    maximumFractionDigits:
+                        2
+                }
+            )
+    );
+
+}
+
+
+function today() {
+
+    const d =
+        new Date();
+
+
+    const year =
+        d.getFullYear();
+
+
+    const month =
+        String(
+            d.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const day =
+        String(
+            d.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    return (
+        year +
+        "-" +
+        month +
+        "-" +
+        day
+    );
+
+}
+
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
 
 
 /* =========================================================
@@ -2091,200 +3651,261 @@ function initializeNavigation() {
 
     const buttons =
         document.querySelectorAll(
-            ".nav-button[data-section]"
+            ".nav-btn[data-section]"
         );
 
-    buttons.forEach(function(button) {
 
-        button.addEventListener(
-            "click",
-            function() {
+    buttons.forEach(
+        function(button) {
 
-                const section =
-                    button.dataset.section;
+            button.addEventListener(
+                "click",
+                function() {
 
-                navigateToSection(section);
+                    navigateToSection(
+                        button.dataset.section
+                    );
 
-            }
-        );
+                }
+            );
 
-    });
+        }
+    );
 
 }
 
 
-function navigateToSection(sectionName) {
+function navigateToSection(
+    sectionName
+) {
+
+    const target =
+        document.getElementById(
+            "section-" +
+            sectionName
+        );
+
+
+    if (!target) {
+
+        console.warn(
+            "Section not found:",
+            sectionName
+        );
+
+        return;
+
+    }
+
 
     const sections =
         document.querySelectorAll(
             ".section"
         );
 
-    const buttons =
-        document.querySelectorAll(
-            ".nav-button"
-        );
 
+    sections.forEach(
+        function(section) {
 
-    let targetFound =
-        false;
-
-
-    sections.forEach(function(section) {
-
-        const isTarget =
-            section.id ===
-            "section-" +
-            sectionName;
-
-        section.classList.toggle(
-            "active",
-            isTarget
-        );
-
-        if (isTarget) {
-
-            targetFound =
-                true;
+            section.classList.toggle(
+                "active",
+                section === target
+            );
 
         }
-
-    });
-
-
-    if (!targetFound) {
-
-        return;
-
-    }
+    );
 
 
-    buttons.forEach(function(button) {
-
-        button.classList.toggle(
-            "active",
-            button.dataset.section ===
-            sectionName
+    const buttons =
+        document.querySelectorAll(
+            ".nav-btn"
         );
 
-    });
+
+    buttons.forEach(
+        function(button) {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.section ===
+                sectionName
+            );
+
+        }
+    );
 
 
     AppState.currentSection =
         sectionName;
 
 
-    updateHeader(
+    updatePageTitle(
+        sectionName
+    );
+
+
+    const sidebar =
+        document.getElementById(
+            "sidebar"
+        );
+
+
+    if (sidebar) {
+
+        sidebar.classList.remove(
+            "open"
+        );
+
+    }
+
+
+    refreshCurrentSection(
         sectionName
     );
 
 }
 
 
-function updateHeader(sectionName) {
+function updatePageTitle(
+    sectionName
+) {
 
     const title =
         document.getElementById(
-            "headerTitle"
-        );
-
-    const subtitle =
-        document.getElementById(
-            "headerSubtitle"
+            "pageTitle"
         );
 
 
-    const names = {
+    const titles = {
 
         dashboard:
-            [
-                "Dashboard",
-                "BusinessDesk Enterprise Suite"
-            ],
+            "Dashboard",
 
         calculator:
-            [
-                "Calculator",
-                "Professional Calculator"
-            ],
+            "Calculator",
 
         spreadsheet:
-            [
-                "Spreadsheet",
-                "Spreadsheet Workspace"
-            ],
+            "Excel Working",
 
-        sales:
-            [
-                "Sales",
-                "Sales Management"
-            ],
+        groups:
+            "Account Groups",
 
-        purchases:
-            [
-                "Purchases",
-                "Purchase Management"
-            ],
+        ledgers:
+            "Ledgers",
 
         parties:
-            [
-                "Parties",
-                "Party Management"
-            ],
+            "Customers / Suppliers",
+
+        sales:
+            "Sales",
+
+        purchase:
+            "Purchase",
 
         vouchers:
-            [
-                "Vouchers",
-                "Voucher Management"
-            ],
+            "Vouchers",
 
-        reports:
-            [
-                "Reports",
-                "Business Reports"
-            ],
+        daybook:
+            "Day Book",
+
+        ledgerreport:
+            "Ledger Statement",
+
+        trialbalance:
+            "Trial Balance",
+
+        profitloss:
+            "Profit & Loss",
+
+        balancesheet:
+            "Balance Sheet",
 
         gst:
-            [
-                "GST",
-                "GST Management"
-            ],
+            "GST Summary",
 
         outstanding:
-            [
-                "Outstanding",
-                "Outstanding Balances"
-            ],
+            "Outstanding",
 
-        controls:
-            [
-                "System Controls",
-                "Application Control Center"
-            ]
+        company:
+            "Company Setup",
+
+        backup:
+            "Backup / Restore"
 
     };
-
-
-    const value =
-        names[sectionName] ||
-        [
-            "BusinessDesk",
-            "Enterprise Suite"
-        ];
 
 
     if (title) {
 
         title.textContent =
-            value[0];
+            titles[sectionName] ||
+            "BusinessDesk";
+
+    }
+
+}
+
+
+function refreshCurrentSection(
+    section
+) {
+
+    if (
+        section ===
+        "dashboard"
+    ) {
+
+        updateDashboard();
 
     }
 
 
-    if (subtitle) {
+    if (
+        section ===
+        "sales"
+    ) {
 
-        subtitle.textContent =
-            value[1];
+        renderSales();
+
+    }
+
+
+    if (
+        section ===
+        "parties"
+    ) {
+
+        renderParties();
+
+    }
+
+
+    if (
+        section ===
+        "ledgers"
+    ) {
+
+        renderLedgers();
+
+    }
+
+
+    if (
+        section ===
+        "groups"
+    ) {
+
+        renderGroups();
+
+    }
+
+
+    if (
+        section ===
+        "spreadsheet"
+    ) {
+
+        renderExcel();
 
     }
 
@@ -2292,715 +3913,220 @@ function updateHeader(sectionName) {
 
 
 /* =========================================================
-   PHASE 2 — CALCULATOR STATE
+   MOBILE MENU
    ========================================================= */
 
-const Calculator = {
+function initializeMenu() {
 
-    current:
-        "0",
+    const button =
+        document.getElementById(
+            "menuBtn"
+        );
 
-    previous:
-        null,
 
-    operator:
-        null,
+    const sidebar =
+        document.getElementById(
+            "sidebar"
+        );
 
-    waitingForOperand:
-        false,
+
+    if (
+        !button ||
+        !sidebar
+    ) {
+
+        return;
+
+    }
+
+
+    button.addEventListener(
+        "click",
+        function() {
+
+            sidebar.classList.toggle(
+                "open"
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   PHASE 2 — CALCULATOR
+   ========================================================= */
+
+const CalcState = {
 
     expression:
         "",
 
-    history:
-        [],
-
-    initialized:
+    justEvaluated:
         false
 
 };
 
 
-/* =========================================================
-   CALCULATOR DISPLAY
-   ========================================================= */
+function calcDisplay() {
 
-function calculatorUpdateDisplay() {
-
-    const display =
+    const element =
         document.getElementById(
-            "calcExpression"
-        );
-
-    const historyDisplay =
-        document.getElementById(
-            "calcHistory"
+            "calcDisplay"
         );
 
 
-    if (display) {
+    if (element) {
 
-        display.textContent =
-            Calculator.current;
-
-    }
-
-
-    if (historyDisplay) {
-
-        historyDisplay.textContent =
-            Calculator.expression;
+        element.value =
+            CalcState.expression ||
+            "0";
 
     }
 
 }
 
 
-/* =========================================================
-   NUMBER INPUT
-   ========================================================= */
-
-function calculatorInputNumber(number) {
-
-    if (
-        Calculator.current ===
-        "Error"
-    ) {
-
-        calculatorClear();
-
-    }
-
-
-    if (
-        Calculator.waitingForOperand
-    ) {
-
-        Calculator.current =
-            String(number);
-
-        Calculator.waitingForOperand =
-            false;
-
-    } else if (
-        Calculator.current ===
-        "0"
-    ) {
-
-        Calculator.current =
-            String(number);
-
-    } else {
-
-        Calculator.current +=
-            String(number);
-
-    }
-
-
-    calculatorUpdateDisplay();
-
-}
-
-
-/* =========================================================
-   DECIMAL
-   ========================================================= */
-
-function calculatorInputDecimal() {
-
-    if (
-        Calculator.current ===
-        "Error"
-    ) {
-
-        calculatorClear();
-
-    }
-
-
-    if (
-        Calculator.waitingForOperand
-    ) {
-
-        Calculator.current =
-            "0.";
-
-        Calculator.waitingForOperand =
-            false;
-
-    } else if (
-        !Calculator.current.includes(".")
-    ) {
-
-        Calculator.current +=
-            ".";
-
-    }
-
-
-    calculatorUpdateDisplay();
-
-}
-
-
-/* =========================================================
-   SAFE NUMBER
-   ========================================================= */
-
-function calculatorToNumber(value) {
-
-    const number =
-        Number(value);
-
-
-    return Number.isFinite(number)
-        ? number
-        : NaN;
-
-}
-
-
-/* =========================================================
-   FORMAT
-   ========================================================= */
-
-function calculatorFormat(value) {
-
-    if (
-        !Number.isFinite(value)
-    ) {
-
-        return "Error";
-
-    }
-
-
-    if (
-        Object.is(value, -0)
-    ) {
-
-        value = 0;
-
-    }
-
-
-    const rounded =
-        Math.round(
-            (
-                value +
-                Number.EPSILON
-            ) *
-            100000000
-        ) /
-        100000000;
-
-
-    return String(rounded);
-
-}
-
-
-/* =========================================================
-   OPERATOR
-   ========================================================= */
-
-function calculatorSetOperator(operator) {
-
-    if (
-        Calculator.current ===
-        "Error"
-    ) {
-
-        return;
-
-    }
-
-
-    const input =
-        calculatorToNumber(
-            Calculator.current
-        );
-
-
-    if (
-        !Number.isFinite(input)
-    ) {
-
-        calculatorSetError();
-
-        return;
-
-    }
-
-
-    /*
-     * If an operator already exists and
-     * the user has entered a second value,
-     * calculate the intermediate result.
-     */
-
-    if (
-        Calculator.operator !== null &&
-        Calculator.previous !== null &&
-        !Calculator.waitingForOperand
-    ) {
-
-        const result =
-            calculatorPerformOperation(
-                Calculator.previous,
-                input,
-                Calculator.operator
-            );
-
-
-        if (
-            result === null
+/*
+    Percentage behaviour:
+
+    100 + 10% = 110
+    100 - 10% = 90
+    100 * 10% = 10
+    100 / 10% = 1000
+
+    Standalone:
+    25% = 0.25
+*/
+
+function calcConvertPercent(
+    expression
+) {
+
+    return expression.replace(
+        /(\d+(?:\.\d+)?)%/g,
+        function(
+            match,
+            number
         ) {
 
-            calculatorSetError();
-
-            return;
+            return (
+                "(" +
+                number +
+                "/100)"
+            );
 
         }
-
-
-        Calculator.current =
-            calculatorFormat(result);
-
-        Calculator.previous =
-            result;
-
-    } else {
-
-        Calculator.previous =
-            input;
-
-    }
-
-
-    Calculator.operator =
-        operator;
-
-    Calculator.waitingForOperand =
-        true;
-
-    Calculator.expression =
-        calculatorFormat(
-            Calculator.previous
-        ) +
-        " " +
-        calculatorOperatorSymbol(
-            operator
-        );
-
-
-    calculatorUpdateDisplay();
-
-}
-
-
-/* =========================================================
-   OPERATOR SYMBOL
-   ========================================================= */
-
-function calculatorOperatorSymbol(
-    operator
-) {
-
-    const symbols = {
-
-        "+":
-            "+",
-
-        "-":
-            "−",
-
-        "*":
-            "×",
-
-        "/":
-            "÷"
-
-    };
-
-
-    return symbols[operator] ||
-           operator;
-
-}
-
-
-/* =========================================================
-   BASIC OPERATION
-   ========================================================= */
-
-function calculatorPerformOperation(
-    first,
-    second,
-    operator
-) {
-
-    switch (operator) {
-
-        case "+":
-
-            return first + second;
-
-        case "-":
-
-            return first - second;
-
-        case "*":
-
-            return first * second;
-
-        case "/":
-
-            if (
-                second === 0
-            ) {
-
-                return null;
-
-            }
-
-            return first / second;
-
-        default:
-
-            return null;
-
-    }
-
-}
-
-
-/* =========================================================
-   CORRECT PERCENTAGE ENGINE
-   ========================================================= */
-
-function calculatorPercent() {
-
-    if (
-        Calculator.current ===
-        "Error"
-    ) {
-
-        return;
-
-    }
-
-
-    const current =
-        calculatorToNumber(
-            Calculator.current
-        );
-
-
-    if (
-        !Number.isFinite(current)
-    ) {
-
-        calculatorSetError();
-
-        return;
-
-    }
-
-
-    /*
-     * Standalone:
-     *
-     * 18 % = 0.18
-     */
-
-    if (
-        Calculator.operator === null ||
-        Calculator.previous === null
-    ) {
-
-        Calculator.current =
-            calculatorFormat(
-                current / 100
-            );
-
-        Calculator.waitingForOperand =
-            true;
-
-        Calculator.expression =
-            calculator.current +
-            "%";
-
-        calculatorUpdateDisplay();
-
-        return;
-
-    }
-
-
-    const base =
-        Calculator.previous;
-
-
-    /*
-     * For + and -
-     *
-     * 100 + 10% = 110
-     * 100 - 10% = 90
-     *
-     * Percentage amount = base × percent / 100
-     */
-
-    if (
-        Calculator.operator === "+" ||
-        Calculator.operator === "-"
-    ) {
-
-        const percentageAmount =
-            base *
-            current /
-            100;
-
-
-        Calculator.current =
-            calculatorFormat(
-                percentageAmount
-            );
-
-    }
-
-
-    /*
-     * For × and ÷
-     *
-     * 100 × 10% = 10
-     * 100 ÷ 10% = 1000
-     *
-     * Convert percentage to decimal.
-     */
-
-    else {
-
-        Calculator.current =
-            calculatorFormat(
-                current / 100
-            );
-
-    }
-
-
-    Calculator.waitingForOperand =
-        false;
-
-
-    Calculator.expression =
-        calculatorFormat(
-            base
-        ) +
-        " " +
-        calculatorOperatorSymbol(
-            Calculator.operator
-        ) +
-        " " +
-        Calculator.current;
-
-
-    calculatorUpdateDisplay();
-
-}
-
-
-/* =========================================================
-   EQUALS
-   ========================================================= */
-
-function calculatorEquals() {
-
-    if (
-        Calculator.current ===
-        "Error"
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        Calculator.operator === null ||
-        Calculator.previous === null
-    ) {
-
-        return;
-
-    }
-
-
-    const first =
-        Calculator.previous;
-
-
-    const second =
-        calculatorToNumber(
-            Calculator.current
-        );
-
-
-    if (
-        !Number.isFinite(second)
-    ) {
-
-        calculatorSetError();
-
-        return;
-
-    }
-
-
-    /*
-     * If percentage was pressed,
-     * Calculator.current already contains
-     * the correct percentage amount.
-     */
-
-    let calculationSecond =
-        second;
-
-
-    const result =
-        calculatorPerformOperation(
-            first,
-            calculationSecond,
-            Calculator.operator
-        );
-
-
-    if (
-        result === null
-    ) {
-
-        calculatorSetError();
-
-        return;
-
-    }
-
-
-    const expression =
-        calculatorFormat(first) +
-        " " +
-        calculatorOperatorSymbol(
-            Calculator.operator
-        ) +
-        " " +
-        calculatorFormat(second);
-
-
-    const resultText =
-        calculatorFormat(
-            result
-        );
-
-
-    Calculator.current =
-        resultText;
-
-    Calculator.expression =
-        expression +
-        " =";
-
-
-    calculatorAddHistory(
-        expression,
-        resultText
     );
 
-
-    Calculator.previous =
-        null;
-
-    Calculator.operator =
-        null;
-
-    Calculator.waitingForOperand =
-        true;
-
-
-    calculatorUpdateDisplay();
-
 }
 
 
-/* =========================================================
-   CLEAR
-   ========================================================= */
+function calcEvaluateExpression(
+    expression
+) {
 
-function calculatorClear() {
-
-    Calculator.current =
-        "0";
-
-    Calculator.previous =
-        null;
-
-    Calculator.operator =
-        null;
-
-    Calculator.waitingForOperand =
-        false;
-
-    Calculator.expression =
-        "";
-
-
-    calculatorUpdateDisplay();
-
-}
-
-
-/* =========================================================
-   BACKSPACE
-   ========================================================= */
-
-function calculatorBackspace() {
-
-    if (
-        Calculator.current ===
-        "Error"
-    ) {
-
-        calculatorClear();
-
-        return;
-
-    }
+    let prepared =
+        calcConvertPercent(
+            expression
+        );
 
 
     if (
-        Calculator.waitingForOperand
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        Calculator.current.length <= 1 ||
-        (
-            Calculator.current.length === 2 &&
-            Calculator.current.startsWith("-")
+        !/^[0-9+\-*/().\s]+$/.test(
+            prepared
         )
     ) {
 
-        Calculator.current =
-            "0";
+        throw new Error(
+            "Invalid expression"
+        );
 
-    } else {
+    }
 
-        Calculator.current =
-            Calculator.current.slice(
+
+    if (
+        /[+\-*/.]$/.test(
+            prepared.trim()
+        )
+    ) {
+
+        throw new Error(
+            "Incomplete expression"
+        );
+
+    }
+
+
+    const result =
+        Function(
+            '"use strict";return (' +
+            prepared +
+            ')'
+        )();
+
+
+    if (
+        !Number.isFinite(
+            result
+        )
+    ) {
+
+        throw new Error(
+            "Invalid result"
+        );
+
+    }
+
+
+    return result;
+
+}
+
+
+function calcInput(
+    value
+) {
+
+    if (
+        CalcState.justEvaluated &&
+        /[0-9.]/.test(value)
+    ) {
+
+        CalcState.expression =
+            "";
+
+        CalcState.justEvaluated =
+            false;
+
+    }
+
+
+    if (
+        CalcState.justEvaluated &&
+        /[+\-*/]/.test(value)
+    ) {
+
+        CalcState.justEvaluated =
+            false;
+
+    }
+
+
+    const last =
+        CalcState.expression.slice(
+            -1
+        );
+
+
+    if (
+        /[+\-*/]/.test(value) &&
+        /[+\-*/]/.test(last)
+    ) {
+
+        CalcState.expression =
+            CalcState.expression.slice(
                 0,
                 -1
             );
@@ -3008,367 +4134,222 @@ function calculatorBackspace() {
     }
 
 
-    calculatorUpdateDisplay();
-
-}
-
-
-/* =========================================================
-   SIGN
-   ========================================================= */
-
-function calculatorToggleSign() {
-
     if (
-        Calculator.current ===
-        "0" ||
-        Calculator.current ===
-        "Error"
+        value === "."
     ) {
 
-        return;
-
-    }
-
-
-    if (
-        Calculator.current.startsWith("-")
-    ) {
-
-        Calculator.current =
-            Calculator.current.substring(
-                1
+        const parts =
+            CalcState.expression.split(
+                /[+\-*/]/
             );
 
-    } else {
 
-        Calculator.current =
-            "-" +
-            Calculator.current;
+        const current =
+            parts[parts.length - 1];
 
-    }
 
+        if (
+            current.includes(".")
+        ) {
 
-    calculatorUpdateDisplay();
-
-}
-
-
-/* =========================================================
-   ERROR
-   ========================================================= */
-
-function calculatorSetError() {
-
-    Calculator.current =
-        "Error";
-
-    Calculator.previous =
-        null;
-
-    Calculator.operator =
-        null;
-
-    Calculator.waitingForOperand =
-        true;
-
-    Calculator.expression =
-        "Calculation error";
-
-
-    calculatorUpdateDisplay();
-
-}
-
-
-/* =========================================================
-   HISTORY
-   ========================================================= */
-
-function calculatorAddHistory(
-    expression,
-    result
-) {
-
-    Calculator.history.unshift({
-
-        expression:
-            expression,
-
-        result:
-            result,
-
-        time:
-            new Date().toISOString()
-
-    });
-
-
-    if (
-        Calculator.history.length >
-        20
-    ) {
-
-        Calculator.history =
-            Calculator.history.slice(
-                0,
-                20
-            );
-
-    }
-
-
-    calculatorRenderHistory();
-
-}
-
-
-/* =========================================================
-   HISTORY RENDER
-   ========================================================= */
-
-function escapeCalculatorHtml(value) {
-
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
-}
-
-
-function calculatorRenderHistory() {
-
-    const container =
-        document.getElementById(
-            "calcHistoryList"
-        );
-
-
-    if (!container) {
-
-        return;
-
-    }
-
-
-    if (
-        Calculator.history.length ===
-        0
-    ) {
-
-        container.innerHTML =
-            '<div class="empty-history">' +
-            'No calculations yet.' +
-            '</div>';
-
-        return;
-
-    }
-
-
-    container.innerHTML =
-        Calculator.history
-            .map(function(item) {
-
-                return (
-
-                    '<div class="history-item">' +
-
-                    '<div class="history-expression">' +
-                    escapeCalculatorHtml(
-                        item.expression
-                    ) +
-                    '</div>' +
-
-                    '<div class="history-result">' +
-                    escapeCalculatorHtml(
-                        item.result
-                    ) +
-                    '</div>' +
-
-                    '</div>'
-
-                );
-
-            })
-            .join("");
-
-}
-
-
-/* =========================================================
-   BUTTON EVENTS
-   ========================================================= */
-
-function initializeCalculator() {
-
-    if (
-        Calculator.initialized
-    ) {
-
-        return;
-
-    }
-
-
-    const calculator =
-        document.getElementById(
-            "section-calculator"
-        );
-
-
-    if (!calculator) {
-
-        return;
-
-    }
-
-
-    calculator.addEventListener(
-        "click",
-        function(event) {
-
-            const button =
-                event.target.closest(
-                    "[data-calc-number]," +
-                    "[data-calc-operator]," +
-                    "[data-calc-action]"
-                );
-
-
-            if (!button) {
-
-                return;
-
-            }
-
-
-            if (
-                button.dataset.calcNumber !==
-                undefined
-            ) {
-
-                calculatorInputNumber(
-                    button.dataset.calcNumber
-                );
-
-                return;
-
-            }
-
-
-            if (
-                button.dataset.calcOperator !==
-                undefined
-            ) {
-
-                calculatorSetOperator(
-                    button.dataset.calcOperator
-                );
-
-                return;
-
-            }
-
-
-            switch (
-                button.dataset.calcAction
-            ) {
-
-                case "clear":
-
-                    calculatorClear();
-
-                    break;
-
-
-                case "backspace":
-
-                    calculatorBackspace();
-
-                    break;
-
-
-                case "percent":
-
-                    calculatorPercent();
-
-                    break;
-
-
-                case "decimal":
-
-                    calculatorInputDecimal();
-
-                    break;
-
-
-                case "sign":
-
-                    calculatorToggleSign();
-
-                    break;
-
-
-                case "equals":
-
-                    calculatorEquals();
-
-                    break;
-
-            }
+            return;
 
         }
-    );
+
+    }
 
 
-    Calculator.initialized =
-        true;
+    CalcState.expression +=
+        value;
 
 
-    calculatorUpdateDisplay();
-
-    calculatorRenderHistory();
+    calcDisplay();
 
 }
 
 
-/* =========================================================
-   KEYBOARD
-   ========================================================= */
+function calcPercent() {
 
-function initializeCalculatorKeyboard() {
+    if (
+        !CalcState.expression
+    ) {
+
+        return;
+
+    }
+
+
+    const match =
+        CalcState.expression.match(
+            /(\d+(?:\.\d+)?)$/
+        );
+
+
+    if (!match) {
+
+        return;
+
+    }
+
+
+    const number =
+        Number(
+            match[1]
+        );
+
+
+    if (
+        !Number.isFinite(number)
+    ) {
+
+        return;
+
+    }
+
+
+    const replacement =
+        String(
+            number / 100
+        );
+
+
+    CalcState.expression =
+        CalcState.expression.slice(
+            0,
+            match.index
+        ) +
+        replacement;
+
+
+    CalcState.justEvaluated =
+        false;
+
+
+    calcDisplay();
+
+}
+
+
+function calcEvaluate() {
+
+    if (
+        !CalcState.expression
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const result =
+            calcEvaluateExpression(
+                CalcState.expression
+            );
+
+
+        CalcState.expression =
+            String(
+                Number(
+                    result.toFixed(12)
+                )
+            );
+
+
+        CalcState.justEvaluated =
+            true;
+
+
+        calcDisplay();
+
+    }
+
+    catch (error) {
+
+        CalcState.expression =
+            "Error";
+
+
+        calcDisplay();
+
+
+        window.setTimeout(
+            function() {
+
+                CalcState.expression =
+                    "";
+
+                CalcState.justEvaluated =
+                    false;
+
+                calcDisplay();
+
+            },
+            900
+        );
+
+    }
+
+}
+
+
+function calcClear() {
+
+    CalcState.expression =
+        "";
+
+    CalcState.justEvaluated =
+        false;
+
+    calcDisplay();
+
+}
+
+
+function calcBack() {
+
+    if (
+        CalcState.justEvaluated
+    ) {
+
+        calcClear();
+
+        return;
+
+    }
+
+
+    CalcState.expression =
+        CalcState.expression.slice(
+            0,
+            -1
+        );
+
+
+    calcDisplay();
+
+}
+
+
+function initializeCalculator() {
 
     document.addEventListener(
         "keydown",
         function(event) {
 
-            const target =
-                event.target;
+            const activeTag =
+                document.activeElement
+                    ?.tagName;
 
-
-            /*
-             * Don't hijack keyboard input
-             * while typing in a form.
-             */
 
             if (
-                target &&
-                (
-                    target.tagName ===
-                    "INPUT" ||
-
-                    target.tagName ===
-                    "TEXTAREA" ||
-
-                    target.tagName ===
-                    "SELECT" ||
-
-                    target.isContentEditable
-                )
+                activeTag ===
+                "INPUT" ||
+                activeTag ===
+                "TEXTAREA" ||
+                activeTag ===
+                "SELECT"
             ) {
 
                 return;
@@ -3381,23 +4362,12 @@ function initializeCalculatorKeyboard() {
 
 
             if (
-                /^[0-9]$/.test(key)
+                /^[0-9.]$/.test(key)
             ) {
 
-                calculatorInputNumber(
-                    key
-                );
+                calcInput(key);
 
-                return;
-
-            }
-
-
-            if (
-                key === "."
-            ) {
-
-                calculatorInputDecimal();
+                event.preventDefault();
 
                 return;
 
@@ -3406,23 +4376,23 @@ function initializeCalculatorKeyboard() {
 
             if (
                 ["+", "-", "*", "/"]
-                .includes(key)
+                    .includes(key)
             ) {
 
-                calculatorSetOperator(
-                    key
-                );
+                calcInput(key);
+
+                event.preventDefault();
 
                 return;
 
             }
 
 
-            if (
-                key === "%"
-            ) {
+            if (key === "%") {
 
-                calculatorPercent();
+                calcPercent();
+
+                event.preventDefault();
 
                 return;
 
@@ -3434,20 +4404,9 @@ function initializeCalculatorKeyboard() {
                 key === "="
             ) {
 
+                calcEvaluate();
+
                 event.preventDefault();
-
-                calculatorEquals();
-
-                return;
-
-            }
-
-
-            if (
-                key === "Backspace"
-            ) {
-
-                calculatorBackspace();
 
                 return;
 
@@ -3458,7 +4417,22 @@ function initializeCalculatorKeyboard() {
                 key === "Escape"
             ) {
 
-                calculatorClear();
+                calcClear();
+
+                event.preventDefault();
+
+                return;
+
+            }
+
+
+            if (
+                key === "Backspace"
+            ) {
+
+                calcBack();
+
+                event.preventDefault();
 
             }
 
@@ -3469,7 +4443,3210 @@ function initializeCalculatorKeyboard() {
 
 
 /* =========================================================
-   APPLICATION INITIALIZATION
+   PHASE 2 — EXCEL WORKING
+   ========================================================= */
+
+function createExcelRow() {
+
+    return {
+
+        description:
+            "",
+
+        qty:
+            1,
+
+        rate:
+            0,
+
+        tax:
+            0
+
+    };
+
+}
+
+
+function addExcelRow() {
+
+    DataState.excel.push(
+        createExcelRow()
+    );
+
+
+    saveStorage(
+        STORAGE.excel,
+        DataState.excel
+    );
+
+
+    renderExcel();
+
+}
+
+
+function removeExcelRow(
+    index
+) {
+
+    if (
+        index < 0 ||
+        index >= DataState.excel.length
+    ) {
+
+        return;
+
+    }
+
+
+    DataState.excel.splice(
+        index,
+        1
+    );
+
+
+    saveStorage(
+        STORAGE.excel,
+        DataState.excel
+    );
+
+
+    renderExcel();
+
+}
+
+
+function calculateExcelRow(
+    row
+) {
+
+    const qty =
+        Math.max(
+            0,
+            numberValue(row.qty)
+        );
+
+
+    const rate =
+        Math.max(
+            0,
+            numberValue(row.rate)
+        );
+
+
+    const tax =
+        Math.max(
+            0,
+            numberValue(row.tax)
+        );
+
+
+    const taxable =
+        qty * rate;
+
+
+    const gst =
+        taxable * tax / 100;
+
+
+    return {
+
+        taxable:
+            taxable,
+
+        gst:
+            gst,
+
+        total:
+            taxable + gst
+
+    };
+
+}
+
+
+function renderExcel() {
+
+    const body =
+        document.getElementById(
+            "excelBody"
+        );
+
+
+    if (!body) {
+
+        return;
+
+    }
+
+
+    body.innerHTML =
+        "";
+
+
+    if (
+        DataState.excel.length === 0
+    ) {
+
+        addExcelRow();
+
+        return;
+
+    }
+
+
+    let taxableTotal =
+        0;
+
+
+    let gstTotal =
+        0;
+
+
+    let grandTotal =
+        0;
+
+
+    DataState.excel.forEach(
+        function(row, index) {
+
+            const calc =
+                calculateExcelRow(
+                    row
+                );
+
+
+            taxableTotal +=
+                calc.taxable;
+
+
+            gstTotal +=
+                calc.gst;
+
+
+            grandTotal +=
+                calc.total;
+
+
+            const tr =
+                document.createElement(
+                    "tr"
+                );
+
+
+            tr.innerHTML = `
+
+                <td>
+                    ${index + 1}
+                </td>
+
+                <td>
+                    <input
+                        class="excel-input"
+                        value="${escapeHTML(row.description)}"
+                        data-excel-field="description"
+                        data-excel-index="${index}">
+                </td>
+
+                <td>
+                    <input
+                        class="excel-input"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value="${row.qty}"
+                        data-excel-field="qty"
+                        data-excel-index="${index}">
+                </td>
+
+                <td>
+                    <input
+                        class="excel-input"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value="${row.rate}"
+                        data-excel-field="rate"
+                        data-excel-index="${index}">
+                </td>
+
+                <td>
+                    <input
+                        class="excel-input"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value="${row.tax}"
+                        data-excel-field="tax"
+                        data-excel-index="${index}">
+                </td>
+
+                <td class="num">
+                    ${money(calc.taxable)}
+                </td>
+
+                <td class="num">
+                    ${money(calc.gst)}
+                </td>
+
+                <td class="num">
+                    <strong>
+                        ${money(calc.total)}
+                    </strong>
+                </td>
+
+                <td>
+                    <button
+                        class="btn btn-danger"
+                        type="button"
+                        onclick="removeExcelRow(${index})">
+
+                        Delete
+
+                    </button>
+                </td>
+
+            `;
+
+
+            body.appendChild(
+                tr
+            );
+
+        }
+    );
+
+
+    document.getElementById(
+        "excelTaxableTotal"
+    ).textContent =
+        money(taxableTotal);
+
+
+    document.getElementById(
+        "excelGSTTotal"
+    ).textContent =
+        money(gstTotal);
+
+
+    document.getElementById(
+        "excelGrandTotal"
+    ).textContent =
+        money(grandTotal);
+
+
+    body.querySelectorAll(
+        "[data-excel-field]"
+    ).forEach(
+        function(input) {
+
+            input.addEventListener(
+                "input",
+                function() {
+
+                    const index =
+                        Number(
+                            input.dataset
+                                .excelIndex
+                        );
+
+
+                    const field =
+                        input.dataset
+                            .excelField;
+
+
+                    if (
+                        !DataState.excel[index]
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    if (
+                        field ===
+                        "description"
+                    ) {
+
+                        DataState.excel[index]
+                            .description =
+                            input.value;
+
+                    }
+
+                    else {
+
+                        DataState.excel[index][field] =
+                            numberValue(
+                                input.value
+                            );
+
+                    }
+
+
+                    saveStorage(
+                        STORAGE.excel,
+                        DataState.excel
+                    );
+
+
+                    renderExcel();
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+function exportCSV() {
+
+    if (
+        DataState.excel.length ===
+        0
+    ) {
+
+        alert(
+            "There is no spreadsheet data to export."
+        );
+
+        return;
+
+    }
+
+
+    const rows = [
+
+        [
+            "Description",
+            "Qty",
+            "Rate",
+            "Tax %",
+            "Taxable",
+            "GST",
+            "Total"
+        ]
+
+    ];
+
+
+    DataState.excel.forEach(
+        function(row) {
+
+            const calc =
+                calculateExcelRow(
+                    row
+                );
+
+
+            rows.push([
+
+                row.description,
+
+                row.qty,
+
+                row.rate,
+
+                row.tax,
+
+                calc.taxable,
+
+                calc.gst,
+
+                calc.total
+
+            ]);
+
+        }
+    );
+
+
+    const csv =
+        rows.map(
+            function(row) {
+
+                return row.map(
+                    function(value) {
+
+                        return '"' +
+                            String(value)
+                                .replace(
+                                    /"/g,
+                                    '""'
+                                ) +
+                            '"';
+
+                    }
+                ).join(",");
+
+            }
+        ).join("\n");
+
+
+    const blob =
+        new Blob(
+            [csv],
+            {
+                type:
+                    "text/csv;charset=utf-8;"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href =
+        url;
+
+
+    link.download =
+        "businessdesk-working.csv";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    link.remove();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+}
+
+
+/* =========================================================
+   GROUPS
+   ========================================================= */
+
+function openGroup() {
+
+    openModal(
+        "groupModal"
+    );
+
+}
+
+
+function saveGroup() {
+
+    const name =
+        document.getElementById(
+            "groupName"
+        ).value.trim();
+
+
+    const nature =
+        document.getElementById(
+            "groupNature"
+        ).value;
+
+
+    if (!name) {
+
+        alert(
+            "Please enter group name."
+        );
+
+        return;
+
+    }
+
+
+    DataState.groups.push({
+
+        id:
+            createID("grp"),
+
+        name:
+            name,
+
+        nature:
+            nature
+
+    });
+
+
+    saveStorage(
+        STORAGE.groups,
+        DataState.groups
+    );
+
+
+    document.getElementById(
+        "groupName"
+    ).value =
+        "";
+
+
+    closeModal(
+        "groupModal"
+    );
+
+
+    renderGroups();
+
+    updateDashboard();
+
+}
+
+
+function renderGroups() {
+
+    const body =
+        document.getElementById(
+            "groupsBody"
+        );
+
+
+    if (!body) {
+
+        return;
+
+    }
+
+
+    body.innerHTML =
+        "";
+
+
+    if (
+        DataState.groups.length ===
+        0
+    ) {
+
+        body.innerHTML = `
+
+            <tr>
+                <td colspan="2">
+                    No account groups added.
+                </td>
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    DataState.groups.forEach(
+        function(group) {
+
+            body.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${escapeHTML(
+                            group.name
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            group.nature
+                        )}
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   LEDGERS
+   ========================================================= */
+
+function openLedger() {
+
+    openModal(
+        "ledgerModal"
+    );
+
+}
+
+
+function saveLedger() {
+
+    const name =
+        document.getElementById(
+            "ledgerName"
+        ).value.trim();
+
+
+    const group =
+        document.getElementById(
+            "ledgerGroup"
+        ).value.trim();
+
+
+    const opening =
+        numberValue(
+            document.getElementById(
+                "ledgerOpening"
+            ).value
+        );
+
+
+    const openingType =
+        document.getElementById(
+            "ledgerOpeningType"
+        ).value;
+
+
+    if (!name) {
+
+        alert(
+            "Please enter ledger name."
+        );
+
+        return;
+
+    }
+
+
+    DataState.ledgers.push({
+
+        id:
+            createID("ledger"),
+
+        name:
+            name,
+
+        group:
+            group || "Unclassified",
+
+        opening:
+            opening,
+
+        openingType:
+            openingType
+
+    });
+
+
+    saveStorage(
+        STORAGE.ledgers,
+        DataState.ledgers
+    );
+
+
+    document.getElementById(
+        "ledgerName"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "ledgerGroup"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "ledgerOpening"
+    ).value =
+        "0";
+
+
+    closeModal(
+        "ledgerModal"
+    );
+
+
+    renderLedgers();
+
+    updateDashboard();
+
+}
+
+
+function renderLedgers() {
+
+    const body =
+        document.getElementById(
+            "ledgersBody"
+        );
+
+
+    if (!body) {
+
+        return;
+
+    }
+
+
+    const search =
+        (
+            document.getElementById(
+                "ledgerSearch"
+            )?.value ||
+            ""
+        )
+        .toLowerCase();
+
+
+    const rows =
+        DataState.ledgers.filter(
+            function(ledger) {
+
+                return (
+                    ledger.name
+                        .toLowerCase()
+                        .includes(search) ||
+
+                    ledger.group
+                        .toLowerCase()
+                        .includes(search)
+                );
+
+            }
+        );
+
+
+    body.innerHTML =
+        "";
+
+
+    if (
+        rows.length ===
+        0
+    ) {
+
+        body.innerHTML = `
+
+            <tr>
+                <td colspan="5">
+                    No ledgers found.
+                </td>
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    rows.forEach(
+        function(ledger) {
+
+            body.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${escapeHTML(
+                            ledger.name
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            ledger.group
+                        )}
+                    </td>
+
+                    <td class="num">
+                        ${money(
+                            ledger.opening
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            ledger.openingType
+                        )}
+                    </td>
+
+                    <td class="num">
+                        ${money(
+                            ledger.opening
+                        )}
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   PARTIES
+   ========================================================= */
+
+function openParty() {
+
+    openModal(
+        "partyModal"
+    );
+
+}
+
+
+function saveParty() {
+
+    const name =
+        document.getElementById(
+            "partyName"
+        ).value.trim();
+
+
+    const type =
+        document.getElementById(
+            "partyType"
+        ).value;
+
+
+    const gstin =
+        document.getElementById(
+            "partyGSTIN"
+        ).value.trim();
+
+
+    const state =
+        document.getElementById(
+            "partyState"
+        ).value.trim();
+
+
+    const phone =
+        document.getElementById(
+            "partyPhone"
+        ).value.trim();
+
+
+    if (!name) {
+
+        alert(
+            "Please enter party name."
+        );
+
+        return;
+
+    }
+
+
+    DataState.parties.push({
+
+        id:
+            createID("party"),
+
+        name:
+            name,
+
+        type:
+            type,
+
+        gstin:
+            gstin,
+
+        state:
+            state,
+
+        phone:
+            phone
+
+    });
+
+
+    saveStorage(
+        STORAGE.parties,
+        DataState.parties
+    );
+
+
+    document.getElementById(
+        "partyName"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "partyGSTIN"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "partyState"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "partyPhone"
+    ).value =
+        "";
+
+
+    closeModal(
+        "partyModal"
+    );
+
+
+    renderParties();
+
+    updateDashboard();
+
+}
+
+
+function renderParties() {
+
+    const body =
+        document.getElementById(
+            "partiesBody"
+        );
+
+
+    if (!body) {
+
+        return;
+
+    }
+
+
+    const search =
+        (
+            document.getElementById(
+                "partySearch"
+            )?.value ||
+            ""
+        )
+        .toLowerCase();
+
+
+    const rows =
+        DataState.parties.filter(
+            function(party) {
+
+                return (
+                    party.name
+                        .toLowerCase()
+                        .includes(search) ||
+
+                    party.type
+                        .toLowerCase()
+                        .includes(search) ||
+
+                    party.gstin
+                        .toLowerCase()
+                        .includes(search)
+                );
+
+            }
+        );
+
+
+    body.innerHTML =
+        "";
+
+
+    if (
+        rows.length ===
+        0
+    ) {
+
+        body.innerHTML = `
+
+            <tr>
+                <td colspan="5">
+                    No parties found.
+                </td>
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    rows.forEach(
+        function(party) {
+
+            body.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${escapeHTML(
+                            party.name
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            party.type
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            party.gstin
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            party.state
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            party.phone
+                        )}
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   PHASE 3 — SALES STATE
+   ========================================================= */
+
+const SalesState = {
+
+    items: []
+
+};
+
+
+function createSaleItem() {
+
+    return {
+
+        description:
+            "",
+
+        quantity:
+            1,
+
+        rate:
+            0,
+
+        discount:
+            0,
+
+        gst:
+            0
+
+    };
+
+}
+
+
+function initializeSales() {
+
+    if (
+        SalesState.items.length ===
+        0
+    ) {
+
+        SalesState.items.push(
+            createSaleItem()
+        );
+
+    }
+
+
+    clearSalesForm();
+
+}
+
+
+function openSales() {
+
+    navigateToSection(
+        "sales"
+    );
+
+    setTimeout(
+        function() {
+
+            const party =
+                document.getElementById(
+                    "saleParty"
+                );
+
+
+            if (party) {
+
+                party.focus();
+
+            }
+
+        },
+        50
+    );
+
+}
+
+
+function getNextInvoiceNumber() {
+
+    let highest =
+        0;
+
+
+    DataState.sales.forEach(
+        function(sale) {
+
+            const match =
+                String(
+                    sale.invoice || ""
+                ).match(
+                    /(\d+)$/
+                );
+
+
+            if (match) {
+
+                highest =
+                    Math.max(
+                        highest,
+                        Number(
+                            match[1]
+                        )
+                    );
+
+            }
+
+        }
+    );
+
+
+    return (
+        "INV-" +
+        String(
+            highest + 1
+        ).padStart(
+            4,
+            "0"
+        )
+    );
+
+}
+
+
+function calculateSaleItem(
+    item
+) {
+
+    const quantity =
+        Math.max(
+            0,
+            numberValue(
+                item.quantity
+            )
+        );
+
+
+    const rate =
+        Math.max(
+            0,
+            numberValue(
+                item.rate
+            )
+        );
+
+
+    const discountRate =
+        Math.min(
+            100,
+            Math.max(
+                0,
+                numberValue(
+                    item.discount
+                )
+            )
+        );
+
+
+    const gstRate =
+        Math.max(
+            0,
+            numberValue(
+                item.gst
+            )
+        );
+
+
+    const subtotal =
+        quantity *
+        rate;
+
+
+    const discount =
+        subtotal *
+        discountRate /
+        100;
+
+
+    const taxable =
+        subtotal -
+        discount;
+
+
+    const gst =
+        taxable *
+        gstRate /
+        100;
+
+
+    const total =
+        taxable +
+        gst;
+
+
+    return {
+
+        subtotal:
+            subtotal,
+
+        discount:
+            discount,
+
+        taxable:
+            taxable,
+
+        gst:
+            gst,
+
+        total:
+            total
+
+    };
+
+}
+
+
+function calculateSalesTotals() {
+
+    const totals = {
+
+        subtotal:
+            0,
+
+        discount:
+            0,
+
+        taxable:
+            0,
+
+        gst:
+            0,
+
+        total:
+            0
+
+    };
+
+
+    SalesState.items.forEach(
+        function(item) {
+
+            const value =
+                calculateSaleItem(
+                    item
+                );
+
+
+            totals.subtotal +=
+                value.subtotal;
+
+
+            totals.discount +=
+                value.discount;
+
+
+            totals.taxable +=
+                value.taxable;
+
+
+            totals.gst +=
+                value.gst;
+
+
+            totals.total +=
+                value.total;
+
+        }
+    );
+
+
+    return totals;
+
+}
+
+
+function renderSaleItems() {
+
+    const body =
+        document.getElementById(
+            "saleItemsBody"
+        );
+
+
+    if (!body) {
+
+        return;
+
+    }
+
+
+    body.innerHTML =
+        "";
+
+
+    SalesState.items.forEach(
+        function(item, index) {
+
+            const calc =
+                calculateSaleItem(
+                    item
+                );
+
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML = `
+
+                <td>
+
+                    <input
+                        type="text"
+                        value="${escapeHTML(
+                            item.description
+                        )}"
+                        data-sale-field="description"
+                        data-sale-index="${index}"
+                        placeholder="Item">
+
+                </td>
+
+
+                <td>
+
+                    <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value="${item.quantity}"
+                        data-sale-field="quantity"
+                        data-sale-index="${index}">
+
+                </td>
+
+
+                <td>
+
+                    <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value="${item.rate}"
+                        data-sale-field="rate"
+                        data-sale-index="${index}">
+
+                </td>
+
+
+                <td>
+
+                    <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        step="0.01"
+                        value="${item.discount}"
+                        data-sale-field="discount"
+                        data-sale-index="${index}">
+
+                </td>
+
+
+                <td>
+
+                    <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value="${item.gst}"
+                        data-sale-field="gst"
+                        data-sale-index="${index}">
+
+                </td>
+
+
+                <td class="num">
+
+                    ${money(
+                        calc.taxable
+                    )}
+
+                </td>
+
+
+                <td class="num">
+
+                    ${money(
+                        calc.gst
+                    )}
+
+                </td>
+
+
+                <td class="num">
+
+                    <strong>
+                        ${money(
+                            calc.total
+                        )}
+                    </strong>
+
+                </td>
+
+
+                <td>
+
+                    <button
+                        type="button"
+                        class="sales-remove"
+                        onclick="removeSaleItem(${index})">
+
+                        Remove
+
+                    </button>
+
+                </td>
+
+            `;
+
+
+            body.appendChild(
+                row
+            );
+
+        }
+    );
+
+
+    body.querySelectorAll(
+        "[data-sale-field]"
+    ).forEach(
+        function(input) {
+
+            input.addEventListener(
+                "input",
+                function() {
+
+                    const index =
+                        Number(
+                            input.dataset
+                                .saleIndex
+                        );
+
+
+                    const field =
+                        input.dataset
+                            .saleField;
+
+
+                    if (
+                        !SalesState.items[index]
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    if (
+                        field ===
+                        "description"
+                    ) {
+
+                        SalesState.items[index]
+                            .description =
+                            input.value;
+
+                    }
+
+                    else {
+
+                        SalesState.items[index][field] =
+                            numberValue(
+                                input.value
+                            );
+
+                    }
+
+
+                    updateSalesSummary();
+
+                }
+            );
+
+        }
+    );
+
+
+    updateSalesSummary();
+
+}
+
+
+function addSaleItem() {
+
+    SalesState.items.push(
+        createSaleItem()
+    );
+
+
+    renderSaleItems();
+
+}
+
+
+function removeSaleItem(
+    index
+) {
+
+    if (
+        SalesState.items.length ===
+        1
+    ) {
+
+        SalesState.items[0] =
+            createSaleItem();
+
+    }
+
+    else {
+
+        SalesState.items.splice(
+            index,
+            1
+        );
+
+    }
+
+
+    renderSaleItems();
+
+}
+
+
+function updateSalesSummary() {
+
+    const totals =
+        calculateSalesTotals();
+
+
+    const subtotal =
+        document.getElementById(
+            "saleSubtotal"
+        );
+
+
+    const discount =
+        document.getElementById(
+            "saleDiscount"
+        );
+
+
+    const taxable =
+        document.getElementById(
+            "saleTaxable"
+        );
+
+
+    const gst =
+        document.getElementById(
+            "saleGST"
+        );
+
+
+    const grand =
+        document.getElementById(
+            "saleGrandTotal"
+        );
+
+
+    if (subtotal) {
+
+        subtotal.textContent =
+            money(
+                totals.subtotal
+            );
+
+    }
+
+
+    if (discount) {
+
+        discount.textContent =
+            money(
+                totals.discount
+            );
+
+    }
+
+
+    if (taxable) {
+
+        taxable.textContent =
+            money(
+                totals.taxable
+            );
+
+    }
+
+
+    if (gst) {
+
+        gst.textContent =
+            money(
+                totals.gst
+            );
+
+    }
+
+
+    if (grand) {
+
+        grand.textContent =
+            money(
+                totals.total
+            );
+
+    }
+
+}
+
+
+function showSalesMessage(
+    message,
+    type
+) {
+
+    const element =
+        document.getElementById(
+            "salesMessage"
+        );
+
+
+    if (!element) {
+
+        return;
+
+    }
+
+
+    element.textContent =
+        message;
+
+
+    element.className =
+        "sales-message " +
+        type;
+
+
+    window.clearTimeout(
+        showSalesMessage.timer
+    );
+
+
+    showSalesMessage.timer =
+        window.setTimeout(
+            function() {
+
+                element.textContent =
+                    "";
+
+                element.className =
+                    "sales-message";
+
+            },
+            3500
+        );
+
+}
+
+
+function clearSalesForm() {
+
+    const invoice =
+        document.getElementById(
+            "saleInvoice"
+        );
+
+
+    const date =
+        document.getElementById(
+            "saleDate"
+        );
+
+
+    const party =
+        document.getElementById(
+            "saleParty"
+        );
+
+
+    const place =
+        document.getElementById(
+            "salePlace"
+        );
+
+
+    const narration =
+        document.getElementById(
+            "saleNarration"
+        );
+
+
+    if (invoice) {
+
+        invoice.value =
+            getNextInvoiceNumber();
+
+    }
+
+
+    if (date) {
+
+        date.value =
+            today();
+
+    }
+
+
+    if (party) {
+
+        party.value =
+            "";
+
+    }
+
+
+    if (place) {
+
+        place.value =
+            "";
+
+    }
+
+
+    if (narration) {
+
+        narration.value =
+            "";
+
+    }
+
+
+    SalesState.items = [
+
+        createSaleItem()
+
+    ];
+
+
+    renderSaleItems();
+
+}
+
+
+function saveSales() {
+
+    const invoice =
+        document.getElementById(
+            "saleInvoice"
+        ).value.trim();
+
+
+    const date =
+        document.getElementById(
+            "saleDate"
+        ).value;
+
+
+    const party =
+        document.getElementById(
+            "saleParty"
+        ).value.trim();
+
+
+    const place =
+        document.getElementById(
+            "salePlace"
+        ).value.trim();
+
+
+    const narration =
+        document.getElementById(
+            "saleNarration"
+        ).value.trim();
+
+
+    if (!date) {
+
+        showSalesMessage(
+            "Please select invoice date.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (!party) {
+
+        showSalesMessage(
+            "Please enter customer / party.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const validItem =
+        SalesState.items.some(
+            function(item) {
+
+                return (
+                    item.description.trim() !==
+                    "" &&
+                    numberValue(
+                        item.quantity
+                    ) > 0
+                );
+
+            }
+        );
+
+
+    if (!validItem) {
+
+        showSalesMessage(
+            "Please enter at least one valid item.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const totals =
+        calculateSalesTotals();
+
+
+    const record = {
+
+        id:
+            createID("sale"),
+
+        invoice:
+            invoice,
+
+        date:
+            date,
+
+        party:
+            party,
+
+        place:
+            place,
+
+        narration:
+            narration,
+
+        items:
+            SalesState.items.map(
+                function(item) {
+
+                    return {
+
+                        description:
+                            item.description,
+
+                        quantity:
+                            numberValue(
+                                item.quantity
+                            ),
+
+                        rate:
+                            numberValue(
+                                item.rate
+                            ),
+
+                        discount:
+                            numberValue(
+                                item.discount
+                            ),
+
+                        gst:
+                            numberValue(
+                                item.gst
+                            )
+
+                    };
+
+                }
+            ),
+
+        subtotal:
+            totals.subtotal,
+
+        discount:
+            totals.discount,
+
+        taxable:
+            totals.taxable,
+
+        gst:
+            totals.gst,
+
+        total:
+            totals.total,
+
+        createdAt:
+            new Date()
+                .toISOString()
+
+    };
+
+
+    DataState.sales.unshift(
+        record
+    );
+
+
+    const saved =
+        saveStorage(
+            STORAGE.sales,
+            DataState.sales
+        );
+
+
+    if (!saved) {
+
+        DataState.sales.shift();
+
+        showSalesMessage(
+            "Unable to save invoice.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    renderSales();
+
+    updateDashboard();
+
+    clearSalesForm();
+
+
+    showSalesMessage(
+        "Sales invoice saved successfully.",
+        "success"
+    );
+
+}
+
+
+function renderSales() {
+
+    const body =
+        document.getElementById(
+            "salesBody"
+        );
+
+
+    if (!body) {
+
+        return;
+
+    }
+
+
+    const count =
+        document.getElementById(
+            "salesCount"
+        );
+
+
+    if (count) {
+
+        count.textContent =
+            DataState.sales.length +
+            (
+                DataState.sales.length ===
+                1
+                    ? " record"
+                    : " records"
+            );
+
+    }
+
+
+    body.innerHTML =
+        "";
+
+
+    if (
+        DataState.sales.length ===
+        0
+    ) {
+
+        body.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    style="
+                    text-align:center;
+                    color:#667085;
+                    ">
+
+                    No sales invoices saved yet.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    DataState.sales.forEach(
+        function(sale) {
+
+            body.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${escapeHTML(
+                            sale.invoice
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            sale.date
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            sale.party
+                        )}
+                    </td>
+
+                    <td class="num">
+                        ${money(
+                            sale.taxable
+                        )}
+                    </td>
+
+                    <td class="num">
+                        ${money(
+                            sale.gst
+                        )}
+                    </td>
+
+                    <td class="num">
+
+                        <strong>
+                            ${money(
+                                sale.total
+                            )}
+                        </strong>
+
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="btn btn-danger"
+                            onclick="
+                            deleteSale('${sale.id}')
+                            ">
+
+                            Delete
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+}
+
+
+function deleteSale(
+    id
+) {
+
+    const index =
+        DataState.sales.findIndex(
+            function(sale) {
+
+                return sale.id === id;
+
+            }
+        );
+
+
+    if (
+        index === -1
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        !window.confirm(
+            "Delete this sales invoice?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    DataState.sales.splice(
+        index,
+        1
+    );
+
+
+    saveStorage(
+        STORAGE.sales,
+        DataState.sales
+    );
+
+
+    renderSales();
+
+    updateDashboard();
+
+}
+
+
+/* =========================================================
+   PURCHASE / VOUCHER
+   ========================================================= */
+
+function openPurchase() {
+
+    navigateToSection(
+        "purchase"
+    );
+
+}
+
+
+function openVoucher() {
+
+    navigateToSection(
+        "vouchers"
+    );
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+function updateDashboard() {
+
+    const ledgers =
+        document.getElementById(
+            "dashLedgers"
+        );
+
+
+    const customers =
+        document.getElementById(
+            "dashCustomers"
+        );
+
+
+    const sales =
+        document.getElementById(
+            "dashSales"
+        );
+
+
+    const purchase =
+        document.getElementById(
+            "dashPurchase"
+        );
+
+
+    if (ledgers) {
+
+        ledgers.textContent =
+            DataState.ledgers.length;
+
+    }
+
+
+    if (customers) {
+
+        customers.textContent =
+            DataState.parties.filter(
+                function(party) {
+
+                    return (
+                        party.type ===
+                        "Customer"
+                    );
+
+                }
+            ).length;
+
+    }
+
+
+    if (sales) {
+
+        const total =
+            DataState.sales.reduce(
+                function(sum, sale) {
+
+                    return (
+                        sum +
+                        numberValue(
+                            sale.total
+                        )
+                    );
+
+                },
+                0
+            );
+
+
+        sales.textContent =
+            money(total);
+
+    }
+
+
+    if (purchase) {
+
+        const total =
+            DataState.purchases.reduce(
+                function(sum, item) {
+
+                    return (
+                        sum +
+                        numberValue(
+                            item.total
+                        )
+                    );
+
+                },
+                0
+            );
+
+
+        purchase.textContent =
+            money(total);
+
+    }
+
+
+    updateReports();
+
+}
+
+
+/* =========================================================
+   REPORT CALCULATIONS
+   ========================================================= */
+
+function updateReports() {
+
+    const outputGST =
+        DataState.sales.reduce(
+            function(sum, sale) {
+
+                return (
+                    sum +
+                    numberValue(
+                        sale.gst
+                    )
+                );
+
+            },
+            0
+        );
+
+
+    const inputGST =
+        DataState.purchases.reduce(
+            function(sum, purchase) {
+
+                return (
+                    sum +
+                    numberValue(
+                        purchase.gst
+                    )
+                );
+
+            },
+            0
+        );
+
+
+    const gstOutput =
+        document.getElementById(
+            "gstOutput"
+        );
+
+
+    const gstInput =
+        document.getElementById(
+            "gstInput"
+        );
+
+
+    const gstNet =
+        document.getElementById(
+            "gstNet"
+        );
+
+
+    if (gstOutput) {
+
+        gstOutput.textContent =
+            money(outputGST);
+
+    }
+
+
+    if (gstInput) {
+
+        gstInput.textContent =
+            money(inputGST);
+
+    }
+
+
+    if (gstNet) {
+
+        gstNet.textContent =
+            money(
+                outputGST -
+                inputGST
+            );
+
+    }
+
+
+    const revenue =
+        DataState.sales.reduce(
+            function(sum, sale) {
+
+                return (
+                    sum +
+                    numberValue(
+                        sale.taxable
+                    )
+                );
+
+            },
+            0
+        );
+
+
+    const expenses =
+        DataState.purchases.reduce(
+            function(sum, purchase) {
+
+                return (
+                    sum +
+                    numberValue(
+                        purchase.taxable
+                    )
+                );
+
+            },
+            0
+        );
+
+
+    const net =
+        revenue -
+        expenses;
+
+
+    const plRevenue =
+        document.getElementById(
+            "plRevenue"
+        );
+
+
+    const plExpenses =
+        document.getElementById(
+            "plExpenses"
+        );
+
+
+    const plNet =
+        document.getElementById(
+            "plNet"
+        );
+
+
+    if (plRevenue) {
+
+        plRevenue.textContent =
+            money(revenue);
+
+    }
+
+
+    if (plExpenses) {
+
+        plExpenses.textContent =
+            money(expenses);
+
+    }
+
+
+    if (plNet) {
+
+        plNet.textContent =
+            money(net);
+
+    }
+
+
+    const receivable =
+        DataState.sales.reduce(
+            function(sum, sale) {
+
+                return (
+                    sum +
+                    numberValue(
+                        sale.total
+                    )
+                );
+
+            },
+            0
+        );
+
+
+    const payable =
+        DataState.purchases.reduce(
+            function(sum, purchase) {
+
+                return (
+                    sum +
+                    numberValue(
+                        purchase.total
+                    )
+                );
+
+            },
+            0
+        );
+
+
+    const outReceivable =
+        document.getElementById(
+            "outReceivable"
+        );
+
+
+    const outPayable =
+        document.getElementById(
+            "outPayable"
+        );
+
+
+    if (outReceivable) {
+
+        outReceivable.textContent =
+            money(receivable);
+
+    }
+
+
+    if (outPayable) {
+
+        outPayable.textContent =
+            money(payable);
+
+    }
+
+}
+
+
+/* =========================================================
+   COMPANY
+   ========================================================= */
+
+function loadCompany() {
+
+    const company =
+        DataState.company || {};
+
+
+    const fields = {
+
+        companyName:
+            company.name || "",
+
+        companyGSTIN:
+            company.gstin || "",
+
+        companyPhone:
+            company.phone || "",
+
+        companyEmail:
+            company.email || "",
+
+        companyAddress:
+            company.address || ""
+
+    };
+
+
+    Object.keys(fields)
+        .forEach(
+            function(id) {
+
+                const element =
+                    document.getElementById(
+                        id
+                    );
+
+
+                if (element) {
+
+                    element.value =
+                        fields[id];
+
+                }
+
+            }
+        );
+
+}
+
+
+function saveCompany() {
+
+    DataState.company = {
+
+        name:
+            document.getElementById(
+                "companyName"
+            ).value.trim(),
+
+        gstin:
+            document.getElementById(
+                "companyGSTIN"
+            ).value.trim(),
+
+        phone:
+            document.getElementById(
+                "companyPhone"
+            ).value.trim(),
+
+        email:
+            document.getElementById(
+                "companyEmail"
+            ).value.trim(),
+
+        address:
+            document.getElementById(
+                "companyAddress"
+            ).value.trim()
+
+    };
+
+
+    saveStorage(
+        STORAGE.company,
+        DataState.company
+    );
+
+
+    alert(
+        "Company details saved."
+    );
+
+}
+
+
+/* =========================================================
+   BACKUP / RESTORE
+   ========================================================= */
+
+function downloadBackup() {
+
+    const backup = {
+
+        version:
+            "3.0.0",
+
+        createdAt:
+            new Date()
+                .toISOString(),
+
+        data: {
+
+            sales:
+                DataState.sales,
+
+            parties:
+                DataState.parties,
+
+            ledgers:
+                DataState.ledgers,
+
+            groups:
+                DataState.groups,
+
+            purchases:
+                DataState.purchases,
+
+            vouchers:
+                DataState.vouchers,
+
+            excel:
+                DataState.excel,
+
+            company:
+                DataState.company
+
+        }
+
+    };
+
+
+    const blob =
+        new Blob(
+            [
+                JSON.stringify(
+                    backup,
+                    null,
+                    2
+                )
+            ],
+            {
+                type:
+                    "application/json"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href =
+        url;
+
+
+    link.download =
+        "businessdesk-backup.json";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    link.remove();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+}
+
+
+function initializeRestore() {
+
+    const input =
+        document.getElementById(
+            "restoreFile"
+        );
+
+
+    if (!input) {
+
+        return;
+
+    }
+
+
+    input.addEventListener(
+        "change",
+        function() {
+
+            const file =
+                input.files[0];
+
+
+            if (!file) {
+
+                return;
+
+            }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(event) {
+
+                    try {
+
+                        const backup =
+                            JSON.parse(
+                                event.target.result
+                            );
+
+
+                        if (
+                            !backup.data
+                        ) {
+
+                            throw new Error(
+                                "Invalid backup"
+                            );
+
+                        }
+
+
+                        DataState.sales =
+                            Array.isArray(
+                                backup.data.sales
+                            )
+                                ? backup.data.sales
+                                : [];
+
+
+                        DataState.parties =
+                            Array.isArray(
+                                backup.data.parties
+                            )
+                                ? backup.data.parties
+                                : [];
+
+
+                        DataState.ledgers =
+                            Array.isArray(
+                                backup.data.ledgers
+                            )
+                                ? backup.data.ledgers
+                                : [];
+
+
+                        DataState.groups =
+                            Array.isArray(
+                                backup.data.groups
+                            )
+                                ? backup.data.groups
+                                : [];
+
+
+                        DataState.purchases =
+                            Array.isArray(
+                                backup.data.purchases
+                            )
+                                ? backup.data.purchases
+                                : [];
+
+
+                        DataState.vouchers =
+                            Array.isArray(
+                                backup.data.vouchers
+                            )
+                                ? backup.data.vouchers
+                                : [];
+
+
+                        DataState.excel =
+                            Array.isArray(
+                                backup.data.excel
+                            )
+                                ? backup.data.excel
+                                : [];
+
+
+                        DataState.company =
+                            backup.data.company ||
+                            {};
+
+
+                        saveStorage(
+                            STORAGE.sales,
+                            DataState.sales
+                        );
+
+
+                        saveStorage(
+                            STORAGE.parties,
+                            DataState.parties
+                        );
+
+
+                        saveStorage(
+                            STORAGE.ledgers,
+                            DataState.ledgers
+                        );
+
+
+                        saveStorage(
+                            STORAGE.groups,
+                            DataState.groups
+                        );
+
+
+                        saveStorage(
+                            STORAGE.purchases,
+                            DataState.purchases
+                        );
+
+
+                        saveStorage(
+                            STORAGE.vouchers,
+                            DataState.vouchers
+                        );
+
+
+                        saveStorage(
+                            STORAGE.excel,
+                            DataState.excel
+                        );
+
+
+                        saveStorage(
+                            STORAGE.company,
+                            DataState.company
+                        );
+
+
+                        renderAll();
+
+                        loadCompany();
+
+
+                        const message =
+                            document.getElementById(
+                                "backupMessage"
+                            );
+
+
+                        if (message) {
+
+                            message.className =
+                                "notice success";
+
+                            message.textContent =
+                                "Backup restored successfully.";
+
+                        }
+
+
+                    }
+
+                    catch (error) {
+
+                        const message =
+                            document.getElementById(
+                                "backupMessage"
+                            );
+
+
+                        if (message) {
+
+                            message.className =
+                                "notice danger";
+
+                            message.textContent =
+                                "Invalid backup file.";
+
+                        }
+
+                    }
+
+                };
+
+
+            reader.readAsText(
+                file
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   MODALS
+   ========================================================= */
+
+function openModal(
+    id
+) {
+
+    const modal =
+        document.getElementById(
+            id
+        );
+
+
+    if (modal) {
+
+        modal.classList.add(
+            "open"
+        );
+
+    }
+
+}
+
+
+function closeModal(
+    id
+) {
+
+    const modal =
+        document.getElementById(
+            id
+        );
+
+
+    if (modal) {
+
+        modal.classList.remove(
+            "open"
+        );
+
+    }
+
+}
+
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target.classList.contains(
+                "modal"
+            )
+        ) {
+
+            event.target.classList.remove(
+                "open"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ID
+   ========================================================= */
+
+function createID(
+    prefix
+) {
+
+    return (
+        prefix +
+        "-" +
+        Date.now() +
+        "-" +
+        Math.random()
+            .toString(36)
+            .slice(2, 8)
+    );
+
+}
+
+
+/* =========================================================
+   LOAD ALL DATA
+   ========================================================= */
+
+function loadAllData() {
+
+    DataState.sales =
+        loadStorage(
+            STORAGE.sales,
+            []
+        );
+
+
+    DataState.parties =
+        loadStorage(
+            STORAGE.parties,
+            []
+        );
+
+
+    DataState.ledgers =
+        loadStorage(
+            STORAGE.ledgers,
+            []
+        );
+
+
+    DataState.groups =
+        loadStorage(
+            STORAGE.groups,
+            []
+        );
+
+
+    DataState.purchases =
+        loadStorage(
+            STORAGE.purchases,
+            []
+        );
+
+
+    DataState.vouchers =
+        loadStorage(
+            STORAGE.vouchers,
+            []
+        );
+
+
+    DataState.excel =
+        loadStorage(
+            STORAGE.excel,
+            []
+        );
+
+
+    DataState.company =
+        loadStorage(
+            STORAGE.company,
+            {}
+        );
+
+}
+
+
+/* =========================================================
+   RENDER EVERYTHING
+   ========================================================= */
+
+function renderAll() {
+
+    renderGroups();
+
+    renderLedgers();
+
+    renderParties();
+
+    renderSales();
+
+    renderExcel();
+
+    updateDashboard();
+
+}
+
+
+/* =========================================================
+   INITIALIZATION
    ========================================================= */
 
 function initializeApplication() {
@@ -3483,32 +7660,46 @@ function initializeApplication() {
     }
 
 
+    loadAllData();
+
+
     initializeNavigation();
+
+    initializeMenu();
 
     initializeCalculator();
 
-    initializeCalculatorKeyboard();
+    initializeRestore();
+
+    initializeSales();
 
 
-    AppState.initialized =
-        true;
+    loadCompany();
+
+    renderAll();
 
 
     navigateToSection(
         "dashboard"
     );
 
+
+    AppState.initialized =
+        true;
+
 }
 
 
 /* =========================================================
-   START APPLICATION
+   START
    ========================================================= */
 
-initializeApplication();
+document.addEventListener(
+    "DOMContentLoaded",
+    initializeApplication
+);
 
 </script>
 
 </body>
-
 </html>
