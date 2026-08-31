@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>BusinessDesk Enterprise Suite — Phase 4.3 (Fixed)</title>
+<title>BusinessDesk Enterprise Suite — Phase 4.3 (Stabilized)</title>
 <style>
-/* Styles unchanged for brevity but preserved */
+/* Styles preserved (same as before) */
 *{box-sizing:border-box}
 :root{--bg:#f3f4f6;--panel:#fff;--surface:#f8fafc;--text:#111827;--muted:#6b7280;--border:#e5e7eb;--primary:#2563eb;--success:#16a34a;--danger:#dc2626;--sidebar:#111827;--shadow:0 8px 24px rgba(15,23,42,.08)}
 body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
@@ -110,7 +110,7 @@ th{background:var(--surface)}
 
       <!-- Calculator -->
       <section class="section" id="section-calculator">
-        <div class="section-heading"><h1>Professional Calculator</h1><p>Corrected percentage and safer error-handling.</p></div>
+        <div class="section-heading"><h1>Professional Calculator</h1><p>Correct percentage and safer error-handling.</p></div>
         <div class="calc-layout">
           <div class="calc-card">
             <div class="calc-display"><div class="calc-history" id="calcHistory"></div><div class="calc-value" id="calcValue">0</div></div>
@@ -151,14 +151,14 @@ th{background:var(--surface)}
 
       <!-- Sales -->
       <section class="section" id="section-sales">
-        <div class="section-heading"><h1>Sales Invoices</h1><p>Create and manage sales invoices; outstanding tracked.</p></div>
+        <div class="section-heading"><h1>Sales Invoices</h1><p>Create and manage sales invoices; outstanding tracked; overpayments recorded as credit.</p></div>
         <div class="toolbar"><button class="btn btn-primary" id="btnNewSale">+ New Sales Invoice</button></div>
         <div class="card"><div class="table-wrap"><table><thead><tr><th>Invoice No.</th><th>Date</th><th>Customer</th><th>Taxable</th><th>GST</th><th>Total</th><th>Paid</th><th>Outstanding</th><th>Action</th></tr></thead><tbody id="salesBody"></tbody></table></div></div>
       </section>
 
       <!-- Purchases -->
       <section class="section" id="section-purchases">
-        <div class="section-heading"><h1>Purchases</h1><p>Record purchase bills with payments & input GST tracking.</p></div>
+        <div class="section-heading"><h1>Purchases</h1><p>Record purchase bills with input GST and payments; edit supported.</p></div>
         <div class="toolbar"><button class="btn btn-primary" id="btnNewPurchase">+ New Purchase</button></div>
         <div class="card"><div class="table-wrap"><table><thead><tr><th>Bill No.</th><th>Date</th><th>Supplier</th><th>Taxable</th><th>GST</th><th>Total</th><th>Paid</th><th>Outstanding</th><th>Action</th></tr></thead><tbody id="purchaseBody"></tbody></table></div></div>
       </section>
@@ -172,7 +172,7 @@ th{background:var(--surface)}
 
       <!-- Vouchers -->
       <section class="section" id="section-vouchers">
-        <div class="section-heading"><h1>Vouchers</h1><p>Single-line vouchers with validation; edit/delete supported.</p></div>
+        <div class="section-heading"><h1>Vouchers</h1><p>Single-line vouchers with validation and edit/delete.</p></div>
         <div class="toolbar"><button class="btn btn-primary" id="btnNewVoucher">+ New Voucher</button></div>
         <div class="card"><div class="table-wrap"><table><thead><tr><th>No.</th><th>Date</th><th>Type</th><th>Debit</th><th>Credit</th><th>Amount</th><th>Action</th></tr></thead><tbody id="voucherBody"></tbody></table></div></div>
       </section>
@@ -199,13 +199,12 @@ th{background:var(--surface)}
 
       <!-- Controls -->
       <section class="section" id="section-controls">
-        <div class="section-heading"><h1>System Controls</h1><p>Load sample data (safe), clear data, and run diagnostics (non-destructive by default).</p></div>
+        <div class="section-heading"><h1>System Controls</h1><p>Load sample data (safe), clear data, and run diagnostics (non-destructive)</p></div>
         <div class="card"><b>Actions</b>
           <p>
             <button class="btn btn-primary" id="loadSample">Load Sample Data</button>
             <button class="btn btn-danger" id="clearAll">Clear All Data</button>
             <button class="btn" id="runDiag">Run Diagnostics (non-destructive)</button>
-            <button class="btn" id="runSelfTest">Run Destructive Self-Test (confirm)</button>
           </p>
         </div>
         <div class="card"><b>Phase 4 Diagnostics</b><div id="phase4Diagnostics" style="white-space:pre-wrap;font-family:monospace;max-height:240px;overflow:auto"></div></div>
@@ -214,135 +213,105 @@ th{background:var(--surface)}
   </main>
 </div>
 
-<!-- Modals: ensure present and referenced by JS -->
-<!-- Sale Modal -->
-<div class="modal-backdrop" id="saleModal" aria-hidden="true"><div class="modal"><div class="modal-head"><h2>New Sales Invoice</h2><button class="close" id="closeSaleModal">×</button></div>
-  <form id="saleForm" novalidate>
-    <div class="form-grid">
-      <div class="field"><label>Invoice No.</label><input type="text" id="saleInvoiceNo" readonly></div>
-      <div class="field"><label>Date</label><input type="date" id="saleDate" required></div>
-      <div class="field"><label>Customer</label><select id="saleCustomer" required><option value="">-- Select Customer --</option></select></div>
-      <div class="field"><label>Taxable Amount</label><input type="number" id="saleTaxable" step="0.01" value="0" min="0" required></div>
-      <div class="field"><label>GST Rate (%)</label><input type="number" id="saleGSTRate" value="18" min="0" max="100" step="0.01" required></div>
-      <div class="field"><label>GST Type</label><select id="saleGSTType"><option value="CGST+SGST">CGST + SGST</option><option value="IGST">IGST</option></select></div>
-      <div class="field"><label>Amount Received</label><input type="number" id="salePaid" value="0" min="0" step="0.01"></div>
-      <div class="field"><label>Total (Auto)</label><input type="text" id="saleTotal" readonly></div>
-    </div>
-    <button type="submit" class="btn btn-primary">Save Invoice</button>
-  </form>
-</div></div>
+<!-- Modals (present and safe) -->
+<div class="modal-backdrop" id="saleModal"><div class="modal"><div class="modal-head"><h2>New Sales Invoice</h2><button class="close" id="closeSaleModal">×</button></div>
+<form id="saleForm" novalidate>
+  <div class="form-grid">
+    <div class="field"><label>Invoice No.</label><input type="text" id="saleInvoiceNo" readonly></div>
+    <div class="field"><label>Date</label><input type="date" id="saleDate" required></div>
+    <div class="field"><label>Customer</label><select id="saleCustomer" required><option value="">-- Select Customer --</option></select></div>
+    <div class="field"><label>Taxable Amount</label><input type="number" id="saleTaxable" step="0.01" value="0" min="0" required></div>
+    <div class="field"><label>GST Rate (%)</label><input type="number" id="saleGSTRate" value="18" min="0" max="100" step="0.01" required></div>
+    <div class="field"><label>GST Type</label><select id="saleGSTType"><option value="CGST+SGST">CGST + SGST</option><option value="IGST">IGST</option></select></div>
+    <div class="field"><label>Amount Received</label><input type="number" id="salePaid" value="0" min="0" step="0.01"></div>
+    <div class="field"><label>Total (Auto)</label><input type="text" id="saleTotal" readonly></div>
+  </div>
+  <button type="submit" class="btn btn-primary">Save Invoice</button>
+</form></div></div>
 
-<!-- Purchase Modal -->
-<div class="modal-backdrop" id="purchaseModal" aria-hidden="true"><div class="modal"><div class="modal-head"><h2>New Purchase</h2><button class="close" id="closePurchaseModal">×</button></div>
-  <form id="purchaseForm" novalidate>
-    <div class="form-grid">
-      <div class="field"><label>Bill No.</label><input type="text" id="purchaseBillNo" readonly></div>
-      <div class="field"><label>Date</label><input type="date" id="purchaseDate" required></div>
-      <div class="field"><label>Supplier</label><select id="purchaseSupplier" required><option value="">-- Select Supplier --</option></select></div>
-      <div class="field"><label>Taxable Amount</label><input type="number" id="purchaseTaxable" step="0.01" value="0" min="0" required></div>
-      <div class="field"><label>GST Rate (%)</label><input type="number" id="purchaseGSTRate" value="18" min="0" max="100" step="0.01" required></div>
-      <div class="field"><label>GST Type</label><select id="purchaseGSTType"><option value="CGST+SGST">CGST + SGST</option><option value="IGST">IGST</option></select></div>
-      <div class="field"><label>Amount Paid</label><input type="number" id="purchasePaid" value="0" min="0" step="0.01"></div>
-      <div class="field"><label>Total (Auto)</label><input type="text" id="purchaseTotal" readonly></div>
-    </div>
-    <button type="submit" class="btn btn-primary">Save Purchase</button>
-  </form>
-</div></div>
+<div class="modal-backdrop" id="purchaseModal"><div class="modal"><div class="modal-head"><h2>New Purchase</h2><button class="close" id="closePurchaseModal">×</button></div>
+<form id="purchaseForm" novalidate>
+  <div class="form-grid">
+    <div class="field"><label>Bill No.</label><input type="text" id="purchaseBillNo" readonly></div>
+    <div class="field"><label>Date</label><input type="date" id="purchaseDate" required></div>
+    <div class="field"><label>Supplier</label><select id="purchaseSupplier" required><option value="">-- Select Supplier --</option></select></div>
+    <div class="field"><label>Taxable Amount</label><input type="number" id="purchaseTaxable" step="0.01" value="0" min="0" required></div>
+    <div class="field"><label>GST Rate (%)</label><input type="number" id="purchaseGSTRate" value="18" min="0" max="100" step="0.01" required></div>
+    <div class="field"><label>GST Type</label><select id="purchaseGSTType"><option value="CGST+SGST">CGST + SGST</option><option value="IGST">IGST</option></select></div>
+    <div class="field"><label>Amount Paid</label><input type="number" id="purchasePaid" value="0" min="0" step="0.01"></div>
+    <div class="field"><label>Total (Auto)</label><input type="text" id="purchaseTotal" readonly></div>
+  </div>
+  <button type="submit" class="btn btn-primary">Save Purchase</button>
+</form></div></div>
 
-<!-- Party Modal -->
-<div class="modal-backdrop" id="partyModal" aria-hidden="true"><div class="modal"><div class="modal-head"><h2>Add Party</h2><button class="close" id="closePartyModal">×</button></div>
-  <form id="partyForm" novalidate>
-    <div class="form-grid">
-      <div class="field"><label>Name</label><input type="text" id="partyName" required></div>
-      <div class="field"><label>Type</label><select id="partyType" required><option value="">-- Select Type --</option><option value="Customer">Customer</option><option value="Supplier">Supplier</option></select></div>
-      <div class="field"><label>GSTIN</label><input type="text" id="partyGSTIN" placeholder="e.g., 18AABCT1234H1Z0"></div>
-      <div class="field"><label>Phone</label><input type="tel" id="partyPhone" placeholder="10-digit phone number"></div>
-      <div class="field"><label>State</label><input type="text" id="partyState" placeholder="e.g., West Bengal"></div>
-    </div>
-    <button type="submit" class="btn btn-primary">Save Party</button>
-  </form>
-</div></div>
+<div class="modal-backdrop" id="partyModal"><div class="modal"><div class="modal-head"><h2>Add Party</h2><button class="close" id="closePartyModal">×</button></div>
+<form id="partyForm" novalidate>
+  <div class="form-grid">
+    <div class="field"><label>Name</label><input type="text" id="partyName" required></div>
+    <div class="field"><label>Type</label><select id="partyType" required><option value="">-- Select Type --</option><option value="Customer">Customer</option><option value="Supplier">Supplier</option></select></div>
+    <div class="field"><label>GSTIN</label><input type="text" id="partyGSTIN" placeholder="e.g., 18AABCT1234H1Z0"></div>
+    <div class="field"><label>Phone</label><input type="tel" id="partyPhone" placeholder="10-digit phone number"></div>
+    <div class="field"><label>State</label><input type="text" id="partyState" placeholder="e.g., West Bengal"></div>
+  </div>
+  <button type="submit" class="btn btn-primary">Save Party</button>
+</form></div></div>
 
-<!-- Voucher Modal -->
-<div class="modal-backdrop" id="voucherModal" aria-hidden="true"><div class="modal"><div class="modal-head"><h2>New Voucher</h2><button class="close" id="closeVoucherModal">×</button></div>
-  <form id="voucherForm" novalidate>
-    <div class="form-grid">
-      <div class="field"><label>Voucher No.</label><input type="text" id="voucherNo" readonly></div>
-      <div class="field"><label>Date</label><input type="date" id="voucherDate" required></div>
-      <div class="field"><label>Type</label><select id="voucherType" required><option value="">-- Select Type --</option><option value="Journal">Journal</option><option value="Deposit">Deposit</option><option value="Withdrawal">Withdrawal</option></select></div>
-      <div class="field"><label>Debit Account</label><input type="text" id="voucherDebit" placeholder="e.g., Cash, Bank" required></div>
-      <div class="field"><label>Credit Account</label><input type="text" id="voucherCredit" placeholder="e.g., Expense, Income" required></div>
-      <div class="field"><label>Amount</label><input type="number" id="voucherAmount" step="0.01" value="0" min="0" required></div>
-    </div>
-    <button type="submit" class="btn btn-primary">Save Voucher</button>
-  </form>
-</div></div>
+<div class="modal-backdrop" id="voucherModal"><div class="modal"><div class="modal-head"><h2>New Voucher</h2><button class="close" id="closeVoucherModal">×</button></div>
+<form id="voucherForm" novalidate>
+  <div class="form-grid">
+    <div class="field"><label>Voucher No.</label><input type="text" id="voucherNo" readonly></div>
+    <div class="field"><label>Date</label><input type="date" id="voucherDate" required></div>
+    <div class="field"><label>Type</label><select id="voucherType" required><option value="">-- Select Type --</option><option value="Journal">Journal</option><option value="Deposit">Deposit</option><option value="Withdrawal">Withdrawal</option></select></div>
+    <div class="field"><label>Debit Account</label><input type="text" id="voucherDebit" required></div>
+    <div class="field"><label>Credit Account</label><input type="text" id="voucherCredit" required></div>
+    <div class="field"><label>Amount</label><input type="number" id="voucherAmount" step="0.01" value="0" min="0" required></div>
+  </div>
+  <button type="submit" class="btn btn-primary">Save Voucher</button>
+</form></div></div>
 
 <div id="toast" style="position:fixed;right:24px;bottom:24px;background:#111827;color:#fff;padding:12px 16px;border-radius:8px;display:none;z-index:5000"></div>
 
 <script>
 /* =========================
- Safe storage keys & helpers
+ Utilities, storage & safety
  ========================= */
 const STORE_KEYS = {
-  PARTIES: 'bd_parties_v1',
-  SALES: 'bd_sales_v1',
-  PURCHASES: 'bd_purchases_v1',
-  VOUCHERS: 'bd_vouchers_v1',
-  SEQUENCES: 'bd_sequences_v1',
-  SAMPLE_MARKER: 'bd_sample_marker_v1'
+  PARTIES: 'bd_parties_v2',
+  SALES: 'bd_sales_v2',
+  PURCHASES: 'bd_purchases_v2',
+  VOUCHERS: 'bd_vouchers_v2',
+  SEQUENCES: 'bd_sequences_v2',
+  SAMPLE_MARKER: 'bd_sample_marker_v2'
 };
 
 function getStore(key){
-  try { return JSON.parse(localStorage.getItem(key) || '[]'); }
-  catch(e) { console.warn('getStore parse failed', e); return []; }
+  try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch(e){ console.warn('getStore parse failed', e); return []; }
 }
 function saveStore(key, data){ localStorage.setItem(key, JSON.stringify(data)); }
 function removeStore(key){ localStorage.removeItem(key); }
-function toast(msg){ const el = document.getElementById('toast'); if(!el){ alert(msg); return; } el.textContent = msg; el.style.display = 'block'; clearTimeout(window.__bdToastTimer); window.__bdToastTimer=setTimeout(()=> el.style.display='none',2000); }
-
-/* Escape user input */
-function escapeHTML(s){
-  return String(s == null ? '' : s).replace(/[&<>"'`=\/]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','/':'&#x2F;','`':'&#x60;','=':'&#x3D;'}[ch]));
-}
+function toast(msg){ const el=document.getElementById('toast'); if(!el){ alert(msg); return; } el.textContent=msg; el.style.display='block'; clearTimeout(window.__bdToastTimer); window.__bdToastTimer=setTimeout(()=>el.style.display='none',2000); }
 function safe(s){ return escapeHTML(s); }
+function escapeHTML(s){ return String(s==null?'':s).replace(/[&<>"'`=\/]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','/':'&#x2F;','`':'&#x60;','=':'&#x3D;'}[ch])); }
 function fmtMoney(v){ return `₹${Number(v||0).toFixed(2)}`; }
+function todayLocal(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 
 /* ======================
- Sequences (robust)
- - nextDocumentNumber: consumes sequence
- - peekDocumentNumber: shows candidate WITHOUT increment
+ Robust sequences (peek + next)
  ====================== */
 function readSeqs(){ try { return JSON.parse(localStorage.getItem(STORE_KEYS.SEQUENCES) || '{}'); } catch(e){ return {}; } }
 function writeSeqs(s){ localStorage.setItem(STORE_KEYS.SEQUENCES, JSON.stringify(s)); }
 function nextSequence(key){
-  const s = readSeqs();
-  s[key] = (s[key] || 0) + 1;
-  writeSeqs(s);
-  return s[key];
+  const s = readSeqs(); s[key] = (s[key]||0) + 1; writeSeqs(s); return s[key];
 }
-function peekNextSequence(key){
-  const s = readSeqs();
-  return (s[key] || 0) + 1; // does not save
-}
+function peekNextSequence(key){ const s = readSeqs(); return (s[key]||0) + 1; }
 function nextDocumentNumber(prefix){
-  const now = new Date();
-  const ym = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}`;
-  const seqKey = `${prefix}-${ym}`;
-  const seq = nextSequence(seqKey);
-  return `${prefix}-${ym}-${String(seq).padStart(4,'0')}`;
+  const now=new Date(); const ym=`${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}`; const seqKey=`${prefix}-${ym}`; const seq = nextSequence(seqKey); return `${prefix}-${ym}-${String(seq).padStart(4,'0')}`;
 }
 function peekDocumentNumber(prefix){
-  const now = new Date();
-  const ym = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}`;
-  const seqKey = `${prefix}-${ym}`;
-  const seq = peekNextSequence(seqKey);
-  return `${prefix}-${ym}-${String(seq).padStart(4,'0')}`;
+  const now=new Date(); const ym=`${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}`; const seqKey=`${prefix}-${ym}`; const seq = peekNextSequence(seqKey); return `${prefix}-${ym}-${String(seq).padStart(4,'0')}`;
 }
 
-/* ===========
- Data helpers
- =========== */
+/* Data accessors */
 function loadParties(){ return getStore(STORE_KEYS.PARTIES); }
 function saveParties(data){ saveStore(STORE_KEYS.PARTIES, data); }
 function loadSales(){ return getStore(STORE_KEYS.SALES); }
@@ -353,382 +322,141 @@ function loadVouchers(){ return getStore(STORE_KEYS.VOUCHERS); }
 function saveVouchers(data){ saveStore(STORE_KEYS.VOUCHERS, data); }
 
 /* ======================
- Safe ID utilities
- ====================== */
-function nextId(prefix){ return `${prefix}_${Date.now()}_${Math.floor(Math.random()*9000+1000)}`; }
-
-/* ======================
- Calculator (same behavior as earlier but with try/catch)
+ Calculator (safe, same as earlier)
  ====================== */
 class Calculator {
-  constructor(){
-    this.reset();
-    this._history = [];
-    this.updateUI();
-  }
+  constructor(){ this.reset(); this._history=[]; this.updateUI(); }
   reset(){ this.display='0'; this.current=null; this.prev=null; this.op=null; this.waiting=false; }
-  inputDigit(d){
-    try {
-      if(this.waiting){ this.current = d==='.' ? '0.' : d; this.waiting=false; }
-      else {
-        if(!this.current) this.current = d==='.' ? '0.' : d;
-        else if(d=='.' && this.current.includes('.')) return;
-        else this.current += d;
-      }
-      this.display = this.current;
-      this.updateUI();
-    } catch(e){ toast('Calculator error'); console.error(e); }
-  }
-  toggleSign(){ if(!this.current) return; this.current = String(parseFloat(this.current) * -1); this.display=this.current; this.updateUI(); }
+  inputDigit(d){ try { if(this.waiting){ this.current = d==='.' ? '0.' : d; this.waiting=false; } else { if(!this.current) this.current = d==='.' ? '0.' : d; else if(d==='.' && this.current.includes('.')) return; else this.current += d; } this.display = this.current; this.updateUI(); } catch(e){ toast('Calculator error'); console.error(e); } }
+  toggleSign(){ if(!this.current) return; this.current = String(parseFloat(this.current)*-1); this.display=this.current; this.updateUI(); }
   backspace(){ if(!this.current || this.waiting){ this.current=null; this.display='0'; this.updateUI(); return; } this.current = this.current.slice(0,-1)||null; this.display=this.current||'0'; this.updateUI(); }
   clearAll(){ this.reset(); this.updateUI(); }
-  percent(){
-    try {
-      if(!this.current) return;
-      let cur = parseFloat(this.current);
-      if(this.op && this.prev !== null){
-        if(this.op === '+' || this.op === '-') cur = this.prev * (cur / 100);
-        else cur = cur / 100;
-      } else cur = cur / 100;
-      this.current = String(Number.isFinite(cur) ? +cur.toPrecision(12) : cur);
-      this.display = this.current;
-      this.updateUI();
-    } catch(e){ toast('Percent error'); console.error(e); }
-  }
-  setOperator(op){
-    try {
-      const curNum = this.current ? parseFloat(this.current) : null;
-      if(curNum === null && this.prev === null) return;
-      if(this.prev === null && curNum !== null) this.prev = curNum;
-      else if(this.op && !this.waiting) this._compute();
-      this.op = op; this.waiting = true; this.updateUI();
-    } catch(e){ toast('Operator error'); console.error(e); }
-  }
-  _compute(){
-    if(this.op == null || this.prev == null) return;
-    const a = this.prev;
-    const b = this.current !== null ? parseFloat(this.current) : this.prev;
-    let result;
-    switch(this.op){
-      case '+': result = a + b; break;
-      case '-': result = a - b; break;
-      case '*': result = a * b; break;
-      case '/': result = b === 0 ? NaN : a / b; break;
-      default: result = b;
-    }
-    this._history.push({a,op:this.op,b,result});
-    this.prev = Number.isFinite(result) ? +result.toPrecision(12) : result;
-    this.current = null; this.op=null; this.waiting=true;
-  }
-  equals(){ try { this._compute(); this.display = String(this.prev||0); this.updateUI(); } catch(e){ toast('Compute error'); console.error(e); } }
-  updateUI(){ const el = document.getElementById('calcValue'); if(el) el.textContent = String(this.display||'0'); const hist = document.getElementById('calcHistoryList'); if(hist){ hist.textContent = this._history.slice(-6).map(it=>`${it.a} ${it.op} ${it.b} = ${it.result}`).join('\n'); } }
+  percent(){ try{ if(!this.current) return; let cur = parseFloat(this.current); if(this.op && this.prev !== null){ if(this.op==='+'||this.op==='-') cur = this.prev * (cur/100); else cur = cur/100; } else cur = cur/100; this.current = String(Number.isFinite(cur)? +cur.toPrecision(12):cur); this.display=this.current; this.updateUI(); } catch(e){ toast('Percent error'); console.error(e); } }
+  setOperator(op){ try{ const curNum = this.current ? parseFloat(this.current) : null; if(curNum === null && this.prev === null) return; if(this.prev===null && curNum !== null) this.prev = curNum; else if(this.op && !this.waiting) this._compute(); this.op = op; this.waiting = true; this.updateUI(); } catch(e){ toast('Operator error'); console.error(e); } }
+  _compute(){ if(this.op==null || this.prev==null) return; const a=this.prev; const b=this.current!==null?parseFloat(this.current):this.prev; let result; switch(this.op){ case '+': result = a+b; break; case '-': result=a-b; break; case '*': result=a*b; break; case '/': result = b===0?NaN:a/b; break; default: result=b; } this._history.push({a,op:this.op,b,result}); this.prev = Number.isFinite(result)? +result.toPrecision(12):result; this.current=null; this.op=null; this.waiting=true; }
+  equals(){ try{ this._compute(); this.display = String(this.prev||0); this.updateUI(); } catch(e){ toast('Compute error'); console.error(e); } }
+  updateUI(){ const v=document.getElementById('calcValue'); if(v) v.textContent = String(this.display||'0'); const h=document.getElementById('calcHistoryList'); if(h) h.textContent = this._history.slice(-6).map(it=>`${it.a} ${it.op} ${it.b} = ${it.result}`).join('\n'); }
 }
 const calc = new Calculator();
-document.addEventListener('click', (ev)=>{
-  const t = ev.target;
-  if(!t.classList) return;
-  if(t.classList.contains('calc-btn')){
-    if(t.dataset.n) calc.inputDigit(t.dataset.n);
-    else if(t.dataset.a){
-      const a = t.dataset.a;
-      if(a==='clear') calc.clearAll();
-      else if(a==='back') calc.backspace();
-      else if(a==='percent') calc.percent();
-      else if(a==='sign') calc.toggleSign();
-      else if(a==='dot') calc.inputDigit('.');
-      else if(a==='equals') calc.equals();
-    } else if(t.dataset.o) calc.setOperator(t.dataset.o);
-  }
-});
+
+/* wire calculator buttons in DOMContentLoaded to avoid duplicates */
 
 /* ======================
- GST and tax helper
- - computeGSTComponents returns cgst, sgst, igst, totalGST, total
+ GST components
  ====================== */
 function computeGSTComponents(taxable, rate, type){
-  const tt = Number(taxable||0);
-  const r = Number(rate||0);
-  if(!isFinite(tt) || !isFinite(r)) return {cgst:0,sgst:0,igst:0,totalGST:0,total:tt};
-  if(type === 'IGST'){
-    const igst = +(tt * r / 100).toFixed(2);
-    return {cgst:0,sgst:0,igst:igst,totalGST:igst,total: +(tt + igst).toFixed(2)};
-  } else {
-    const halfRate = r/2;
-    const cgst = +(tt * halfRate / 100).toFixed(2);
-    const sgst = +(tt * halfRate / 100).toFixed(2);
-    const t = +(tt + cgst + sgst).toFixed(2);
-    return {cgst,sgst,igst:0,totalGST: +(cgst+sgst).toFixed(2), total: t};
-  }
+  const t = Number(taxable||0), r = Number(rate||0);
+  if(!isFinite(t) || !isFinite(r)) return {cgst:0,sgst:0,igst:0,totalGST:0,total:t};
+  if(type === 'IGST'){ const igst = +(t * r / 100).toFixed(2); return {cgst:0,sgst:0,igst:igst,totalGST:igst,total: +(t+igst).toFixed(2)}; }
+  const half = r/2; const cgst = +(t*half/100).toFixed(2); const sgst = +(t*half/100).toFixed(2); return {cgst,sgst,igst:0,totalGST: +(cgst+sgst).toFixed(2), total: +(t+cgst+sgst).toFixed(2)};
+}
+
+/* ======================
+ Migration routine for old GST data formats
+ - Detects old fields like 'gst' or 'GST' or missing 'comps' and normalizes
+ - Runs once on startup (idempotent)
+ ====================== */
+function migrateOldGSTData(){
+  let migrated = false;
+  const sales = loadSales().map(s => {
+    // if comps missing but old fields exist, try to compute
+    if(!s.comps){
+      const taxable = s.taxable || s.amount || 0;
+      const gstRate = s.gstRate || s.GST || s.gst || 0;
+      const gstType = s.gstType || s.GSTType || 'CGST+SGST';
+      const comps = computeGSTComponents(taxable, gstRate, gstType);
+      s.comps = comps; s.total = comps.total; s.gstRate = gstRate; s.gstType = gstType;
+      migrated = true;
+    }
+    return s;
+  });
+  if(migrated) saveSales(sales);
+
+  migrated = false;
+  const purchases = loadPurchases().map(p => {
+    if(!p.comps){
+      const taxable = p.taxable || p.amount || 0;
+      const gstRate = p.gstRate || p.GST || p.gst || 0;
+      const gstType = p.gstType || p.GSTType || 'CGST+SGST';
+      const comps = computeGSTComponents(taxable, gstRate, gstType);
+      p.comps = comps; p.total = comps.total; p.gstRate = gstRate; p.gstType = gstType;
+      migrated = true;
+    }
+    return p;
+  });
+  if(migrated) savePurchases(purchases);
+
+  if(migrated) toast('Migrated old GST data to new format');
 }
 
 /* ======================
  Party management
- - ensure consistent 'gstin' field
- - modal safe-guards: check elements exist first
  ====================== */
 function renderParties(){
-  const tbody = document.getElementById('partyBody');
-  if(!tbody) return;
-  const parties = loadParties();
-  tbody.innerHTML = '';
+  const tbody = document.getElementById('partyBody'); if(!tbody) return;
+  const parties = loadParties(); tbody.innerHTML = '';
   parties.forEach(p=>{
     const tr = document.createElement('tr');
     tr.innerHTML = `<td>${safe(p.name)}</td><td>${safe(p.type)}</td><td>${safe(p.gstin||'')}</td><td>${safe(p.phone||'')}</td><td>${safe(p.state||'')}</td><td><button class="btn btn-sm" data-action="edit-party" data-id="${p.id}">Edit</button> <button class="btn btn-sm btn-danger" data-action="del-party" data-id="${p.id}">Delete</button></td>`;
     tbody.appendChild(tr);
   });
   // populate selectors
-  const saleSel = document.getElementById('saleCustomer');
-  const purSel = document.getElementById('purchaseSupplier');
+  const saleSel = document.getElementById('saleCustomer'); const purSel = document.getElementById('purchaseSupplier');
   if(saleSel) saleSel.innerHTML = `<option value="">-- Select Customer --</option>` + parties.filter(x=>x.type==='Customer').map(x=>`<option value="${safe(x.id)}">${safe(x.name)}</option>`).join('');
   if(purSel) purSel.innerHTML = `<option value="">-- Select Supplier --</option>` + parties.filter(x=>x.type==='Supplier').map(x=>`<option value="${safe(x.id)}">${safe(x.name)}</option>`).join('');
 }
 
-document.getElementById('btnNewParty').addEventListener('click', ()=> openPartyModal());
-function openPartyModal(data){
-  const modal = document.getElementById('partyModal'); if(!modal) return;
-  modal.classList.add('open');
-  const name = document.getElementById('partyName'); const type = document.getElementById('partyType'); const gstin = document.getElementById('partyGSTIN'); const phone = document.getElementById('partyPhone'); const state = document.getElementById('partyState');
-  if(data){
-    name.value = data.name||''; type.value = data.type||''; gstin.value = data.gstin||''; phone.value = data.phone||''; state.value = data.state||'';
-    document.getElementById('partyForm').dataset.editId = data.id;
-  } else {
-    name.value=''; type.value=''; gstin.value=''; phone.value=''; state.value=''; delete document.getElementById('partyForm').dataset.editId;
-  }
-}
-function closePartyModal(){ const m=document.getElementById('partyModal'); if(m) m.classList.remove('open'); }
-document.getElementById('closePartyModal').addEventListener('click', closePartyModal);
-document.getElementById('partyForm').addEventListener('submit', (ev)=>{
-  ev.preventDefault();
-  const form = ev.target;
-  const editId = form.dataset.editId;
-  const name = document.getElementById('partyName').value.trim();
-  const type = document.getElementById('partyType').value;
-  const gstin = document.getElementById('partyGSTIN').value.trim();
-  const phone = document.getElementById('partyPhone').value.trim();
-  const state = document.getElementById('partyState').value.trim();
-  if(!name || !type){ toast('Name and Type required'); return; }
-  // basic GSTIN pattern check (very lightweight): 15 chars alnum
-  if(gstin && !/^[0-9A-Za-z]{15}$/.test(gstin)){ toast('GSTIN appears invalid (expected 15 alphanumeric)'); return; }
-  const parties = loadParties();
-  if(editId){
-    const idx = parties.findIndex(p=>p.id===editId);
-    if(idx >= 0){ parties[idx] = {...parties[idx], name, type, gstin, phone, state}; saveParties(parties); }
-  } else {
-    parties.push({id: nextId('party'), name, type, gstin, phone, state});
-    saveParties(parties);
-  }
-  renderParties(); closePartyModal(); toast('Party saved');
-});
-
-/* Delete/Edit delegation */
-document.getElementById('partyBody').addEventListener('click', (e)=>{
-  const btn = e.target.closest('button'); if(!btn) return;
-  const action = btn.dataset.action, id = btn.dataset.id;
-  if(action === 'del-party'){ if(confirm('Delete party?')){ const list = loadParties().filter(p=>p.id!==id); saveParties(list); renderParties(); toast('Party deleted'); } }
-  else if(action === 'edit-party'){ const p = loadParties().find(pp=>pp.id===id); if(p) openPartyModal(p); }
-});
+/* Party modal and logic (wired in DOMContentLoaded) */
 
 /* ======================
  Sales: open/edit/save/render
+ - Overpayment handling: store 'credit' field if paid > total and set outstanding = 0
  ====================== */
-document.getElementById('btnNewSale').addEventListener('click', ()=> openSaleModal());
-function openSaleModal(edit){
-  const modal = document.getElementById('saleModal'); if(!modal) return;
-  modal.classList.add('open');
-  const invoiceNo = document.getElementById('saleInvoiceNo');
-  const date = document.getElementById('saleDate');
-  const cust = document.getElementById('saleCustomer');
-  const taxable = document.getElementById('saleTaxable');
-  const rate = document.getElementById('saleGSTRate');
-  const type = document.getElementById('saleGSTType');
-  const paid = document.getElementById('salePaid');
-  const total = document.getElementById('saleTotal');
-  if(edit){
-    invoiceNo.value = edit.invoiceNo; date.value = edit.date; cust.value = edit.customerId; taxable.value = edit.taxable; rate.value = edit.gstRate; type.value = edit.gstType; paid.value = edit.paid || 0; total.value = fmtMoney(edit.total);
-    document.getElementById('saleForm').dataset.editId = edit.id;
-  } else {
-    invoiceNo.value = peekDocumentNumber('INV'); // show candidate but do not consume until save
-    date.value = todayLocal(); cust.value = ''; taxable.value='0'; rate.value='18'; type.value='CGST+SGST'; paid.value='0'; total.value=fmtMoney(0);
-    delete document.getElementById('saleForm').dataset.editId;
-  }
-  const update = ()=> {
-    const comps = computeGSTComponents(Number(taxable.value)||0, Number(rate.value)||0, type.value);
-    total.value = fmtMoney(comps.total);
-  };
-  taxable.oninput = update; rate.oninput = update; type.onchange = update; update();
-}
-function closeSaleModal(){ const m=document.getElementById('saleModal'); if(m) m.classList.remove('open'); }
-document.getElementById('closeSaleModal').addEventListener('click', closeSaleModal);
-document.getElementById('saleForm').addEventListener('submit', (ev)=>{
-  ev.preventDefault();
-  const form = ev.target; const editId = form.dataset.editId;
-  const invoiceNoInput = document.getElementById('saleInvoiceNo');
-  const invoiceNo = editId ? invoiceNoInput.value : nextDocumentNumber('INV'); // consume sequence only on actual save
-  const date = document.getElementById('saleDate').value;
-  const customerId = document.getElementById('saleCustomer').value;
-  const taxable = Number(document.getElementById('saleTaxable').value) || 0;
-  const gstRate = Number(document.getElementById('saleGSTRate').value) || 0;
-  const gstType = document.getElementById('saleGSTType').value;
-  const paid = Number(document.getElementById('salePaid').value) || 0;
-  if(!customerId){ toast('Select a customer'); return; }
-  if(taxable < 0 || gstRate < 0){ toast('Invalid numbers'); return; }
-  const comps = computeGSTComponents(taxable,gstRate,gstType);
-  const total = comps.total; const outstanding = +(total - paid).toFixed(2);
-  const sales = loadSales();
-  if(editId){
-    const idx = sales.findIndex(s=>s.id===editId);
-    if(idx>=0){ sales[idx] = {...sales[idx], invoiceNo, date, customerId, taxable, gstRate, gstType, paid, total, outstanding, comps}; saveSales(sales); }
-  } else {
-    sales.push({ id: nextId('sale'), invoiceNo, date, customerId, taxable, gstRate, gstType, paid, total, outstanding, comps});
-    saveSales(sales);
-  }
-  renderSales(); closeSaleModal(); toast('Sale saved');
-});
-
-/* Sales rendering and delegation */
 function renderSales(){
   const body = document.getElementById('salesBody'); if(!body) return;
-  const sales = loadSales(); const parties = loadParties();
-  body.innerHTML = '';
+  const sales = loadSales(); const parties = loadParties(); body.innerHTML = '';
   sales.forEach(s=>{
-    const party = parties.find(p=>p.id===s.customerId) || null;
+    const party = parties.find(p => p.id === s.customerId) || null;
+    const outstandingDisplay = (s.outstanding < 0) ? `${fmtMoney(Math.abs(s.outstanding))} (credit)` : fmtMoney(s.outstanding);
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${safe(s.invoiceNo)}</td><td>${safe(s.date)}</td><td>${safe(party?party.name:'(Unknown)')}</td><td class="right">${fmtMoney(s.taxable)}</td><td class="right">${fmtMoney(s.comps ? s.comps.totalGST : 0)}</td><td class="right">${fmtMoney(s.total)}</td><td class="right">${fmtMoney(s.paid)}</td><td class="right">${fmtMoney(s.outstanding)}</td><td><button class="btn btn-sm" data-action="edit-sale" data-id="${s.id}">Edit</button> <button class="btn btn-sm btn-danger" data-action="del-sale" data-id="${s.id}">Delete</button></td>`;
+    tr.innerHTML = `<td>${safe(s.invoiceNo)}</td><td>${safe(s.date)}</td><td>${safe(party?party.name:'(Unknown)')}</td><td class="right">${fmtMoney(s.taxable)}</td><td class="right">${fmtMoney(s.comps? s.comps.totalGST:0)}</td><td class="right">${fmtMoney(s.total)}</td><td class="right">${fmtMoney(s.paid)}</td><td class="right">${outstandingDisplay}</td><td><button class="btn btn-sm" data-action="edit-sale" data-id="${s.id}">Edit</button> <button class="btn btn-sm btn-danger" data-action="del-sale" data-id="${s.id}">Delete</button></td>`;
     body.appendChild(tr);
   });
 }
 
-/* sales table delegation */
-document.getElementById('salesBody').addEventListener('click', (e)=>{
-  const btn = e.target.closest('button'); if(!btn) return;
-  const action = btn.dataset.action; const id = btn.dataset.id;
-  if(action === 'del-sale'){ if(confirm('Delete sale?')){ saveSales(loadSales().filter(s=>s.id!==id)); renderSales(); updateDashboardAndReports(); toast('Sale deleted'); } }
-  else if(action === 'edit-sale'){ const s = loadSales().find(x=>x.id===id); if(s) openSaleModal(s); }
-});
-
 /* ======================
- Purchases (edit + render)
+ Purchases render (with edit)
  ====================== */
-document.getElementById('btnNewPurchase').addEventListener('click', ()=> openPurchaseModal());
-function openPurchaseModal(edit){
-  const modal = document.getElementById('purchaseModal'); if(!modal) return;
-  modal.classList.add('open');
-  const billNo = document.getElementById('purchaseBillNo');
-  const date = document.getElementById('purchaseDate');
-  const sup = document.getElementById('purchaseSupplier');
-  const taxable = document.getElementById('purchaseTaxable');
-  const rate = document.getElementById('purchaseGSTRate');
-  const type = document.getElementById('purchaseGSTType');
-  const paid = document.getElementById('purchasePaid');
-  const total = document.getElementById('purchaseTotal');
-  if(edit){
-    billNo.value = edit.billNo; date.value = edit.date; sup.value = edit.supplierId; taxable.value = edit.taxable; rate.value = edit.gstRate; type.value = edit.gstType; paid.value = edit.paid || 0; total.value = fmtMoney(edit.total);
-    document.getElementById('purchaseForm').dataset.editId = edit.id;
-  } else {
-    billNo.value = peekDocumentNumber('PB'); date.value = todayLocal(); sup.value=''; taxable.value='0'; rate.value='18'; type.value='CGST+SGST'; paid.value='0'; total.value=fmtMoney(0);
-    delete document.getElementById('purchaseForm').dataset.editId;
-  }
-  const update = ()=>{ const comps = computeGSTComponents(Number(taxable.value)||0, Number(rate.value)||0, type.value); total.value = fmtMoney(comps.total); };
-  taxable.oninput = update; rate.oninput = update; type.onchange = update; update();
-}
-function closePurchaseModal(){ const m=document.getElementById('purchaseModal'); if(m) m.classList.remove('open'); }
-document.getElementById('closePurchaseModal').addEventListener('click', closePurchaseModal);
-document.getElementById('purchaseForm').addEventListener('submit', (ev)=>{
-  ev.preventDefault();
-  const form = ev.target; const editId = form.dataset.editId;
-  const billNo = editId ? document.getElementById('purchaseBillNo').value : nextDocumentNumber('PB');
-  const date = document.getElementById('purchaseDate').value;
-  const supplierId = document.getElementById('purchaseSupplier').value;
-  const taxable = Number(document.getElementById('purchaseTaxable').value) || 0;
-  const gstRate = Number(document.getElementById('purchaseGSTRate').value) || 0;
-  const gstType = document.getElementById('purchaseGSTType').value;
-  const paid = Number(document.getElementById('purchasePaid').value) || 0;
-  if(!supplierId){ toast('Choose supplier'); return; }
-  if(taxable < 0 || gstRate < 0){ toast('Invalid numbers'); return; }
-  const comps = computeGSTComponents(taxable,gstRate,gstType);
-  const total = comps.total; const outstanding = +(total - paid).toFixed(2);
-  const purchases = loadPurchases();
-  if(editId){
-    const idx = purchases.findIndex(p=>p.id===editId);
-    if(idx>=0) purchases[idx] = {...purchases[idx], billNo, date, supplierId, taxable, gstRate, gstType, paid, total, outstanding, comps};
-  } else purchases.push({ id: nextId('purchase'), billNo, date, supplierId, taxable, gstRate, gstType, paid, total, outstanding, comps });
-  savePurchases(purchases); renderPurchases(); closePurchaseModal(); toast('Purchase saved');
-});
-
-/* purchases render + delegation */
 function renderPurchases(){
   const body = document.getElementById('purchaseBody'); if(!body) return;
-  const things = loadPurchases(); const parties = loadParties();
-  body.innerHTML = '';
-  things.forEach(p=>{
+  const purchases = loadPurchases(); const parties = loadParties(); body.innerHTML='';
+  purchases.forEach(p=>{
     const sup = parties.find(x=>x.id===p.supplierId) || null;
+    const outstandingDisplay = (p.outstanding < 0) ? `${fmtMoney(Math.abs(p.outstanding))} (credit)` : fmtMoney(p.outstanding);
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${safe(p.billNo)}</td><td>${safe(p.date)}</td><td>${safe(sup?sup.name:'(Unknown)')}</td><td class="right">${fmtMoney(p.taxable)}</td><td class="right">${fmtMoney(p.comps? p.comps.totalGST:0)}</td><td class="right">${fmtMoney(p.total)}</td><td class="right">${fmtMoney(p.paid)}</td><td class="right">${fmtMoney(p.outstanding)}</td><td><button class="btn btn-sm" data-action="edit-purchase" data-id="${p.id}">Edit</button> <button class="btn btn-sm btn-danger" data-action="del-purchase" data-id="${p.id}">Delete</button></td>`;
+    tr.innerHTML = `<td>${safe(p.billNo)}</td><td>${safe(p.date)}</td><td>${safe(sup?sup.name:'(Unknown)')}</td><td class="right">${fmtMoney(p.taxable)}</td><td class="right">${fmtMoney(p.comps? p.comps.totalGST:0)}</td><td class="right">${fmtMoney(p.total)}</td><td class="right">${fmtMoney(p.paid)}</td><td class="right">${outstandingDisplay}</td><td><button class="btn btn-sm" data-action="edit-purchase" data-id="${p.id}">Edit</button> <button class="btn btn-sm btn-danger" data-action="del-purchase" data-id="${p.id}">Delete</button></td>`;
     body.appendChild(tr);
   });
 }
-document.getElementById('purchaseBody').addEventListener('click', (e)=>{
-  const btn = e.target.closest('button'); if(!btn) return;
-  const id = btn.dataset.id;
-  const action = btn.dataset.action;
-  if(action === 'del-purchase'){ if(confirm('Delete purchase?')){ savePurchases(loadPurchases().filter(x=>x.id!==id)); renderPurchases(); updateDashboardAndReports(); toast('Purchase deleted'); } }
-  else if(action === 'edit-purchase'){ const p = loadPurchases().find(x=>x.id===id); if(p) openPurchaseModal(p); }
-});
 
 /* ======================
- Vouchers (edit + validate)
+ Vouchers render
  ====================== */
-document.getElementById('btnNewVoucher').addEventListener('click', ()=> openVoucherModal());
-function openVoucherModal(edit){
-  const modal = document.getElementById('voucherModal'); if(!modal) return;
-  modal.classList.add('open');
-  const no = document.getElementById('voucherNo'); const date = document.getElementById('voucherDate'); const type = document.getElementById('voucherType'); const debit = document.getElementById('voucherDebit'); const credit = document.getElementById('voucherCredit'); const amount = document.getElementById('voucherAmount');
-  if(edit){
-    no.value = edit.voucherNo; date.value = edit.date; type.value = edit.type; debit.value = edit.debit; credit.value = edit.credit; amount.value = edit.amount; document.getElementById('voucherForm').dataset.editId = edit.id;
-  } else {
-    no.value = peekDocumentNumber('VCH'); date.value = todayLocal(); type.value=''; debit.value=''; credit.value=''; amount.value='0'; delete document.getElementById('voucherForm').dataset.editId;
-  }
-}
-function closeVoucherModal(){ const m=document.getElementById('voucherModal'); if(m) m.classList.remove('open'); }
-document.getElementById('closeVoucherModal').addEventListener('click', closeVoucherModal);
-document.getElementById('voucherForm').addEventListener('submit', (ev)=>{
-  ev.preventDefault();
-  const form = ev.target; const editId = form.dataset.editId;
-  const voucherNo = editId ? document.getElementById('voucherNo').value : nextDocumentNumber('VCH');
-  const date = document.getElementById('voucherDate').value; const type = document.getElementById('voucherType').value;
-  const debit = document.getElementById('voucherDebit').value.trim(); const credit = document.getElementById('voucherCredit').value.trim();
-  const amount = Number(document.getElementById('voucherAmount').value) || 0;
-  if(!type || !debit || !credit || amount <= 0){ toast('Voucher validation failed: all fields required + amount > 0'); return; }
-  if(debit === credit){ toast('Debit and Credit cannot be same'); return; }
-  const vouchers = loadVouchers();
-  if(editId){
-    const i = vouchers.findIndex(v=>v.id===editId); if(i>=0) vouchers[i] = {...vouchers[i], voucherNo, date, type, debit, credit, amount};
-  } else vouchers.push({ id: nextId('voucher'), voucherNo, date, type, debit, credit, amount });
-  saveVouchers(vouchers); renderVouchers(); closeVoucherModal(); toast('Voucher saved');
-});
 function renderVouchers(){
   const body = document.getElementById('voucherBody'); if(!body) return;
-  const arr = loadVouchers(); body.innerHTML='';
-  arr.forEach(v=>{
+  const v = loadVouchers(); body.innerHTML = '';
+  v.forEach(x=>{
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${safe(v.voucherNo)}</td><td>${safe(v.date)}</td><td>${safe(v.type)}</td><td>${safe(v.debit)}</td><td>${safe(v.credit)}</td><td class="right">${fmtMoney(v.amount)}</td><td><button class="btn btn-sm" data-action="edit-voucher" data-id="${v.id}">Edit</button> <button class="btn btn-sm btn-danger" data-action="del-voucher" data-id="${v.id}">Delete</button></td>`;
+    tr.innerHTML = `<td>${safe(x.voucherNo)}</td><td>${safe(x.date)}</td><td>${safe(x.type)}</td><td>${safe(x.debit)}</td><td>${safe(x.credit)}</td><td class="right">${fmtMoney(x.amount)}</td><td><button class="btn btn-sm" data-action="edit-voucher" data-id="${x.id}">Edit</button> <button class="btn btn-sm btn-danger" data-action="del-voucher" data-id="${x.id}">Delete</button></td>`;
     body.appendChild(tr);
   });
 }
-document.getElementById('voucherBody').addEventListener('click', (e)=>{
-  const btn = e.target.closest('button'); if(!btn) return;
-  const action = btn.dataset.action; const id = btn.dataset.id;
-  if(action === 'del-voucher'){ if(confirm('Delete voucher?')){ saveVouchers(loadVouchers().filter(v=>v.id!==id)); renderVouchers(); toast('Voucher deleted'); } }
-  else if(action === 'edit-voucher'){ const v = loadVouchers().find(x=>x.id===id); if(v) openVoucherModal(v); }
-});
 
 /* ======================
- Rendering helpers & reports
- - outstanding keyed by party id (no collisions)
- - negative outstanding shown as credit (overpayment)
+ Dashboard & Reports update
  ====================== */
 function updateDashboardAndReports(){
-  const sales = loadSales(); const purchases = loadPurchases(); const parties = loadParties();
+  const sales = loadSales(), purchases = loadPurchases(), parties = loadParties();
   const totalSales = sales.reduce((s,x)=>s + Number(x.total||0),0);
   const totalPurchases = purchases.reduce((s,x)=>s + Number(x.total||0),0);
   document.getElementById('dashSales').textContent = fmtMoney(totalSales);
@@ -737,11 +465,11 @@ function updateDashboardAndReports(){
   document.getElementById('reportPurchases').textContent = fmtMoney(totalPurchases);
   document.getElementById('reportGross').textContent = fmtMoney(totalSales - totalPurchases);
 
-  // Build GST register
+  // GST register
   const reg = [];
-  sales.forEach(s => { if(s.comps) reg.push({source:s.invoiceNo,taxable:s.taxable,cgst:s.comps.cgst,sgst:s.comps.sgst,igst:s.comps.igst,totalGST:s.comps.totalGST,total:s.total, type:'Output'}); });
-  purchases.forEach(p => { if(p.comps) reg.push({source:p.billNo,taxable:p.taxable,cgst:p.comps.cgst,sgst:p.comps.sgst,igst:p.comps.igst,totalGST:p.comps.totalGST,total:p.total, type:'Input'}); });
-  const reportGSTBody = document.getElementById('reportGSTBody'); if(reportGSTBody){ reportGSTBody.innerHTML = ''; reg.forEach(r=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${safe(r.source)} (${safe(r.type)})</td><td class="right">${fmtMoney(r.taxable)}</td><td class="right">${fmtMoney(r.cgst)}</td><td class="right">${fmtMoney(r.sgst)}</td><td class="right">${fmtMoney(r.igst)}</td><td class="right">${fmtMoney(r.totalGST)}</td><td class="right">${fmtMoney(r.total)}</td>`; reportGSTBody.appendChild(tr); }); }
+  sales.forEach(s => { if(s.comps) reg.push({source:s.invoiceNo, taxable:s.taxable, cgst:s.comps.cgst, sgst:s.comps.sgst, igst:s.comps.igst, totalGST:s.comps.totalGST, total:s.total, type:'Output'}); });
+  purchases.forEach(p => { if(p.comps) reg.push({source:p.billNo, taxable:p.taxable, cgst:p.comps.cgst, sgst:p.comps.sgst, igst:p.comps.igst, totalGST:p.comps.totalGST, total:p.total, type:'Input'}); });
+  const reportGSTBody = document.getElementById('reportGSTBody'); if(reportGSTBody){ reportGSTBody.innerHTML=''; reg.forEach(r=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${safe(r.source)} (${safe(r.type)})</td><td class="right">${fmtMoney(r.taxable)}</td><td class="right">${fmtMoney(r.cgst)}</td><td class="right">${fmtMoney(r.sgst)}</td><td class="right">${fmtMoney(r.igst)}</td><td class="right">${fmtMoney(r.totalGST)}</td><td class="right">${fmtMoney(r.total)}</td>`; reportGSTBody.appendChild(tr); }); }
 
   // GST totals
   const gstOutput = reg.filter(r=>r.type==='Output').reduce((s,r)=>s + Number(r.totalGST||0),0);
@@ -750,58 +478,44 @@ function updateDashboardAndReports(){
   document.getElementById('gstInput').textContent = fmtMoney(gstInput);
   document.getElementById('gstNet').textContent = fmtMoney(gstOutput - gstInput);
 
-  // Outstanding: keyed by party id (no collision), negative => credit
-  const outMap = {}; // {partyId: {name,type,amount}}
+  // Outstanding map keyed by party id
+  const outMap = {};
   sales.forEach(s=>{
     const pid = s.customerId || 'unknown_customer';
-    if(!outMap[pid]) outMap[pid] = {name:(parties.find(p=>p.id===pid)||{}).name || pid, type:'Customer', amount:0};
+    outMap[pid] = outMap[pid] || {name:(parties.find(p=>p.id===pid)||{}).name || pid, type:'Customer', amount:0};
     outMap[pid].amount += Number(s.outstanding||0);
   });
   purchases.forEach(p=>{
     const pid = p.supplierId || 'unknown_supplier';
-    if(!outMap[pid]) outMap[pid] = {name:(parties.find(pp=>pp.id===pid)||{}).name || pid, type:'Supplier', amount:0};
+    outMap[pid] = outMap[pid] || {name:(parties.find(pp=>pp.id===pid)||{}).name || pid, type:'Supplier', amount:0};
     outMap[pid].amount += Number(p.outstanding||0);
   });
-  // Totals
   const custTotal = Object.values(outMap).filter(x=>x.type==='Customer').reduce((s,x)=>s + Number(x.amount||0),0);
   const supTotal = Object.values(outMap).filter(x=>x.type==='Supplier').reduce((s,x)=>s + Number(x.amount||0),0);
   document.getElementById('outstandingCustomers').textContent = fmtMoney(custTotal);
   document.getElementById('outstandingSuppliers').textContent = fmtMoney(supTotal);
   document.getElementById('dashOutstanding').textContent = fmtMoney(custTotal + supTotal);
-  const outBody = document.getElementById('outstandingBody'); if(outBody){ outBody.innerHTML=''; Object.entries(outMap).forEach(([id,val])=>{ const tr=document.createElement('tr'); const amt = Number(val.amount||0); const display = amt < 0 ? `${fmtMoney(Math.abs(amt))} (credit)` : fmtMoney(amt); tr.innerHTML = `<td>${safe(val.name)}</td><td>${safe(val.type)}</td><td>-</td><td class="right">${display}</td>`; outBody.appendChild(tr); }); }
+  const outBody = document.getElementById('outstandingBody'); if(outBody){ outBody.innerHTML=''; Object.entries(outMap).forEach(([id,val])=>{ const tr=document.createElement('tr'); const amt = Number(val.amount||0); const disp = amt < 0 ? `${fmtMoney(Math.abs(amt))} (credit)` : fmtMoney(amt); tr.innerHTML=`<td>${safe(val.name)}</td><td>${safe(val.type)}</td><td>-</td><td class="right">${disp}</td>`; outBody.appendChild(tr); }); }
 }
 
 /* ======================
- Render convenience
- ====================== */
-function renderAll(){
-  renderParties(); renderSales(); renderPurchases(); renderVouchers(); updateDashboardAndReports();
-}
-
-/* ======================
- Sample data (safe)
- - marks a marker to prevent repeated accidental loads
+ Safe sample loader (idempotent)
  ====================== */
 function loadSampleData(){
   if(localStorage.getItem(STORE_KEYS.SAMPLE_MARKER)){
-    if(!confirm('Sample data already loaded. Load again (may duplicate)?')) return;
+    if(!confirm('Sample data previously loaded. Load again? This may duplicate some records.')) return;
   } else {
-    // set marker to avoid accidental duplicate loads
     localStorage.setItem(STORE_KEYS.SAMPLE_MARKER, new Date().toISOString());
   }
-  // sample parties
-  const parties = [
+  // add parties if missing
+  const existing = loadParties();
+  const samples = [
     {id:'party_cust_1', name:'Acme Corp', type:'Customer', gstin:'27AABCT1234H1Z0', phone:'9876543210', state:'Karnataka'},
     {id:'party_sup_1', name:'Global Supply Co', type:'Supplier', gstin:'27BBCCD2345K1Z1', phone:'9123456789', state:'Maharashtra'}
   ];
-  // careful: don't overwrite existing parties; append unique by name
-  const existing = loadParties();
-  parties.forEach(p=>{
-    if(!existing.some(ex=>ex.name === p.name && ex.type === p.type)) existing.push(p);
-  });
+  samples.forEach(s => { if(!existing.some(e=>e.name===s.name && e.type===s.type)) existing.push(s); });
   saveParties(existing);
 
-  // sales/purchases: only add if none exist to avoid bloat
   if(loadSales().length === 0){
     const comps = computeGSTComponents(10000,18,'CGST+SGST');
     saveSales([{id: nextId('sale'), invoiceNo: nextDocumentNumber('INV'), date: todayLocal(), customerId:'party_cust_1', taxable:10000, gstRate:18, gstType:'CGST+SGST', paid:5000, total: comps.total, outstanding: +(comps.total - 5000).toFixed(2), comps }]);
@@ -814,87 +528,100 @@ function loadSampleData(){
     saveVouchers([{id: nextId('voucher'), voucherNo: nextDocumentNumber('VCH'), date: todayLocal(), type:'Journal', debit:'Cash', credit:'Sales', amount:5000}]);
   }
   renderAll();
-  toast('Sample data loaded (safe mode).');
-}
-
-/* Clear data (explicit) */
-function clearAllData(){
-  if(!confirm('Clear all BusinessDesk data (this cannot be undone)?')) return;
-  Object.values(STORE_KEYS).forEach(k=> localStorage.removeItem(k));
-  location.reload();
+  toast('Sample data loaded safely.');
 }
 
 /* ======================
- Diagnostics / self-tests
- - default diagnostics NON-DESTRUCTIVE (no sequences consumed)
- - destructive self-test must be explicitly confirmed
+ Diagnostics (non-destructive)
  ====================== */
 function runDiagnosticsNonDestructive(){
   const out = [];
   out.push('Diagnostics (non-destructive) at ' + new Date().toLocaleString());
   try {
-    out.push('Storage keys present: ' + Object.keys(STORE_KEYS).join(', '));
-    // localStorage basic test
+    out.push('Storage keys:' + Object.keys(STORE_KEYS).join(', '));
     const testKey = '__bd_diag_test';
     localStorage.setItem(testKey, JSON.stringify({ok:true}));
-    const val = JSON.parse(localStorage.getItem(testKey) || '{}');
-    out.push('localStorage test: ' + (val.ok ? 'OK' : 'FAIL'));
+    const v = JSON.parse(localStorage.getItem(testKey) || '{}');
+    out.push('localStorage test: ' + (v.ok ? 'OK' : 'FAIL'));
     localStorage.removeItem(testKey);
-    // calculator smoke test using peek (non-destructive)
+
+    // calculator sample using peek (no sequence consumption)
     const c = new Calculator(); c.inputDigit('1'); c.inputDigit('0'); c.setOperator('+'); c.inputDigit('1'); c.inputDigit('0'); c.percent(); c.equals();
-    out.push('Calculator sample (non-destructive): ' + c.display + ' (expect 11)');
-    // sequence peek
-    const peekInv = peekDocumentNumber('INV');
-    out.push('Next invoice preview (peek): ' + peekInv);
-    // counts
-    out.push(`Parties: ${loadParties().length}, Sales: ${loadSales().length}, Purchases: ${loadPurchases().length}, Vouchers: ${loadVouchers().length}`);
+    out.push('Calculator sample result (expect 11): ' + c.display);
+
+    // peek next invoice (non-destructive)
+    out.push('Next invoice (peek): ' + peekDocumentNumber('INV'));
+
+    out.push(`Counts -> Parties: ${loadParties().length}, Sales: ${loadSales().length}, Purchases: ${loadPurchases().length}, Vouchers: ${loadVouchers().length}`);
     out.push('Diagnostics completed (non-destructive).');
   } catch(e){ out.push('Diagnostics error: ' + e.message); console.error(e); }
   document.getElementById('phase4Diagnostics').textContent = out.join('\n');
 }
 
-function runDestructiveSelfTest(){
-  if(!confirm('Destructive self-test will mutate data (add sample records, consume sequences). Continue?')) return;
-  const out = [];
-  out.push('Destructive self-test started at ' + new Date().toLocaleString());
-  try {
-    // Save current snapshot (simple backup)
-    const backup = {
-      parties: localStorage.getItem(STORE_KEYS.PARTIES),
-      sales: localStorage.getItem(STORE_KEYS.SALES),
-      purchases: localStorage.getItem(STORE_KEYS.PURCHASES),
-      vouchers: localStorage.getItem(STORE_KEYS.VOUCHERS),
-      sequences: localStorage.getItem(STORE_KEYS.SEQUENCES)
-    };
-    // perform actions that deliberately mutate: load sample (force), create a test invoice
-    // load sample but this time ignore sample marker to force create
-    const parties = [
-      {id:'test_party_1', name:'TD Test Customer', type:'Customer', gstin:'29TEST0001A1Z0', phone:'9000000001', state:'Test'},
-      {id:'test_party_2', name:'TD Test Supplier', type:'Supplier', gstin:'29TEST0002A1Z0', phone:'9000000002', state:'Test'}
-    ];
-    // append unconditionally
-    const existing = loadParties(); parties.forEach(p=> existing.push(p)); saveParties(existing);
-    // create invoice and consume sequence
-    const sale = { id: nextId('sale'), invoiceNo: nextDocumentNumber('INV'), date: todayLocal(), customerId:'test_party_1', taxable:1234, gstRate:18, gstType:'CGST+SGST', paid:0 };
-    sale.comps = computeGSTComponents(sale.taxable,sale.gstRate,sale.gstType); sale.total = sale.comps.total; sale.outstanding = sale.total;
-    const sarr = loadSales(); sarr.push(sale); saveSales(sarr);
-    // create voucher and consume sequence
-    const voucher = { id: nextId('voucher'), voucherNo: nextDocumentNumber('VCH'), date: todayLocal(), type:'Test', debit:'Cash', credit:'Sales', amount:1234 };
-    const varr = loadVouchers(); varr.push(voucher); saveVouchers(varr);
-    renderAll();
-    out.push('Destructive changes applied (sample parties, sale, voucher created).');
-    out.push('Backup keys (not auto restored) present in JS memory for manual restore if needed.');
-  } catch(e){ out.push('Self-test error: ' + e.message); console.error(e); }
-  document.getElementById('phase4Diagnostics').textContent = out.join('\n');
+/* ======================
+ Migration activation (runs once at startup)
+ - non-destructive aside from normalizing stored objects
+ ====================== */
+function runMigrations(){
+  migrateOldGSTData();
+}
+function migrateOldGSTData(){
+  let changed = false;
+  const sales = loadSales().map(s => {
+    if(!s.comps){
+      const taxable = s.taxable || s.amount || 0;
+      const gstRate = s.gstRate || s.GST || s.gst || 0;
+      const gstType = s.gstType || s.GSTType || 'CGST+SGST';
+      const comps = computeGSTComponents(taxable, gstRate, gstType);
+      s.comps = comps; s.total = comps.total; s.gstRate = gstRate; s.gstType = gstType; changed = true;
+    }
+    return s;
+  });
+  if(changed){ saveSales(sales); changed=false; }
+  const purchases = loadPurchases().map(p => {
+    if(!p.comps){
+      const taxable = p.taxable || p.amount || 0;
+      const gstRate = p.gstRate || p.GST || p.gst || 0;
+      const gstType = p.gstType || p.GSTType || 'CGST+SGST';
+      const comps = computeGSTComponents(taxable, gstRate, gstType);
+      p.comps = comps; p.total = comps.total; p.gstRate = gstRate; p.gstType = gstType; changed = true;
+    }
+    return p;
+  });
+  if(changed) savePurchases(purchases);
+  if(changed) toast('Old GST data migrated (normalized).');
 }
 
 /* ======================
- Event wiring and safe start
- - ensure elements exist before attaching
+ Render entry point
+ ====================== */
+function renderAll(){
+  renderParties(); renderSales(); renderPurchases(); renderVouchers(); updateDashboardAndReports();
+}
+
+/* ======================
+ DOM wiring: attach event listeners once here
  ====================== */
 document.addEventListener('DOMContentLoaded', ()=>{
-  // nav buttons robust
-  document.querySelectorAll('.nav-button').forEach(btn=>{
+  // Calculator button delegation
+  document.querySelectorAll('.calc-btn').forEach(b=>{
+    b.addEventListener('click', (ev)=>{
+      const t = ev.currentTarget;
+      if(t.dataset.n) calc.inputDigit(t.dataset.n);
+      else if(t.dataset.a){
+        const a = t.dataset.a;
+        if(a==='clear') calc.clearAll();
+        else if(a==='back') calc.backspace();
+        else if(a==='percent') calc.percent();
+        else if(a==='sign') calc.toggleSign();
+        else if(a==='dot') calc.inputDigit('.');
+        else if(a==='equals') calc.equals();
+      } else if(t.dataset.o) calc.setOperator(t.dataset.o);
+    });
+  });
+
+  // Nav buttons (slider) — single wiring
+  document.querySelectorAll('.nav-button').forEach(btn => {
     btn.addEventListener('click', ()=> {
       document.querySelectorAll('.nav-button').forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
@@ -906,21 +633,177 @@ document.addEventListener('DOMContentLoaded', ()=>{
     });
   });
 
-  // Attach control buttons (safe)
-  const loadSampleBtn = document.getElementById('loadSample'); if(loadSampleBtn) loadSampleBtn.addEventListener('click', loadSampleData);
-  const clearAllBtn = document.getElementById('clearAll'); if(clearAllBtn) clearAllBtn.addEventListener('click', clearAllData);
-  const runDiagBtn = document.getElementById('runDiag'); if(runDiagBtn) runDiagBtn.addEventListener('click', runDiagnosticsNonDestructive);
-  const runSelfBtn = document.getElementById('runSelfTest'); if(runSelfBtn) runSelfBtn.addEventListener('click', runDestructiveSelfTest);
+  // Party controls
+  const btnNewParty = document.getElementById('btnNewParty'); if(btnNewParty) btnNewParty.addEventListener('click', ()=> openPartyModal());
+  document.getElementById('partyForm').addEventListener('submit', (ev)=> { ev.preventDefault(); /* uses existing handler defined below */ });
+  document.getElementById('partyBody').addEventListener('click', (e)=> {
+    const btn = e.target.closest('button'); if(!btn) return;
+    const action = btn.dataset.action; const id = btn.dataset.id;
+    if(action === 'del-party'){ if(confirm('Delete party?')){ const list = loadParties().filter(p=>p.id!==id); saveParties(list); renderParties(); renderAll(); toast('Party deleted'); } }
+    else if(action === 'edit-party'){ const p = loadParties().find(x=>x.id===id); if(p) openPartyModal(p); }
+  });
 
-  // Attach remaining render listeners and initial render safely
+  // Party modal handlers
+  function openPartyModal(data){
+    const modal=document.getElementById('partyModal'); if(!modal) return; modal.classList.add('open');
+    const name=document.getElementById('partyName'), type=document.getElementById('partyType'), gstin=document.getElementById('partyGSTIN'), phone=document.getElementById('partyPhone'), state=document.getElementById('partyState');
+    if(data){ name.value=data.name||''; type.value=data.type||''; gstin.value=data.gstin||''; phone.value=data.phone||''; state.value=data.state||''; document.getElementById('partyForm').dataset.editId = data.id; }
+    else { name.value=''; type.value=''; gstin.value=''; phone.value=''; state.value=''; delete document.getElementById('partyForm').dataset.editId; }
+  }
+  function closePartyModal(){ const m=document.getElementById('partyModal'); if(m) m.classList.remove('open'); }
+  const partyForm = document.getElementById('partyForm');
+  if(partyForm){
+    document.getElementById('closePartyModal').addEventListener('click', closePartyModal);
+    partyForm.addEventListener('submit', (ev)=>{
+      ev.preventDefault();
+      const editId = partyForm.dataset.editId;
+      const name = document.getElementById('partyName').value.trim();
+      const type = document.getElementById('partyType').value;
+      const gstin = document.getElementById('partyGSTIN').value.trim();
+      const phone = document.getElementById('partyPhone').value.trim();
+      const state = document.getElementById('partyState').value.trim();
+      if(!name || !type){ toast('Name and Type required'); return; }
+      if(gstin && !/^[0-9A-Za-z]{15}$/.test(gstin)){ toast('GSTIN seems invalid (15 alnum chars expected)'); return; }
+      const parties = loadParties();
+      if(editId){ const idx = parties.findIndex(p=>p.id===editId); if(idx>=0){ parties[idx] = {...parties[idx], name, type, gstin, phone, state}; saveParties(parties); } }
+      else { parties.push({id: nextId('party'), name, type, gstin, phone, state}); saveParties(parties); }
+      closePartyModal(); renderParties(); renderAll(); toast('Party saved');
+    });
+  }
+
+  // Sales modal handlers
+  const btnNewSale = document.getElementById('btnNewSale'); if(btnNewSale) btnNewSale.addEventListener('click', ()=> openSaleModal());
+  function openSaleModal(edit){
+    const modal = document.getElementById('saleModal'); if(!modal) return; modal.classList.add('open');
+    const invoiceNo = document.getElementById('saleInvoiceNo'), date = document.getElementById('saleDate'), cust = document.getElementById('saleCustomer'), taxable = document.getElementById('saleTaxable'), rate = document.getElementById('saleGSTRate'), gstType = document.getElementById('saleGSTType'), paid = document.getElementById('salePaid'), total = document.getElementById('saleTotal');
+    if(edit){ invoiceNo.value=edit.invoiceNo; date.value=edit.date; cust.value=edit.customerId; taxable.value=edit.taxable; rate.value=edit.gstRate; gstType.value=edit.gstType; paid.value=edit.paid||0; total.value=fmtMoney(edit.total); document.getElementById('saleForm').dataset.editId=edit.id; }
+    else { invoiceNo.value = peekDocumentNumber('INV'); date.value=todayLocal(); cust.value=''; taxable.value='0'; rate.value='18'; gstType.value='CGST+SGST'; paid.value='0'; total.value=fmtMoney(0); delete document.getElementById('saleForm').dataset.editId; }
+    const update = ()=>{ const comps = computeGSTComponents(Number(taxable.value)||0, Number(rate.value)||0, gstType.value); total.value = fmtMoney(comps.total); };
+    taxable.oninput = update; rate.oninput = update; gstType.onchange = update; update();
+  }
+  function closeSaleModal(){ const m=document.getElementById('saleModal'); if(m) m.classList.remove('open'); }
+  const saleForm = document.getElementById('saleForm');
+  if(saleForm){
+    document.getElementById('closeSaleModal').addEventListener('click', closeSaleModal);
+    saleForm.addEventListener('submit', (ev)=>{
+      ev.preventDefault();
+      const editId = saleForm.dataset.editId;
+      const invoiceNo = editId ? document.getElementById('saleInvoiceNo').value : nextDocumentNumber('INV');
+      const date = document.getElementById('saleDate').value;
+      const customerId = document.getElementById('saleCustomer').value;
+      const taxable = Number(document.getElementById('saleTaxable').value) || 0;
+      const gstRate = Number(document.getElementById('saleGSTRate').value) || 0;
+      const gstType = document.getElementById('saleGSTType').value;
+      const paid = Number(document.getElementById('salePaid').value) || 0;
+      if(!customerId){ toast('Select customer'); return; }
+      if(taxable < 0 || gstRate < 0){ toast('Invalid numbers'); return; }
+      const comps = computeGSTComponents(taxable,gstRate,gstType);
+      const total = comps.total;
+      const outstandingRaw = +(total - paid);
+      const outstanding = outstandingRaw >= 0 ? +outstandingRaw.toFixed(2) : 0;
+      const credit = outstandingRaw < 0 ? +Math.abs(outstandingRaw).toFixed(2) : 0;
+      const sales = loadSales();
+      if(editId){ const idx = sales.findIndex(s=>s.id===editId); if(idx>=0){ sales[idx] = {...sales[idx], invoiceNo, date, customerId, taxable, gstRate, gstType, paid, total, outstanding, credit, comps}; saveSales(sales); } }
+      else { sales.push({ id: nextId('sale'), invoiceNo, date, customerId, taxable, gstRate, gstType, paid, total, outstanding, credit, comps }); saveSales(sales); }
+      closeSaleModal(); renderSales(); updateDashboardAndReports(); toast('Sale saved');
+    });
+  }
+
+  // Sales table delegation
+  const salesBody = document.getElementById('salesBody');
+  if(salesBody){
+    salesBody.addEventListener('click', (e)=>{
+      const btn = e.target.closest('button'); if(!btn) return;
+      const action = btn.dataset.action, id = btn.dataset.id;
+      if(action === 'del-sale'){ if(confirm('Delete sale?')){ saveSales(loadSales().filter(s=>s.id!==id)); renderSales(); updateDashboardAndReports(); toast('Sale deleted'); } }
+      else if(action === 'edit-sale'){ const s = loadSales().find(x=>x.id===id); if(s) openSaleModal(s); }
+    });
+  }
+
+  // Purchases
+  const btnNewPurchase = document.getElementById('btnNewPurchase'); if(btnNewPurchase) btnNewPurchase.addEventListener('click', ()=> openPurchaseModal());
+  function openPurchaseModal(edit){
+    const modal = document.getElementById('purchaseModal'); if(!modal) return; modal.classList.add('open');
+    const billNo=document.getElementById('purchaseBillNo'), date=document.getElementById('purchaseDate'), sup=document.getElementById('purchaseSupplier'), taxable=document.getElementById('purchaseTaxable'), rate=document.getElementById('purchaseGSTRate'), gstType=document.getElementById('purchaseGSTType'), paid=document.getElementById('purchasePaid'), total=document.getElementById('purchaseTotal');
+    if(edit){ billNo.value=edit.billNo; date.value=edit.date; sup.value=edit.supplierId; taxable.value=edit.taxable; rate.value=edit.gstRate; gstType.value=edit.gstType; paid.value=edit.paid||0; total.value=fmtMoney(edit.total); document.getElementById('purchaseForm').dataset.editId = edit.id; }
+    else { billNo.value = peekDocumentNumber('PB'); date.value=todayLocal(); sup.value=''; taxable.value='0'; rate.value='18'; gstType.value='CGST+SGST'; paid.value='0'; total.value=fmtMoney(0); delete document.getElementById('purchaseForm').dataset.editId; }
+    const update = ()=>{ const comps=computeGSTComponents(Number(taxable.value)||0, Number(rate.value)||0, gstType.value); total.value = fmtMoney(comps.total); };
+    taxable.oninput=update; rate.oninput=update; gstType.onchange=update; update();
+  }
+  function closePurchaseModal(){ const m=document.getElementById('purchaseModal'); if(m) m.classList.remove('open'); }
+  const purchaseForm = document.getElementById('purchaseForm');
+  if(purchaseForm){
+    document.getElementById('closePurchaseModal').addEventListener('click', closePurchaseModal);
+    purchaseForm.addEventListener('submit', (ev)=>{
+      ev.preventDefault();
+      const editId = purchaseForm.dataset.editId;
+      const billNo = editId ? document.getElementById('purchaseBillNo').value : nextDocumentNumber('PB');
+      const date = document.getElementById('purchaseDate').value;
+      const supplierId = document.getElementById('purchaseSupplier').value;
+      const taxable = Number(document.getElementById('purchaseTaxable').value) || 0;
+      const gstRate = Number(document.getElementById('purchaseGSTRate').value) || 0;
+      const gstType = document.getElementById('purchaseGSTType').value;
+      const paid = Number(document.getElementById('purchasePaid').value) || 0;
+      if(!supplierId){ toast('Choose supplier'); return; }
+      if(taxable < 0 || gstRate < 0){ toast('Invalid numbers'); return; }
+      const comps = computeGSTComponents(taxable,gstRate,gstType); const total = comps.total; const outstandingRaw = +(total - paid); const outstanding = outstandingRaw >= 0 ? +outstandingRaw.toFixed(2) : 0; const credit = outstandingRaw < 0 ? +Math.abs(outstandingRaw).toFixed(2) : 0;
+      const purchases = loadPurchases();
+      if(editId){ const idx = purchases.findIndex(p=>p.id===editId); if(idx>=0){ purchases[idx] = {...purchases[idx], billNo, date, supplierId, taxable, gstRate, gstType, paid, total, outstanding, credit, comps}; savePurchases(purchases); } }
+      else { purchases.push({ id: nextId('purchase'), billNo, date, supplierId, taxable, gstRate, gstType, paid, total, outstanding, credit, comps }); savePurchases(purchases); }
+      closePurchaseModal(); renderPurchases(); updateDashboardAndReports(); toast('Purchase saved');
+    });
+  }
+  // purchases table delegation
+  const purchaseBody = document.getElementById('purchaseBody');
+  if(purchaseBody){
+    purchaseBody.addEventListener('click', (e)=> {
+      const btn = e.target.closest('button'); if(!btn) return; const action = btn.dataset.action; const id = btn.dataset.id;
+      if(action === 'del-purchase'){ if(confirm('Delete purchase?')){ savePurchases(loadPurchases().filter(p=>p.id!==id)); renderPurchases(); updateDashboardAndReports(); toast('Purchase deleted'); } }
+      else if(action === 'edit-purchase'){ const p = loadPurchases().find(x=>x.id===id); if(p) openPurchaseModal(p); }
+    });
+  }
+
+  // Vouchers
+  const btnNewVoucher = document.getElementById('btnNewVoucher'); if(btnNewVoucher) btnNewVoucher.addEventListener('click', ()=> openVoucherModal());
+  function openVoucherModal(edit){
+    const modal=document.getElementById('voucherModal'); if(!modal) return; modal.classList.add('open');
+    const no=document.getElementById('voucherNo'), date=document.getElementById('voucherDate'), type=document.getElementById('voucherType'), debit=document.getElementById('voucherDebit'), credit=document.getElementById('voucherCredit'), amt=document.getElementById('voucherAmount');
+    if(edit){ no.value=edit.voucherNo; date.value=edit.date; type.value=edit.type; debit.value=edit.debit; credit.value=edit.credit; amt.value=edit.amount; document.getElementById('voucherForm').dataset.editId = edit.id; }
+    else { no.value = peekDocumentNumber('VCH'); date.value=todayLocal(); type.value=''; debit.value=''; credit.value=''; amt.value='0'; delete document.getElementById('voucherForm').dataset.editId; }
+  }
+  function closeVoucherModal(){ const m=document.getElementById('voucherModal'); if(m) m.classList.remove('open'); }
+  const voucherForm = document.getElementById('voucherForm');
+  if(voucherForm){
+    document.getElementById('closeVoucherModal').addEventListener('click', closeVoucherModal);
+    voucherForm.addEventListener('submit', (ev)=>{ ev.preventDefault(); const editId = voucherForm.dataset.editId; const voucherNo = editId ? document.getElementById('voucherNo').value : nextDocumentNumber('VCH'); const date = document.getElementById('voucherDate').value; const type = document.getElementById('voucherType').value; const debit = document.getElementById('voucherDebit').value.trim(); const credit = document.getElementById('voucherCredit').value.trim(); const amount = Number(document.getElementById('voucherAmount').value) || 0; if(!type || !debit || !credit || amount <= 0){ toast('Voucher validation failed: all fields required + amount > 0'); return; } if(debit === credit){ toast('Debit and Credit cannot be same'); return; } const vouchers = loadVouchers(); if(editId){ const i = vouchers.findIndex(v=>v.id===editId); if(i>=0) vouchers[i] = {...vouchers[i], voucherNo, date, type, debit, credit, amount}; } else vouchers.push({ id: nextId('voucher'), voucherNo, date, type, debit, credit, amount }); saveVouchers(vouchers); renderVouchers(); updateDashboardAndReports(); closeVoucherModal(); toast('Voucher saved'); });
+  }
+  // vouchers delegation
+  const voucherBody = document.getElementById('voucherBody');
+  if(voucherBody){
+    voucherBody.addEventListener('click', (e)=> {
+      const btn = e.target.closest('button'); if(!btn) return;
+      const action = btn.dataset.action; const id = btn.dataset.id;
+      if(action === 'del-voucher'){ if(confirm('Delete voucher?')){ saveVouchers(loadVouchers().filter(v=>v.id!==id)); renderVouchers(); updateDashboardAndReports(); toast('Voucher deleted'); } }
+      else if(action === 'edit-voucher'){ const v = loadVouchers().find(x=>x.id===id); if(v) openVoucherModal(v); }
+    });
+  }
+
+  // System controls
+  const loadSampleBtn = document.getElementById('loadSample'); if(loadSampleBtn) loadSampleBtn.addEventListener('click', loadSampleData);
+  const clearAllBtn = document.getElementById('clearAll'); if(clearAllBtn) clearAllBtn.addEventListener('click', ()=> { if(confirm('Clear all BusinessDesk data? This cannot be undone.')){ Object.values(STORE_KEYS).forEach(k=>localStorage.removeItem(k)); location.reload(); }});
+  const runDiagBtn = document.getElementById('runDiag'); if(runDiagBtn) runDiagBtn.addEventListener('click', runDiagnosticsNonDestructive);
+
+  // Party/sales/purchases render initial
+  runMigrations(); // normalize old data if necessary
   renderAll();
 });
 
-/* Ensure functions referenced earlier exist even if DOMContentLoaded not fired yet */
-function renderSales(){ /* placeholder (real implementation above) */ }
-function renderPurchases(){ /* placeholder */ }
-function renderVouchers(){ /* placeholder */ }
+/* ======================
+ Startup helpers (used in various places)
+ ====================== */
+function nextId(prefix){ return `${prefix}_${Date.now()}_${Math.floor(Math.random()*9000+1000)}`; }
 
+/* End of script */
 </script>
 </body>
 </html>
