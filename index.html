@@ -1,14 +1,14 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BusinessDesk — Single-Source Cleanup</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BusinessDesk — Cleaned Single Source</title>
 <style>
-/* (UI styles preserved / compact) */
+/* Base UI styles */
 *{box-sizing:border-box}
 :root{--bg:#f3f4f6;--panel:#fff;--surface:#f8fafc;--text:#111827;--muted:#6b7280;--border:#e5e7eb;--primary:#2563eb;--success:#16a34a;--danger:#dc2626;--sidebar:#111827;--shadow:0 8px 24px rgba(15,23,42,.08)}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
 button,input,select{font:inherit}
 button{cursor:pointer}
 .app{min-height:100vh;display:flex}
@@ -41,7 +41,7 @@ button{cursor:pointer}
 table{width:100%;border-collapse:collapse}
 th,td{padding:10px 11px;border-bottom:1px solid var(--border);font-size:13px;text-align:left;white-space:nowrap}
 th{background:var(--surface)}
-.right{text-align:right}
+.right, th.right { text-align:right; } /* ensure headers align right too */
 .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .field{display:flex;flex-direction:column;gap:5px}
 .field label{font-size:12px;font-weight:700}
@@ -75,7 +75,7 @@ th{background:var(--surface)}
 <body>
 <div class="app">
   <aside class="sidebar">
-    <div class="brand"><b>BusinessDesk</b><small>Phase 4 — Clean</small></div>
+    <div class="brand"><b>BusinessDesk</b><small>Phase 4 — Single Source</small></div>
     <nav class="nav">
       <div class="nav-title">Main</div>
       <button class="nav-button active" data-section="dashboard">⌂ Dashboard</button>
@@ -97,24 +97,26 @@ th{background:var(--surface)}
   <main class="main">
     <header class="header"><div><div class="header-title" id="headerTitle">Dashboard</div><div class="header-subtitle" id="headerSubtitle">BusinessDesk</div></div></header>
     <div class="content">
-      <!-- Dashboard -->
+
       <section class="section active" id="section-dashboard">
-        <div class="section-heading"><h1>Dashboard</h1><p>Core metrics</p></div>
+        <div class="section-heading"><h1>Dashboard</h1><p>Overview</p></div>
         <div class="grid grid-3">
           <div class="card"><b>Sales</b><div class="metric" id="dashSales">₹0.00</div></div>
           <div class="card"><b>Purchases</b><div class="metric" id="dashPurchases">₹0.00</div></div>
           <div class="card"><b>Outstanding</b><div class="metric" id="dashOutstanding">₹0.00</div></div>
         </div>
-        <div class="card"><div id="dashStatus" class="notice success">System ready. ✓</div></div>
+        <div class="card"><div id="dashStatus" class="notice success">System ready</div></div>
       </section>
 
-      <!-- Calculator -->
       <section class="section" id="section-calculator">
-        <div class="section-heading"><h1>Calculator</h1><p>Correct percentage and divide-by-zero handling.</p></div>
+        <div class="section-heading"><h1>Calculator</h1><p>Fixed % behavior and divide-by-zero UX</p></div>
         <div class="calc-layout">
           <div class="calc-card">
-            <div class="calc-display"><div class="calc-history" id="calcHistory"></div><div class="calc-value" id="calcValue">0</div></div>
-            <div class="calc-grid" id="calcGrid">
+            <div class="calc-display">
+              <div class="calc-history" id="calcHistory"></div>
+              <div class="calc-value" id="calcValue">0</div>
+            </div>
+            <div class="calc-grid">
               <button class="calc-btn function" data-a="clear">AC</button>
               <button class="calc-btn function" data-a="back">⌫</button>
               <button class="calc-btn function" data-a="percent">%</button>
@@ -140,200 +142,211 @@ th{background:var(--surface)}
           <div class="card">
             <b>Examples</b>
             <p class="muted">Try 10 + 10% → 11</p>
-            <div id="calcHistoryList" style="white-space:pre-wrap;font-family:monospace"></div>
+            <pre id="calcHistoryList" style="white-space:pre-wrap;font-family:monospace"></pre>
           </div>
         </div>
       </section>
 
-      <!-- Sales -->
       <section class="section" id="section-sales">
-        <div class="section-heading"><h1>Sales</h1><p>Invoices with invoice-number policy: numbering uses invoice date YYYYMM.</p></div>
+        <div class="section-heading"><h1>Sales</h1><p>Invoice numbering uses invoice date (YYYYMM)</p></div>
         <div class="toolbar"><button class="btn btn-primary" id="btnNewSale">+ New Sales Invoice</button></div>
-        <div class="card"><div class="table-wrap"><table><thead><tr><th>Invoice No.</th><th>Date</th><th>Customer</th><th>Taxable</th><th>GST</th><th>Total</th><th>Paid</th><th>Outstanding</th><th>Action</th></tr></thead><tbody id="salesBody"></tbody></table></div></div>
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Invoice No.</th><th>Date</th><th>Customer</th>
+                  <th class="right">Taxable</th><th class="right">GST</th><th class="right">Total</th><th class="right">Paid</th><th class="right">Outstanding</th><th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="salesBody"></tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
-      <!-- Purchases -->
       <section class="section" id="section-purchases">
-        <div class="section-heading"><h1>Purchases</h1><p>Bill numbering uses bill date YYYYMM similarly.</p></div>
+        <div class="section-heading"><h1>Purchases</h1><p>Bill numbering uses bill date (YYYYMM)</p></div>
         <div class="toolbar"><button class="btn btn-primary" id="btnNewPurchase">+ New Purchase</button></div>
-        <div class="card"><div class="table-wrap"><table><thead><tr><th>Bill No.</th><th>Date</th><th>Supplier</th><th>Taxable</th><th>GST</th><th>Total</th><th>Paid</th><th>Outstanding</th><th>Action</th></tr></thead><tbody id="purchaseBody"></tbody></table></div></div>
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Bill No.</th><th>Date</th><th>Supplier</th>
+                  <th class="right">Taxable</th><th class="right">GST</th><th class="right">Total</th><th class="right">Paid</th><th class="right">Outstanding</th><th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="purchaseBody"></tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
-      <!-- Parties -->
       <section class="section" id="section-parties">
-        <div class="section-heading"><h1>Parties</h1><p>Customers / Suppliers</p></div>
+        <div class="section-heading"><h1>Parties</h1></div>
         <div class="toolbar"><button class="btn btn-primary" id="btnNewParty">+ Add Party</button></div>
-        <div class="card"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Type</th><th>GSTIN</th><th>Phone</th><th>State</th><th>Action</th></tr></thead><tbody id="partyBody"></tbody></table></div></div>
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Name</th><th>Type</th><th>GSTIN</th><th>Phone</th><th>State</th><th>Action</th></tr></thead>
+              <tbody id="partyBody"></tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
-      <!-- Vouchers -->
       <section class="section" id="section-vouchers">
-        <div class="section-heading"><h1>Vouchers</h1><p>Single-line vouchers, validated.</p></div>
+        <div class="section-heading"><h1>Vouchers</h1></div>
         <div class="toolbar"><button class="btn btn-primary" id="btnNewVoucher">+ New Voucher</button></div>
-        <div class="card"><div class="table-wrap"><table><thead><tr><th>No.</th><th>Date</th><th>Type</th><th>Debit</th><th>Credit</th><th>Amount</th><th>Action</th></tr></thead><tbody id="voucherBody"></tbody></table></div></div>
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>No.</th><th>Date</th><th>Type</th><th>Debit</th><th>Credit</th><th class="right">Amount</th><th>Action</th></tr></thead>
+              <tbody id="voucherBody"></tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
-      <!-- Reports -->
       <section class="section" id="section-reports">
-        <div class="section-heading"><h1>Reports</h1><p>GST and document register</p></div>
-        <div class="grid grid-3"><div class="card"><b>Sales Total</b><div class="metric" id="reportSales">₹0.00</div></div><div class="card"><b>Purchase Total</b><div class="metric" id="reportPurchases">₹0.00</div></div><div class="card"><b>Gross</b><div class="metric" id="reportGross">₹0.00</div></div></div>
-        <div class="card"><b>GST Register</b><div class="table-wrap"><table><thead><tr><th>Source</th><th>Taxable</th><th>CGST</th><th>SGST</th><th>IGST</th><th>Total GST</th><th>Total</th></tr></thead><tbody id="reportGSTBody"></tbody></table></div></div>
+        <div class="section-heading"><h1>Reports</h1></div>
+        <div class="grid grid-3">
+          <div class="card"><b>Sales Total</b><div class="metric" id="reportSales">₹0.00</div></div>
+          <div class="card"><b>Purchase Total</b><div class="metric" id="reportPurchases">₹0.00</div></div>
+          <div class="card"><b>Gross</b><div class="metric" id="reportGross">₹0.00</div></div>
+        </div>
+        <div class="card">
+          <b>GST Register</b>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Source</th><th class="right">Taxable</th><th class="right">CGST</th><th class="right">SGST</th><th class="right">IGST</th><th class="right">Total GST</th><th class="right">Total</th></tr></thead>
+              <tbody id="reportGSTBody"></tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
-      <!-- GST -->
       <section class="section" id="section-gst">
-        <div class="section-heading"><h1>GST Summary</h1><p>Output / Input / Net</p></div>
-        <div class="grid grid-3"><div class="card"><b>Output GST</b><div class="metric" id="gstOutput">₹0.00</div></div><div class="card"><b>Input GST</b><div class="metric" id="gstInput">₹0.00</div></div><div class="card"><b>Net</b><div class="metric" id="gstNet">₹0.00</div></div></div>
+        <div class="section-heading"><h1>GST</h1></div>
+        <div class="grid grid-3">
+          <div class="card"><b>Output GST</b><div class="metric" id="gstOutput">₹0.00</div></div>
+          <div class="card"><b>Input GST</b><div class="metric" id="gstInput">₹0.00</div></div>
+          <div class="card"><b>Net</b><div class="metric" id="gstNet">₹0.00</div></div>
+        </div>
       </section>
 
-      <!-- Outstanding -->
       <section class="section" id="section-outstanding">
-        <div class="section-heading"><h1>Outstanding</h1><p>Keyed by party id; negative = credit.</p></div>
-        <div class="grid grid-2"><div class="card"><b>Customer Outstanding</b><div class="metric" id="outstandingCustomers">₹0.00</div></div><div class="card"><b>Supplier Outstanding</b><div class="metric" id="outstandingSuppliers">₹0.00</div></div></div>
-        <div class="card"><div class="table-wrap"><table><thead><tr><th>Party</th><th>Type</th><th>Documents</th><th>Outstanding</th></tr></thead><tbody id="outstandingBody"></tbody></table></div></div>
+        <div class="section-heading"><h1>Outstanding</h1></div>
+        <div class="grid grid-2">
+          <div class="card"><b>Customer Outstanding</b><div class="metric" id="outstandingCustomers">₹0.00</div></div>
+          <div class="card"><b>Supplier Outstanding</b><div class="metric" id="outstandingSuppliers">₹0.00</div></div>
+        </div>
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Party</th><th>Type</th><th>Documents</th><th class="right">Outstanding</th></tr></thead>
+              <tbody id="outstandingBody"></tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
-      <!-- Controls -->
       <section class="section" id="section-controls">
-        <div class="section-heading"><h1>System</h1><p>Safe tools</p></div>
+        <div class="section-heading"><h1>System</h1></div>
         <div class="card">
           <p>
             <button class="btn btn-primary" id="loadSample">Load Sample Data</button>
             <button class="btn btn-danger" id="clearAll">Clear All Data</button>
-            <button class="btn" id="runDiag">Run Diagnostics (non-destructive)</button>
-            <button class="btn" id="runMigrations">Run Migrations (normalize old GST)</button>
+            <button class="btn" id="runDiag">Run Diagnostics</button>
+            <button class="btn" id="runMigrations">Run Migrations</button>
           </p>
         </div>
         <div class="card"><b>Diagnostics</b><pre id="phase4Diagnostics" style="white-space:pre-wrap;max-height:240px;overflow:auto"></pre></div>
       </section>
+
     </div>
   </main>
 </div>
 
-<!-- Single copy modals -->
+<!-- Single modals -->
 <div class="modal-backdrop" id="saleModal"><div class="modal"><div class="modal-head"><h2>Sale</h2><button class="close" id="closeSaleModal">×</button></div>
-<form id="saleForm" novalidate>
-  <div class="form-grid">
-    <div class="field"><label>Invoice No.</label><input type="text" id="saleInvoiceNo" readonly></div>
-    <div class="field"><label>Date</label><input type="date" id="saleDate" required></div>
-    <div class="field"><label>Customer</label><select id="saleCustomer" required><option value="">-- Select --</option></select></div>
-    <div class="field"><label>Taxable</label><input type="number" id="saleTaxable" step="0.01" min="0" value="0"></div>
-    <div class="field"><label>GST Rate (%)</label><input type="number" id="saleGSTRate" step="0.01" min="0" max="100" value="18"></div>
-    <div class="field"><label>GST Type</label><select id="saleGSTType"><option value="CGST+SGST">CGST+SGST</option><option value="IGST">IGST</option></select></div>
-    <div class="field"><label>Amount Received</label><input type="number" id="salePaid" step="0.01" min="0" value="0"></div>
-    <div class="field"><label>Total</label><input type="text" id="saleTotal" readonly></div>
-  </div>
-  <button class="btn btn-primary" type="submit">Save</button>
-</form></div></div>
+<form id="saleForm" novalidate><div class="form-grid">
+  <div class="field"><label>Invoice No.</label><input id="saleInvoiceNo" readonly></div>
+  <div class="field"><label>Date</label><input id="saleDate" type="date"></div>
+  <div class="field"><label>Customer</label><select id="saleCustomer"><option value="">--</option></select></div>
+  <div class="field"><label>Taxable</label><input id="saleTaxable" type="number" step="0.01" min="0" value="0"></div>
+  <div class="field"><label>GST Rate (%)</label><input id="saleGSTRate" type="number" step="0.01" min="0" max="100" value="18"></div>
+  <div class="field"><label>GST Type</label><select id="saleGSTType"><option>CGST+SGST</option><option>IGST</option></select></div>
+  <div class="field"><label>Amount Received</label><input id="salePaid" type="number" step="0.01" min="0" value="0"></div>
+  <div class="field"><label>Total</label><input id="saleTotal" readonly></div>
+</div><button class="btn btn-primary" type="submit">Save</button></form></div></div>
 
 <div class="modal-backdrop" id="purchaseModal"><div class="modal"><div class="modal-head"><h2>Purchase</h2><button class="close" id="closePurchaseModal">×</button></div>
-<form id="purchaseForm" novalidate>
-  <div class="form-grid">
-    <div class="field"><label>Bill No.</label><input type="text" id="purchaseBillNo" readonly></div>
-    <div class="field"><label>Date</label><input type="date" id="purchaseDate" required></div>
-    <div class="field"><label>Supplier</label><select id="purchaseSupplier" required><option value="">-- Select --</option></select></div>
-    <div class="field"><label>Taxable</label><input type="number" id="purchaseTaxable" step="0.01" min="0" value="0"></div>
-    <div class="field"><label>GST Rate (%)</label><input type="number" id="purchaseGSTRate" step="0.01" min="0" max="100" value="18"></div>
-    <div class="field"><label>GST Type</label><select id="purchaseGSTType"><option value="CGST+SGST">CGST+SGST</option><option value="IGST">IGST</option></select></div>
-    <div class="field"><label>Amount Paid</label><input type="number" id="purchasePaid" step="0.01" min="0" value="0"></div>
-    <div class="field"><label>Total</label><input type="text" id="purchaseTotal" readonly></div>
-  </div>
-  <button class="btn btn-primary" type="submit">Save</button>
-</form></div></div>
+<form id="purchaseForm" novalidate><div class="form-grid">
+  <div class="field"><label>Bill No.</label><input id="purchaseBillNo" readonly></div>
+  <div class="field"><label>Date</label><input id="purchaseDate" type="date"></div>
+  <div class="field"><label>Supplier</label><select id="purchaseSupplier"><option value="">--</option></select></div>
+  <div class="field"><label>Taxable</label><input id="purchaseTaxable" type="number" step="0.01" min="0" value="0"></div>
+  <div class="field"><label>GST Rate (%)</label><input id="purchaseGSTRate" type="number" step="0.01" min="0" max="100" value="18"></div>
+  <div class="field"><label>GST Type</label><select id="purchaseGSTType"><option>CGST+SGST</option><option>IGST</option></select></div>
+  <div class="field"><label>Amount Paid</label><input id="purchasePaid" type="number" step="0.01" min="0" value="0"></div>
+  <div class="field"><label>Total</label><input id="purchaseTotal" readonly></div>
+</div><button class="btn btn-primary" type="submit">Save</button></form></div></div>
 
 <div class="modal-backdrop" id="partyModal"><div class="modal"><div class="modal-head"><h2>Party</h2><button class="close" id="closePartyModal">×</button></div>
-<form id="partyForm" novalidate>
-  <div class="form-grid">
-    <div class="field"><label>Name</label><input type="text" id="partyName" required></div>
-    <div class="field"><label>Type</label><select id="partyType" required><option value="">-- Select --</option><option value="Customer">Customer</option><option value="Supplier">Supplier</option></select></div>
-    <div class="field"><label>GSTIN</label><input type="text" id="partyGSTIN" placeholder="15 chars"></div>
-    <div class="field"><label>Phone</label><input type="tel" id="partyPhone"></div>
-    <div class="field"><label>State</label><input type="text" id="partyState"></div>
-  </div>
-  <button class="btn btn-primary" type="submit">Save</button>
-</form></div></div>
+<form id="partyForm" novalidate><div class="form-grid">
+  <div class="field"><label>Name</label><input id="partyName" required></div>
+  <div class="field"><label>Type</label><select id="partyType"><option value="">--</option><option>Customer</option><option>Supplier</option></select></div>
+  <div class="field"><label>GSTIN</label><input id="partyGSTIN"></div>
+  <div class="field"><label>Phone</label><input id="partyPhone"></div>
+  <div class="field"><label>State</label><input id="partyState"></div>
+</div><button class="btn btn-primary" type="submit">Save</button></form></div></div>
 
 <div class="modal-backdrop" id="voucherModal"><div class="modal"><div class="modal-head"><h2>Voucher</h2><button class="close" id="closeVoucherModal">×</button></div>
-<form id="voucherForm" novalidate>
-  <div class="form-grid">
-    <div class="field"><label>Voucher No.</label><input type="text" id="voucherNo" readonly></div>
-    <div class="field"><label>Date</label><input type="date" id="voucherDate" required></div>
-    <div class="field"><label>Type</label><select id="voucherType" required><option value="">-- Select --</option><option value="Journal">Journal</option><option value="Deposit">Deposit</option><option value="Withdrawal">Withdrawal</option></select></div>
-    <div class="field"><label>Debit</label><input type="text" id="voucherDebit" required></div>
-    <div class="field"><label>Credit</label><input type="text" id="voucherCredit" required></div>
-    <div class="field"><label>Amount</label><input type="number" id="voucherAmount" step="0.01" min="0" value="0" required></div>
-  </div>
-  <button class="btn btn-primary" type="submit">Save</button>
-</form></div></div>
+<form id="voucherForm" novalidate><div class="form-grid">
+  <div class="field"><label>Voucher No.</label><input id="voucherNo" readonly></div>
+  <div class="field"><label>Date</label><input id="voucherDate" type="date"></div>
+  <div class="field"><label>Type</label><select id="voucherType"><option value="">--</option><option>Journal</option><option>Deposit</option><option>Withdrawal</option></select></div>
+  <div class="field"><label>Debit</label><input id="voucherDebit"></div>
+  <div class="field"><label>Credit</label><input id="voucherCredit"></div>
+  <div class="field"><label>Amount</label><input id="voucherAmount" type="number" step="0.01" min="0" value="0"></div>
+</div><button class="btn btn-primary" type="submit">Save</button></form></div></div>
 
-<div id="toast" style="position:fixed;right:24px;bottom:24px;background:#111827;color:#fff;padding:12px 16px;border-radius:8px;display:none;z-index:5000"></div>
+<div id="toast" style="position:fixed;right:24px;bottom:24px;background:#111827;color:#fff;padding:12px 16px;border-radius:8px;display:none;z-index:6000"></div>
 
 <script>
-/* ============================
- Single source JS: all functions here
- ============================ */
+/* Single-source JavaScript */
 
 /* Storage keys */
 const STORE_KEYS = {
-  PARTIES: 'bd_parties_v3',
-  SALES: 'bd_sales_v3',
-  PURCHASES: 'bd_purchases_v3',
-  VOUCHERS: 'bd_vouchers_v3',
-  SEQUENCES: 'bd_sequences_v3',          // production sequences (consumed on save)
-  SAMPLE_SEQUENCES: 'bd_sample_sequences_v1', // sample sequences (isolated)
-  SAMPLE_MARKER: 'bd_sample_marker_v3'
+  PARTIES: 'bd_parties_v4',
+  SALES: 'bd_sales_v4',
+  PURCHASES: 'bd_purchases_v4',
+  VOUCHERS: 'bd_vouchers_v4',
+  SEQUENCES: 'bd_sequences_v4',           // production sequences consumed on save
+  SAMPLE_SEQUENCES: 'bd_sample_sequences_v1', // isolated sample sequences
+  SAMPLE_MARKER: 'bd_sample_marker_v4'
 };
 
-/* Small helpers */
-function getStore(k){ try { return JSON.parse(localStorage.getItem(k) || '[]'); } catch(e){ return []; } }
-function saveStore(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
-function rmStore(k){ localStorage.removeItem(k); }
-function toast(msg){ const el = document.getElementById('toast'); if(!el){ alert(msg); return; } el.textContent = msg; el.style.display='block'; clearTimeout(window.__bdT); window.__bdT = setTimeout(()=> el.style.display='none', 2200); }
-function escapeHTML(s){ return String(s==null?'':s).replace(/[&<>"'`=\/]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','/':'&#x2F;','`':'&#x60;','=':'&#x3D;'}[ch])); }
-function safe(v){ return escapeHTML(v); }
+/* Utilities */
+function getStore(key){ try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch(e){ console.warn('getStore parse failed', e); return []; } }
+function saveStore(key, data){ localStorage.setItem(key, JSON.stringify(data)); }
+function rmStore(key){ localStorage.removeItem(key); }
+function toast(msg){ const el = document.getElementById('toast'); if(!el){ alert(msg); return; } el.textContent = msg; el.style.display='block'; clearTimeout(window.__bdT); window.__bdT = setTimeout(()=> el.style.display='none', 2500); }
+function safe(s){ return String(s==null?'':s).replace(/[&<>"'`=\/]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','/':'&#x2F;','`':'&#x60;','=':'&#x3D;'}[ch])); }
 function fmtMoney(v){ return '₹' + Number(v||0).toFixed(2); }
 function todayLocal(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 function nextId(prefix){ return `${prefix}_${Date.now()}_${Math.floor(Math.random()*9000+1000)}`; }
 
-/* ============================
- Sequences (production & sample)
- - peekDocumentNumber(prefix, dateStr, {sample:false}) -> preview without consuming
- - nextDocumentNumber(prefix, dateStr, {sample:false}) -> consumes sequence (production) or sample sequence (if sample true)
- - numbering uses provided dateStr's YYYYMM; if not provided, uses today
- ============================ */
+/* Sequence helpers (production vs sample) */
 function _readSeqs(key){ try { return JSON.parse(localStorage.getItem(key) || '{}'); } catch(e){ return {}; } }
-function _writeSeqs(key, obj){ localStorage.setItem(key, JSON.stringify(obj)); }
+function _writeSeqs(key,obj){ localStorage.setItem(key, JSON.stringify(obj)); }
+function _ymFromDate(dateStr){ if(!dateStr) { const n=new Date(); return `${n.getFullYear()}${String(n.getMonth()+1).padStart(2,'0')}`; } const d = new Date(dateStr); if(isNaN(d)) { const n=new Date(); return `${n.getFullYear()}${String(n.getMonth()+1).padStart(2,'0')}`; } return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}`; }
+function peekDocumentNumber(prefix, dateStr, opts={sample:false}){ const key = opts.sample ? STORE_KEYS.SAMPLE_SEQUENCES : STORE_KEYS.SEQUENCES; const seqs = _readSeqs(key); const seqKey = `${prefix}-${_ymFromDate(dateStr)}`; const next = (seqs[seqKey] || 0) + 1; return `${prefix}-${_ymFromDate(dateStr)}-${String(next).padStart(4,'0')}`; }
+function nextDocumentNumber(prefix, dateStr, opts={sample:false}){ const key = opts.sample ? STORE_KEYS.SAMPLE_SEQUENCES : STORE_KEYS.SEQUENCES; const seqs = _readSeqs(key); const seqKey = `${prefix}-${_ymFromDate(dateStr)}`; seqs[seqKey] = (seqs[seqKey] || 0) + 1; _writeSeqs(key, seqs); const seq = seqs[seqKey]; return `${prefix}-${_ymFromDate(dateStr)}-${String(seq).padStart(4,'0')}`; }
 
-function _ymFromDate(dateStr){
-  if(!dateStr) {
-    const n=new Date(); return `${n.getFullYear()}${String(n.getMonth()+1).padStart(2,'0')}`;
-  }
-  const d = new Date(dateStr);
-  if(isNaN(d)) { const n = new Date(); return `${n.getFullYear()}${String(n.getMonth()+1).padStart(2,'0')}`; }
-  return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}`;
-}
-
-function peekDocumentNumber(prefix, dateStr, opts={sample:false}){
-  const key = opts.sample ? STORE_KEYS.SAMPLE_SEQUENCES : STORE_KEYS.SEQUENCES;
-  const seqs = _readSeqs(key);
-  const seqKey = `${prefix}-${_ymFromDate(dateStr)}`;
-  const next = (seqs[seqKey] || 0) + 1;
-  return `${prefix}-${_ymFromDate(dateStr)}-${String(next).padStart(4,'0')}`;
-}
-
-function nextDocumentNumber(prefix, dateStr, opts={sample:false}){
-  const key = opts.sample ? STORE_KEYS.SAMPLE_SEQUENCES : STORE_KEYS.SEQUENCES;
-  const seqs = _readSeqs(key);
-  const seqKey = `${prefix}-${_ymFromDate(dateStr)}`;
-  seqs[seqKey] = (seqs[seqKey] || 0) + 1;
-  _writeSeqs(key, seqs);
-  const seq = seqs[seqKey];
-  return `${prefix}-${_ymFromDate(dateStr)}-${String(seq).padStart(4,'0')}`;
-}
-
-/* ============================
- GST computation (single function)
- ============================ */
+/* computeGSTComponents: single authoritative implementation */
 function computeGSTComponents(taxable, rate, type){
   const t = Number(taxable || 0);
   const r = Number(rate || 0);
@@ -350,22 +363,28 @@ function computeGSTComponents(taxable, rate, type){
   }
 }
 
-/* ============================
- Single render functions
- ============================ */
+/* computeOutstanding: unified overpayment handling */
+function computeOutstanding(total, paid){
+  total = Number(total||0); paid = Number(paid||0);
+  const diff = +(total - paid);
+  if(diff >= 0) return { outstanding: +diff.toFixed(2), credit: 0 };
+  return { outstanding: 0, credit: +Math.abs(diff).toFixed(2) };
+}
+
+/* Single render functions */
 function renderParties(){
   const tbody = document.getElementById('partyBody'); if(!tbody) return;
   const parties = getStore(STORE_KEYS.PARTIES);
   tbody.innerHTML = '';
   parties.forEach(p=>{
-    const tr = document.createElement('tr');
+    const tr=document.createElement('tr');
     tr.innerHTML = `<td>${safe(p.name)}</td><td>${safe(p.type)}</td><td>${safe(p.gstin||'')}</td><td>${safe(p.phone||'')}</td><td>${safe(p.state||'')}</td><td><button class="btn btn-sm" data-action="edit-party" data-id="${p.id}">Edit</button> <button class="btn btn-sm btn-danger" data-action="del-party" data-id="${p.id}">Delete</button></td>`;
     tbody.appendChild(tr);
   });
-  // selectors
+  // populate selectors
   const saleSel = document.getElementById('saleCustomer'); const purSel = document.getElementById('purchaseSupplier');
-  if(saleSel) saleSel.innerHTML = `<option value="">-- Select --</option>` + parties.filter(x=>x.type==='Customer').map(x=>`<option value="${safe(x.id)}">${safe(x.name)}</option>`).join('');
-  if(purSel) purSel.innerHTML = `<option value="">-- Select --</option>` + parties.filter(x=>x.type==='Supplier').map(x=>`<option value="${safe(x.id)}">${safe(x.name)}</option>`).join('');
+  if(saleSel) saleSel.innerHTML = `<option value="">--</option>` + parties.filter(x=>x.type==='Customer').map(x=>`<option value="${safe(x.id)}">${safe(x.name)}</option>`).join('');
+  if(purSel) purSel.innerHTML = `<option value="">--</option>` + parties.filter(x=>x.type==='Supplier').map(x=>`<option value="${safe(x.id)}">${safe(x.name)}</option>`).join('');
 }
 
 function renderSales(){
@@ -375,9 +394,9 @@ function renderSales(){
   tbody.innerHTML = '';
   sales.forEach(s=>{
     const p = parties.find(x=>x.id===s.customerId) || null;
-    const outstandingDisplay = (s.outstanding < 0) ? `${fmtMoney(Math.abs(s.outstanding))} (credit)` : fmtMoney(s.outstanding);
+    const outDisp = s.credit && s.credit > 0 ? `${fmtMoney(s.credit)} (credit)` : fmtMoney(s.outstanding);
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${safe(s.invoiceNo)}</td><td>${safe(s.date)}</td><td>${safe(p? p.name : '(Unknown)')}</td><td class="right">${fmtMoney(s.taxable)}</td><td class="right">${fmtMoney(s.comps? s.comps.totalGST:0)}</td><td class="right">${fmtMoney(s.total)}</td><td class="right">${fmtMoney(s.paid)}</td><td class="right">${outstandingDisplay}</td><td><button class="btn btn-sm" data-action="edit-sale" data-id="${s.id}">Edit</button> <button class="btn btn-sm btn-danger" data-action="del-sale" data-id="${s.id}">Delete</button></td>`;
+    tr.innerHTML = `<td>${safe(s.invoiceNo)}</td><td>${safe(s.date)}</td><td>${safe(p? p.name : '(Unknown)')}</td><td class="right">${fmtMoney(s.taxable)}</td><td class="right">${fmtMoney(s.comps? s.comps.totalGST:0)}</td><td class="right">${fmtMoney(s.total)}</td><td class="right">${fmtMoney(s.paid)}</td><td class="right">${outDisp}</td><td><button class="btn btn-sm" data-action="edit-sale" data-id="${s.id}">Edit</button> <button class="btn btn-sm btn-danger" data-action="del-sale" data-id="${s.id}">Delete</button></td>`;
     tbody.appendChild(tr);
   });
 }
@@ -389,9 +408,9 @@ function renderPurchases(){
   tbody.innerHTML = '';
   purchases.forEach(p=>{
     const sup = parties.find(x=>x.id===p.supplierId) || null;
-    const outstandingDisplay = (p.outstanding < 0) ? `${fmtMoney(Math.abs(p.outstanding))} (credit)` : fmtMoney(p.outstanding);
+    const outDisp = p.credit && p.credit > 0 ? `${fmtMoney(p.credit)} (credit)` : fmtMoney(p.outstanding);
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${safe(p.billNo)}</td><td>${safe(p.date)}</td><td>${safe(sup? sup.name : '(Unknown)')}</td><td class="right">${fmtMoney(p.taxable)}</td><td class="right">${fmtMoney(p.comps? p.comps.totalGST:0)}</td><td class="right">${fmtMoney(p.total)}</td><td class="right">${fmtMoney(p.paid)}</td><td class="right">${outstandingDisplay}</td><td><button class="btn btn-sm" data-action="edit-purchase" data-id="${p.id}">Edit</button> <button class="btn btn-sm btn-danger" data-action="del-purchase" data-id="${p.id}">Delete</button></td>`;
+    tr.innerHTML = `<td>${safe(p.billNo)}</td><td>${safe(p.date)}</td><td>${safe(sup? sup.name : '(Unknown)')}</td><td class="right">${fmtMoney(p.taxable)}</td><td class="right">${fmtMoney(p.comps? p.comps.totalGST:0)}</td><td class="right">${fmtMoney(p.total)}</td><td class="right">${fmtMoney(p.paid)}</td><td class="right">${outDisp}</td><td><button class="btn btn-sm" data-action="edit-purchase" data-id="${p.id}">Edit</button> <button class="btn btn-sm btn-danger" data-action="del-purchase" data-id="${p.id}">Delete</button></td>`;
     tbody.appendChild(tr);
   });
 }
@@ -407,7 +426,6 @@ function renderVouchers(){
   });
 }
 
-/* Single renderAll */
 function renderAll(){
   renderParties();
   renderSales();
@@ -416,9 +434,7 @@ function renderAll(){
   updateDashboardAndReports();
 }
 
-/* ============================
- Dashboard and reports
- ============================ */
+/* Dashboard and reports */
 function updateDashboardAndReports(){
   const sales = getStore(STORE_KEYS.SALES);
   const purchases = getStore(STORE_KEYS.PURCHASES);
@@ -432,20 +448,14 @@ function updateDashboardAndReports(){
   document.getElementById('reportPurchases').textContent = fmtMoney(totalPurchases);
   document.getElementById('reportGross').textContent = fmtMoney(totalSales - totalPurchases);
 
-  // GST register rows
+  // GST register
   const rows = [];
-  sales.forEach(s=> { if(s.comps) rows.push({...s, kind:'Output', source:s.invoiceNo}); });
-  purchases.forEach(p=> { if(p.comps) rows.push({...p, kind:'Input', source:p.billNo}); });
+  sales.forEach(s=> { if(s.comps) rows.push({source:s.invoiceNo,kind:'Output',taxable:s.taxable,comps:s.comps,total:s.total}); });
+  purchases.forEach(p=> { if(p.comps) rows.push({source:p.billNo,kind:'Input',taxable:p.taxable,comps:p.comps,total:p.total}); });
+  const reportGSTBody = document.getElementById('reportGSTBody'); if(reportGSTBody){ reportGSTBody.innerHTML=''; rows.forEach(r=>{ const tr=document.createElement('tr'); tr.innerHTML = `<td>${safe(r.source)} (${safe(r.kind)})</td><td class="right">${fmtMoney(r.taxable)}</td><td class="right">${fmtMoney(r.comps.cgst)}</td><td class="right">${fmtMoney(r.comps.sgst)}</td><td class="right">${fmtMoney(r.comps.igst)}</td><td class="right">${fmtMoney(r.comps.totalGST)}</td><td class="right">${fmtMoney(r.total)}</td>`; reportGSTBody.appendChild(tr); }); }
 
-  const reportGSTBody = document.getElementById('reportGSTBody'); if(reportGSTBody){ reportGSTBody.innerHTML=''; rows.forEach(r=>{
-    const tr = document.createElement('tr');
-    const comps = r.comps || {cgst:0,sgst:0,igst:0,totalGST:0};
-    tr.innerHTML = `<td>${safe(r.source)} (${safe(r.kind)})</td><td class="right">${fmtMoney(r.taxable)}</td><td class="right">${fmtMoney(comps.cgst)}</td><td class="right">${fmtMoney(comps.sgst)}</td><td class="right">${fmtMoney(comps.igst)}</td><td class="right">${fmtMoney(comps.totalGST)}</td><td class="right">${fmtMoney(r.total)}</td>`;
-    reportGSTBody.appendChild(tr);
-  }); }
-
-  const gstOutput = rows.filter(x=> x.kind === 'Output').reduce((s,x)=> s + Number((x.comps && x.comps.totalGST) || 0), 0);
-  const gstInput = rows.filter(x=> x.kind === 'Input').reduce((s,x)=> s + Number((x.comps && x.comps.totalGST) || 0), 0);
+  const gstOutput = rows.filter(x=>x.kind==='Output').reduce((s,x)=> s + Number(x.comps.totalGST||0), 0);
+  const gstInput = rows.filter(x=>x.kind==='Input').reduce((s,x)=> s + Number(x.comps.totalGST||0), 0);
   document.getElementById('gstOutput').textContent = fmtMoney(gstOutput);
   document.getElementById('gstInput').textContent = fmtMoney(gstInput);
   document.getElementById('gstNet').textContent = fmtMoney(gstOutput - gstInput);
@@ -455,12 +465,12 @@ function updateDashboardAndReports(){
   sales.forEach(s=>{
     const pid = s.customerId || '__unknown_customer';
     outMap[pid] = outMap[pid] || { name: (parties.find(p=>p.id===pid)||{}).name || pid, type:'Customer', amount:0 };
-    outMap[pid].amount += Number(s.outstanding || 0);
+    outMap[pid].amount += Number(s.outstanding || 0) - Number(s.credit || 0);
   });
   purchases.forEach(p=>{
     const pid = p.supplierId || '__unknown_supplier';
     outMap[pid] = outMap[pid] || { name: (parties.find(x=>x.id===pid)||{}).name || pid, type:'Supplier', amount:0 };
-    outMap[pid].amount += Number(p.outstanding || 0);
+    outMap[pid].amount += Number(p.outstanding || 0) - Number(p.credit || 0);
   });
 
   const custTotal = Object.values(outMap).filter(x=>x.type==='Customer').reduce((s,x)=> s + Number(x.amount||0), 0);
@@ -469,438 +479,323 @@ function updateDashboardAndReports(){
   document.getElementById('outstandingSuppliers').textContent = fmtMoney(supTotal);
   document.getElementById('dashOutstanding').textContent = fmtMoney(custTotal + supTotal);
 
-  const outBody = document.getElementById('outstandingBody'); if(outBody){
-    outBody.innerHTML = '';
-    Object.entries(outMap).forEach(([id, v])=>{
-      const amt = Number(v.amount||0);
-      const disp = amt < 0 ? `${fmtMoney(Math.abs(amt))} (credit)` : fmtMoney(amt);
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${safe(v.name)}</td><td>${safe(v.type)}</td><td>-</td><td class="right">${disp}</td>`;
-      outBody.appendChild(tr);
-    });
-  }
+  const outBody = document.getElementById('outstandingBody'); if(outBody){ outBody.innerHTML=''; Object.entries(outMap).forEach(([id,v])=>{ const amt = Number(v.amount||0); const disp = amt < 0 ? `${fmtMoney(Math.abs(amt))} (credit)` : fmtMoney(amt); const tr=document.createElement('tr'); tr.innerHTML = `<td>${safe(v.name)}</td><td>${safe(v.type)}</td><td>-</td><td class="right">${disp}</td>`; outBody.appendChild(tr); }); }
 }
 
-/* ============================
- Migration (single startup migration)
- - Normalizes old GST fields into .comps, .gstRate, .gstType, .total
- - Idempotent
- ============================ */
+/* Migration (single startup function). Idempotent and logs results. */
 function migrateOldGSTData(){
-  let changed = false;
+  const diagnostics = [];
+  let changedAny = false;
+
+  // Sales migration
   const sales = getStore(STORE_KEYS.SALES).map(s=>{
     if(!s.comps){
+      diagnostics.push(`Migrating sale id=${s.id||'(no id)'}: adding comps`);
       const taxable = s.taxable || s.amount || 0;
       const gstRate = s.gstRate || s.gst || s.GST || 0;
       const gstType = s.gstType || s.GSTType || 'CGST+SGST';
       const comps = computeGSTComponents(taxable, gstRate, gstType);
       s.comps = comps; s.total = comps.total; s.gstRate = gstRate; s.gstType = gstType;
-      changed = true;
+      changedAny = true;
     }
     return s;
   });
-  if(changed) saveStore(STORE_KEYS.SALES, sales);
+  if(changedAny) saveStore(STORE_KEYS.SALES, sales);
 
-  changed = false;
+  // Purchases migration
+  changedAny = false;
   const purchases = getStore(STORE_KEYS.PURCHASES).map(p=>{
     if(!p.comps){
+      diagnostics.push(`Migrating purchase id=${p.id||'(no id)'}: adding comps`);
       const taxable = p.taxable || p.amount || 0;
       const gstRate = p.gstRate || p.gst || p.GST || 0;
       const gstType = p.gstType || p.GSTType || 'CGST+SGST';
       const comps = computeGSTComponents(taxable, gstRate, gstType);
       p.comps = comps; p.total = comps.total; p.gstRate = gstRate; p.gstType = gstType;
-      changed = true;
+      changedAny = true;
     }
     return p;
   });
-  if(changed) saveStore(STORE_KEYS.PURCHASES, purchases);
+  if(changedAny) saveStore(STORE_KEYS.PURCHASES, purchases);
 
-  if(changed) {
+  if(diagnostics.length){
+    diagnostics.unshift('Migration applied: ' + new Date().toLocaleString());
+    diagnostics.forEach(line => appendDiag(line));
     toast('Migration: normalized old GST fields');
-    logDiagnostics('Migration: normalized old GST fields');
+  } else {
+    appendDiag('Migration: nothing to do');
   }
 }
 
-/* ============================
- Calculator: single class, handles divide-by-zero gracefully
- ============================ */
-class Calculator {
-  constructor(){ this.reset(); this.history=[]; this.updateUI(); }
-  reset(){ this.display='0'; this.current=null; this.prev=null; this.op=null; this.waiting=false; this.error=false; }
-  inputDigit(d){ if(this.error) { this.reset(); } if(this.waiting){ this.current = d==='.' ? '0.' : d; this.waiting=false; } else { if(!this.current) this.current = d==='.' ? '0.' : d; else if(d==='.' && this.current.includes('.')) return; else this.current += d; } this.display = this.current; this.updateUI(); }
-  toggleSign(){ if(!this.current) return; this.current = String(parseFloat(this.current) * -1); this.display = this.current; this.updateUI(); }
-  backspace(){ if(!this.current || this.waiting){ this.current = null; this.display='0'; this.updateUI(); return; } this.current = this.current.slice(0,-1) || null; this.display = this.current || '0'; this.updateUI(); }
-  clearAll(){ this.reset(); this.updateUI(); }
-  percent(){ if(!this.current) return; let cur = parseFloat(this.current); if(this.op && this.prev !== null){ if(this.op === '+' || this.op === '-') cur = this.prev * (cur / 100); else cur = cur / 100; } else cur = cur / 100; this.current = String(Number.isFinite(cur) ? +cur.toPrecision(12) : cur); this.display = this.current; this.updateUI(); }
-  setOperator(op){ const curNum = this.current ? parseFloat(this.current) : null; if(curNum === null && this.prev === null) return; if(this.prev === null && curNum !== null) this.prev = curNum; else if(this.op && !this.waiting) this._compute(); this.op = op; this.waiting = true; this.updateUI(); }
-  _compute(){ if(this.op == null || this.prev == null) return; const a = this.prev; const b = this.current !== null ? parseFloat(this.current) : this.prev; let result; switch(this.op){ case '+': result = a + b; break; case '-': result = a - b; break; case '*': result = a * b; break; case '/': if(b === 0){ this.error = true; this.display = 'Error (div by 0)'; this.updateUI(); return; } result = a / b; break; default: result = b; } this.history.push({a,op:this.op,b,result}); this.prev = Number.isFinite(result) ? +result.toPrecision(12) : result; this.current = null; this.op = null; this.waiting = true; this.display = String(this.prev); }
-  equals(){ if(this.error) { this.reset(); return; } this._compute(); this.updateUI(); }
-  updateUI(){ const el = document.getElementById('calcValue'); if(el) el.textContent = this.display; const hist = document.getElementById('calcHistoryList'); if(hist) hist.textContent = this.history.slice(-6).map(h=>`${h.a} ${h.op} ${h.b} = ${h.result}`).join('\n'); }
-}
-const calc = new Calculator();
-
-/* ============================
- Modal implementations (single)
- - open/close + form submit handlers wired in one event block below
- ============================ */
-
-/* ============================
- Sample data (isolated)
- - sample generation uses SAMPLE_SEQUENCES and does not touch production sequences
- - sample numbers: prefix 'SINV', 'SPB', 'SVCH' to avoid confusion
- ============================ */
-function nextSampleNumber(prefix, dateStr){
-  return nextDocumentNumber(prefix, dateStr, {sample:true});
-}
-function peekSampleNumber(prefix, dateStr){
-  return peekDocumentNumber(prefix, dateStr, {sample:true});
-}
-
+/* Sample data: isolated sequences and distinct prefixes */
 function loadSampleData(){
-  // keep marker to avoid accidental repeated loads
   if(localStorage.getItem(STORE_KEYS.SAMPLE_MARKER)){
-    if(!confirm('Sample data already loaded. Load again?')) return;
+    if(!confirm('Sample data previously loaded. Load duplicates?')) return;
   } else {
     localStorage.setItem(STORE_KEYS.SAMPLE_MARKER, new Date().toISOString());
   }
-  // add minimal parties if missing
-  const existing = getStore(STORE_KEYS.PARTIES);
+  // parties
+  const parties = getStore(STORE_KEYS.PARTIES);
   const samples = [
-    {id:'party_cust_sample_1', name:'Sample Customer Inc', type:'Customer', gstin:'27SAMPLE1234H1Z0', phone:'9000000001', state:'Karnataka'},
-    {id:'party_sup_sample_1', name:'Sample Supplier LLP', type:'Supplier', gstin:'27SAMPLE2345K1Z1', phone:'9000000002', state:'Maharashtra'}
+    { id: 'party_cust_sample_1', name:'Sample Customer Inc', type:'Customer', gstin:'27SAMPLE1234H1Z0', phone:'9000000001', state:'Karnataka' },
+    { id: 'party_sup_sample_1', name:'Sample Supplier LLP', type:'Supplier', gstin:'27SAMPLE2345K1Z1', phone:'9000000002', state:'Maharashtra' }
   ];
-  samples.forEach(s => { if(!existing.some(e=> e.name===s.name && e.type===s.type)) existing.push(s); });
-  saveStore(STORE_KEYS.PARTIES, existing);
+  samples.forEach(s => { if(!parties.some(p => p.name === s.name && p.type === s.type)) parties.push(s); });
+  saveStore(STORE_KEYS.PARTIES, parties);
 
-  // sample sales/purchases/vouchers only if none exist
+  // sample sales if none
   if(getStore(STORE_KEYS.SALES).length === 0){
-    const comps = computeGSTComponents(12345,18,'CGST+SGST');
-    const inv = nextSampleNumber('SINV', todayLocal());
-    const sales = [{ id: nextId('sale'), invoiceNo: inv, date: todayLocal(), customerId: 'party_cust_sample_1', taxable:12345, gstRate:18, gstType:'CGST+SGST', paid:5000, total: comps.total, outstanding: +(comps.total - 5000).toFixed(2), comps }];
+    const comps = computeGSTComponents(12345, 18, 'CGST+SGST');
+    const inv = nextDocumentNumber('SINV', todayLocal(), { sample: true });
+    const sales = [{ id: nextId('sale'), invoiceNo: inv, date: todayLocal(), customerId: 'party_cust_sample_1', taxable:12345, gstRate:18, gstType:'CGST+SGST', paid:5000, total:comps.total, outstanding: +(comps.total - 5000).toFixed(2), credit:0, comps }];
     saveStore(STORE_KEYS.SALES, sales);
   }
+
   if(getStore(STORE_KEYS.PURCHASES).length === 0){
-    const comps = computeGSTComponents(6789,18,'CGST+SGST');
-    const pb = nextSampleNumber('SPB', todayLocal());
-    const purchases = [{ id: nextId('purchase'), billNo: pb, date: todayLocal(), supplierId: 'party_sup_sample_1', taxable:6789, gstRate:18, gstType:'CGST+SGST', paid:2000, total: comps.total, outstanding: +(comps.total - 2000).toFixed(2), comps }];
+    const comps = computeGSTComponents(6789, 18, 'CGST+SGST');
+    const pb = nextDocumentNumber('SPB', todayLocal(), { sample: true });
+    const purchases = [{ id: nextId('purchase'), billNo: pb, date: todayLocal(), supplierId: 'party_sup_sample_1', taxable:6789, gstRate:18, gstType:'CGST+SGST', paid:2000, total:comps.total, outstanding: +(comps.total - 2000).toFixed(2), credit:0, comps }];
     saveStore(STORE_KEYS.PURCHASES, purchases);
   }
+
   if(getStore(STORE_KEYS.VOUCHERS).length === 0){
-    const vch = nextSampleNumber('SVCH', todayLocal());
+    const vch = nextDocumentNumber('SVCH', todayLocal(), { sample: true });
     saveStore(STORE_KEYS.VOUCHERS, [{ id: nextId('voucher'), voucherNo: vch, date: todayLocal(), type:'Journal', debit:'Cash', credit:'Sales', amount:5000 }]);
   }
 
   renderAll();
-  toast('Sample data loaded (isolated sequences used).');
+  toast('Sample data loaded (sample sequences isolated).');
 }
 
-/* ============================
- Diagnostics (non-destructive)
- ============================ */
-function logDiagnostics(msg){
-  const el = document.getElementById('phase4Diagnostics'); if(!el) return;
-  el.textContent = (el.textContent ? el.textContent + '\n' : '') + msg;
-}
+/* Diagnostics */
+function appendDiag(msg){ const el=document.getElementById('phase4Diagnostics'); if(!el) return; el.textContent = (el.textContent ? el.textContent + '\n' : '') + msg; }
 function runDiagnostics(){
-  const out = [];
-  out.push('Diagnostics non-destructive: ' + new Date().toLocaleString());
+  appendDiag('Diagnostics run: ' + new Date().toLocaleString());
   try {
-    const testKey = '__bd_diag';
-    localStorage.setItem(testKey, JSON.stringify({ok:true}));
-    const val = JSON.parse(localStorage.getItem(testKey) || '{}');
-    out.push('localStorage test: ' + (val.ok ? 'OK' : 'FAIL'));
-    localStorage.removeItem(testKey);
-    // calculator sample (no sequences)
-    const c = new Calculator(); c.inputDigit('1'); c.inputDigit('0'); c.setOperator('+'); c.inputDigit('1'); c.inputDigit('0'); c.percent(); c.equals(); out.push('Calculator sample result (expect 11): ' + c.display);
-    // peek invoice
-    out.push('Peek invoice number: ' + peekDocumentNumber('INV', todayLocal(), {sample:false}));
-    out.push(`Counts: Parties ${getStore(STORE_KEYS.PARTIES).length}, Sales ${getStore(STORE_KEYS.SALES).length}, Purchases ${getStore(STORE_KEYS.PURCHASES).length}, Vouchers ${getStore(STORE_KEYS.VOUCHERS).length}`);
-    out.push('Diagnostics done.');
-  } catch(e){ out.push('Diagnostics error: ' + e.message); console.error(e); }
-  out.forEach(line => logDiagnostics(line));
-  toast('Diagnostics completed');
+    const tkey='__bd_diag';
+    localStorage.setItem(tkey, JSON.stringify({ok:true}));
+    const v = JSON.parse(localStorage.getItem(tkey) || '{}');
+    appendDiag('localStorage test: ' + (v.ok ? 'OK' : 'FAIL'));
+    localStorage.removeItem(tkey);
+    // calculator smoke (no sequences)
+    const c = new Calculator(); c.inputDigit('1'); c.inputDigit('0'); c.setOperator('+'); c.inputDigit('1'); c.inputDigit('0'); c.percent(); c.equals();
+    appendDiag('Calculator sample (expect 11): ' + c.display);
+    appendDiag('Peek invoice (today): ' + peekDocumentNumber('INV', todayLocal(), { sample: false }));
+    appendDiag(`Counts: Parties ${getStore(STORE_KEYS.PARTIES).length}, Sales ${getStore(STORE_KEYS.SALES).length}, Purchases ${getStore(STORE_KEYS.PURCHASES).length}, Vouchers ${getStore(STORE_KEYS.VOUCHERS).length}`);
+  } catch(e){
+    appendDiag('Diagnostics error: ' + e.message);
+  }
+  toast('Diagnostics finished');
 }
 
-/* ============================
- DOM wiring: single event-wiring block
- - attach once on DOMContentLoaded
- - no duplicate listeners
- - modal open/close + forms handled here
- ============================ */
+/* Calculator: single class, improved divide-by-zero UX */
+class Calculator {
+  constructor(){ this.reset(); this.history=[]; this.updateUI(); }
+  reset(){ this.display='0'; this.current=null; this.prev=null; this.op=null; this.waiting=false; this.error=false; }
+  inputDigit(d){ if(this.error){ this.reset(); } if(this.waiting){ this.current = d === '.' ? '0.' : d; this.waiting = false; } else { if(!this.current) this.current = (d === '.' ? '0.' : d); else if(d === '.' && this.current.includes('.')) return; else this.current += d; } this.display = this.current; this.updateUI(); }
+  toggleSign(){ if(!this.current) return; this.current = String(parseFloat(this.current) * -1); this.display = this.current; this.updateUI(); }
+  backspace(){ if(this.error){ this.reset(); this.updateUI(); return; } if(!this.current || this.waiting){ this.current = null; this.display = '0'; this.updateUI(); return; } this.current = this.current.slice(0,-1) || null; this.display = this.current || '0'; this.updateUI(); }
+  clearAll(){ this.reset(); this.updateUI(); }
+  percent(){ if(this.error) { this.reset(); } if(!this.current) return; let cur = parseFloat(this.current); if(this.op && this.prev !== null){ if(this.op === '+' || this.op === '-') cur = this.prev * (cur / 100); else cur = cur / 100; } else cur = cur / 100; this.current = String(Number.isFinite(cur) ? +cur.toPrecision(12) : cur); this.display = this.current; this.updateUI(); }
+  setOperator(op){ const curNum = this.current ? parseFloat(this.current) : null; if(curNum === null && this.prev === null) return; if(this.prev === null && curNum !== null) this.prev = curNum; else if(this.op && !this.waiting) this._compute(); this.op = op; this.waiting = true; this.updateUI(); }
+  _compute(){ if(this.op == null || this.prev == null) return; const a = this.prev; const b = this.current !== null ? parseFloat(this.current) : this.prev; let result; switch(this.op){ case '+': result = a + b; break; case '-': result = a - b; break; case '*': result = a * b; break; case '/': if(b === 0){ this.error = true; this.display = 'Error: division by zero'; this.updateUI(); return; } result = a / b; break; default: result = b; } this.history.push({a,op:this.op,b,result}); this.prev = Number.isFinite(result) ? +result.toPrecision(12) : result; this.current = null; this.op = null; this.waiting = true; this.display = String(this.prev); }
+  equals(){ if(this.error){ this.reset(); this.updateUI(); return; } this._compute(); this.updateUI(); }
+  updateUI(){ const v = document.getElementById('calcValue'); if(v) v.textContent = this.display; const h = document.getElementById('calcHistoryList'); if(h) h.textContent = this.history.slice(-6).map(it=>`${it.a} ${it.op} ${it.b} = ${it.result}`).join('\n'); }
+}
+const calc = new Calculator();
+
+/* DOM wiring (single block) */
 document.addEventListener('DOMContentLoaded', ()=>{
 
-  /* attach single calculator wiring */
-  document.querySelectorAll('.calc-btn').forEach(b=>{
-    b.addEventListener('click', (ev)=>{
+  /* calculator wiring (only once) */
+  document.querySelectorAll('.calc-btn').forEach(btn=>{
+    btn.addEventListener('click', (ev)=>{
       const t = ev.currentTarget;
       if(t.dataset.n) calc.inputDigit(t.dataset.n);
       else if(t.dataset.a){
         const a = t.dataset.a;
-        if(a==='clear') calc.clearAll();
-        else if(a==='back') calc.backspace();
-        else if(a==='percent') calc.percent();
-        else if(a==='sign') calc.toggleSign();
-        else if(a==='dot') calc.inputDigit('.');
-        else if(a==='equals') calc.equals();
+        if(a === 'clear') calc.clearAll();
+        else if(a === 'back') calc.backspace();
+        else if(a === 'percent') calc.percent();
+        else if(a === 'sign') calc.toggleSign();
+        else if(a === 'dot') calc.inputDigit('.');
+        else if(a === 'equals') calc.equals();
       } else if(t.dataset.o) calc.setOperator(t.dataset.o);
     });
   });
 
-  /* nav slider single wiring */
+  /* one nav wiring */
   document.querySelectorAll('.nav-button').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       document.querySelectorAll('.nav-button').forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
-      const section = btn.dataset.section;
+      const sec = btn.dataset.section;
       document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-      const el = document.getElementById('section-' + section);
+      const el = document.getElementById('section-' + sec);
       if(el) el.classList.add('active');
       const header = document.getElementById('headerTitle'); if(header) header.textContent = btn.textContent.trim();
     });
   });
 
-  /* System controls */
+  /* system buttons */
   const loadSampleBtn = document.getElementById('loadSample'); if(loadSampleBtn) loadSampleBtn.addEventListener('click', loadSampleData);
-  const clearAllBtn = document.getElementById('clearAll'); if(clearAllBtn) clearAllBtn.addEventListener('click', ()=>{ if(confirm('Clear all data? This cannot be undone.')){ Object.values(STORE_KEYS).forEach(k=> localStorage.removeItem(k)); location.reload(); }});
+  const clearAllBtn = document.getElementById('clearAll'); if(clearAllBtn) clearAllBtn.addEventListener('click', ()=>{ if(confirm('Clear all BusinessDesk data? This cannot be undone.')){ Object.values(STORE_KEYS).forEach(k=> localStorage.removeItem(k)); location.reload(); }});
   const runDiagBtn = document.getElementById('runDiag'); if(runDiagBtn) runDiagBtn.addEventListener('click', runDiagnostics);
-  const runMigBtn = document.getElementById('runMigrations'); if(runMigBtn) runMigBtn.addEventListener('click', ()=>{ migrateOldGSTData(); renderAll(); toast('Migrations run'); logDiagnostics('Manual migration run'); });
+  const runMigBtn = document.getElementById('runMigrations'); if(runMigBtn) runMigBtn.addEventListener('click', ()=>{ migrateOldGSTData(); renderAll(); });
 
   /* Party modal */
-  const btnNewParty = document.getElementById('btnNewParty'); if(btnNewParty) btnNewParty.addEventListener('click', ()=> openPartyModal());
   const partyModal = document.getElementById('partyModal');
-  function openPartyModal(data){
-    if(!partyModal) return;
-    partyModal.classList.add('open');
-    const name = document.getElementById('partyName'), type = document.getElementById('partyType'), gstin = document.getElementById('partyGSTIN'), phone = document.getElementById('partyPhone'), state = document.getElementById('partyState');
-    if(data){ name.value = data.name||''; type.value = data.type||''; gstin.value=data.gstin||''; phone.value=data.phone||''; state.value=data.state||''; document.getElementById('partyForm').dataset.editId = data.id; }
-    else { name.value=''; type.value=''; gstin.value=''; phone.value=''; state.value=''; delete document.getElementById('partyForm').dataset.editId; }
-  }
-  function closePartyModal(){ if(partyModal) partyModal.classList.remove('open'); }
-  const partyForm = document.getElementById('partyForm');
-  if(document.getElementById('closePartyModal')) document.getElementById('closePartyModal').addEventListener('click', closePartyModal);
-  if(partyForm){
-    partyForm.addEventListener('submit', (ev)=>{
-      ev.preventDefault();
-      const editId = partyForm.dataset.editId;
-      const name = document.getElementById('partyName').value.trim();
-      const type = document.getElementById('partyType').value;
-      const gstin = document.getElementById('partyGSTIN').value.trim();
-      const phone = document.getElementById('partyPhone').value.trim();
-      const state = document.getElementById('partyState').value.trim();
-      if(!name || !type){ toast('Name and Type required'); return; }
-      if(gstin && !/^[0-9A-Za-z]{15}$/.test(gstin)){ toast('GSTIN invalid (approx)'); return; }
-      const parties = getStore(STORE_KEYS.PARTIES);
-      if(editId){
-        const idx = parties.findIndex(p=>p.id===editId);
-        if(idx>=0){ parties[idx] = {...parties[idx], name, type, gstin, phone, state }; saveStore(STORE_KEYS.PARTIES, parties); }
-      } else { parties.push({ id: nextId('party'), name, type, gstin, phone, state }); saveStore(STORE_KEYS.PARTIES, parties); }
-      closePartyModal(); renderParties(); renderAll(); toast('Party saved');
-    });
-  }
-
-  /* sales modal */
-  const saleModal = document.getElementById('saleModal');
-  const btnNewSale = document.getElementById('btnNewSale'); if(btnNewSale) btnNewSale.addEventListener('click', ()=> openSaleModal());
-  function openSaleModal(edit){
-    if(!saleModal) return;
-    saleModal.classList.add('open');
-    const invoiceNo = document.getElementById('saleInvoiceNo'), dateEl = document.getElementById('saleDate'), cust = document.getElementById('saleCustomer'), taxable = document.getElementById('saleTaxable'), rateEl = document.getElementById('saleGSTRate'), gstType = document.getElementById('saleGSTType'), paid = document.getElementById('salePaid'), total = document.getElementById('saleTotal');
-    if(edit){
-      invoiceNo.value = edit.invoiceNo; dateEl.value = edit.date; cust.value = edit.customerId || ''; taxable.value = edit.taxable || 0; rateEl.value = edit.gstRate || 18; gstType.value = edit.gstType || 'CGST+SGST'; paid.value = edit.paid || 0; total.value = fmtMoney(edit.total || 0); document.getElementById('saleForm').dataset.editId = edit.id;
+  document.getElementById('btnNewParty').addEventListener('click', ()=> openPartyModal());
+  document.getElementById('closePartyModal').addEventListener('click', ()=> partyModal.classList.remove('open'));
+  document.getElementById('partyForm').addEventListener('submit', (ev)=>{
+    ev.preventDefault();
+    const editId = ev.target.dataset.editId;
+    const name = document.getElementById('partyName').value.trim();
+    const type = document.getElementById('partyType').value;
+    const gstin = document.getElementById('partyGSTIN').value.trim();
+    const phone = document.getElementById('partyPhone').value.trim();
+    const state = document.getElementById('partyState').value.trim();
+    if(!name || !type){ toast('Name and type required'); return; }
+    if(gstin && !/^[0-9A-Za-z]{15}$/.test(gstin)){ toast('GSTIN seems invalid'); return; }
+    const parties = getStore(STORE_KEYS.PARTIES);
+    if(editId){
+      const i = parties.findIndex(p=>p.id===editId);
+      if(i>=0){ parties[i] = {...parties[i], name, type, gstin, phone, state}; saveStore(STORE_KEYS.PARTIES, parties); }
     } else {
-      dateEl.value = todayLocal();
-      invoiceNo.value = peekDocumentNumber('INV', dateEl.value, {sample:false});
-      cust.value = '';
-      taxable.value = 0;
-      rateEl.value = 18;
-      gstType.value = 'CGST+SGST';
-      paid.value = 0;
-      total.value = fmtMoney(0);
-      delete document.getElementById('saleForm').dataset.editId;
+      parties.push({ id: nextId('party'), name, type, gstin, phone, state });
+      saveStore(STORE_KEYS.PARTIES, parties);
     }
-    // update total when inputs change
-    function update(){ const comps = computeGSTComponents(Number(taxable.value)||0, Number(rateEl.value)||0, gstType.value); total.value = fmtMoney(comps.total); }
-    taxable.oninput = update; rateEl.oninput = update; gstType.onchange = update; update();
-  }
-  function closeSaleModal(){ if(saleModal) saleModal.classList.remove('open'); }
-  if(document.getElementById('closeSaleModal')) document.getElementById('closeSaleModal').addEventListener('click', closeSaleModal);
-  const saleForm = document.getElementById('saleForm');
-  if(saleForm){
-    saleForm.addEventListener('submit', (ev)=>{
-      ev.preventDefault();
-      const editId = saleForm.dataset.editId;
-      const dateVal = document.getElementById('saleDate').value;
-      const invoiceNo = editId ? document.getElementById('saleInvoiceNo').value : nextDocumentNumber('INV', dateVal, {sample:false});
-      const customerId = document.getElementById('saleCustomer').value;
-      if(!customerId){ toast('Select customer'); return; }
-      const taxable = Number(document.getElementById('saleTaxable').value) || 0;
-      const gstRate = Number(document.getElementById('saleGSTRate').value) || 0;
-      const gstType = document.getElementById('saleGSTType').value;
-      const paid = Number(document.getElementById('salePaid').value) || 0;
-      if(taxable < 0 || gstRate < 0){ toast('Invalid amounts'); return; }
-      const comps = computeGSTComponents(taxable, gstRate, gstType);
-      const total = comps.total;
-      const rawOut = +(total - paid);
-      const outstanding = rawOut >= 0 ? +rawOut.toFixed(2) : 0;
-      const credit = rawOut < 0 ? +Math.abs(rawOut).toFixed(2) : 0;
-      const sales = getStore(STORE_KEYS.SALES);
-      if(editId){
-        const idx = sales.findIndex(s=>s.id===editId);
-        if(idx>=0){ sales[idx] = {...sales[idx], invoiceNo, date: dateVal, customerId, taxable, gstRate, gstType, paid, total, outstanding, credit, comps}; saveStore(STORE_KEYS.SALES, sales); }
-      } else {
-        sales.push({ id: nextId('sale'), invoiceNo, date: dateVal, customerId, taxable, gstRate, gstType, paid, total, outstanding, credit, comps });
-        saveStore(STORE_KEYS.SALES, sales);
-      }
-      closeSaleModal(); renderSales(); updateDashboardAndReports(); toast('Sale saved');
-    });
-  }
+    partyModal.classList.remove('open'); renderParties(); renderAll(); toast('Party saved');
+  });
+  document.getElementById('partyBody').addEventListener('click', (e)=>{
+    const b = e.target.closest('button'); if(!b) return;
+    const action = b.dataset.action, id = b.dataset.id;
+    if(action === 'del-party'){ if(confirm('Delete party?')){ saveStore(STORE_KEYS.PARTIES, getStore(STORE_KEYS.PARTIES).filter(p=>p.id!==id)); renderParties(); renderAll(); toast('Party deleted'); } }
+    else if(action === 'edit-party'){ const p = getStore(STORE_KEYS.PARTIES).find(x=>x.id===id); if(p){ openPartyModal(p); } }
+  });
+  function openPartyModal(data){ if(!partyModal) return; partyModal.classList.add('open'); const name=document.getElementById('partyName'), type=document.getElementById('partyType'), gstin=document.getElementById('partyGSTIN'), phone=document.getElementById('partyPhone'), state=document.getElementById('partyState'); if(data){ name.value=data.name; type.value=data.type; gstin.value=data.gstin||''; phone.value=data.phone||''; state.value=data.state||''; document.getElementById('partyForm').dataset.editId = data.id; } else { name.value=''; type.value=''; gstin.value=''; phone.value=''; state.value=''; delete document.getElementById('partyForm').dataset.editId; } }
 
-  /* sales table delegation */
-  const salesBody = document.getElementById('salesBody');
-  if(salesBody){
-    salesBody.addEventListener('click', (e)=>{
-      const btn = e.target.closest('button'); if(!btn) return;
-      const action = btn.dataset.action, id = btn.dataset.id;
-      if(action === 'del-sale'){ if(confirm('Delete sale?')){ saveStore(STORE_KEYS.SALES, getStore(STORE_KEYS.SALES).filter(s=>s.id!==id)); renderSales(); updateDashboardAndReports(); toast('Sale deleted'); } }
-      else if(action === 'edit-sale'){ const s = getStore(STORE_KEYS.SALES).find(x=>x.id===id); if(s) openSaleModal(s); }
-    });
-  }
+  /* Sales modal */
+  const saleModal = document.getElementById('saleModal');
+  document.getElementById('btnNewSale').addEventListener('click', ()=> openSaleModal());
+  document.getElementById('closeSaleModal').addEventListener('click', ()=> saleModal.classList.remove('open'));
+  document.getElementById('saleForm').addEventListener('submit', (ev)=>{
+    ev.preventDefault();
+    const editId = ev.target.dataset.editId;
+    const dateVal = document.getElementById('saleDate').value || todayLocal();
+    const invoiceNo = editId ? document.getElementById('saleInvoiceNo').value : nextDocumentNumber('INV', dateVal, { sample: false });
+    const customerId = document.getElementById('saleCustomer').value;
+    if(!customerId){ toast('Select a customer'); return; }
+    const taxable = Number(document.getElementById('saleTaxable').value) || 0;
+    const gstRate = Number(document.getElementById('saleGSTRate').value) || 0;
+    const gstType = document.getElementById('saleGSTType').value;
+    const paid = Number(document.getElementById('salePaid').value) || 0;
+    if(taxable < 0 || gstRate < 0){ toast('Invalid numbers'); return; }
+    const comps = computeGSTComponents(taxable, gstRate, gstType);
+    const { outstanding, credit } = computeOutstanding(comps.total, paid);
+    const sales = getStore(STORE_KEYS.SALES);
+    if(editId){
+      const idx = sales.findIndex(s=>s.id===editId);
+      if(idx>=0){ sales[idx] = {...sales[idx], invoiceNo, date: dateVal, customerId, taxable, gstRate, gstType, paid, total: comps.total, outstanding, credit, comps }; saveStore(STORE_KEYS.SALES, sales); }
+    } else {
+      sales.push({ id: nextId('sale'), invoiceNo, date: dateVal, customerId, taxable, gstRate, gstType, paid, total: comps.total, outstanding, credit, comps });
+      saveStore(STORE_KEYS.SALES, sales);
+    }
+    saleModal.classList.remove('open'); renderSales(); updateDashboardAndReports(); toast('Sale saved');
+  });
+  document.getElementById('salesBody').addEventListener('click', (e)=>{
+    const b = e.target.closest('button'); if(!b) return;
+    const action = b.dataset.action, id = b.dataset.id;
+    if(action === 'del-sale'){ if(confirm('Delete sale?')){ saveStore(STORE_KEYS.SALES, getStore(STORE_KEYS.SALES).filter(s=>s.id!==id)); renderSales(); updateDashboardAndReports(); toast('Sale deleted'); } }
+    else if(action === 'edit-sale'){ const s = getStore(STORE_KEYS.SALES).find(x=>x.id===id); if(s){ openSaleModal(s); } }
+  });
+  function openSaleModal(edit){ if(!saleModal) return; saleModal.classList.add('open'); const invoiceNo=document.getElementById('saleInvoiceNo'), dateEl=document.getElementById('saleDate'), cust=document.getElementById('saleCustomer'), taxable=document.getElementById('saleTaxable'), rateEl=document.getElementById('saleGSTRate'), gstType=document.getElementById('saleGSTType'), paid=document.getElementById('salePaid'), total=document.getElementById('saleTotal'); if(edit){ invoiceNo.value=edit.invoiceNo; dateEl.value=edit.date; cust.value=edit.customerId||''; taxable.value=edit.taxable||0; rateEl.value=edit.gstRate||18; gstType.value=edit.gstType||'CGST+SGST'; paid.value=edit.paid||0; total.value=fmtMoney(edit.total||0); document.getElementById('saleForm').dataset.editId = edit.id; } else { dateEl.value = todayLocal(); invoiceNo.value = peekDocumentNumber('INV', dateEl.value, { sample:false }); cust.value=''; taxable.value=0; rateEl.value=18; gstType.value='CGST+SGST'; paid.value=0; total.value=fmtMoney(0); delete document.getElementById('saleForm').dataset.editId; } const updater = ()=> { const comps = computeGSTComponents(Number(taxable.value)||0, Number(rateEl.value)||0, gstType.value); total.value = fmtMoney(comps.total); }; taxable.oninput = updater; rateEl.oninput = updater; gstType.onchange = updater; updater(); }
 
   /* Purchases modal */
   const purchaseModal = document.getElementById('purchaseModal');
-  const btnNewPurchase = document.getElementById('btnNewPurchase'); if(btnNewPurchase) btnNewPurchase.addEventListener('click', ()=> openPurchaseModal());
-  function openPurchaseModal(edit){
-    if(!purchaseModal) return;
-    purchaseModal.classList.add('open');
-    const billNo = document.getElementById('purchaseBillNo'), dateEl = document.getElementById('purchaseDate'), sup = document.getElementById('purchaseSupplier'), taxable = document.getElementById('purchaseTaxable'), rateEl = document.getElementById('purchaseGSTRate'), gstType = document.getElementById('purchaseGSTType'), paid = document.getElementById('purchasePaid'), total = document.getElementById('purchaseTotal');
-    if(edit){
-      billNo.value = edit.billNo; dateEl.value = edit.date; sup.value = edit.supplierId || ''; taxable.value = edit.taxable || 0; rateEl.value = edit.gstRate || 18; gstType.value = edit.gstType || 'CGST+SGST'; paid.value = edit.paid || 0; total.value = fmtMoney(edit.total || 0); document.getElementById('purchaseForm').dataset.editId = edit.id;
+  document.getElementById('btnNewPurchase').addEventListener('click', ()=> openPurchaseModal());
+  document.getElementById('closePurchaseModal').addEventListener('click', ()=> purchaseModal.classList.remove('open'));
+  document.getElementById('purchaseForm').addEventListener('submit', (ev)=>{
+    ev.preventDefault();
+    const editId = ev.target.dataset.editId;
+    const dateVal = document.getElementById('purchaseDate').value || todayLocal();
+    const billNo = editId ? document.getElementById('purchaseBillNo').value : nextDocumentNumber('PB', dateVal, { sample: false });
+    const supplierId = document.getElementById('purchaseSupplier').value;
+    if(!supplierId){ toast('Select a supplier'); return; }
+    const taxable = Number(document.getElementById('purchaseTaxable').value) || 0;
+    const gstRate = Number(document.getElementById('purchaseGSTRate').value) || 0;
+    const gstType = document.getElementById('purchaseGSTType').value;
+    const paid = Number(document.getElementById('purchasePaid').value) || 0;
+    if(taxable < 0 || gstRate < 0){ toast('Invalid numbers'); return; }
+    const comps = computeGSTComponents(taxable, gstRate, gstType);
+    const { outstanding, credit } = computeOutstanding(comps.total, paid);
+    const purchases = getStore(STORE_KEYS.PURCHASES);
+    if(editId){
+      const idx = purchases.findIndex(p=>p.id===editId);
+      if(idx>=0){ purchases[idx] = {...purchases[idx], billNo, date: dateVal, supplierId, taxable, gstRate, gstType, paid, total: comps.total, outstanding, credit, comps }; saveStore(STORE_KEYS.PURCHASES, purchases); }
     } else {
-      dateEl.value = todayLocal();
-      billNo.value = peekDocumentNumber('PB', dateEl.value, {sample:false});
-      sup.value = '';
-      taxable.value = 0;
-      rateEl.value = 18;
-      gstType.value = 'CGST+SGST';
-      paid.value = 0;
-      total.value = fmtMoney(0);
-      delete document.getElementById('purchaseForm').dataset.editId;
+      purchases.push({ id: nextId('purchase'), billNo, date: dateVal, supplierId, taxable, gstRate, gstType, paid, total: comps.total, outstanding, credit, comps });
+      saveStore(STORE_KEYS.PURCHASES, purchases);
     }
-    function update(){ const comps = computeGSTComponents(Number(taxable.value)||0, Number(rateEl.value)||0, gstType.value); total.value = fmtMoney(comps.total); }
-    taxable.oninput = update; rateEl.oninput = update; gstType.onchange = update; update();
-  }
-  function closePurchaseModal(){ if(purchaseModal) purchaseModal.classList.remove('open'); }
-  if(document.getElementById('closePurchaseModal')) document.getElementById('closePurchaseModal').addEventListener('click', closePurchaseModal);
-  const purchaseForm = document.getElementById('purchaseForm');
-  if(purchaseForm){
-    purchaseForm.addEventListener('submit', (ev)=>{
-      ev.preventDefault();
-      const editId = purchaseForm.dataset.editId;
-      const dateVal = document.getElementById('purchaseDate').value;
-      const billNo = editId ? document.getElementById('purchaseBillNo').value : nextDocumentNumber('PB', dateVal, {sample:false});
-      const supplierId = document.getElementById('purchaseSupplier').value;
-      if(!supplierId){ toast('Select supplier'); return; }
-      const taxable = Number(document.getElementById('purchaseTaxable').value) || 0;
-      const gstRate = Number(document.getElementById('purchaseGSTRate').value) || 0;
-      const gstType = document.getElementById('purchaseGSTType').value;
-      const paid = Number(document.getElementById('purchasePaid').value) || 0;
-      if(taxable < 0 || gstRate < 0){ toast('Invalid numbers'); return; }
-      const comps = computeGSTComponents(taxable, gstRate, gstType);
-      const total = comps.total; const rawOut = +(total - paid); const outstanding = rawOut >= 0 ? +rawOut.toFixed(2) : 0; const credit = rawOut < 0 ? +Math.abs(rawOut).toFixed(2) : 0;
-      const purchases = getStore(STORE_KEYS.PURCHASES);
-      if(editId){
-        const idx = purchases.findIndex(p=>p.id===editId);
-        if(idx>=0){ purchases[idx] = {...purchases[idx], billNo, date: dateVal, supplierId, taxable, gstRate, gstType, paid, total, outstanding, credit, comps }; saveStore(STORE_KEYS.PURCHASES, purchases); }
-      } else {
-        purchases.push({ id: nextId('purchase'), billNo, date: dateVal, supplierId, taxable, gstRate, gstType, paid, total, outstanding, credit, comps });
-        saveStore(STORE_KEYS.PURCHASES, purchases);
-      }
-      closePurchaseModal(); renderPurchases(); updateDashboardAndReports(); toast('Purchase saved');
-    });
-  }
+    purchaseModal.classList.remove('open'); renderPurchases(); updateDashboardAndReports(); toast('Purchase saved');
+  });
+  document.getElementById('purchaseBody').addEventListener('click', (e)=>{
+    const b = e.target.closest('button'); if(!b) return;
+    const action = b.dataset.action, id = b.dataset.id;
+    if(action === 'del-purchase'){ if(confirm('Delete purchase?')){ saveStore(STORE_KEYS.PURCHASES, getStore(STORE_KEYS.PURCHASES).filter(p=>p.id!==id)); renderPurchases(); updateDashboardAndReports(); toast('Purchase deleted'); } }
+    else if(action === 'edit-purchase'){ const p = getStore(STORE_KEYS.PURCHASES).find(x=>x.id===id); if(p) openPurchaseModal(p); }
+  });
+  function openPurchaseModal(edit){ if(!purchaseModal) return; purchaseModal.classList.add('open'); const billNo=document.getElementById('purchaseBillNo'), dateEl=document.getElementById('purchaseDate'), sup=document.getElementById('purchaseSupplier'), taxable=document.getElementById('purchaseTaxable'), rateEl=document.getElementById('purchaseGSTRate'), gstType=document.getElementById('purchaseGSTType'), paid=document.getElementById('purchasePaid'), total=document.getElementById('purchaseTotal'); if(edit){ billNo.value=edit.billNo; dateEl.value=edit.date; sup.value=edit.supplierId||''; taxable.value=edit.taxable||0; rateEl.value=edit.gstRate||18; gstType.value=edit.gstType||'CGST+SGST'; paid.value=edit.paid||0; total.value=fmtMoney(edit.total||0); document.getElementById('purchaseForm').dataset.editId = edit.id; } else { dateEl.value=todayLocal(); billNo.value = peekDocumentNumber('PB', dateEl.value, { sample:false }); sup.value=''; taxable.value=0; rateEl.value=18; gstType.value='CGST+SGST'; paid.value=0; total.value=fmtMoney(0); delete document.getElementById('purchaseForm').dataset.editId; } const updater = ()=> { const comps = computeGSTComponents(Number(taxable.value)||0, Number(rateEl.value)||0, gstType.value); total.value = fmtMoney(comps.total); }; taxable.oninput = updater; rateEl.oninput = updater; gstType.onchange = updater; updater(); }
 
-  /* purchases table delegation */
-  const purchaseBody = document.getElementById('purchaseBody');
-  if(purchaseBody){
-    purchaseBody.addEventListener('click', (e)=>{
-      const btn = e.target.closest('button'); if(!btn) return;
-      const action = btn.dataset.action, id = btn.dataset.id;
-      if(action === 'del-purchase'){ if(confirm('Delete purchase?')){ saveStore(STORE_KEYS.PURCHASES, getStore(STORE_KEYS.PURCHASES).filter(p=>p.id!==id)); renderPurchases(); updateDashboardAndReports(); toast('Purchase deleted'); } }
-      else if(action === 'edit-purchase'){ const p = getStore(STORE_KEYS.PURCHASES).find(x=>x.id===id); if(p) openPurchaseModal(p); }
-    });
-  }
-
-  /* Vouchers */
+  /* Vouchers modal */
   const voucherModal = document.getElementById('voucherModal');
-  const btnNewVoucher = document.getElementById('btnNewVoucher'); if(btnNewVoucher) btnNewVoucher.addEventListener('click', ()=> openVoucherModal());
-  function openVoucherModal(edit){
-    if(!voucherModal) return;
-    voucherModal.classList.add('open');
-    const no = document.getElementById('voucherNo'), dateEl = document.getElementById('voucherDate'), type = document.getElementById('voucherType'), debit = document.getElementById('voucherDebit'), credit = document.getElementById('voucherCredit'), amt = document.getElementById('voucherAmount');
-    if(edit){ no.value=edit.voucherNo; dateEl.value=edit.date; type.value=edit.type; debit.value=edit.debit; credit.value=edit.credit; amt.value=edit.amount; document.getElementById('voucherForm').dataset.editId = edit.id; }
-    else { dateEl.value = todayLocal(); no.value = peekDocumentNumber('VCH', dateEl.value, {sample:false}); type.value=''; debit.value=''; credit.value=''; amt.value='0'; delete document.getElementById('voucherForm').dataset.editId; }
-  }
-  function closeVoucherModal(){ if(voucherModal) voucherModal.classList.remove('open'); }
-  if(document.getElementById('closeVoucherModal')) document.getElementById('closeVoucherModal').addEventListener('click', closeVoucherModal);
-  const voucherForm = document.getElementById('voucherForm');
-  if(voucherForm){
-    voucherForm.addEventListener('submit', (ev)=>{
-      ev.preventDefault();
-      const editId = voucherForm.dataset.editId;
-      const dateVal = document.getElementById('voucherDate').value;
-      const voucherNo = editId ? document.getElementById('voucherNo').value : nextDocumentNumber('VCH', dateVal, {sample:false});
-      const type = document.getElementById('voucherType').value;
-      const debit = document.getElementById('voucherDebit').value.trim();
-      const credit = document.getElementById('voucherCredit').value.trim();
-      const amount = Number(document.getElementById('voucherAmount').value) || 0;
-      if(!type || !debit || !credit || amount <= 0){ toast('Voucher validation failed: all fields required + amount>0'); return; }
-      if(debit === credit){ toast('Debit and Credit cannot be same'); return; }
-      const vouchers = getStore(STORE_KEYS.VOUCHERS);
-      if(editId){
-        const idx = vouchers.findIndex(v=>v.id===editId);
-        if(idx>=0){ vouchers[idx] = {...vouchers[idx], voucherNo, date: dateVal, type, debit, credit, amount }; saveStore(STORE_KEYS.VOUCHERS, vouchers); }
-      } else {
-        vouchers.push({ id: nextId('voucher'), voucherNo, date: dateVal, type, debit, credit, amount });
-        saveStore(STORE_KEYS.VOUCHERS, vouchers);
-      }
-      closeVoucherModal(); renderVouchers(); updateDashboardAndReports(); toast('Voucher saved');
-    });
-  }
+  document.getElementById('btnNewVoucher').addEventListener('click', ()=> openVoucherModal());
+  document.getElementById('closeVoucherModal').addEventListener('click', ()=> voucherModal.classList.remove('open'));
+  document.getElementById('voucherForm').addEventListener('submit', (ev)=>{
+    ev.preventDefault();
+    const editId = ev.target.dataset.editId;
+    const dateVal = document.getElementById('voucherDate').value || todayLocal();
+    const voucherNo = editId ? document.getElementById('voucherNo').value : nextDocumentNumber('VCH', dateVal, { sample: false });
+    const type = document.getElementById('voucherType').value;
+    const debit = document.getElementById('voucherDebit').value.trim();
+    const credit = document.getElementById('voucherCredit').value.trim();
+    const amount = Number(document.getElementById('voucherAmount').value) || 0;
+    if(!type || !debit || !credit || amount <= 0){ toast('Voucher validation failed: all fields required and amount > 0'); return; }
+    if(debit === credit){ toast('Debit and Credit cannot be the same'); return; }
+    const vouchers = getStore(STORE_KEYS.VOUCHERS);
+    if(editId){
+      const idx = vouchers.findIndex(v=>v.id===editId);
+      if(idx>=0){ vouchers[idx] = {...vouchers[idx], voucherNo, date: dateVal, type, debit, credit, amount }; saveStore(STORE_KEYS.VOUCHERS, vouchers); }
+    } else {
+      vouchers.push({ id: nextId('voucher'), voucherNo, date: dateVal, type, debit, credit, amount });
+      saveStore(STORE_KEYS.VOUCHERS, vouchers);
+    }
+    voucherModal.classList.remove('open'); renderVouchers(); updateDashboardAndReports(); toast('Voucher saved');
+  });
+  document.getElementById('voucherBody').addEventListener('click', (e)=>{
+    const b = e.target.closest('button'); if(!b) return;
+    const action = b.dataset.action, id = b.dataset.id;
+    if(action === 'del-voucher'){ if(confirm('Delete voucher?')){ saveStore(STORE_KEYS.VOUCHERS, getStore(STORE_KEYS.VOUCHERS).filter(v=>v.id!==id)); renderVouchers(); updateDashboardAndReports(); toast('Voucher deleted'); } }
+    else if(action === 'edit-voucher'){ const v = getStore(STORE_KEYS.VOUCHERS).find(x=>x.id===id); if(v) openVoucherModal(v); }
+  });
+  function openVoucherModal(edit){ if(!voucherModal) return; voucherModal.classList.add('open'); const no=document.getElementById('voucherNo'), dateEl=document.getElementById('voucherDate'), type=document.getElementById('voucherType'), debit=document.getElementById('voucherDebit'), credit=document.getElementById('voucherCredit'), amt=document.getElementById('voucherAmount'); if(edit){ no.value=edit.voucherNo; dateEl.value=edit.date; type.value=edit.type; debit.value=edit.debit; credit.value=edit.credit; amt.value=edit.amount; document.getElementById('voucherForm').dataset.editId = edit.id; } else { dateEl.value = todayLocal(); no.value = peekDocumentNumber('VCH', dateEl.value, { sample:false }); type.value=''; debit.value=''; credit.value=''; amt.value='0'; delete document.getElementById('voucherForm').dataset.editId; } }
 
-  /* vouchers table delegation */
-  const voucherBody = document.getElementById('voucherBody');
-  if(voucherBody){
-    voucherBody.addEventListener('click', (e)=>{
-      const btn = e.target.closest('button'); if(!btn) return;
-      const action = btn.dataset.action, id = btn.dataset.id;
-      if(action === 'del-voucher'){ if(confirm('Delete voucher?')){ saveStore(STORE_KEYS.VOUCHERS, getStore(STORE_KEYS.VOUCHERS).filter(v=>v.id!==id)); renderVouchers(); updateDashboardAndReports(); toast('Voucher deleted'); } }
-      else if(action === 'edit-voucher'){ const v = getStore(STORE_KEYS.VOUCHERS).find(x=>x.id===id); if(v) openVoucherModal(v); }
-    });
-  }
-
-  /* tables' generic delete/edit for parties handled above */
-
-  /* Initial migration + render */
+  /* initial migration + render */
   migrateOldGSTData();
   renderAll();
 });
 
-/* ============================
- Expose a couple small functions to console for dev testing
- ============================ */
+/* Expose a small API for dev console (non-destructive) */
 window.bd = {
   computeGSTComponents,
-  nextDocumentNumber,
+  computeOutstanding,
   peekDocumentNumber,
-  nextSampleNumber,
-  peekSampleNumber,
+  nextDocumentNumber,
   loadSampleData,
-  runDiagnostics,
+  runDiagnostics: runDiagnostics,
   migrateOldGSTData,
   renderAll
 };
-
-/* end of script */
 </script>
 </body>
 </html>
